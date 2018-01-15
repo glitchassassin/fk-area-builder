@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Loader from './Models/are_model';
 
 class App extends Component {
   render() {
+    let loader = new Loader()
     return (
       <div className="App">
         <header className="App-header">
@@ -11,7 +13,9 @@ class App extends Component {
           <h1 className="App-title">Forgotten Kingdoms Area Builder</h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          <pre>
+            {loader.toString()}
+          </pre>
         </p>
       </div>
     );
