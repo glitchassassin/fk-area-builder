@@ -1472,6 +1472,109 @@ class GameObject {
             	value4_desc: "unused",
             }
         };
+        this.valid_wear_flags = {
+            CAN_WEAR_TAKE: {
+                code: "CAN_WEAR_TAKE",
+                sdesc: "CAN_WEAR_TAKE",
+                ldesc: "This allows the item to be picked up by the PC."
+            },
+            CAN_WEAR_FINGER: {
+                code: "CAN_WEAR_FINGER",
+                sdesc: "CAN_WEAR_FINGER",
+                ldesc: "There are two finger locations and they are not layerable."
+            },
+            CAN_WEAR_NECK: {
+                code: "CAN_WEAR_NECK",
+                sdesc: "CAN_WEAR_NECK",
+                ldesc: "There are two neck locations and they are not layerable."
+            },
+            CAN_WEAR_BODY: {
+                code: "CAN_WEAR_BODY",
+                sdesc: "CAN_WEAR_BODY",
+                ldesc: "There is one body location and it is layerable."
+            },
+            CAN_WEAR_HEAD: {
+                code: "CAN_WEAR_HEAD",
+                sdesc: "CAN_WEAR_HEAD",
+                ldesc: "There is one head location and it is layerable."
+            },
+            CAN_WEAR_LEGS: {
+                code: "CAN_WEAR_LEGS",
+                sdesc: "CAN_WEAR_LEGS",
+                ldesc: "There is one legs location and it is layerable."
+            },
+            CAN_WEAR_FEET: {
+                code: "CAN_WEAR_FEET",
+                sdesc: "CAN_WEAR_FEET",
+                ldesc: "There is one feet location and it is layerable."
+            },
+            CAN_WEAR_HANDS: {
+                code: "CAN_WEAR_HANDS",
+                sdesc: "CAN_WEAR_HANDS",
+                ldesc: "There is one hands location and it is layerable."
+            },
+            CAN_WEAR_ARMS: {
+                code: "CAN_WEAR_ARMS",
+                sdesc: "CAN_WEAR_ARMS",
+                ldesc: "There is one arms location and it is layerable."
+            },
+            CAN_WEAR_WAIST: {
+                code: "CAN_WEAR_WAIST",
+                sdesc: "CAN_WEAR_WAIST",
+                ldesc: "There is one waist location and it is not layerable."
+            },
+            CAN_WEAR_BELT: {
+                code: "CAN_WEAR_BELT",
+                sdesc: "CAN_WEAR_BELT",
+                ldesc: "There is one belt location and it is layerable."
+            },
+            CAN_WEAR_WRIST: {
+                code: "CAN_WEAR_WRIST",
+                sdesc: "CAN_WEAR_WRIST",
+                ldesc: "There are two wrist location and they are not layerable."
+            },
+            CAN_WEAR_HOLD: {
+                code: "CAN_WEAR_HOLD",
+                sdesc: "CAN_WEAR_HOLD",
+                ldesc: "There are two hold locations and they are not layerable."
+            },
+            CAN_WEAR_BOTH_HANDS: {
+                code: "CAN_WEAR_BOTH_HANDS",
+                sdesc: "CAN_WEAR_BOTH_HANDS",
+                ldesc: "There is one both hands location and it is not layerable."
+            },
+            CAN_WEAR_EARS: {
+                code: "CAN_WEAR_EARS",
+                sdesc: "CAN_WEAR_EARS",
+                ldesc: "There is one ears location and it is not layerable."
+            },
+            CAN_WEAR_FACE: {
+                code: "CAN_WEAR_FACE",
+                sdesc: "CAN_WEAR_FACE",
+                ldesc: "There is one face location and it is not layerable."
+            },
+            CAN_WEAR_FLOATING: {
+                code: "CAN_WEAR_FLOATING",
+                sdesc: "CAN_WEAR_FLOATING",
+                ldesc: "There is one floating location and it is not layerable."
+            },
+            CAN_WEAR_SYMBOL: {
+                code: "CAN_WEAR_SYMBOL",
+                sdesc: "CAN_WEAR_SYMBOL",
+                ldesc: "There is one feet location and it is layerable. (This one is not to be used in normal areas. It is for god symbols only)."
+            },
+            CAN_WEAR_SADDLE: {
+                code: "CAN_WEAR_SADDLE",
+                sdesc: "CAN_WEAR_SADDLE",
+                ldesc: "There is one saddle location and it is layerable. This can only be used by mobiles and PC's of a certain body type."
+            },
+            CAN_WEAR_ARMOR: {
+                code: "CAN_WEAR_ARMOR",
+                sdesc: "CAN_WEAR_ARMOR",
+                ldesc: "This wear location is only for mobiles, set in hard code. It is not for use by builders."
+            }
+
+        };
         this.valid_attributes = {
             FLAG_GLOW: {
                 code: "FLAG_GLOW",
@@ -2515,11 +2618,90 @@ class GameObject {
         };
     }
     get _error_prefix() {
-        return `[GameObject:(${this.vnum}) ${this.sdesc}]`
+        return `[GameObject:(${this.vnum}) ${this.sdesc}]`;
     }
     
     validate() {
-        
+        let errors = [];
+        if (this.vnum == null) {
+            errors.push(`${this._error_prefix} No vnum defined`);
+        }
+        if (this.sdesc == null) {
+            errors.push(`${this._error_prefix} No short description defined`);
+        }
+        if (this.ldesc == null) {
+            errors.push(`${this._error_prefix} No long description defined`);
+        }
+        if (this.keywords == null) {
+            errors.push(`${this._error_prefix} No keywords defined`);
+        }
+        if (this.action_description !== "") {
+            errors.push(`${this._error_prefix} "action_description" is not used and should be empty`);
+        }
+        if (this.item_type == null) {
+            errors.push(`${this._error_prefix} No item type defined`);
+        }
+        else if (!(this.item_type.code in this.valid_item_types)) {
+            errors.push(`${this._error_prefix} Invalid item type defined`);
+        }
+        for (let i = 0; i < this.attributes.length; i++) {
+            if (!(this.attributes[i].code in this.valid_attributes)) {
+                errors.push(`${this._error_prefix} Invalid attribute defined`);
+            }
+            else if (["FLAG_DARK","FLAG_SHOPKEEPER","FLAG_METAL","FLAG_DONATION",
+                      "FLAG_PROTOTYPE"].indexOf(this.attributes[i].code) != -1) {
+                errors.push(`${this._error_prefix} Unused attribute code "${this.attributes[i].code}" defined`);
+            }
+        }
+        for (let i = 0; i < this.wear_flags.length; i++) {
+            if (!(this.wear_flags[i].code in this.valid_wear_flags)) {
+                errors.push(`${this._error_prefix} Invalid wear flag defined`);
+            }
+            else if (["CAN_WEAR_ARMOR"].indexOf(this.wear_flags[i].code) != -1) {
+                errors.push(`${this._error_prefix} Unused wear_flag code "${this.wear_flags[i].code}" defined`);
+            }
+        }
+        for (let i = 0; i < this.extra_descriptions.length; i++) {
+            let ed_errors = this.extra_descriptions[i].validate()
+            if (ed_errors.length) {
+                errors = errors.concat(ed_errors.map((error) => `${this._error_prefix} ${error}`));
+            }
+        }
+        if (this.quality == null) {
+            errors.push(`${this._error_prefix} No quality defined`);
+        }
+        else if (!(this.quality.code in this.valid_qualities)) {
+            errors.push(`${this._error_prefix} Invalid quality defined`);
+        }
+        if (this.condition == null) {
+            errors.push(`${this._error_prefix} No condition defined`);
+        }
+        else if (!(this.condition.code in this.valid_conditions)) {
+            errors.push(`${this._error_prefix} Invalid condition defined`);
+        }
+        if (this.material == null) {
+            errors.push(`${this._error_prefix} No material defined`);
+        }
+        else if (!(this.material.code in this.valid_materials)) {
+            errors.push(`${this._error_prefix} Invalid material defined`);
+        }
+        if (this.size == null) {
+            errors.push(`${this._error_prefix} No size defined`);
+        }
+        else if (!(this.size.code in this.valid_sizes)) {
+            errors.push(`${this._error_prefix} Invalid size defined`);
+        }
+        for (let i = 0; i < this.special_applies.length; i++) {
+            if (!(this.special_applies[i].code in this.valid_applies)) {
+                errors.push(`${this._error_prefix} Invalid APPLY defined`);
+            }
+            else if (["APPLY_CLASS","APPLY_LEVEL","APPLY_AGE","APPLY_EXP",
+                      "APPLY_RESISTANT","APPLY_IMMUNE","APPLY_SUSCEPTIBLE",
+                      "APPLY_PALM","APPLY_SCAN","APPLY_BLOOD"].indexOf(this.special_applies[i].code) != -1) {
+                errors.push(`${this._error_prefix} Unused APPLY code "${this.special_applies[i].code}" defined`);
+            }
+        }
+        return errors;
     }
     
     toString() {
@@ -2608,6 +2790,21 @@ function testLoader() {
     
     loader.area.rooms.push(courtroom)
     loader.area.rooms.push(dungeon)
+    
+    let trapdoor_key = new GameObject();
+    trapdoor_key.vnum = "QQ01";
+    trapdoor_key.sdesc = "{80}A large iron key";
+    trapdoor_key.ldesc = "{80}A large iron key is lying about for anyone to take";
+    trapdoor_key.keywords = "large iron key";
+    trapdoor_key.item_type = trapdoor_key.valid_item_types.ITEM_TYPE_KEY;
+    trapdoor_key.wear_flags.push(trapdoor_key.valid_wear_flags.CAN_WEAR_HOLD);
+    let trapdoor_key_desc = new ExtraDescription();
+    trapdoor_key_desc.keywords = "large iron key";
+    trapdoor_key_desc.ldesc = "{80}This is a heavy iron key, scratched from years of use.\nIt looks like it might open a trapdoor.";
+    trapdoor_key.extra_descriptions.push(trapdoor_key_desc);
+    trapdoor_key.quality = trapdoor_key.valid_qualities.QUALITY_AVERAGE;
+    trapdoor_key.condition = trapdoor_key.valid_conditions.COND_USABLE;
+    trapdoor_key.size = trapdoor_key.valid_sizes.SIZE_TINY;
     
     loader.area.justice_system = new JusticeSystem();
     loader.area.justice_system.courtroom = courtroom
