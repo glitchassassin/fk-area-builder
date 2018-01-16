@@ -1082,6 +1082,7 @@ class GameObject {
         }
         this.special_applies = [];
         this.programs = [];
+        this.identify_message = null;
         
         this.valid_item_types = {
             ITEM_TYPE_LIGHT: {
@@ -2717,6 +2718,7 @@ ${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.co
 ${this.values.value0} ${this.values.value1} ${this.values.value2} ${this.values.value3} ${this.values.value4} ${this.values.value5}
 ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.special_applies.map((spec) => (`A ${spec.code} ${spec.value}`)).join("\n")}
+${this.identify_message != null ? `I\n${this.identify_message}\n~` : "" }
 ${this.programs.map((program) => (program.toString())).join("\n")}
 `;
     }
