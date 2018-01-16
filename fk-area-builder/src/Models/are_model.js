@@ -1472,7 +1472,163 @@ class GameObject {
             	value4_desc: "unused",
             }
         };
-        this.valid_attributes = {};
+        this.valid_attributes = {
+            FLAG_GLOW: {
+                code: "FLAG_GLOW",
+                sdesc: "FLAG_GLOW",
+                ldesc: "Item description has (Glowing) and provides light when equipped. (Unequipped objects must weigh > 100 pounds to light the room.)"
+            },
+            FLAG_HUM: {
+                code: "FLAG_HUM",
+                sdesc: "FLAG_HUM",
+                ldesc: "Item description has (Humming)"
+            },
+            FLAG_DARK: {
+                code: "FLAG_DARK",
+                sdesc: "FLAG_DARK",
+                ldesc: "This flag has no affect"
+            },
+            FLAG_LOYAL: {
+                code: "FLAG_LOYAL",
+                sdesc: "FLAG_LOYAL",
+                ldesc: "Weapon does not drop on floor if disarmed"
+            },
+            FLAG_EVIL: {
+                code: "FLAG_EVIL",
+                sdesc: "FLAG_EVIL",
+                ldesc: "Item has an evil aura"
+            },
+            FLAG_INVIS: {
+                code: "FLAG_INVIS",
+                sdesc: "FLAG_INVIS",
+                ldesc: "Item is invisible"
+            },
+            FLAG_MAGIC: {
+                code: "FLAG_MAGIC",
+                sdesc: "FLAG_MAGIC",
+                ldesc: "Item object has affects or program."
+            },
+            FLAG_NODROP: {
+                code: "FLAG_NODROP",
+                sdesc: "FLAG_NODROP",
+                ldesc: "PC cannot drop object. Item is cursed"
+            },
+            FLAG_RESIZE: {
+                code: "FLAG_RESIZE",
+                sdesc: "FLAG_RESIZE",
+                ldesc: "Armour will resize when worn"
+            },
+            FLAG_ANTI_LAWFUL: {
+                code: "FLAG_ANTI_LAWFUL",
+                sdesc: "FLAG_ANTI_LAWFUL",
+                ldesc: "Item zaps good chars"
+            },
+            FLAG_ANTI_CHAOTIC: {
+                code: "FLAG_ANTI_CHAOTIC",
+                sdesc: "FLAG_ANTI_CHAOTIC",
+                ldesc: "Item zaps evil chars"
+            },
+            FLAG_ANTI_UNCONCERNED: {
+                code: "FLAG_ANTI_UNCONCERNED",
+                sdesc: "FLAG_ANTI_UNCONCERNED",
+                ldesc: "Item zaps neutral chars"
+            },
+            FLAG_NOREMOVE: {
+                code: "FLAG_NOREMOVE",
+                sdesc: "FLAG_NOREMOVE",
+                ldesc: "Item cannot be removed. Item is cursed."
+            },
+            FLAG_INVENTORY: {
+                code: "FLAG_INVENTORY",
+                sdesc: "FLAG_INVENTORY",
+                ldesc: "Item cannot be put into containers and is more resistant to damage."
+            },
+            FLAG_ANTI_WIZARD: {
+                code: "FLAG_ANTI_WIZARD",
+                sdesc: "FLAG_ANTI_WIZARD",
+                ldesc: "Item cannot be used by wizards"
+            },
+            FLAG_ANTI_ROGUE: {
+                code: "FLAG_ANTI_ROGUE",
+                sdesc: "FLAG_ANTI_ROGUE",
+                ldesc: "Item cannot be used by rogues"
+            },
+            FLAG_ANTI_WARRIOR: {
+                code: "FLAG_ANTI_WARRIOR",
+                sdesc: "FLAG_ANTI_WARRIOR",
+                ldesc: "Item cannot be used by warriors"
+            },
+            FLAG_ANTI_PRIEST: {
+                code: "FLAG_ANTI_PRIEST",
+                sdesc: "FLAG_ANTI_PRIEST",
+                ldesc: "Item cannot be used by priests"
+            },
+            FLAG_NOSCRY: {
+                code: "FLAG_NOSCRY",
+                sdesc: "FLAG_NOSCRY",
+                ldesc: "Item cannot be scryed for with spells."
+            },
+            FLAG_SHOPKEEPER: {
+                code: "FLAG_SHOPKEEPER",
+                sdesc: "FLAG_SHOPKEEPER",
+                ldesc: "Used in hard code. Not for use by builders."
+            },
+            FLAG_METAL: {
+                code: "FLAG_METAL",
+                sdesc: "FLAG_METAL",
+                ldesc: "No longer in use."
+            },
+            FLAG_CONCEALED: {
+                code: "FLAG_CONCEALED",
+                sdesc: "FLAG_CONCEALED",
+                ldesc: "Only used on holy symbols with the conceal command"
+            },
+            FLAG_DONATION: {
+                code: "FLAG_DONATION",
+                sdesc: "FLAG_DONATION",
+                ldesc: "Do not use."
+            },
+            FLAG_POISONED: {
+                code: "FLAG_POISONED",
+                sdesc: "FLAG_POISONED",
+                ldesc: "1/4 more damage"
+            },
+            FLAG_COVERING: {
+                code: "FLAG_COVERING",
+                sdesc: "FLAG_COVERING",
+                ldesc: "For containers 'look under'"
+            },
+            FLAG_DEATHROT: {
+                code: "FLAG_DEATHROT",
+                sdesc: "FLAG_DEATHROT",
+                ldesc: "Item disappears from corpse when the PC or moble dies"
+            },
+            FLAG_PROTOTYPE: {
+                code: "FLAG_PROTOTYPE",
+                sdesc: "FLAG_PROTOTYPE",
+                ldesc: "Used in OLC. Not to be used for offline building."
+            },
+            FLAG_BURIED: {
+                code: "FLAG_BURIED",
+                sdesc: "FLAG_BURIED",
+                ldesc: "Item is underground"
+            },
+            FLAG_PERMANENT: {
+                code: "FLAG_PERMANENT",
+                sdesc: "FLAG_PERMANENT",
+                ldesc: "Item stays on the PC through death."
+            },
+            FLAG_TRANSPARENT: {
+                code: "FLAG_TRANSPARENT",
+                sdesc: "FLAG_TRANSPARENT",
+                ldesc: "Items worn under this layer can be seen. Used for cloaks etc."
+            },
+            FLAG_UNIQUE: {
+                code: "FLAG_UNIQUE",
+                sdesc: "FLAG_UNIQUE",
+                ldesc: "Prevents the PC from wearing more than one of a specific object."
+            }
+        };
         this.valid_qualities = {
             QUALITY_WORTHLESS: {
                 code: "QUALITY_WORTHLESS",
