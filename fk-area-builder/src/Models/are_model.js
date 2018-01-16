@@ -796,15 +796,241 @@ S
 
 class Exit {
     constructor() {
-        
+        this.direction = null;
+        this.comment = "";
+        this.somewhere_keyword = null;
+        this.door_keyword = "";
+        this.flags = {
+            door_flags: [],
+            door_key: -1,
+            target_vnum: null,
+            exit_size: 0
+        }
+        this.valid_directions = {
+            DDIR_EAST: {
+                code: "DDIR_EAST",
+                sdesc: "East"
+            },
+            DDIR_WEST: {
+                code: "DDIR_WEST",
+                sdesc: "West"
+            },
+            DDIR_NORTH: {
+                code: "DDIR_NORTH",
+                sdesc: "North"
+            },
+            DDIR_SOUTH: {
+                code: "DDIR_SOUTH",
+                sdesc: "South"
+            },
+            DDIR_UP: {
+                code: "DDIR_UP",
+                sdesc: "Up"
+            },
+            DDIR_DOWN: {
+                code: "DDIR_DOWN",
+                sdesc: "Down"
+            },
+            DDIR_SOMEWHERE: {
+                code: "DDIR_SOMEWHERE",
+                sdesc: "Somewhere"
+            },
+        }
+        this.valid_door_flags = {
+            EX_ISDOOR: {
+                code: "EX_ISDOOR",
+                sdesc: "EX_ISDOOR",
+                ldesc: "exit has a door"
+            },
+            EX_CLOSED: {
+                code: "EX_CLOSED",
+                sdesc: "EX_CLOSED",
+                ldesc: "exit with door is closed"
+            },
+            EX_LOCKED: {
+                code: "EX_LOCKED",
+                sdesc: "EX_LOCKED",
+                ldesc: "exit with door is locked"
+            },
+            EX_SECRET: {
+                code: "EX_SECRET",
+                sdesc: "EX_SECRET",
+                ldesc: "cannot be seen or opened"
+            },
+            EX_PICKPROOF: {
+                code: "EX_PICKPROOF",
+                sdesc: "EX_PICKPROOF",
+                ldesc: "door cannot be picked"
+            },
+            EX_FLY: {
+                code: "EX_FLY",
+                sdesc: "EX_FLY",
+                ldesc: "player must fly to pass the door"
+            },
+            EX_CLIMB: {
+                code: "EX_CLIMB",
+                sdesc: "EX_CLIMB",
+                ldesc: "players must climb to pass"
+            },
+            EX_DIG: {
+                code: "EX_DIG",
+                sdesc: "EX_DIG",
+                ldesc: "players must dig the exit"
+            },
+            EX_NOPASSDOOR: {
+                code: "EX_NOPASSDOOR",
+                sdesc: "EX_NOPASSDOOR",
+                ldesc: "passdoor doesn't work"
+            },
+            EX_HIDDEN: {
+                code: "EX_HIDDEN",
+                sdesc: "EX_HIDDEN",
+                ldesc: "cannot be seen but can open"
+            },
+            EX_PASSAGE: {
+                code: "EX_PASSAGE",
+                sdesc: "EX_PASSAGE",
+                ldesc: "passage opened by a mob program"
+            },
+            EX_PORTAL: {
+                code: "EX_PORTAL",
+                sdesc: "EX_PORTAL",
+                ldesc: "spells that create portals"
+            },
+            EX_XCLIMB: {
+                code: "EX_XCLIMB",
+                sdesc: "EX_XCLIMB",
+                ldesc: "typing 'climb' will scoot you out this exit"
+            },
+            EX_XENTER: {
+                code: "EX_XENTER",
+                sdesc: "EX_XENTER",
+                ldesc: "typing 'enter' will move a PC out of this exit"
+            },
+            EX_XLEAVE: {
+                code: "EX_XLEAVE",
+                sdesc: "EX_XLEAVE",
+                ldesc: "typing 'leave' will send a PC out this exit"
+            },
+            EX_XAUTO: {
+                code: "EX_XAUTO",
+                sdesc: "EX_XAUTO",
+                ldesc: "players will 'automatically' use this exit. This is required for somewhere exits with keyword entrances."
+            },
+            EX_XSEARCHABLE: {
+                code: "EX_XSEARCHABLE",
+                sdesc: "EX_XSEARCHABLE",
+                ldesc: "door can be found in standard search"
+            },
+            EX_BASHED: {
+                code: "EX_BASHED",
+                sdesc: "EX_BASHED",
+                ldesc: "exit has been bashed"
+            },
+            EX_BASHPROOF: {
+                code: "EX_BASHPROOF",
+                sdesc: "EX_BASHPROOF",
+                ldesc: "exit cannot be bashed"
+            },
+            EX_NOMOB: {
+                code: "EX_NOMOB",
+                sdesc: "EX_NOMOB",
+                ldesc: "mobiles cannot pass"
+            },
+            EX_WINDOW: {
+                code: "EX_WINDOW",
+                sdesc: "EX_WINDOW",
+                ldesc: "players can look even thru closed door"
+            },
+            EX_XLOOK: {
+                code: "EX_XLOOK",
+                sdesc: "EX_XLOOK",
+                ldesc: "players can look through the exit"
+            }
+        }
+        this.valid_exit_sizes = {
+            EXIT_SIZE_ANY: {
+                code: 0,
+                sdesc: "EXIT_SIZE_ANY",
+            },
+            EXIT_SIZE_ANY_1: {
+                code: 1,
+                sdesc: "EXIT_SIZE_ANY_1",
+            },
+            EXIT_SIZE_TINY: {
+                code: 1000,
+                sdesc: "EXIT_SIZE_TINY",
+            },
+            EXIT_SIZE_SMALL: {
+                code: 1001,
+                sdesc: "EXIT_SIZE_SMALL",
+            },
+            EXIT_SIZE_MEDIUM: {
+                code: 1002,
+                sdesc: "EXIT_SIZE_MEDIUM",
+            },
+            EXIT_SIZE_NORMAL: {
+                code: 1002,
+                sdesc: "EXIT_SIZE_NORMAL",
+            },
+            EXIT_SIZE_LARGE: {
+                code: 1003,
+                sdesc: "EXIT_SIZE_LARGE",
+            },
+            EXIT_SIZE_HUGE: {
+                code: 1004,
+                sdesc: "EXIT_SIZE_HUGE",
+            },
+            EXIT_SIZE_GIANT: {
+                code: 1005,
+                sdesc: "EXIT_SIZE_GIANT",
+            }
+        }
     }
     
     validate() {
-        
+        let errors = [];
+        if (this.direction == null) {
+            errors.push(`${this._error_prefix} No direction defined`);
+        }
+        if (this.valid_directions.map((direction) => (direction.code)).indexOf(this.direction) == -1) {
+            errors.push(`${this._error_prefix} Invalid direction`);
+        }
+        if (this.target_vnum == null) {
+            errors.push(`${this._error_prefix} No target vnum defined`);
+        }
+        if (this.direction == this.valid_directions.DDIR_SOMEWHERE && this.somewhere_keyword == null) {
+            errors.push(`${this._error_prefix} Somewhere exit defined, but no exit keyword specified`);
+        }
+        if (this.direction == this.valid_directions.DDIR_SOMEWHERE && this.flags.door_flags.indexOf(this.valid_door_flags.EX_XAUTO) == -1) {
+            errors.push(`${this._error_prefix} Somewhere exit defined, but EX_XAUTO flag not set`);
+        }
+        if (this.door_keyword != "" && this.flags.door_flags.indexOf(this.valid_door_flags.EX_ISDOOR) == -1) {
+            errors.push(`${this._error_prefix} Door keywords defined, but EX_ISDOOR flag not set`);
+        }
+        for (let i = 0; i < this.flags.door_flags.length; i++) {
+            if (this.valid_door_flags.indexOf(this.flags.door_flags[i]) == -1) {
+                errors.push(`${this._error_prefix} Invalid flag`);
+            }
+        }
+        if (this.valid_exit_sizes.map((size) => (size.code)).indexOf(this.flags.exit_size) == -1) {
+            errors.push(`${this._error_prefix} Invalid exit size set`);
+        }
+        if (this.valid_exit_sizes.map((size) => (size.code)).indexOf(this.flags.exit_size) == -1) {
+            errors.push(`${this._error_prefix} Invalid exit size set`);
+        }
+        return errors
     }
     
     toString() {
-        
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `${this.direction.code}
+${this.comment}~
+${this.direction == this.valid_directions.DDIR_SOMEWHERE ? this.somewhere_keyword : this.door_keyword}~
+${this.flags.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.flags.door_key} ${this.flags.target_vnum} ${this.flags.exit_size}`;
     }
 }
 //export default Loader;
