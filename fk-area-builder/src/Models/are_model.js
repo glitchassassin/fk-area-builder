@@ -435,34 +435,6 @@ $`
     }
 }
 
-class Mob {
-    constructor() {
-        
-    }
-    
-    validate() {
-        
-    }
-    
-    toString() {
-        
-    }
-}
-
-class GameObject {
-    constructor() {
-        
-    }
-    
-    validate() {
-        
-    }
-    
-    toString() {
-        
-    }
-}
-
 class Room {
     constructor() {
         this.vnum = null;
@@ -802,7 +774,7 @@ class Room {
     }
     
     toString() {
-        return `${this.vnum}
+        return `#${this.vnum}
 ${this.sdesc}~
 ${this.ldesc}
 ~
@@ -1055,9 +1027,11 @@ ${this.flags.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.flags.do
 
 class ExtraDescription {
     constructor() {
-        this._error_prefix = "[ExtraDescription]";
         this.keywords = null;
         this.ldesc = null;
+    }
+    get _error_prefix() {
+        return `[ExtraDescription:${this.keywords}]`;
     }
     
     validate() {
@@ -1082,6 +1056,1349 @@ ${this.ldesc}
 ~`;
     }
 }
+
+class GameObject {
+    constructor() {
+        this.vnum = null;
+        this.sdesc = null;
+        this.ldesc - null;
+        this.keywords = null;
+        this.action_description = ""; // Not used
+        this.item_type = null;
+        this.attributes = [];
+        this.wear_flags = [];
+        this.extra_descriptions = [];
+        this.quality = null;
+        this.material = null;
+        this.condition = null;
+        this.size = null;
+        this.values = {
+            value0: 0,
+            value1: 0,
+            value2: 0,
+            value3: 0,
+            value4: 0,
+            value5: 0,
+        }
+        this.special_applies = [];
+        this.programs = [];
+        
+        this.valid_item_types = {
+            ITEM_TYPE_LIGHT: {
+                code: "ITEM_TYPE_LIGHT",
+                sdesc: "ITEM_TYPE_LIGHT",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "hours left, 0 is dead, -1 is infinite. Infinite lights are to be rare magical items.",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_SCROLL: {
+                code: "ITEM_TYPE_SCROLL",
+                sdesc: "ITEM_TYPE_SCROLL",
+            	value0_desc: "level of spell/s *",
+            	value1_desc: "spell number 1",
+            	value2_desc: "spell number 2",
+            	value3_desc: "spell number3",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_WAND: {
+                code: "ITEM_TYPE_WAND",
+                sdesc: "ITEM_TYPE_WAND",
+            	value0_desc: "level of spell",
+            	value1_desc: "max charges",
+            	value2_desc: "charges left",
+            	value3_desc: "spell number",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_STAFF: {
+                code: "ITEM_TYPE_STAFF",
+                sdesc: "ITEM_TYPE_STAFF",
+            	value0_desc: "level of spell",
+            	value1_desc: "max charges",
+            	value2_desc: "charges left",
+            	value3_desc: "spell number",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_WEAPON: {
+                code: "ITEM_TYPE_WEAPON",
+                sdesc: "ITEM_TYPE_WEAPON",
+            	value0_desc: "unused",
+            	value1_desc: "weapon flag",
+            	value2_desc: "weapon flag modifiers",
+            	value3_desc: "Weapon Type",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_SHEATH: {
+                code: "ITEM_TYPE_SHEATH",
+                sdesc: "ITEM_TYPE_SHEATH",
+            	value0_desc: "capacity in pounds",
+            	value1_desc: "container flags",
+            	value2_desc: "key vnum",
+            	value3_desc: "unused",
+            	value4_desc: "layers",
+            },
+            ITEM_TYPE_TREASURE: {
+                code: "ITEM_TYPE_TREASURE",
+                sdesc: "ITEM_TYPE_TREASURE",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "layers",
+            },
+            ITEM_TYPE_ARMOR: {
+                code: "ITEM_TYPE_ARMOR",
+                sdesc: "ITEM_TYPE_ARMOR",
+            	value0_desc: "unused",
+            	value1_desc: "body type (lesson pending)",
+            	value2_desc: "layers",
+            	value3_desc: "Armor type",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_POTION: {
+                code: "ITEM_TYPE_POTION",
+                sdesc: "ITEM_TYPE_POTION",
+            	value0_desc: "level of spells",
+            	value1_desc: "spell number 1",
+            	value2_desc: "spell number 2",
+            	value3_desc: "spell number 3",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_FURNITURE: {
+                code: "ITEM_TYPE_FURNITURE",
+                sdesc: "ITEM_TYPE_FURNITURE",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "Furniture State",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_TRASH: {
+                code: "ITEM_TYPE_TRASH",
+                sdesc: "ITEM_TYPE_TRASH",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_CONTAINER: {
+                code: "ITEM_TYPE_CONTAINER",
+                sdesc: "ITEM_TYPE_CONTAINER",
+            	value0_desc: "capacity in pounds",
+            	value1_desc: "container flags",
+            	value2_desc: "key vnum",
+            	value3_desc: "unused",
+            	value4_desc: "layers",
+            },
+            ITEM_TYPE_DRINKCON: {
+                code: "ITEM_TYPE_DRINKCON",
+                sdesc: "ITEM_TYPE_DRINKCON",
+            	value0_desc: "total amount of drinks",
+            	value1_desc: "current amount of drinks",
+            	value2_desc: "liquid #",
+            	value3_desc: "component/herb value",
+            	value4_desc: "junks on use or not",
+            },
+            ITEM_TYPE_KEY: {
+                code: "ITEM_TYPE_KEY",
+                sdesc: "ITEM_TYPE_KEY",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_FOOD: {
+                code: "ITEM_TYPE_FOOD",
+                sdesc: "ITEM_TYPE_FOOD",
+            	value0_desc: "nourishment value",
+            	value1_desc: "decay timer",
+            	value2_desc: "FOOD_RAW or FOOD_COOKED, 0 is raw",
+            	value3_desc: "component/herb value",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_MONEY: {
+                code: "ITEM_TYPE_MONEY",
+                sdesc: "ITEM_TYPE_MONEY",
+            	value0_desc: "# of coins",
+            	value1_desc: "coin type",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_PEN: {
+                code: "ITEM_TYPE_PEN",
+                sdesc: "ITEM_TYPE_PEN",
+            	value0_desc: "amount of ink",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_CORPSE_NPC: {
+                code: "ITEM_TYPE_CORPSE_NPC",
+                sdesc: "ITEM_TYPE_CORPSE_NPC",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "decomposition timer",
+            	value3_desc: "25 * Race Size",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_CORPSE_PC: {
+                code: "ITEM_TYPE_CORPSE_PC",
+                sdesc: "ITEM_TYPE_CORPSE_PC",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_FOUNTAIN: {
+                code: "ITEM_TYPE_FOUNTAIN",
+                sdesc: "ITEM_TYPE_FOUNTAIN",
+            	value0_desc: "unused",
+            	value1_desc: "Amount of drinks",
+            	value2_desc: "Liquid Type",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_PILL: {
+                code: "ITEM_TYPE_PILL",
+                sdesc: "ITEM_TYPE_PILL",
+            	value0_desc: "level of spells",
+            	value1_desc: "spell number 1",
+            	value2_desc: "spell number 2",
+            	value3_desc: "spell number 3",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_BLOOD: {
+                code: "ITEM_TYPE_BLOOD",
+                sdesc: "ITEM_TYPE_BLOOD",
+            	value0_desc: "unused",
+            	value1_desc: "quantity",
+            	value2_desc: "decay timer",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_BLOODSTAIN: {
+                code: "ITEM_TYPE_BLOODSTAIN",
+                sdesc: "ITEM_TYPE_BLOODSTAIN",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "decay timer",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_SCRAPS: {
+                code: "ITEM_TYPE_SCRAPS",
+                sdesc: "ITEM_TYPE_SCRAPS",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "decay timer",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_PIPE: {
+                code: "ITEM_TYPE_PIPE",
+                sdesc: "ITEM_TYPE_PIPE",
+            	value0_desc: "maximum capacity of pipe",
+            	value1_desc: "amount of herb in the pipe",
+            	value2_desc: "herb type",
+            	value3_desc: "pipe flags",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_FIRE: {
+                code: "ITEM_TYPE_FIRE",
+                sdesc: "ITEM_TYPE_FIRE",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "hours left, 0 is dead, -1 is infinite",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_BOOK: {
+                code: "ITEM_TYPE_BOOK",
+                sdesc: "ITEM_TYPE_BOOK",
+            	value0_desc: "unused",
+            	value1_desc: "spell number",
+            	value2_desc: "unused",
+            	value3_desc: "Language",
+            	value4_desc: "Skill Level (From 1 to 25)",
+            },
+            ITEM_TYPE_LEVER: {
+                code: "ITEM_TYPE_LEVER",
+                sdesc: "ITEM_TYPE_LEVER",
+            	value0_desc: "lever trigger flag",
+            	value1_desc: "vnum of teleport room or spell number or start room or room to be randomised",
+            	value2_desc: "room to load the mob or object into",
+            	value3_desc: "object or mob to loaded",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_BUTTON: {
+                code: "ITEM_TYPE_BUTTON",
+                sdesc: "ITEM_TYPE_BUTTON",
+            	value0_desc: "lever trigger flag",
+            	value1_desc: "vnum of teleport room or spell number",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_TRAP: {
+                code: "ITEM_TYPE_TRAP",
+                sdesc: "ITEM_TYPE_TRAP",
+            	value0_desc: "trap type",
+            	value1_desc: "number of reloads",
+            	value2_desc: "trap trigger",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_MAP: {
+                code: "ITEM_TYPE_MAP",
+                sdesc: "ITEM_TYPE_MAP",
+            	value0_desc: "unused",
+            	value1_desc: "low room vnum",
+            	value2_desc: "high room vnum",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_PORTAL: {
+                code: "ITEM_TYPE_PORTAL",
+                sdesc: "ITEM_TYPE_PORTAL",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_PAPER: {
+                code: "ITEM_TYPE_PAPER",
+                sdesc: "ITEM_TYPE_PAPER",
+            	value0_desc: "text status",
+            	value1_desc: "subject status",
+            	value2_desc: "to status",
+            	value3_desc: "language number",
+            	value4_desc: "language skill level",
+            },
+            ITEM_TYPE_PROJECTILE: {
+                code: "ITEM_TYPE_PROJECTILE",
+                sdesc: "ITEM_TYPE_PROJECTILE",
+            	value0_desc: "unused",
+            	value1_desc: "weapon flag",
+            	value2_desc: "weapon flag modifiers",
+            	value3_desc: "Weapon Type",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_QUIVER: {
+                code: "ITEM_TYPE_QUIVER",
+                sdesc: "ITEM_TYPE_QUIVER",
+            	value0_desc: "capacity in pounds",
+            	value1_desc: "container flags",
+            	value2_desc: "key vnum",
+            	value3_desc: "unused",
+            	value4_desc: "layers",
+            },
+            ITEM_TYPE_SHOVEL: {
+                code: "ITEM_TYPE_SHOVEL",
+                sdesc: "ITEM_TYPE_SHOVEL",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_SALVE: {
+                code: "ITEM_TYPE_SALVE",
+                sdesc: "ITEM_TYPE_SALVE",
+            	value0_desc: "level",
+            	value1_desc: "Number of uses",
+            	value2_desc: "unused",
+            	value3_desc: "herb type",
+            	value4_desc: "spell slot number",
+            },
+            ITEM_TYPE_SYMBOL: {
+                code: "ITEM_TYPE_SYMBOL",
+                sdesc: "ITEM_TYPE_SYMBOL",
+            	value0_desc: "NO. spell component uses",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_TRADEGOODS: {
+                code: "ITEM_TYPE_TRADEGOODS",
+                sdesc: "ITEM_TYPE_TRADEGOODS",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_INSTRUMENT: {
+                code: "ITEM_TYPE_INSTRUMENT",
+                sdesc: "ITEM_TYPE_INSTRUMENT",
+            	value0_desc: "level of spell",
+            	value1_desc: "max charges",
+            	value2_desc: "charges left",
+            	value3_desc: "spell number",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_HIDE: {
+                code: "ITEM_TYPE_HIDE",
+                sdesc: "ITEM_TYPE_HIDE",
+            	value0_desc: "unused",
+            	value1_desc: "unused",
+            	value2_desc: "unused",
+            	value3_desc: "mob vnum",
+            	value4_desc: "race number",
+            },
+            ITEM_TYPE_CART: {
+                code: "ITEM_TYPE_CART",
+                sdesc: "ITEM_TYPE_CART",
+            	value0_desc: "capacity",
+            	value1_desc: "container flags",
+            	value2_desc: "key vnum",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            },
+            ITEM_TYPE_COMPONENT: {
+                code: "ITEM_TYPE_COMPONENT",
+                sdesc: "ITEM_TYPE_COMPONENT",
+            	value0_desc: "number of uses for the component and amount of herb",
+            	value1_desc: "unused",
+            	value2_desc: "herb type",
+            	value3_desc: "unused",
+            	value4_desc: "unused",
+            }
+        };
+        this.valid_attributes = {};
+        this.valid_qualities = {
+            QUALITY_WORTHLESS: {
+                code: "QUALITY_WORTHLESS",
+                sdesc: "QUALITY_WORTHLESS"
+            },
+            QUALITY_INFERIOR: {
+                code: "QUALITY_INFERIOR",
+                sdesc: "QUALITY_INFERIOR"
+            },
+            QUALITY_LOW: {
+                code: "QUALITY_LOW",
+                sdesc: "QUALITY_LOW"
+            },
+            QUALITY_AVERAGE: {
+                code: "QUALITY_AVERAGE",
+                sdesc: "QUALITY_AVERAGE"
+            },
+            QUALITY_HIGH: {
+                code: "QUALITY_HIGH",
+                sdesc: "QUALITY_HIGH"
+            },
+            QUALITY_SUPERIOR: {
+                code: "QUALITY_SUPERIOR",
+                sdesc: "QUALITY_SUPERIOR"
+            },
+            QUALITY_OUTSTANDING: {
+                code: "QUALITY_OUTSTANDING",
+                sdesc: "QUALITY_OUTSTANDING"
+            }
+        };
+        this.valid_materials = {
+            MATERIAL_UNKNOWN: {
+                code: "MATERIAL_UNKNOWN",
+                sdesc: "MATERIAL_UNKNOWN"
+            },
+            MATERIAL_WOOD: {
+                code: "MATERIAL_WOOD",
+                sdesc: "MATERIAL_WOOD"
+            },
+            MATERIAL_OAK: {
+                code: "MATERIAL_OAK",
+                sdesc: "MATERIAL_OAK"
+            },
+            MATERIAL_YEW: {
+                code: "MATERIAL_YEW",
+                sdesc: "MATERIAL_YEW"
+            },
+            MATERIAL_EBONY: {
+                code: "MATERIAL_EBONY",
+                sdesc: "MATERIAL_EBONY"
+            },
+            MATERIAL_HARDWOOD: {
+                code: "MATERIAL_HARDWOOD",
+                sdesc: "MATERIAL_HARDWOOD"
+            },
+            MATERIAL_ICE: {
+                code: "MATERIAL_ICE",
+                sdesc: "MATERIAL_ICE"
+            },
+            MATERIAL_SOFTWOOD: {
+                code: "MATERIAL_SOFTWOOD",
+                sdesc: "MATERIAL_SOFTWOOD"
+            },
+            MATERIAL_FLESH: {
+                code: "MATERIAL_FLESH",
+                sdesc: "MATERIAL_FLESH"
+            },
+            MATERIAL_SILK: {
+                code: "MATERIAL_SILK",
+                sdesc: "MATERIAL_SILK"
+            },
+            MATERIAL_WOOL: {
+                code: "MATERIAL_WOOL",
+                sdesc: "MATERIAL_WOOL"
+            },
+            MATERIAL_CLOTH: {
+                code: "MATERIAL_CLOTH",
+                sdesc: "MATERIAL_CLOTH"
+            },
+            MATERIAL_FUR: {
+                code: "MATERIAL_FUR",
+                sdesc: "MATERIAL_FUR"
+            },
+            MATERIAL_WATER: {
+                code: "MATERIAL_WATER",
+                sdesc: "MATERIAL_WATER"
+            },
+            MATERIAL_METAL: {
+                code: "MATERIAL_METAL",
+                sdesc: "MATERIAL_METAL"
+            },
+            MATERIAL_SILVER: {
+                code: "MATERIAL_SILVER",
+                sdesc: "MATERIAL_SILVER"
+            },
+            MATERIAL_GOLD: {
+                code: "MATERIAL_GOLD",
+                sdesc: "MATERIAL_GOLD"
+            },
+            MATERIAL_STEEL: {
+                code: "MATERIAL_STEEL",
+                sdesc: "MATERIAL_STEEL"
+            },
+            MATERIAL_LEAD: {
+                code: "MATERIAL_LEAD",
+                sdesc: "MATERIAL_LEAD"
+            },
+            MATERIAL_BRONZE: {
+                code: "MATERIAL_BRONZE",
+                sdesc: "MATERIAL_BRONZE"
+            },
+            MATERIAL_COPPER: {
+                code: "MATERIAL_COPPER",
+                sdesc: "MATERIAL_COPPER"
+            },
+            MATERIAL_PLATINUM: {
+                code: "MATERIAL_PLATINUM",
+                sdesc: "MATERIAL_PLATINUM"
+            },
+            MATERIAL_TITANIUM: {
+                code: "MATERIAL_TITANIUM",
+                sdesc: "MATERIAL_TITANIUM"
+            },
+            MATERIAL_ALUMINIUM: {
+                code: "MATERIAL_ALUMINIUM",
+                sdesc: "MATERIAL_ALUMINIUM"
+            },
+            MATERIAL_TIN: {
+                code: "MATERIAL_TIN",
+                sdesc: "MATERIAL_TIN"
+            },
+            MATERIAL_IRON: {
+                code: "MATERIAL_IRON",
+                sdesc: "MATERIAL_IRON"
+            },
+            MATERIAL_BRASS: {
+                code: "MATERIAL_BRASS",
+                sdesc: "MATERIAL_BRASS"
+            },
+            MATERIAL_DIAMOND: {
+                code: "MATERIAL_DIAMOND",
+                sdesc: "MATERIAL_DIAMOND"
+            },
+            MATERIAL_PEARL: {
+                code: "MATERIAL_PEARL",
+                sdesc: "MATERIAL_PEARL"
+            },
+            MATERIAL_GEM: {
+                code: "MATERIAL_GEM",
+                sdesc: "MATERIAL_GEM"
+            },
+            MATERIAL_RUBY: {
+                code: "MATERIAL_RUBY",
+                sdesc: "MATERIAL_RUBY"
+            },
+            MATERIAL_OBSIDIAN: {
+                code: "MATERIAL_OBSIDIAN",
+                sdesc: "MATERIAL_OBSIDIAN"
+            },
+            MATERIAL_IVORY: {
+                code: "MATERIAL_IVORY",
+                sdesc: "MATERIAL_IVORY"
+            },
+            MATERIAL_MITHRIL: {
+                code: "MATERIAL_MITHRIL",
+                sdesc: "MATERIAL_MITHRIL"
+            },
+            MATERIAL_ADAMANTIUM: {
+                code: "MATERIAL_ADAMANTIUM",
+                sdesc: "MATERIAL_ADAMANTIUM"
+            },
+            MATERIAL_ENERGY: {
+                code: "MATERIAL_ENERGY",
+                sdesc: "MATERIAL_ENERGY"
+            },
+            MATERIAL_GLASS: {
+                code: "MATERIAL_GLASS",
+                sdesc: "MATERIAL_GLASS"
+            },
+            MATERIAL_PAPER: {
+                code: "MATERIAL_PAPER",
+                sdesc: "MATERIAL_PAPER"
+            },
+            MATERIAL_MARBLE: {
+                code: "MATERIAL_MARBLE",
+                sdesc: "MATERIAL_MARBLE"
+            },
+            MATERIAL_PLANT: {
+                code: "MATERIAL_PLANT",
+                sdesc: "MATERIAL_PLANT"
+            },
+            MATERIAL_STONE: {
+                code: "MATERIAL_STONE",
+                sdesc: "MATERIAL_STONE"
+            },
+            MATERIAL_HIDE: {
+                code: "MATERIAL_HIDE",
+                sdesc: "MATERIAL_HIDE"
+            },
+            MATERIAL_BONE: {
+                code: "MATERIAL_BONE",
+                sdesc: "MATERIAL_BONE"
+            },
+            MATERIAL_POWDER: {
+                code: "MATERIAL_POWDER",
+                sdesc: "MATERIAL_POWDER"
+            },
+            MATERIAL_LEATHER: {
+                code: "MATERIAL_LEATHER",
+                sdesc: "MATERIAL_LEATHER"
+            },
+            MATERIAL_OIL: {
+                code: "MATERIAL_OIL",
+                sdesc: "MATERIAL_OIL"
+            },
+            MATERIAL_ELVEN: {
+                code: "MATERIAL_ELVEN",
+                sdesc: "MATERIAL_ELVEN"
+            },
+            MATERIAL_ELECTRUM: {
+                code: "MATERIAL_ELECTRUM",
+                sdesc: "MATERIAL_ELECTRUM"
+            },
+            MATERIAL_EMERALD: {
+                code: "MATERIAL_EMERALD",
+                sdesc: "MATERIAL_EMERALD"
+            },
+            MATERIAL_SAPPHIRE: {
+                code: "MATERIAL_SAPPHIRE",
+                sdesc: "MATERIAL_SAPPHIRE"
+            },
+            MATERIAL_COLD_IRON: {
+                code: "MATERIAL_COLD_IRON",
+                sdesc: "MATERIAL_COLD_IRON"
+            },
+            MATERIAL_DRAGON_HIDE: {
+                code: "MATERIAL_DRAGON_HIDE",
+                sdesc: "MATERIAL_DRAGON_HIDE"
+            },
+            MATERIAL_DARKWOOD: {
+                code: "MATERIAL_DARKWOOD",
+                sdesc: "MATERIAL_DARKWOOD"
+            },
+            MATERIAL_ALCHEMICAL_SILVER: {
+                code: "MATERIAL_ALCHEMICAL_SILVER",
+                sdesc: "MATERIAL_ALCHEMICAL_SILVER"
+            }
+        };
+        this.valid_conditions = {
+            COND_TERRIBLE: {
+                code: "COND_TERRIBLE",
+                sdesc: "COND_TERRIBLE"
+            },
+            COND_AWFUL: {
+                code: "COND_AWFUL",
+                sdesc: "COND_AWFUL"
+            },
+            COND_VERY_BAD: {
+                code: "COND_VERY_BAD",
+                sdesc: "COND_VERY_BAD"
+            },
+            COND_BAD: {
+                code: "COND_BAD",
+                sdesc: "COND_BAD"
+            },
+            COND_USABLE: {
+                code: "COND_USABLE",
+                sdesc: "COND_USABLE"
+            },
+            COND_GOOD: {
+                code: "COND_GOOD",
+                sdesc: "COND_GOOD"
+            },
+            COND_VERY_GOOD: {
+                code: "COND_VERY_GOOD",
+                sdesc: "COND_VERY_GOOD"
+            },
+            COND_SUPERB: {
+                code: "COND_SUPERB",
+                sdesc: "COND_SUPERB"
+            },
+            COND_PERFECT: {
+                code: "COND_PERFECT",
+                sdesc: "COND_PERFECT"
+            }
+        };
+        this.valid_sizes = {
+            SIZE_TINY: {
+                code: "SIZE_TINY",
+                sdesc: "SIZE_TINY"
+            },
+            SIZE_SMALL: {
+                code: "SIZE_SMALL",
+                sdesc: "SIZE_SMALL"
+            },
+            SIZE_MEDIUM: {
+                code: "SIZE_MEDIUM",
+                sdesc:"SIZE_MEDIUM" 
+            },
+            SIZE_LARGE: {
+                code: "SIZE_LARGE",
+                sdesc: "SIZE_LARGE"
+            },
+            SIZE_HUGE: {
+                code: "SIZE_HUGE",
+                sdesc: "SIZE_HUGE"
+            },
+            SIZE_GIANT: {
+                code: "SIZE_GIANT",
+                sdesc: "SIZE_GIANT"
+            }
+        };
+        this.valid_applies = {
+            APPLY_STR: {
+                code: "APPLY_STR",
+                sdesc: "APPLY_STR",
+                ldesc: "Adds or takes away strength.",
+            },
+            APPLY_DEX: {
+                code: "APPLY_DEX",
+                sdesc: "APPLY_DEX",
+                ldesc: "Adds or takes away from dexterity",
+            },
+            APPLY_INT: {
+                code: "APPLY_INT",
+                sdesc: "APPLY_INT",
+                ldesc: "Adds or takes away from intelligence",
+            },
+            APPLY_WIS: {
+                code: "APPLY_WIS",
+                sdesc: "APPLY_WIS",
+                ldesc: "Adds or takes away from wisdom",
+            },
+            APPLY_CON: {
+                code: "APPLY_CON",
+                sdesc: "APPLY_CON",
+                ldesc: "Adds or takes away from constitution",
+            },
+            APPLY_SEX: {
+                code: "APPLY_SEX",
+                sdesc: "APPLY_SEX",
+                ldesc: "Changes the sex of the PC by the value",
+            },
+            APPLY_CLASS: {
+                code: "APPLY_CLASS",
+                sdesc: "APPLY_CLASS",
+                ldesc: "Do not use",
+            },
+            APPLY_LEVEL: {
+                code: "APPLY_LEVEL",
+                sdesc: "APPLY_LEVEL",
+                ldesc: "Do not use",
+            },
+            APPLY_AGE: {
+                code: "APPLY_AGE",
+                sdesc: "APPLY_AGE",
+                ldesc: "Do not use",
+            },
+            APPLY_HEIGHT: {
+                code: "APPLY_HEIGHT",
+                sdesc: "APPLY_HEIGHT",
+                ldesc: "Adds to or takes away from the height of the character",
+            },
+            APPLY_WEIGHT: {
+                code: "APPLY_WEIGHT",
+                sdesc: "APPLY_WEIGHT",
+                ldesc: "Adds to or takes away from the characters weight. (Not the weight carried)",
+            },
+            APPLY_MANA: {
+                code: "APPLY_MANA",
+                sdesc: "APPLY_MANA",
+                ldesc: "Adds to or takes away from the character's total mana",
+            },
+            APPLY_HIT: {
+                code: "APPLY_HIT",
+                sdesc: "APPLY_HIT",
+                ldesc: "Adds to or takes away from the total hitpoints of the character",
+            },
+            APPLY_MOVE: {
+                code: "APPLY_MOVE",
+                sdesc: "APPLY_MOVE",
+                ldesc: "Adds to or takes away from the total stamina/move of the character",
+            },
+            APPLY_VALUE: {
+                code: "APPLY_VALUE",
+                sdesc: "APPLY_VALUE",
+                ldesc: "Adds to or takes value from an object. This is measured in Copper.",
+            },
+            APPLY_EXP: {
+                code: "APPLY_EXP",
+                sdesc: "APPLY_EXP",
+                ldesc: "Do not use",
+            },
+            APPLY_AC: {
+                code: "APPLY_AC",
+                sdesc: "APPLY_AC",
+                ldesc: "Affects the character/s armor class. Negative value improves armour class, a postitive value degrades armour class",
+            },
+            APPLY_HITROLL: {
+                code: "APPLY_HITROLL",
+                sdesc: "APPLY_HITROLL",
+                ldesc: "Adds or takes away hitroll to/from a weapon",
+            },
+            APPLY_DAMROLL: {
+                code: "APPLY_DAMROLL",
+                sdesc: "APPLY_DAMROLL",
+                ldesc: "Adds or takes away dammroll from a weapon",
+            },
+            APPLY_RANGE: {
+                code: "APPLY_RANGE",
+                sdesc: "APPLY_RANGE",
+                ldesc: "Allows the character to shoot or throw further or less, by the number of rooms specified",
+            },
+            APPLY_BOWS: {
+                code: "APPLY_BOWS",
+                sdesc: "APPLY_BOWS",
+                ldesc: "Adds or takes away from the characters bow skill",
+            },
+            APPLY_SAP: {
+                code: "APPLY_SAP",
+                sdesc: "APPLY_SAP",
+                ldesc: "Adds or takes away from the characters sap skill",
+            },
+            APPLY_BRAWLING: {
+                code: "APPLY_BRAWLING",
+                sdesc: "APPLY_BRAWLING",
+                ldesc: "Adds or takes away from the characters brawling skill",
+            },
+            APPLY_APPRAISE: {
+                code: "APPLY_APPRAISE",
+                sdesc: "APPLY_APPRAISE",
+                ldesc: "Adds or takes away from the characters appraise skill",
+            },
+            APPLY_CHA: {
+                code: "APPLY_CHA",
+                sdesc: "APPLY_CHA",
+                ldesc: "Adds to or takes away from a PC's charisma",
+            },
+            APPLY_AFFECT: {
+                code: "APPLY_AFFECT",
+                sdesc: "APPLY_AFFECT",
+                ldesc: "Used to apply AFF_ flags. Character remains affected while the object is worn.",
+            },
+            APPLY_RESISTANT: {
+                code: "APPLY_RESISTANT",
+                sdesc: "APPLY_RESISTANT",
+                ldesc: "No longer in use. Do not use.",
+            },
+            APPLY_IMMUNE: {
+                code: "APPLY_IMMUNE",
+                sdesc: "APPLY_IMMUNE",
+                ldesc: "No longer in use. Do not use.",
+            },
+            APPLY_SUSCEPTIBLE: {
+                code: "APPLY_SUSCEPTIBLE",
+                sdesc: "APPLY_SUSCEPTIBLE",
+                ldesc: "No longer in use. Do not use.",
+            },
+            APPLY_WEAPONSPELL: {
+                code: "APPLY_WEAPONSPELL",
+                sdesc: "APPLY_WEAPONSPELL",
+                ldesc: "Casts a spell when hitting use SPELL_ 100 % of the time.",
+            },
+            APPLY_LCK: {
+                code: "APPLY_LCK",
+                sdesc: "APPLY_LCK",
+                ldesc: "Adds to or takes away from luck",
+            },
+            APPLY_BACKSTAB: {
+                code: "APPLY_BACKSTAB",
+                sdesc: "APPLY_BACKSTAB",
+                ldesc: "Adds to or takes away from the backstab skill",
+            },
+            APPLY_PICK: {
+                code: "APPLY_PICK",
+                sdesc: "APPLY_PICK",
+                ldesc: "Adds to or takes away from the pick locks skill",
+            },
+            APPLY_TRACK: {
+                code: "APPLY_TRACK",
+                sdesc: "APPLY_TRACK",
+                ldesc: "Adds to or takes away from the track skill",
+            },
+            APPLY_STEAL: {
+                code: "APPLY_STEAL",
+                sdesc: "APPLY_STEAL",
+                ldesc: "Adds to or takes away from the steal skill",
+            },
+            APPLY_SNEAK: {
+                code: "APPLY_SNEAK",
+                sdesc: "APPLY_SNEAK",
+                ldesc: "Adds to or takes away from the sneak skill",
+            },
+            APPLY_HIDE: {
+                code: "APPLY_HIDE",
+                sdesc: "APPLY_HIDE",
+                ldesc: "Adds to or takes away from the hide skill",
+            },
+            APPLY_PALM: {
+                code: "APPLY_PALM",
+                sdesc: "APPLY_PALM",
+                ldesc: "Not coded. Do not use.",
+            },
+            APPLY_DETRAP: {
+                code: "APPLY_DETRAP",
+                sdesc: "APPLY_DETRAP",
+                ldesc: "Adds to or takes away from the detrap skill",
+            },
+            APPLY_DODGE: {
+                code: "APPLY_DODGE",
+                sdesc: "APPLY_DODGE",
+                ldesc: "Adds to or takes away from the dodge skill",
+            },
+            APPLY_PEEK: {
+                code: "APPLY_PEEK",
+                sdesc: "APPLY_PEEK",
+                ldesc: "Adds to or takes away from the peek skill",
+            },
+            APPLY_SCAN: {
+                code: "APPLY_SCAN",
+                sdesc: "APPLY_SCAN",
+                ldesc: "No longer used",
+            },
+            APPLY_GOUGE: {
+                code: "APPLY_GOUGE",
+                sdesc: "APPLY_GOUGE",
+                ldesc: "Adds to or takes away from the gouge skill",
+            },
+            APPLY_SEARCH: {
+                code: "APPLY_SEARCH",
+                sdesc: "APPLY_SEARCH",
+                ldesc: "Adds to or takes away from the search skill",
+            },
+            APPLY_MOUNT: {
+                code: "APPLY_MOUNT",
+                sdesc: "APPLY_MOUNT",
+                ldesc: "Adds to or takes away from the mount skill",
+            },
+            APPLY_DISARM: {
+                code: "APPLY_DISARM",
+                sdesc: "APPLY_DISARM",
+                ldesc: "Adds to or takes away from the disarm skill",
+            },
+            APPLY_KICK: {
+                code: "APPLY_KICK",
+                sdesc: "APPLY_KICK",
+                ldesc: "Adds to or takes away from the kick skill",
+            },
+            APPLY_PARRY: {
+                code: "APPLY_PARRY",
+                sdesc: "APPLY_PARRY",
+                ldesc: "Adds to or takes away from the parry skill",
+            },
+            APPLY_BASH: {
+                code: "APPLY_BASH",
+                sdesc: "APPLY_BASH",
+                ldesc: "Adds to or takes away from the bash skill",
+            },
+            APPLY_STUN: {
+                code: "APPLY_STUN",
+                sdesc: "APPLY_STUN",
+                ldesc: "Adds to or takes away from the stun skill",
+            },
+            APPLY_PUNCH: {
+                code: "APPLY_PUNCH",
+                sdesc: "APPLY_PUNCH",
+                ldesc: "Adds to or takes away from the punch skill",
+            },
+            APPLY_CLIMB: {
+                code: "APPLY_CLIMB",
+                sdesc: "APPLY_CLIMB",
+                ldesc: "Adds to or takes away from the climb skill",
+            },
+            APPLY_GRIP: {
+                code: "APPLY_GRIP",
+                sdesc: "APPLY_GRIP",
+                ldesc: "Adds to or takes away from the grip skill",
+            },
+            APPLY_SCRIBE: {
+                code: "APPLY_SCRIBE",
+                sdesc: "APPLY_SCRIBE",
+                ldesc: "Adds to or takes away from the scribe skill",
+            },
+            APPLY_BREW: {
+                code: "APPLY_BREW",
+                sdesc: "APPLY_BREW",
+                ldesc: "Adds to or takes away from the brew potions skill",
+            },
+            APPLY_WEARSPELL: {
+                code: "APPLY_WEARSPELL",
+                sdesc: "APPLY_WEARSPELL",
+                ldesc: "Used to apply SPELL_ spell affects. Spell is applied to wearer when object is worn, and will wear off like a normal spell.",
+            },
+            APPLY_REMOVESPELL: {
+                code: "APPLY_REMOVESPELL",
+                sdesc: "APPLY_REMOVESPELL",
+                ldesc: "When object is removed, the SPELL_ affects the character.",
+            },
+            APPLY_EMOTION: {
+                code: "APPLY_EMOTION",
+                sdesc: "APPLY_EMOTION",
+                ldesc: "Adds to or takes away from a PC's emotional state",
+            },
+            APPLY_MENTALSTATE: {
+                code: "APPLY_MENTALSTATE",
+                sdesc: "APPLY_MENTALSTATE",
+                ldesc: "Adds to or takes away from a PC's mental state",
+            },
+            APPLY_STRIPSN: {
+                code: "APPLY_STRIPSN",
+                sdesc: "APPLY_STRIPSN",
+                ldesc: "Use SPELL_ here.",
+            },
+            APPLY_REMOVE: {
+                code: "APPLY_REMOVE",
+                sdesc: "APPLY_REMOVE",
+                ldesc: "Use AFF_ flags here. Removes the affect upon wearing the object.",
+            },
+            APPLY_DIG: {
+                code: "APPLY_DIG",
+                sdesc: "APPLY_DIG",
+                ldesc: "Adds to or takes away from a PC's dig skill",
+            },
+            APPLY_FULL: {
+                code: "APPLY_FULL",
+                sdesc: "APPLY_FULL",
+                ldesc: "Affects the hours until the PC is hungry",
+            },
+            APPLY_THIRST: {
+                code: "APPLY_THIRST",
+                sdesc: "APPLY_THIRST",
+                ldesc: "Affects the hours until the PC is thirsty",
+            },
+            APPLY_DRUNK: {
+                code: "APPLY_DRUNK",
+                sdesc: "APPLY_DRUNK",
+                ldesc: "Affects the hours until the PC is sober",
+            },
+            APPLY_BLOOD: {
+                code: "APPLY_BLOOD",
+                sdesc: "APPLY_BLOOD",
+                ldesc: "Do not use.",
+            },
+            APPLY_HAGGLE: {
+                code: "APPLY_HAGGLE",
+                sdesc: "APPLY_HAGGLE",
+                ldesc: "Increases or decreases the characters haggle skill.",
+            },
+            APPLY_OBJWEIGHT: {
+                code: "APPLY_OBJWEIGHT",
+                sdesc: "APPLY_OBJWEIGHT",
+                ldesc: "Increases or decreases the weight of the object.",
+            },
+            APPLY_RESIST_MAGIC: {
+                code: "APPLY_RESIST_MAGIC",
+                sdesc: "APPLY_RESIST_MAGIC",
+                ldesc: "Wearing of the object affects the characters resistance to magic",
+            },
+            APPLY_RESIST_FIRE: {
+                code: "APPLY_RESIST_FIRE",
+                sdesc: "APPLY_RESIST_FIRE",
+                ldesc: "Wearing of the object affects the characters resistance to fire",
+            },
+            APPLY_RESIST_COLD: {
+                code: "APPLY_RESIST_COLD",
+                sdesc: "APPLY_RESIST_COLD",
+                ldesc: "Wearing of the object affects the characters resistance to cold",
+            },
+            APPLY_RESIST_ELECTRICITY: {
+                code: "APPLY_RESIST_ELECTRICITY",
+                sdesc: "APPLY_RESIST_ELECTRICITY",
+                ldesc: "Wearing of the object affects the characters resistance to electricity",
+            },
+            APPLY_RESIST_ENERGY: {
+                code: "APPLY_RESIST_ENERGY",
+                sdesc: "APPLY_RESIST_ENERGY",
+                ldesc: "Wearing of the object affects the characters resistance to energy",
+            },
+            APPLY_RESIST_ACID: {
+                code: "APPLY_RESIST_ACID",
+                sdesc: "APPLY_RESIST_ACID",
+                ldesc: "Wearing of the object affects the characters resistance to acid",
+            },
+            APPLY_RESIST_POISON: {
+                code: "APPLY_RESIST_POISON",
+                sdesc: "APPLY_RESIST_POISON",
+                ldesc: "Wearing of the object affects the characters resistance to poison",
+            },
+            APPLY_RESIST_DRAIN: {
+                code: "APPLY_RESIST_DRAIN",
+                sdesc: "APPLY_RESIST_DRAIN",
+                ldesc: "Wearing of the object affects the characters resistance to drain",
+            },
+            APPLY_RESIST_HOLD: {
+                code: "APPLY_RESIST_HOLD",
+                sdesc: "APPLY_RESIST_HOLD",
+                ldesc: "Wearing of the object affects the characters resistance to hold spells",
+            },
+            APPLY_RESIST_PHYSICAL: {
+                code: "APPLY_RESIST_PHYSICAL",
+                sdesc: "APPLY_RESIST_PHYSICAL",
+                ldesc: "Wearing of the object affects the characters resistance to physical attacks",
+            },
+            APPLY_RESIST_HEALING: {
+                code: "APPLY_RESIST_HEALING",
+                sdesc: "APPLY_RESIST_HEALING",
+                ldesc: "Wearing of the object affects the characters resistance to healing",
+            },
+            APPLY_RESIST_MIND: {
+                code: "APPLY_RESIST_MIND",
+                sdesc: "APPLY_RESIST_MIND",
+                ldesc: "Wearing of the object affects the characters resistance to mind spells and attacks",
+            },
+            APPLY_RESIST_BASH: {
+                code: "APPLY_RESIST_BASH",
+                sdesc: "APPLY_RESIST_BASH",
+                ldesc: "Wearing of the object affects the characters resistance to bash",
+            },
+            APPLY_RESIST_PIERCE: {
+                code: "APPLY_RESIST_PIERCE",
+                sdesc: "APPLY_RESIST_PIERCE",
+                ldesc: "Wearing of the object affects the characters resistance to piercing weapons",
+            },
+            APPLY_RESIST_SLASH: {
+                code: "APPLY_RESIST_SLASH",
+                sdesc: "APPLY_RESIST_SLASH",
+                ldesc: "Wearing of the object affects the characters resistance to slashing weapons",
+            },
+            APPLY_RESIST_NONMAGIC: {
+                code: "APPLY_RESIST_NONMAGIC",
+                sdesc: "APPLY_RESIST_NONMAGIC",
+                ldesc: "Wearing of the object affects the characters resistance to non magical attacks",
+            },
+            APPLY_MAGIC: {
+                code: "APPLY_MAGIC",
+                sdesc: "APPLY_MAGIC",
+                ldesc: "Wearing of the object increases magic damage",
+            },
+            APPLY_FIRE: {
+                code: "APPLY_FIRE",
+                sdesc: "APPLY_FIRE",
+                ldesc: "Wearing of the object increases fire damage",
+            },
+            APPLY_COLD: {
+                code: "APPLY_COLD",
+                sdesc: "APPLY_COLD",
+                ldesc: "Wearing of the object increases cold damage",
+            },
+            APPLY_ELECTRICITY: {
+                code: "APPLY_ELECTRICITY",
+                sdesc: "APPLY_ELECTRICITY",
+                ldesc: "Wearing of the object increases electrical damage",
+            },
+            APPLY_ENERGY: {
+                code: "APPLY_ENERGY",
+                sdesc: "APPLY_ENERGY",
+                ldesc: "Wearing of the object increases energy damage",
+            },
+            APPLY_ACID: {
+                code: "APPLY_ACID",
+                sdesc: "APPLY_ACID",
+                ldesc: "Wearing of the object increases acid damage",
+            },
+            APPLY_POISON: {
+                code: "APPLY_POISON",
+                sdesc: "APPLY_POISON",
+                ldesc: "Wearing of the object increases poison damage",
+            },
+            APPLY_DRAIN: {
+                code: "APPLY_DRAIN",
+                sdesc: "APPLY_DRAIN",
+                ldesc: "Wearing of the object increases drain damage",
+            },
+            APPLY_HEALING: {
+                code: "APPLY_HEALING",
+                sdesc: "APPLY_HEALING",
+                ldesc: "Wearing of the object increases healing",
+            },
+            APPLY_PHYSICAL: {
+                code: "APPLY_PHYSICAL",
+                sdesc: "APPLY_PHYSICAL",
+                ldesc: "Wearing of the object increases physical damage",
+            },
+            APPLY_MIND: {
+                code: "APPLY_MIND",
+                sdesc: "APPLY_MIND",
+                ldesc: "Wearing of the object increases mind damage",
+            },
+            APPLY_BLUDGEON: {
+                code: "APPLY_BLUDGEON",
+                sdesc: "APPLY_BLUDGEON",
+                ldesc: "Wearing of the object increases bludgeon damage",
+            },
+            APPLY_PIERCE: {
+                code: "APPLY_PIERCE",
+                sdesc: "APPLY_PIERCE",
+                ldesc: "Wearing of the object increases piercing damage",
+            },
+            APPLY_SLASH: {
+                code: "APPLY_SLASH",
+                sdesc: "APPLY_SLASH",
+                ldesc: "Wearing of the object increases slashing damage",
+            },
+            APPLY_WEAPONSPELL_ONE: {
+                code: "APPLY_WEAPONSPELL_ONE",
+                sdesc: "APPLY_WEAPONSPELL_ONE",
+                ldesc: "Casts a spell when hitting use SPELL_ 10 % of the time.",
+            },
+            APPLY_WEAPONSPELL_TWO: {
+                code: "APPLY_WEAPONSPELL_TWO",
+                sdesc: "APPLY_WEAPONSPELL_TWO",
+                ldesc: "Casts a spell when hitting use SPELL_ 25 % of the time.",
+            },
+            APPLY_WEAPONSPELL_FIVE: {
+                code: "APPLY_WEAPONSPELL_FIVE",
+                sdesc: "APPLY_WEAPONSPELL_FIVE",
+                ldesc: "Casts a spell when hitting use SPELL_ 50 % of the time.",
+            },
+            APPLY_DUAL_WIELD: {
+                code: "APPLY_DUAL_WIELD",
+                sdesc: "APPLY_DUAL_WIELD",
+                ldesc: "Increases or decreases the dual wield skill",
+            },
+            APPLY_DISGUISE: {
+                code: "APPLY_DISGUISE",
+                sdesc: "APPLY_DISGUISE",
+                ldesc: "Increases or decreases the disguise skill",
+            },
+            APPLY_LEVEL_ONE_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_ONE_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_ONE_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 1 spell slots",
+            },
+            APPLY_LEVEL_TWO_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_TWO_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_TWO_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 2 spell slots",
+            },
+            APPLY_LEVEL_THREE_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_THREE_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_THREE_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 3 spell slots",
+            },
+            APPLY_LEVEL_FOUR_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_FOUR_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_FOUR_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 4 spell slots",
+            },
+            APPLY_LEVEL_FIVE_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_FIVE_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_FIVE_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 5 spell slots",
+            },
+            APPLY_LEVEL_SIX_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_SIX_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_SIX_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 6 spell slots",
+            },
+            APPLY_LEVEL_SEVEN_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_SEVEN_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_SEVEN_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 7 spell slots",
+            },
+            APPLY_LEVEL_EIGHT_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_EIGHT_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_EIGHT_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 8 spell slots",
+            },
+            APPLY_LEVEL_NINE_SPELL_SLOTS: {
+                code: "APPLY_LEVEL_NINE_SPELL_SLOTS",
+                sdesc: "APPLY_LEVEL_NINE_SPELL_SLOTS",
+                ldesc: "Increases or decreases the number of level 9 spell slots",
+            },
+            APPLY_EXHAUSTION_MENTAL_STATE: {
+                code: "APPLY_EXHAUSTION_MENTAL_STATE",
+                sdesc: "APPLY_EXHAUSTION_MENTAL_STATE",
+                ldesc: "Modifies the exhaustion mental state of the wearer (100 for dead tired, 0 for normal)",
+            },
+            APPLY_SANITY_MENTAL_STATE: {
+                code: "APPLY_SANITY_MENTAL_STATE",
+                sdesc: "APPLY_SANITY_MENTAL_STATE",
+                ldesc: "Modifies the sanity mental state of the wearer (100 for mad, 0 for normal)",
+            }
+        };
+    }
+    get _error_prefix() {
+        return `[GameObject:(${this.vnum}) ${this.sdesc}]`
+    }
+    
+    validate() {
+        
+    }
+    
+    toString() {
+        return `#${this.vnum}
+${this.keywords}~
+${this.sdesc}~
+${this.ldesc}~
+${this.action_description}~
+${this.item_type}
+${this.attributes.map((attribute)=>(attribute.code)).join("|")||0}
+${this.wear_flags.map((flag)=>(flag.code)).join("|")||0}
+${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.code}
+${this.values.value0} ${this.values.value1} ${this.values.value2} ${this.values.value3} ${this.values.value4} ${this.values.value5}
+${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
+${this.special_applies.map((spec) => (`A ${spec.code} ${spec.value}`)).join("\n")}
+${this.programs.map((program) => (program.toString())).join("\n")}
+`;
+    }
+}
+
+class Mob {
+    constructor() {
+        
+    }
+    
+    validate() {
+        
+    }
+    
+    toString() {
+        
+    }
+}
+
+
 //export default Loader;
 
 // DEBUG
