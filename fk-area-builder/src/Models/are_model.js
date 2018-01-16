@@ -12,7 +12,6 @@ class Loader {
 
 class Area {
     constructor() {
-        this._error_prefix = "[Area]";
         this.name = null;
         this.category = null;
         this.valid_categories = {
@@ -167,8 +166,13 @@ class Area {
                 sdesc: "Darkwood"
             }
         }
+        
+        this.rooms = [];
+        
     }
-    
+    get _error_prefix() {
+        return `[Area:${this.name}]`;
+    }
     validate() {
         let errors = []
         // Area name
@@ -197,7 +201,7 @@ class Area {
         if (this.justice_system != null) {
             let justice_system_errors = this.justice_system.validate()
             if (justice_system_errors.length) {
-                errors.push(justice_system_errors.map((error) => `${this._error_prefix} ${error}`));
+                errors = errors.concat(justice_system_errors.map((error) => `${this._error_prefix} ${error}`));
             }
         }
         // Level range
@@ -250,7 +254,13 @@ class Area {
         if (this.logging_material != null && this.valid_logging_materials.indexOf(this.logging_material) != -1) {
             errors.push(`${this._error_prefix} Invalid logging material`);
         }
-        
+        // Check rooms
+        for (let i = 0; i < this.rooms.length; i++) {
+            let room_errors = this.rooms[i].validate();
+            if (room_errors.length) {
+                errors = errors.concat(room_errors.map((error) => (`${this._error_prefix} ${error}`)))
+            }
+        }
         return errors
     }
     
@@ -273,8 +283,9 @@ ${this.wilderness_flag} ${this.reset_duration}
 ${this.justice_system != null ? this.justice_system.toString() : ""}
 ${this.mining_material != null ? "#MINING " + this.mining_material.code : ""}
 ${this.logging_material != null ? "#LOGGING " + this.logging_material.code : ""}
+${this.rooms.length ? "#ROOMS\n" + this.rooms.map((room)=>(room.toString())).join("\n") : ""}
 #$
-`;
+`.replace(/\n[\n]+/g, "\n");
     }
 }
 
@@ -352,23 +363,23 @@ class JusticeSystem {
         if (this.courtroom == null) {
             errors.push(`${this._error_prefix} No courtroom defined`);
         }
-        else {
+        /*else { // Courtroom room errors will be tracked by Area
             let courtroom_errors = this.courtroom.validate()
             if (courtroom_errors.length) {
-                errors.push(courtroom_errors.map((error) => `${this._error_prefix} ${error}`))
+                errors = errors.concat(courtroom_errors.map((error) => `${this._error_prefix} ${error}`));
             }
-        }
+        }*/ 
         
         // Check dungeon
         if (this.dungeon == null) {
             errors.push(`${this._error_prefix} No dungeon defined`);
         }
-        else {
+        /* else { // Dungeon room errors will be tracked by Area
             let dungeon_errors = this.dungeon.validate()
             if (dungeon_errors.length) {
-                errors.push(dungeon_errors.map((error) => `${this._error_prefix} ${error}`))
+                errors = errors.concat(dungeon_errors.map((error) => `${this._error_prefix} ${error}`));
             }
-        }
+        } */
         
         // Check judge
         if (this.judge == null) {
@@ -377,7 +388,7 @@ class JusticeSystem {
         else {
             let judge_errors = this.judge.validate()
             if (judge_errors.length) {
-                errors.push(judge_errors.map((error) => `${this._error_prefix} ${error}`))
+                errors = errors.concat(judge_errors.map((error) => `${this._error_prefix} ${error}`));
             }
         }
         
@@ -388,7 +399,7 @@ class JusticeSystem {
         else {
             let guard_errors = this.guard.validate()
             if (guard_errors.length) {
-                errors.push(guard_errors.map((error) => `${this._error_prefix} ${error}`))
+                errors = errors.concat(guard_errors.map((error) => `${this._error_prefix} ${error}`));
             }
         }
         
@@ -454,7 +465,6 @@ class GameObject {
 
 class Room {
     constructor() {
-        this._error_prefix = "[Room]"
         this.vnum = null;
         this.sdesc = null;
         this.ldesc = null;
@@ -465,8 +475,9 @@ class Room {
             teleport_delay: 0,
             teleport_target: 0,
             tunnel: 0
-        }
-        this.exits = []
+        };
+        this.exits = [];
+        this.extra_descriptions = [];
         this.valid_room_flags = {
             ROOM_DARK: {
                 code: "ROOM_DARK",
@@ -747,9 +758,11 @@ class Room {
             }
         }
     }
-    
+    get _error_prefix() {
+        return `[Room:(${this.vnum}) ${this.sdesc}]`;
+    }
     validate() {
-        let errors = []
+        let errors = [];
         if (this.vnum == null) {
             errors.push(`${this._error_prefix} No vnum defined`);
         }
@@ -762,7 +775,7 @@ class Room {
         if (this.flags.sector == null) {
             errors.push(`${this._error_prefix} No sector defined`);
         }
-        else if (this.valid_sector_flags.indexOf(this.flags.sector) == -1) {
+        else if (this.flags.sector in this.valid_sector_flags) {
             errors.push(`${this._error_prefix} Invalid sector`);
         }
         for (let i = 0; i < this.flags.room_flags.length; i++) {
@@ -774,12 +787,18 @@ class Room {
             }
         }
         for (let i = 0; i < this.exits.length; i++) {
-            let exit_errors = this.exits[i].validate()
+            let exit_errors = this.exits[i].validate();
             if (exit_errors.length) {
-                errors.push(exit_errors.map((error) => `${this._error_prefix} ${error}`));
+                errors = errors.concat(exit_errors.map((error) => `${this._error_prefix} ${error}`));
             }
         }
-        return errors
+        for (let i = 0; i < this.extra_descriptions.length; i++) {
+            let extra_description_errors = this.extra_descriptions[i].validate();
+            if (extra_description_errors.length) {
+                errors = errors.concat(extra_description_errors.map((error) => `${this._error_prefix} ${error}`));
+            }
+        }
+        return errors;
     }
     
     toString() {
@@ -787,8 +806,9 @@ class Room {
 ${this.sdesc}~
 ${this.ldesc}
 ~
-${this.flags.defunct} ${this.flags.room_flags.join("|")||"0"} ${this.flags.sector} ${this.flags.teleport_delay} ${this.flags.teleport_target} ${this.flags.tunnel}
+${this.flags.defunct} ${this.flags.room_flags.join("|")||"0"} ${this.flags.sector.code} ${this.flags.teleport_delay} ${this.flags.teleport_target} ${this.flags.tunnel}
 ${this.exits.map((exit) => (exit.toString())).join("\n")}
+${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 S
 `;
     }
@@ -987,16 +1007,18 @@ class Exit {
             }
         }
     }
-    
+    get _error_prefix() {
+        return `[Exit:${this.flags.target_vnum}]`
+    }
     validate() {
         let errors = [];
         if (this.direction == null) {
             errors.push(`${this._error_prefix} No direction defined`);
         }
-        if (this.valid_directions.map((direction) => (direction.code)).indexOf(this.direction) == -1) {
+        if (this.direction in this.valid_directions) {
             errors.push(`${this._error_prefix} Invalid direction`);
         }
-        if (this.target_vnum == null) {
+        if (this.flags.target_vnum == null) {
             errors.push(`${this._error_prefix} No target vnum defined`);
         }
         if (this.direction == this.valid_directions.DDIR_SOMEWHERE && this.somewhere_keyword == null) {
@@ -1009,14 +1031,11 @@ class Exit {
             errors.push(`${this._error_prefix} Door keywords defined, but EX_ISDOOR flag not set`);
         }
         for (let i = 0; i < this.flags.door_flags.length; i++) {
-            if (this.valid_door_flags.indexOf(this.flags.door_flags[i]) == -1) {
+            if (!(this.flags.door_flags[i].code in this.valid_door_flags)) {
                 errors.push(`${this._error_prefix} Invalid flag`);
             }
         }
-        if (this.valid_exit_sizes.map((size) => (size.code)).indexOf(this.flags.exit_size) == -1) {
-            errors.push(`${this._error_prefix} Invalid exit size set`);
-        }
-        if (this.valid_exit_sizes.map((size) => (size.code)).indexOf(this.flags.exit_size) == -1) {
+        if (this.flags.exit_size in this.valid_exit_sizes) {
             errors.push(`${this._error_prefix} Invalid exit size set`);
         }
         return errors
@@ -1033,46 +1052,107 @@ ${this.direction == this.valid_directions.DDIR_SOMEWHERE ? this.somewhere_keywor
 ${this.flags.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.flags.door_key} ${this.flags.target_vnum} ${this.flags.exit_size}`;
     }
 }
+
+class ExtraDescription {
+    constructor() {
+        this._error_prefix = "[ExtraDescription]";
+        this.keywords = null;
+        this.ldesc = null;
+    }
+    
+    validate() {
+        let errors = [];
+        if (this.keywords == null) {
+            errors.push(`${this._error_prefix} No keywords defined`);
+        }
+        if (this.ldesc == null) {
+            errors.push(`${this._error_prefix} No description defined`);
+        }
+        return errors;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `E
+${this.keywords}~
+${this.ldesc}
+~`;
+    }
+}
 //export default Loader;
 
 // DEBUG
 function testLoader() {
     let loader = new Loader();
-    console.log(loader.toString())
+    //console.log(loader.toString());
     
-    loader.area.name = "Calimport"
-    loader.area.category = loader.area.valid_categories.cities
-    loader.area.reset_msg = "{A0}A hot wind blows off the desert."
-    loader.area.authors.push("Grenwyn")
-    loader.area.economy.min = 100000
-    loader.area.economy.max = 100000
-    loader.area.weather.humidity = 1
-    loader.area.weather.temperature = 8
+    loader.area.name = "Calimport";
+    loader.area.category = loader.area.valid_categories.cities;
+    loader.area.reset_msg = "{A0}A hot wind blows off the desert.";
+    loader.area.authors.push("Grenwyn");
+    loader.area.economy.min = 100000;
+    loader.area.economy.max = 100000;
+    loader.area.weather.humidity = 1;
+    loader.area.weather.temperature = 8;
     // loader.area.authors.push("Lord Greywether") // should fail
     
+    let courtroom = new Room();
+    courtroom.vnum = "QQ01";
+    courtroom.sdesc = "Courtroom";
+    courtroom.ldesc = "A really big courtroom";
+    courtroom.flags.sector = courtroom.valid_room_flags.ROOM_INDOORS;
+    let courtroom_exit = new Exit();
+    courtroom_exit.direction = courtroom_exit.valid_directions.DDIR_DOWN
+    courtroom_exit.door_keyword = "trapdoor"
+    courtroom_exit.flags.door_flags.push(courtroom_exit.valid_door_flags.EX_ISDOOR)
+    courtroom_exit.flags.door_flags.push(courtroom_exit.valid_door_flags.EX_LOCKED)
+    courtroom_exit.flags.door_flags.push(courtroom_exit.valid_door_flags.EX_CLOSED)
+    courtroom.exits.push(courtroom_exit)
+    
+    let dungeon = new Room();
+    dungeon.vnum = "QQ03";
+    dungeon.sdesc = "Dungeon";
+    dungeon.ldesc = "A really smelly dungeon";
+    dungeon.flags.sector = dungeon.valid_room_flags.ROOM_INDOORS;
+    let dungeon_exit = new Exit();
+    dungeon_exit.direction = dungeon_exit.valid_directions.DDIR_UP
+    dungeon_exit.door_keyword = "trapdoor"
+    dungeon_exit.flags.door_flags.push(dungeon_exit.valid_door_flags.EX_ISDOOR)
+    dungeon_exit.flags.door_flags.push(dungeon_exit.valid_door_flags.EX_LOCKED)
+    dungeon_exit.flags.door_flags.push(dungeon_exit.valid_door_flags.EX_CLOSED)
+    dungeon.exits.push(dungeon_exit)
+    let dungeon_extra_desc = new ExtraDescription()
+    dungeon_extra_desc.keywords = "smelly garbage"
+    dungeon_extra_desc.ldesc = "There's a heap of really nasty garbage here. It might be a way out - if you die of food poisoning!"
+    dungeon.extra_descriptions.push(dungeon_extra_desc)
+    
+    
+    dungeon_exit.flags.target_vnum = courtroom.vnum
+    courtroom_exit.flags.target_vnum = dungeon.vnum
+    
+    loader.area.rooms.push(courtroom)
+    loader.area.rooms.push(dungeon)
+    
     loader.area.justice_system = new JusticeSystem();
-    loader.area.justice_system.courtroom = {
-        vnum: "QQ01",
-        validate: () => (true)
-    }
+    loader.area.justice_system.courtroom = courtroom
     loader.area.justice_system.judge = {
         vnum: "QQ02",
         validate: () => (true)
-    }
-    loader.area.justice_system.dungeon = {
-        vnum: "QQ03",
-        validate: () => (true)
-    }
+    };
+    loader.area.justice_system.dungeon = dungeon;
     loader.area.justice_system.guard = {
         vnum: "QQ04",
         validate: () => (true)
-    }
-    loader.area.justice_system.crimes.CRIME_HIGH_MURDER.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_DEATH
-    loader.area.justice_system.crimes.CRIME_LOW_MURDER.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_SEVER
-    loader.area.justice_system.crimes.CRIME_ASSAULT.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_JAIL
-    loader.area.justice_system.crimes.CRIME_MUGGING.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_RANDOM_ITEM
+    };
+    loader.area.justice_system.crimes.CRIME_HIGH_MURDER.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_DEATH;
+    loader.area.justice_system.crimes.CRIME_LOW_MURDER.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_SEVER;
+    loader.area.justice_system.crimes.CRIME_ASSAULT.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_JAIL;
+    loader.area.justice_system.crimes.CRIME_MUGGING.punishment = loader.area.justice_system.valid_punishments.PUNISHMENT_RANDOM_ITEM;
     
-    console.log(loader.toString())
+    console.log(loader.toString());
 }
 
 testLoader();
