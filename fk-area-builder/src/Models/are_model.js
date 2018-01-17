@@ -1,5 +1,64 @@
 // Flag tables
 
+const AREA_CATEGORIES = {
+    WILDERNESS: {
+        color_code: "{20}",
+        sdesc: "Wilderness areas"
+    },
+    LOW_LEVEL: {
+        color_code: "{30}",
+        sdesc: "Low level dungeons/quest areas"
+    },
+    INCOMPLETE: {
+        color_code: "{40}",
+        sdesc: "Incomplete areas"
+    },
+    MID_LEVEL: {
+        color_code: "{50}",
+        sdesc: "Mid level dungeons/quest areas"
+    },
+    HIGH_LEVEL: {
+        color_code: "{60}",
+        sdesc: "High level dungeons/quest areas"
+    },
+    OTHER_PLANES: {
+        color_code: "{70}",
+        sdesc: "Areas from other planes"
+    },
+    UNDERDARK: {
+        color_code: "{80}",
+        sdesc: "Underdark Areas"
+    },
+    SPECIAL: {
+        color_code: "{90}",
+        sdesc: "Special areas"
+    },
+    VILLAGES: {
+        color_code: "{A0}",
+        sdesc: "Villages and encampments"
+    },
+    CITIES: {
+        color_code: "{B0}",
+        sdesc: "Major cities and towns"
+    },
+    IMMS_RPS: {
+        color_code: "{C0}",
+        sdesc: "Areas for imms and special rps"
+    },
+    GUILDHOUSES_ACADEMIES: {
+        color_code: "{D0}",
+        sdesc: "Guildhouses and Academies"
+    },
+    ORGANIZATIONS: {
+        color_code: "{E0}",
+        sdesc: "Organization HQ and side areas"
+    },
+    TEMPLES: {
+        color_code: "{F0}",
+        sdesc: "Temples"
+    },
+};
+
 const PUNISHMENTS = {
     PUNISHMENT_NOT_ENFORCED: {
         code: "PUNISHMENT_NOT_ENFORCED",
@@ -3968,64 +4027,6 @@ class Area {
     constructor() {
         this.name = null;
         this.category = null;
-        this.valid_categories = {
-            wilderness: {
-                color_code: "{20}",
-                sdesc: "Wilderness areas"
-            },
-            low_level: {
-                color_code: "{30}",
-                sdesc: "Low level dungeons/quest areas"
-            },
-            incomplete: {
-                color_code: "{40}",
-                sdesc: "Incomplete areas"
-            },
-            mid_level: {
-                color_code: "{50}",
-                sdesc: "Mid level dungeons/quest areas"
-            },
-            high_level: {
-                color_code: "{60}",
-                sdesc: "High level dungeons/quest areas"
-            },
-            other_planes: {
-                color_code: "{70}",
-                sdesc: "Areas from other planes"
-            },
-            underdark: {
-                color_code: "{80}",
-                sdesc: "Underdark Areas"
-            },
-            special: {
-                color_code: "{90}",
-                sdesc: "Special areas"
-            },
-            villages: {
-                color_code: "{A0}",
-                sdesc: "Villages and encampments"
-            },
-            cities: {
-                color_code: "{B0}",
-                sdesc: "Major cities and towns"
-            },
-            imms_rps: {
-                color_code: "{C0}",
-                sdesc: "Areas for imms and special rps"
-            },
-            guildhouses_academies: {
-                color_code: "{D0}",
-                sdesc: "Guildhouses and Academies"
-            },
-            organizations: {
-                color_code: "{E0}",
-                sdesc: "Organization HQ and side areas"
-            },
-            temples: {
-                color_code: "{F0}",
-                sdesc: "Temples"
-            },
-        };
         this.authors = [];
         this.justice_system = null;
         this.level_range = {
@@ -4046,82 +4047,11 @@ class Area {
             temperature: 5
         };
         this.mining_material = null;
-        this.valid_mining_materials = {
-            MATERIAL_SILVER: {
-                code: "MATERIAL_SILVER",
-                sdesc: "Silver"
-            },
-            MATERIAL_GOLD: {
-                code: "MATERIAL_GOLD",
-                sdesc: "Gold"
-            },
-            MATERIAL_LEAD: {
-                code: "MATERIAL_LEAD",
-                sdesc: "Lead"
-            },
-            MATERIAL_COPPER: {
-                code: "MATERIAL_COPPER",
-                sdesc: "Copper"
-            },
-            MATERIAL_PLATINUM: {
-                code: "MATERIAL_PLATINUM",
-                sdesc: "Platinum"
-            },
-            MATERIAL_TITANIUM: {
-                code: "MATERIAL_TITANIUM",
-                sdesc: "Titanium"
-            },
-            MATERIAL_TIN: {
-                code: "MATERIAL_TIN",
-                sdesc: "Tin"
-            },
-            MATERIAL_IRON: {
-                code: "MATERIAL_IRON",
-                sdesc: "Iron"
-            },
-            MATERIAL_MITHRIL: {
-                code: "MATERIAL_MITHRIL",
-                sdesc: "Mithril"
-            },
-            MATERIAL_ADAMANTIUM: {
-                code: "MATERIAL_ADAMANTIUM",
-                sdesc: "Adamantium"
-            }
-
-        }
         this.logging_material = null;
-        this.valid_logging_materials = {
-            MATERIAL_WOOD: {
-                code: "MATERIAL_WOOD",
-                sdesc: "Wood"
-            },
-            MATERIAL_HARDWOOD: {
-                code: "MATERIAL_HARDWOOD",
-                sdesc: "Hardwood"
-            },
-            MATERIAL_SOFTWOOD: {
-                code: "MATERIAL_SOFTWOOD",
-                sdesc: "Softwood"
-            },
-            MATERIAL_OAK: {
-                code: "MATERIAL_OAK",
-                sdesc: "Oak"
-            },
-            MATERIAL_YEW: {
-                code: "MATERIAL_YEW",
-                sdesc: "Yew"
-            },
-            MATERIAL_EBONY: {
-                code: "MATERIAL_EBONY",
-                sdesc: "Ebony"
-            },
-            MATERIAL_DARKWOOD: {
-                code: "MATERIAL_DARKWOOD",
-                sdesc: "Darkwood"
-            }
-        }
         
         this.rooms = [];
+        this.objects = [];
+        this.mobs = [];
         
     }
     get _error_prefix() {
@@ -4201,11 +4131,11 @@ class Area {
             errors.push(`${this._error_prefix} Invalid weather temperature`);
         }
         // Mining materials
-        if (this.mining_material != null && this.valid_mining_materials.indexOf(this.mining_material) != -1) {
+        if (this.mining_material != null && !(this.mining_material.code in OBJECT_MATERIALS)) {
             errors.push(`${this._error_prefix} Invalid mining material`);
         }
         // Logging materials
-        if (this.logging_material != null && this.valid_logging_materials.indexOf(this.logging_material) != -1) {
+        if (this.logging_material != null && !(this.logging_material.code in OBJECT_MATERIALS)) {
             errors.push(`${this._error_prefix} Invalid logging material`);
         }
         // Check rooms
@@ -4213,6 +4143,13 @@ class Area {
             let room_errors = this.rooms[i].validate();
             if (room_errors.length) {
                 errors = errors.concat(room_errors.map((error) => (`${this._error_prefix} ${error}`)))
+            }
+        }
+        // Check objects
+        for (let i = 0; i < this.objects.length; i++) {
+            let object_errors = this.objects[i].validate();
+            if (object_errors.length) {
+                errors = errors.concat(object_errors.map((error) => (`${this._error_prefix} ${error}`)))
             }
         }
         return errors
@@ -4238,6 +4175,7 @@ ${this.justice_system != null ? this.justice_system.toString() : ""}
 ${this.mining_material != null ? "#MINING " + this.mining_material.code : ""}
 ${this.logging_material != null ? "#LOGGING " + this.logging_material.code : ""}
 ${this.rooms.length ? "#ROOMS\n" + this.rooms.map((room)=>(room.toString())).join("\n") : ""}
+${this.objects.length ? "#OBJECTS\n" + this.objects.map((obj)=>(obj.toString())).join("\n") : ""}
 #$
 `.replace(/\n[\n]+/g, "\n");
     }
@@ -4245,7 +4183,6 @@ ${this.rooms.length ? "#ROOMS\n" + this.rooms.map((room)=>(room.toString())).joi
 
 class JusticeSystem {
     constructor() {
-        this._error_prefix = "[JusticeSystem]"
         this.courtroom = null;
         this.dungeon = null;
         this.judge = null;
@@ -4276,6 +4213,9 @@ class JusticeSystem {
                 punishment: null
             }
         }
+    }
+    get _error_prefix() {
+        return "[JusticeSystem]"
     }
     
     validate() {
@@ -4574,7 +4514,7 @@ class GameObject {
         if (this.item_type == null) {
             errors.push(`${this._error_prefix} No item type defined`);
         }
-        else if (!(this.item_type.code in this.valid_item_types)) {
+        else if (!(this.item_type.code in ITEM_TYPES)) {
             errors.push(`${this._error_prefix} Invalid item type defined`);
         }
         for (let i = 0; i < this.attributes.length; i++) {
@@ -4642,7 +4582,7 @@ ${this.keywords}~
 ${this.sdesc}~
 ${this.ldesc}~
 ${this.action_description}~
-${this.item_type}
+${this.item_type.code}
 ${this.attributes.map((attribute)=>(attribute.code)).join("|")||0}
 ${this.wear_flags.map((flag)=>(flag.code)).join("|")||0}
 ${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.code}
@@ -4678,7 +4618,7 @@ function testLoader() {
     //console.log(loader.toString());
     
     loader.area.name = "Calimport";
-    loader.area.category = loader.area.valid_categories.cities;
+    loader.area.category = AREA_CATEGORIES.CITIES;
     loader.area.reset_msg = "{A0}A hot wind blows off the desert.";
     loader.area.authors.push("Grenwyn");
     loader.area.economy.min = 100000;
@@ -4738,7 +4678,10 @@ function testLoader() {
     trapdoor_key.extra_descriptions.push(trapdoor_key_desc);
     trapdoor_key.quality = OBJECT_QUALITY.QUALITY_AVERAGE;
     trapdoor_key.condition = OBJECT_CONDITION.COND_USABLE;
+    trapdoor_key.material = OBJECT_MATERIALS.MATERIAL_IRON;
     trapdoor_key.size = OBJECT_SIZES.SIZE_TINY;
+    
+    loader.area.objects.push(trapdoor_key);
     
     loader.area.justice_system = new JusticeSystem();
     loader.area.justice_system.courtroom = courtroom
