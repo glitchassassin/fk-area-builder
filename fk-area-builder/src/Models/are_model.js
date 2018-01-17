@@ -8541,7 +8541,1375 @@ const MOB_RIS = {
     }
 };
 
+const MOB_SPELLS = {
+    ACID_ARROW: {
+        code: "acid arrow",
+        sdesc: "acid arrow",
+        do_not_use: false
+    },
+    ACID_BLAST: {
+        code: "acid blast",
+        sdesc: "acid blast",
+        do_not_use: false
+    },
+    ACID_BREATH: {
+        code: "acid breath",
+        sdesc: "acid breath",
+        do_not_use: false
+    },
+    ALERTNESS: {
+        code: "alertness",
+        sdesc: "alertness",
+        do_not_use: false
+    },
+    ANIMATE_DEAD: {
+        code: "animate dead",
+        sdesc: "animate dead",
+        do_not_use: false
+    },
+    ANIMATE_OBJECT: {
+        code: "animate object",
+        sdesc: "animate object",
+        do_not_use: false
+    },
+    ANTIMAGIC_SHELL: {
+        code: "antimagic shell",
+        sdesc: "antimagic shell",
+        do_not_use: false
+    },
+    ARMOR: {
+        code: "armor",
+        sdesc: "armor",
+        do_not_use: false
+    },
+    ASTRAL_WALK: {
+        code: "astral walk",
+        sdesc: "astral walk",
+        do_not_use: false
+    },
+    BARKSKIN: {
+        code: "barkskin",
+        sdesc: "barkskin",
+        do_not_use: false
+    },
+    BLAZEBANE: {
+        code: "blazebane",
+        sdesc: "blazebane",
+        do_not_use: false
+    },
+    BLESS: {
+        code: "bless",
+        sdesc: "bless",
+        do_not_use: false
+    },
+    BLINDNESS: {
+        code: "blindness",
+        sdesc: "blindness",
+        do_not_use: false
+    },
+    BLOOD_OF_CYRIC: {
+        code: "blood of cyric",
+        sdesc: "blood of cyric",
+        do_not_use: false
+    },
+    BULLS_STRENGTH: {
+        code: "bulls strength",
+        sdesc: "bulls strength",
+        do_not_use: false
+    },
+    BURNING_HANDS: {
+        code: "burning hands",
+        sdesc: "burning hands",
+        do_not_use: false
+    },
+    CALL_LIGHTNING: {
+        code: "call lightning",
+        sdesc: "call lightning",
+        do_not_use: false
+    },
+    CAUSE_CRITICAL: {
+        code: "cause critical",
+        sdesc: "cause critical",
+        do_not_use: false
+    },
+    CAUSE_LIGHT: {
+        code: "cause light",
+        sdesc: "cause light",
+        do_not_use: false
+    },
+    CAUSE_SERIOUS: {
+        code: "cause serious",
+        sdesc: "cause serious",
+        do_not_use: false
+    },
+    CHAIN_LIGHTNING: {
+        code: "chain lightning",
+        sdesc: "chain lightning",
+        do_not_use: false
+    },
+    CHANGE_SEX: {
+        code: "change sex",
+        sdesc: "change sex",
+        do_not_use: false
+    },
+    CHARGED_BEACON: {
+        code: "charged beacon",
+        sdesc: "charged beacon",
+        do_not_use: false
+    },
+    CHARIOT_OF_THE_SUN: {
+        code: "chariot of the sun",
+        sdesc: "chariot of the sun",
+        do_not_use: false
+    },
+    CHARM_MONSTER: {
+        code: "charm monster",
+        sdesc: "charm monster",
+        do_not_use: false
+    },
+    CHARM_PERSON: {
+        code: "charm person",
+        sdesc: "charm person",
+        do_not_use: false
+    },
+    CHILL_TOUCH: {
+        code: "chill touch",
+        sdesc: "chill touch",
+        do_not_use: false
+    },
+    CLAIRVOYANCE: {
+        code: "clairvoyance",
+        sdesc: "clairvoyance",
+        do_not_use: false
+    },
+    COLOR_SPRAY: {
+        code: "color spray",
+        sdesc: "color spray",
+        do_not_use: false
+    },
+    COMPREHEND_LANGUAGES: {
+        code: "comprehend languages",
+        sdesc: "comprehend languages",
+        do_not_use: false
+    },
+    CONE_OF_COLD: {
+        code: "cone of cold",
+        sdesc: "cone of cold",
+        do_not_use: false
+    },
+    CONJURE_ELEMENTAL: {
+        code: "conjure elemental",
+        sdesc: "conjure elemental",
+        do_not_use: false
+    },
+    CONTINUAL_LIGHT: {
+        code: "continual light",
+        sdesc: "continual light",
+        do_not_use: false
+    },
+    CONTROL_UNDEAD: {
+        code: "control undead",
+        sdesc: "control undead",
+        do_not_use: false
+    },
+    CONTROL_WEATHER: {
+        code: "control weather",
+        sdesc: "control weather",
+        do_not_use: false
+    },
+    CREATE_FOOD: {
+        code: "create food",
+        sdesc: "create food",
+        do_not_use: false
+    },
+    CREATE_OBJECT: {
+        code: "create object",
+        sdesc: "create object",
+        do_not_use: false
+    },
+    CREATE_SPRING: {
+        code: "create spring",
+        sdesc: "create spring",
+        do_not_use: false
+    },
+    CREATE_WATER: {
+        code: "create water",
+        sdesc: "create water",
+        do_not_use: false
+    },
+    CURE_BLINDNESS: {
+        code: "cure blindness",
+        sdesc: "cure blindness",
+        do_not_use: false
+    },
+    CURE_CRITICAL: {
+        code: "cure critical",
+        sdesc: "cure critical",
+        do_not_use: false
+    },
+    CURE_LIGHT: {
+        code: "cure light",
+        sdesc: "cure light",
+        do_not_use: false
+    },
+    CURE_POISON: {
+        code: "cure poison",
+        sdesc: "cure poison",
+        do_not_use: false
+    },
+    CURE_SERIOUS: {
+        code: "cure serious",
+        sdesc: "cure serious",
+        do_not_use: false
+    },
+    CURSE: {
+        code: "curse",
+        sdesc: "curse",
+        do_not_use: false
+    },
+    DELAYED_BLAST: {
+        code: "delayed blast",
+        sdesc: "delayed blast",
+        do_not_use: false
+    },
+    DETECT_BURIED: {
+        code: "detect buried",
+        sdesc: "detect buried",
+        do_not_use: false
+    },
+    DETECT_EVIL: {
+        code: "detect evil",
+        sdesc: "detect evil",
+        do_not_use: false
+    },
+    DETECT_HIDDEN: {
+        code: "detect hidden",
+        sdesc: "detect hidden",
+        do_not_use: false
+    },
+    DETECT_INVIS: {
+        code: "detect invis",
+        sdesc: "detect invis",
+        do_not_use: false
+    },
+    DETECT_MAGIC: {
+        code: "detect magic",
+        sdesc: "detect magic",
+        do_not_use: false
+    },
+    DETECT_POISON: {
+        code: "detect poison",
+        sdesc: "detect poison",
+        do_not_use: false
+    },
+    DISINTEGRATE: {
+        code: "disintegrate",
+        sdesc: "disintegrate",
+        do_not_use: false
+    },
+    DISJUNCTION: {
+        code: "disjunction",
+        sdesc: "disjunction",
+        do_not_use: false
+    },
+    DISPEL_EVIL: {
+        code: "dispel evil",
+        sdesc: "dispel evil",
+        do_not_use: false
+    },
+    DISPEL_MAGIC: {
+        code: "dispel magic",
+        sdesc: "dispel magic",
+        do_not_use: false
+    },
+    DIVINITY: {
+        code: "divinity",
+        sdesc: "divinity",
+        do_not_use: false
+    },
+    DRAGONSKIN: {
+        code: "dragonskin",
+        sdesc: "dragonskin",
+        do_not_use: false
+    },
+    DREAM: {
+        code: "dream",
+        sdesc: "dream",
+        do_not_use: false
+    },
+    EARTHQUAKE: {
+        code: "earthquake",
+        sdesc: "earthquake",
+        do_not_use: false
+    },
+    ELTSACS_FEAR: {
+        code: "eltsacs fear",
+        sdesc: "eltsacs fear",
+        do_not_use: false
+    },
+    ENCHANT_ARMOR: {
+        code: "enchant armor",
+        sdesc: "enchant armor",
+        do_not_use: false
+    },
+    ENCHANT_WEAPON: {
+        code: "enchant weapon",
+        sdesc: "enchant weapon",
+        do_not_use: false
+    },
+    ENERGY_DRAIN: {
+        code: "energy drain",
+        sdesc: "energy drain",
+        do_not_use: false
+    },
+    ENTANGLE: {
+        code: "entangle",
+        sdesc: "entangle",
+        do_not_use: false
+    },
+    ETHEREAL_FLYER: {
+        code: "ethereal flyer",
+        sdesc: "ethereal flyer",
+        do_not_use: false
+    },
+    FAERIE_FIRE: {
+        code: "faerie fire",
+        sdesc: "faerie fire",
+        do_not_use: false
+    },
+    FAERIE_FOG: {
+        code: "faerie fog",
+        sdesc: "faerie fog",
+        do_not_use: false
+    },
+    FARHEAL: {
+        code: "farheal",
+        sdesc: "farheal",
+        do_not_use: false
+    },
+    FATIGUE: {
+        code: "fatigue",
+        sdesc: "fatigue",
+        do_not_use: false
+    },
+    FEEBLEMIND: {
+        code: "feeblemind",
+        sdesc: "feeblemind",
+        do_not_use: false
+    },
+    FIND_FAMILIAR: {
+        code: "find familiar",
+        sdesc: "find familiar",
+        do_not_use: false
+    },
+    FIND_TRAPS: {
+        code: "find traps",
+        sdesc: "find traps",
+        do_not_use: false
+    },
+    FIRE_BREATH: {
+        code: "fire breath",
+        sdesc: "fire breath",
+        do_not_use: false
+    },
+    FIREBALL: {
+        code: "fireball",
+        sdesc: "fireball",
+        do_not_use: false
+    },
+    FIRESHIELD: {
+        code: "fireshield",
+        sdesc: "fireshield",
+        do_not_use: false
+    },
+    FLAME_ARROW: {
+        code: "flame arrow",
+        sdesc: "flame arrow",
+        do_not_use: false
+    },
+    FLAME_JAWS: {
+        code: "flame jaws",
+        sdesc: "flame jaws",
+        do_not_use: false
+    },
+    FLAMESTRIKE: {
+        code: "flamestrike",
+        sdesc: "flamestrike",
+        do_not_use: false
+    },
+    FLY: {
+        code: "fly",
+        sdesc: "fly",
+        do_not_use: false
+    },
+    FREEDOM_OF_MOVEMENT: {
+        code: "freedom of movement",
+        sdesc: "freedom of movement",
+        do_not_use: false
+    },
+    FRIENDS: {
+        code: "friends",
+        sdesc: "friends",
+        do_not_use: false
+    },
+    FROST_BREATH: {
+        code: "frost breath",
+        sdesc: "frost breath",
+        do_not_use: false
+    },
+    FUMBLE: {
+        code: "fumble",
+        sdesc: "fumble",
+        do_not_use: false
+    },
+    GAS_BREATH: {
+        code: "gas breath",
+        sdesc: "gas breath",
+        do_not_use: false
+    },
+    GATE: {
+        code: "gate",
+        sdesc: "gate",
+        do_not_use: false
+    },
+    GLOBE_OF_INVULNERABILITY: {
+        code: "globe of invulnerability",
+        sdesc: "globe of invulnerability",
+        do_not_use: false
+    },
+    GOOD_FORTUNE: {
+        code: "good fortune",
+        sdesc: "good fortune",
+        do_not_use: false
+    },
+    HAND_OF_CHAOS: {
+        code: "hand of chaos",
+        sdesc: "hand of chaos",
+        do_not_use: false
+    },
+    HARM: {
+        code: "harm",
+        sdesc: "harm",
+        do_not_use: false
+    },
+    HEAL: {
+        code: "heal",
+        sdesc: "heal",
+        do_not_use: false
+    },
+    HEROISM: {
+        code: "heroism",
+        sdesc: "heroism",
+        do_not_use: false
+    },
+    HOLD_MONSTER: {
+        code: "hold monster",
+        sdesc: "hold monster",
+        do_not_use: false
+    },
+    HOLD_PERSON: {
+        code: "hold person",
+        sdesc: "hold person",
+        do_not_use: false
+    },
+    HOLY_SANCTITY: {
+        code: "holy sanctity",
+        sdesc: "holy sanctity",
+        do_not_use: false
+    },
+    HOLY_SYMBOL: {
+        code: "holy symbol",
+        sdesc: "holy symbol",
+        do_not_use: false
+    },
+    ICE_STORM: {
+        code: "ice storm",
+        sdesc: "ice storm",
+        do_not_use: false
+    },
+    ICESHIELD: {
+        code: "iceshield",
+        sdesc: "iceshield",
+        do_not_use: false
+    },
+    IDENTIFY: {
+        code: "identify",
+        sdesc: "identify",
+        do_not_use: false
+    },
+    ILL_FORTUNE: {
+        code: "ill fortune",
+        sdesc: "ill fortune",
+        do_not_use: false
+    },
+    ILMATERS_BLESS: {
+        code: "ilmaters bless",
+        sdesc: "ilmaters bless",
+        do_not_use: false
+    },
+    INFRAVISION: {
+        code: "infravision",
+        sdesc: "infravision",
+        do_not_use: false
+    },
+    INVIS: {
+        code: "invis",
+        sdesc: "invis",
+        do_not_use: false
+    },
+    INVISIBILITY_PURGE: {
+        code: "invisibility purge",
+        sdesc: "invisibility purge",
+        do_not_use: false
+    },
+    KNOCK: {
+        code: "knock",
+        sdesc: "knock",
+        do_not_use: false
+    },
+    KNOW_ALIGNMENT: {
+        code: "know alignment",
+        sdesc: "know alignment",
+        do_not_use: false
+    },
+    LEVITATE: {
+        code: "levitate",
+        sdesc: "levitate",
+        do_not_use: false
+    },
+    LIGHTNING_BOLT: {
+        code: "lightning bolt",
+        sdesc: "lightning bolt",
+        do_not_use: false
+    },
+    LIGHTNING_BREATH: {
+        code: "lightning breath",
+        sdesc: "lightning breath",
+        do_not_use: false
+    },
+    LLANTHYRS_MEND: {
+        code: "llanthyrs mend",
+        sdesc: "llanthyrs mend",
+        do_not_use: false
+    },
+    LOCATE_OBJECT: {
+        code: "locate object",
+        sdesc: "locate object",
+        do_not_use: false
+    },
+    MAGIC_MIRROR: {
+        code: "magic mirror",
+        sdesc: "magic mirror",
+        do_not_use: false
+    },
+    MAGIC_MISSILE: {
+        code: "magic missile",
+        sdesc: "magic missile",
+        do_not_use: false
+    },
+    MAGNETIC_THRUS: {
+        code: "magnetic thrus",
+        sdesc: "magnetic thrus",
+        do_not_use: false
+    },
+    MASS_INVIS: {
+        code: "mass invis",
+        sdesc: "mass invis",
+        do_not_use: false
+    },
+    MIND_BLANK: {
+        code: "mind blank",
+        sdesc: "mind blank",
+        do_not_use: false
+    },
+    MIND_WRACK: {
+        code: "mind wrack",
+        sdesc: "mind wrack",
+        do_not_use: false
+    },
+    MIND_WRENCH: {
+        code: "mind wrench",
+        sdesc: "mind wrench",
+        do_not_use: false
+    },
+    MIRROR_IMAGE: {
+        code: "mirror image",
+        sdesc: "mirror image",
+        do_not_use: false
+    },
+    MNEMONIC_ENHAN: {
+        code: "mnemonic enhan",
+        sdesc: "mnemonic enhan",
+        do_not_use: false
+    },
+    MONSTER_SUMMON: {
+        code: "monster summon",
+        sdesc: "monster summon",
+        do_not_use: false
+    },
+    MOONBEAM: {
+        code: "moonbeam",
+        sdesc: "moonbeam",
+        do_not_use: false
+    },
+    NONDETECTION: {
+        code: "nondetection",
+        sdesc: "nondetection",
+        do_not_use: false
+    },
+    NULL_SPHERE: {
+        code: "null sphere",
+        sdesc: "null sphere",
+        do_not_use: false
+    },
+    PASS_DOOR: {
+        code: "pass door",
+        sdesc: "pass door",
+        do_not_use: false
+    },
+    PASS_PLANT: {
+        code: "pass plant",
+        sdesc: "pass plant",
+        do_not_use: false
+    },
+    PHANTASMAL_KILLER: {
+        code: "phantasmal killer",
+        sdesc: "phantasmal killer",
+        do_not_use: false
+    },
+    PHOENIX_CLAW: {
+        code: "phoenix claw",
+        sdesc: "phoenix claw",
+        do_not_use: false
+    },
+    POISON: {
+        code: "poison",
+        sdesc: "poison",
+        do_not_use: false
+    },
+    POLYMORPH: {
+        code: "polymorph",
+        sdesc: "polymorph",
+        do_not_use: false
+    },
+    POSSESS: {
+        code: "possess",
+        sdesc: "possess",
+        do_not_use: false
+    },
+    PRODUCE_FLAME: {
+        code: "produce flame",
+        sdesc: "produce flame",
+        do_not_use: false
+    },
+    PROTECTION: {
+        code: "protection",
+        sdesc: "protection",
+        do_not_use: false
+    },
+    QUANTUM_SPIKE: {
+        code: "quantum spike",
+        sdesc: "quantum spike",
+        do_not_use: false
+    },
+    RAINBOW_PATTERN: {
+        code: "rainbow pattern",
+        sdesc: "rainbow pattern",
+        do_not_use: false
+    },
+    RAISE_DEAD: {
+        code: "raise dead",
+        sdesc: "raise dead",
+        do_not_use: false
+    },
+    RAZORBAIT: {
+        code: "razorbait",
+        sdesc: "razorbait",
+        do_not_use: false
+    },
+    RECHARGE: {
+        code: "recharge",
+        sdesc: "recharge",
+        do_not_use: false
+    },
+    REFRESH: {
+        code: "refresh",
+        sdesc: "refresh",
+        do_not_use: false
+    },
+    REGENERATE: {
+        code: "regenerate",
+        sdesc: "regenerate",
+        do_not_use: false
+    },
+    REMOVE_CURSE: {
+        code: "remove curse",
+        sdesc: "remove curse",
+        do_not_use: false
+    },
+    REMOVE_TRAP: {
+        code: "remove trap",
+        sdesc: "remove trap",
+        do_not_use: false
+    },
+    RESILIENCE: {
+        code: "resilience",
+        sdesc: "resilience",
+        do_not_use: false
+    },
+    RESIST_COLD: {
+        code: "resist cold",
+        sdesc: "resist cold",
+        do_not_use: false
+    },
+    RESIST_ELECTRICITY: {
+        code: "resist electricity",
+        sdesc: "resist electricity",
+        do_not_use: false
+    },
+    RESIST_FIRE: {
+        code: "resist fire",
+        sdesc: "resist fire",
+        do_not_use: false
+    },
+    RESTORATION: {
+        code: "restoration",
+        sdesc: "restoration",
+        do_not_use: false
+    },
+    RESTORE_MANA: {
+        code: "restore mana",
+        sdesc: "restore mana",
+        do_not_use: false
+    },
+    RESURRECTION: {
+        code: "resurrection",
+        sdesc: "resurrection",
+        do_not_use: false
+    },
+    REVIVE: {
+        code: "revive",
+        sdesc: "revive",
+        do_not_use: false
+    },
+    SAGACITY: {
+        code: "sagacity",
+        sdesc: "sagacity",
+        do_not_use: false
+    },
+    SANCTUARY: {
+        code: "sanctuary",
+        sdesc: "sanctuary",
+        do_not_use: false
+    },
+    SCORCHING_SURGE: {
+        code: "scorching surge",
+        sdesc: "scorching surge",
+        do_not_use: false
+    },
+    SENTRY_OF_HELM: {
+        code: "sentry of helm",
+        sdesc: "sentry of helm",
+        do_not_use: false
+    },
+    SHADOW_CONJURATION: {
+        code: "shadow conjuration",
+        sdesc: "shadow conjuration",
+        do_not_use: false
+    },
+    SHADOW_DOOR: {
+        code: "shadow door",
+        sdesc: "shadow door",
+        do_not_use: false
+    },
+    SHADOW_FIST: {
+        code: "shadow fist",
+        sdesc: "shadow fist",
+        do_not_use: false
+    },
+    SHADOW_FUNNEL: {
+        code: "shadow funnel",
+        sdesc: "shadow funnel",
+        do_not_use: false
+    },
+    SHADOW_WALK: {
+        code: "shadow walk",
+        sdesc: "shadow walk",
+        do_not_use: false
+    },
+    SHIELD: {
+        code: "shield",
+        sdesc: "shield",
+        do_not_use: false
+    },
+    SHOCKING_GRASP: {
+        code: "shocking grasp",
+        sdesc: "shocking grasp",
+        do_not_use: false
+    },
+    SHOCKSHIELD: {
+        code: "shockshield",
+        sdesc: "shockshield",
+        do_not_use: false
+    },
+    SILENCE: {
+        code: "silence",
+        sdesc: "silence",
+        do_not_use: false
+    },
+    SLEEP: {
+        code: "sleep",
+        sdesc: "sleep",
+        do_not_use: false
+    },
+    SLINK: {
+        code: "slink",
+        sdesc: "slink",
+        do_not_use: false
+    },
+    SOUND_BURST: {
+        code: "sound burst",
+        sdesc: "sound burst",
+        do_not_use: false
+    },
+    SPEAK_WITH_DEAD: {
+        code: "speak with dead",
+        sdesc: "speak with dead",
+        do_not_use: false
+    },
+    SPECTRAL_FIST: {
+        code: "spectral fist",
+        sdesc: "spectral fist",
+        do_not_use: false
+    },
+    SPECTRAL_HAND: {
+        code: "spectral hand",
+        sdesc: "spectral hand",
+        do_not_use: false
+    },
+    SPECTRAL_LIGHT: {
+        code: "spectral light",
+        sdesc: "spectral light",
+        do_not_use: false
+    },
+    STONE_SKIN: {
+        code: "stone skin",
+        sdesc: "stone skin",
+        do_not_use: false
+    },
+    STONE_WALK: {
+        code: "stone walk",
+        sdesc: "stone walk",
+        do_not_use: false
+    },
+    SULFUROUS_SPRAY: {
+        code: "sulfurous spray",
+        sdesc: "sulfurous spray",
+        do_not_use: false
+    },
+    SUMMON: {
+        code: "summon",
+        sdesc: "summon",
+        do_not_use: false
+    },
+    SUNRAY: {
+        code: "sunray",
+        sdesc: "sunray",
+        do_not_use: false
+    },
+    SWORDBAIT: {
+        code: "swordbait",
+        sdesc: "swordbait",
+        do_not_use: false
+    },
+    TAYZAS_ACIDSHIELD: {
+        code: "tayzas acidshield",
+        sdesc: "tayzas acidshield",
+        do_not_use: false
+    },
+    TELEPORT: {
+        code: "teleport",
+        sdesc: "teleport",
+        do_not_use: false
+    },
+    TOUCH_OF_JUSTICE: {
+        code: "touch of justice",
+        sdesc: "touch of justice",
+        do_not_use: false
+    },
+    TRANSPORT: {
+        code: "transport",
+        sdesc: "transport",
+        do_not_use: false
+    },
+    TROLLISH_VIGOR: {
+        code: "trollish vigor",
+        sdesc: "trollish vigor",
+        do_not_use: false
+    },
+    TRUE_SIGHT: {
+        code: "true sight",
+        sdesc: "true sight",
+        do_not_use: false
+    },
+    TURN_UNDEAD: {
+        code: "turn undead",
+        sdesc: "turn undead",
+        do_not_use: false
+    },
+    VALIANCE: {
+        code: "valiance",
+        sdesc: "valiance",
+        do_not_use: false
+    },
+    VAMPIRIC_TOUCH: {
+        code: "vampiric touch",
+        sdesc: "vampiric touch",
+        do_not_use: false
+    },
+    VENTRILOQUISM: {
+        code: "ventriloquism",
+        sdesc: "ventriloquism",
+        do_not_use: false
+    },
+    WARHORSE: {
+        code: "warhorse",
+        sdesc: "warhorse",
+        do_not_use: false
+    },
+    WATER_BREATHING: {
+        code: "water breathing",
+        sdesc: "water breathing",
+        do_not_use: false
+    },
+    WATER_TO_WINE: {
+        code: "water to wine",
+        sdesc: "water to wine",
+        do_not_use: false
+    },
+    WEAKEN: {
+        code: "weaken",
+        sdesc: "weaken",
+        do_not_use: false
+    },
+    WEB: {
+        code: "web",
+        sdesc: "web",
+        do_not_use: false
+    },
+    WIND_WALK: {
+        code: "wind walk",
+        sdesc: "wind walk",
+        do_not_use: false
+    },
+    WINTER_MIST: {
+        code: "winter mist",
+        sdesc: "winter mist",
+        do_not_use: false
+    },
+    WITCH_LIGHT: {
+        code: "witch light",
+        sdesc: "witch light",
+        do_not_use: false
+    },
+    WORD_OF_RECALL: {
+        code: "word of recall",
+        sdesc: "word of recall",
+        do_not_use: false
+    },
+    WRAITHFORM: {
+        code: "wraithform",
+        sdesc: "wraithform",
+        do_not_use: false
+    },
+    
+};
 
+const MOB_SKILLS = {
+    AID: {
+        code: "aid",
+        sdesc: "aid",
+    },
+    ANIMAL_EMPATHY: {
+        code: "animal empathy",
+        sdesc: "animal empathy",
+    },
+    BACKSTAB: {
+        code: "backstab",
+        sdesc: "backstab",
+    },
+    BASH: {
+        code: "bash",
+        sdesc: "bash",
+    },
+    BITE: {
+        code: "bite",
+        sdesc: "bite",
+    },
+    BREW: {
+        code: "brew",
+        sdesc: "brew",
+    },
+    CIRCLE_STAB: {
+        code: "circle stab",
+        sdesc: "circle stab",
+    },
+    CLAW: {
+        code: "claw",
+        sdesc: "claw",
+    },
+    CLIMB: {
+        code: "climb",
+        sdesc: "climb",
+    },
+    COMPANION: {
+        code: "companion",
+        sdesc: "companion",
+    },
+    CONCENTRATION: {
+        code: "concentration",
+        sdesc: "concentration",
+    },
+    COOK: {
+        code: "cook",
+        sdesc: "cook",
+    },
+    DETRAP: {
+        code: "detrap",
+        sdesc: "detrap",
+    },
+    DIG: {
+        code: "dig",
+        sdesc: "dig",
+    },
+    DIRTKICK: {
+        code: "dirtkick",
+        sdesc: "dirtkick",
+    },
+    DISARM: {
+        code: "disarm",
+        sdesc: "disarm",
+    },
+    DISCERN: {
+        code: "discern",
+        sdesc: "discern",
+    },
+    DISGUISE: {
+        code: "disguise",
+        sdesc: "disguise",
+    },
+    DODGE: {
+        code: "dodge",
+        sdesc: "dodge",
+    },
+    DOORBASH: {
+        code: "doorbash",
+        sdesc: "doorbash",
+    },
+    DUAL_BACKSTAB: {
+        code: "dual backstab",
+        sdesc: "dual backstab",
+    },
+    DUAL_WIELD: {
+        code: "dual wield",
+        sdesc: "dual wield",
+    },
+    ENHANCED_DAMAGE: {
+        code: "enhanced damage",
+        sdesc: "enhanced damage",
+    },
+    FEED: {
+        code: "feed",
+        sdesc: "feed",
+    },
+    FIFTH_ATTACK: {
+        code: "fifth attack",
+        sdesc: "fifth attack",
+    },
+    FOURTH_ATTACK: {
+        code: "fourth attack",
+        sdesc: "fourth attack",
+    },
+    GOUGE: {
+        code: "gouge",
+        sdesc: "gouge",
+    },
+    GRIP: {
+        code: "grip",
+        sdesc: "grip",
+    },
+    HAGGLE: {
+        code: "haggle",
+        sdesc: "haggle",
+    },
+    HANDLE_ANIMAL: {
+        code: "handle animal",
+        sdesc: "handle animal",
+    },
+    HIDE: {
+        code: "hide",
+        sdesc: "hide",
+    },
+    HITALL: {
+        code: "hitall",
+        sdesc: "hitall",
+    },
+    IGNITE: {
+        code: "ignite",
+        sdesc: "ignite",
+    },
+    INFLUENCE: {
+        code: "influence",
+        sdesc: "influence",
+    },
+    KICK: {
+        code: "kick",
+        sdesc: "kick",
+    },
+    LAYONHANDS: {
+        code: "layonhands",
+        sdesc: "layonhands",
+    },
+    LIMBER: {
+        code: "limber",
+        sdesc: "limber",
+    },
+    LISTEN: {
+        code: "listen",
+        sdesc: "listen",
+    },
+    MEDITATE: {
+        code: "meditate",
+        sdesc: "meditate",
+    },
+    MOUNT: {
+        code: "mount",
+        sdesc: "mount",
+    },
+    PARRY: {
+        code: "parry",
+        sdesc: "parry",
+    },
+    PATHFINDING: {
+        code: "pathfinding",
+        sdesc: "pathfinding",
+    },
+    PEEK: {
+        code: "peek",
+        sdesc: "peek",
+    },
+    PICK_LOCK: {
+        code: "pick lock",
+        sdesc: "pick lock",
+    },
+    POISON_WEAPON: {
+        code: "poison weapon",
+        sdesc: "poison weapon",
+    },
+    PUNCH: {
+        code: "punch",
+        sdesc: "punch",
+    },
+    RAGE: {
+        code: "rage",
+        sdesc: "rage",
+    },
+    RESCUE: {
+        code: "rescue",
+        sdesc: "rescue",
+    },
+    RIPOSTE: {
+        code: "riposte",
+        sdesc: "riposte",
+    },
+    SAP: {
+        code: "sap",
+        sdesc: "sap",
+    },
+    SCRIBE: {
+        code: "scribe",
+        sdesc: "scribe",
+    },
+    SEARCH: {
+        code: "search",
+        sdesc: "search",
+    },
+    SECOND_ATTACK: {
+        code: "second attack",
+        sdesc: "second attack",
+    },
+    SECOND_DODGE: {
+        code: "second dodge",
+        sdesc: "second dodge",
+    },
+    SECOND_PARRY: {
+        code: "second parry",
+        sdesc: "second parry",
+    },
+    SHAPECHANGE: {
+        code: "shapechange",
+        sdesc: "shapechange",
+    },
+    SING: {
+        code: "sing",
+        sdesc: "sing",
+    },
+    SLICE: {
+        code: "slice",
+        sdesc: "slice",
+    },
+    SNEAK: {
+        code: "sneak",
+        sdesc: "sneak",
+    },
+    SPELLCRAFT: {
+        code: "spellcraft",
+        sdesc: "spellcraft",
+    },
+    STEAL: {
+        code: "steal",
+        sdesc: "steal",
+    },
+    STING: {
+        code: "sting",
+        sdesc: "sting",
+    },
+    STUN: {
+        code: "stun",
+        sdesc: "stun",
+    },
+    SWIM: {
+        code: "swim",
+        sdesc: "swim",
+    },
+    TAIL: {
+        code: "tail",
+        sdesc: "tail",
+    },
+    THIRD_ATTACK: {
+        code: "third attack",
+        sdesc: "third attack",
+    },
+    THIRD_DODGE: {
+        code: "third dodge",
+        sdesc: "third dodge",
+    },
+    THIRD_PARRY: {
+        code: "third parry",
+        sdesc: "third parry",
+    },
+    TRACK: {
+        code: "track",
+        sdesc: "track",
+    },
+    TRIP: {
+        code: "trip",
+        sdesc: "trip",
+    },
+    USE_MAGIC_DEVICE: {
+        code: "use magic device",
+        sdesc: "use magic device",
+    },
+};
+
+const MOB_WEAPON_SKILLS = {
+    BOWS: {
+        code: "bows",
+        sdesc: "bows"
+    },
+    BRAWLING: {
+        code: "brawling",
+        sdesc: "brawling"
+    },
+    CHAINS: {
+        code: "chains",
+        sdesc: "chains"
+    },
+    CLUBS: {
+        code: "clubs",
+        sdesc: "clubs"
+    },
+    CROSSBOWS: {
+        code: "crossbows",
+        sdesc: "crossbows"
+    },
+    DOUBLE_EDGED_BLADES: {
+        code: "double-edged blades",
+        sdesc: "double-edged blades"
+    },
+    GREAT_BLADES: {
+        code: "great blades",
+        sdesc: "great blades"
+    },
+    GREAT_CHAINS: {
+        code: "great chains",
+        sdesc: "great chains"
+    },
+    LINES: {
+        code: "lines",
+        sdesc: "lines"
+    },
+    LONG_AXES: {
+        code: "long axes",
+        sdesc: "long axes"
+    },
+    LONG_SPIKES: {
+        code: "long spikes",
+        sdesc: "long spikes"
+    },
+    MOUNTED_POLEARMS: {
+        code: "mounted polearms",
+        sdesc: "mounted polearms"
+    },
+    POLEARMS: {
+        code: "polearms",
+        sdesc: "polearms"
+    },
+    ROPE_WEAPONS: {
+        code: "rope weapons",
+        sdesc: "rope weapons"
+    },
+    SHIELDWORK: {
+        code: "shieldwork",
+        sdesc: "shieldwork"
+    },
+    SHORT_AXES: {
+        code: "short axes",
+        sdesc: "short axes"
+    },
+    SHORT_BLADES: {
+        code: "short blades",
+        sdesc: "short blades"
+    },
+    SHORT_SPIKES: {
+        code: "short spikes",
+        sdesc: "short spikes"
+    },
+    SINGLE_EDGED_BLADES: {
+        code: "single-edged blades",
+        sdesc: "single-edged blades"
+    },
+    SLINGS: {
+        code: "slings",
+        sdesc: "slings"
+    },
+    STAVES: {
+        code: "staves",
+        sdesc: "staves"
+    },
+    THROWN_PROJECTILES: {
+        code: "thrown projectiles",
+        sdesc: "thrown projectiles"
+    },
+    THRUSTING_BLADES: {
+        code: "thrusting blades",
+        sdesc: "thrusting blades"
+    },
+    WHIPS: {
+        code: "whips",
+        sdesc: "whips"
+    },
+};
 
 // Model classes
 
@@ -9151,7 +10519,7 @@ class SimpleMob {
         this.spoken_languages = [];
     }
     get _error_prefix() {
-        return `[Mob:(${this.vnum}) ${this.sdesc}]`
+        return `[SimpleMob:(${this.vnum}) ${this.sdesc}]`
     }
     
     validate() {
@@ -9239,6 +10607,56 @@ ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
     }
 }
 
+class UniqueMob (SimpleMob) {
+    constructor() {
+        super()
+        this.affect_flags = [];
+        this.virtual_armor = {
+            armor_type: null,
+            material: null
+        };
+        this.alignment = null;
+        this.stats = {
+            str: 13,
+            int: 13,
+            wis: 13,
+            dex: 13,
+            con: 13,
+            cha: 13,
+            lck: 13,
+        }
+    }
+    get _error_prefix() {
+        return `[UniqueMob:(${this.vnum}) ${this.sdesc}]`
+    }
+    
+    validate() {
+        errors = super.validate()
+        
+    }
+    
+    toString() {
+        errors = this.validate()
+        if (errors.length) {
+            return this.errors.join("\n")
+        }
+        return `#${this.vnum}
+${this.keywords}~
+${this.sdesc}~
+${this.ldesc}~
+${this.fulldesc}
+~
+U ${this.level} ${this.class} ${this.race} ${this.sex} ${this.position} ${this.deity}
+${this.act_flags.map((flag)=>(flag.code)).join("|")}
+${this.affect_flags.map((flag)=>(flag.code)).join("|")}
+${this.virtual_armor.armor_type} ${this.virtual_armor.material}
+${this.alignment}
+${this.stats.str} ${this.stats.int} ${this.stats.wis} ${this.stats.dex} ${this.stats.con} ${this.stats.cha} ${this.stats.lck}
+${this.understood_languages.map((lang)=>(lang.code)).join("|")}
+${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
+|`
+    }
+}
 
 //export default Loader;
 
