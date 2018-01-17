@@ -8236,6 +8236,312 @@ const MOB_ACT_FLAGS = {
 
 };
 
+const MOB_AFFECTS = {
+    AFF_BLIND: {
+        code: "AFF_BLIND",
+        sdesc: "AFF_BLIND",
+        ldesc: "Mobile is affected by blindness"
+    },
+    AFF_INVIS: {
+        code: "AFF_INVIS",
+        sdesc: "AFF_INVIS",
+        ldesc: "Mobile is invisible"
+    },
+    AFF_DETECT_EVIL: {
+        code: "AFF_DETECT_EVIL",
+        sdesc: "AFF_DETECT_EVIL",
+        ldesc: "Mobile can detect evil"
+    },
+    AFF_DETECT_INVIS: {
+        code: "AFF_DETECT_INVIS",
+        sdesc: "AFF_DETECT_INVIS",
+        ldesc: "Mobile can detect magic"
+    },
+    AFF_DETECT_MAGIC: {
+        code: "AFF_DETECT_MAGIC",
+        sdesc: "AFF_DETECT_MAGIC",
+        ldesc: "Mobile can detect magic"
+    },
+    AFF_DETECT_HIDDEN: {
+        code: "AFF_DETECT_HIDDEN",
+        sdesc: "AFF_DETECT_HIDDEN",
+        ldesc: "Mobile can detect hidden creatures"
+    },
+    AFF_DETECT_BURIED: {
+        code: "AFF_DETECT_BURIED",
+        sdesc: "AFF_DETECT_BURIED",
+        ldesc: "Mobile can detect buried"
+    },
+    AFF_SANCTUARY: {
+        code: "AFF_SANCTUARY",
+        sdesc: "AFF_SANCTUARY",
+        ldesc: "Mobile is protected by sanctuary"
+    },
+    AFF_FAERIE_FIRE: {
+        code: "AFF_FAERIE_FIRE",
+        sdesc: "AFF_FAERIE_FIRE",
+        ldesc: "Mobile is affected by faerie fire"
+    },
+    AFF_INFRARED: {
+        code: "AFF_INFRARED",
+        sdesc: "AFF_INFRARED",
+        ldesc: "Mobile has infravision"
+    },
+    AFF_CURSE: {
+        code: "AFF_CURSE",
+        sdesc: "AFF_CURSE",
+        ldesc: "Mobile is cursed"
+    },
+    AFF_POISON: {
+        code: "AFF_POISON",
+        sdesc: "AFF_POISON",
+        ldesc: "Mobile is poisoned"
+    },
+    AFF_PROTECT: {
+        code: "AFF_PROTECT",
+        sdesc: "AFF_PROTECT",
+        ldesc: "Mobile is protected by protection"
+    },
+    AFF_PARALYSIS: {
+        code: "AFF_PARALYSIS",
+        sdesc: "AFF_PARALYSIS",
+        ldesc: "Mobile is paralyzed"
+    },
+    AFF_SNEAK: {
+        code: "AFF_SNEAK",
+        sdesc: "AFF_SNEAK",
+        ldesc: "Mobile is sneaking"
+    },
+    AFF_HIDE: {
+        code: "AFF_HIDE",
+        sdesc: "AFF_HIDE",
+        ldesc: "Mobile is hiding"
+    },
+    AFF_SLEEP: {
+        code: "AFF_SLEEP",
+        sdesc: "AFF_SLEEP",
+        ldesc: "Mobile is affected by sleep spell"
+    },
+    AFF_CHARM: {
+        code: "AFF_CHARM",
+        sdesc: "AFF_CHARM",
+        ldesc: "Mobile is charmed"
+    },
+    AFF_FLYING: {
+        code: "AFF_FLYING",
+        sdesc: "AFF_FLYING",
+        ldesc: "Mobile is is flying"
+    },
+    AFF_PASS_DOOR: {
+        code: "AFF_PASS_DOOR",
+        sdesc: "AFF_PASS_DOOR",
+        ldesc: "Mobile can pass door"
+    },
+    AFF_FLOATING: {
+        code: "AFF_FLOATING",
+        sdesc: "AFF_FLOATING",
+        ldesc: "Mobile is floating"
+    },
+    AFF_TRUE_SIGHT: {
+        code: "AFF_TRUE_SIGHT",
+        sdesc: "AFF_TRUE_SIGHT",
+        ldesc: "Mobile is affected by truesight"
+    },
+    AFF_FIRESHIELD: {
+        code: "AFF_FIRESHIELD",
+        sdesc: "AFF_FIRESHIELD",
+        ldesc: "Mobile is affected by fireshield"
+    },
+    AFF_SHOCKSHIELD: {
+        code: "AFF_SHOCKSHIELD",
+        sdesc: "AFF_SHOCKSHIELD",
+        ldesc: "Mobile is affected by shockshield"
+    },
+    AFF_ICESHIELD: {
+        code: "AFF_ICESHIELD",
+        sdesc: "AFF_ICESHIELD",
+        ldesc: "Mobile is affected by iceshield"
+    },
+    AFF_BERSERK: {
+        code: "AFF_BERSERK",
+        sdesc: "AFF_BERSERK",
+        ldesc: "Mobile is berserk when fighting"
+    },
+    AFF_WATER_BREATHING: {
+        code: "AFF_WATER_BREATHING",
+        sdesc: "AFF_WATER_BREATHING",
+        ldesc: "Mobile is affected by water breathing"
+    },
+    AFF_GUARDIAN: {
+        code: "AFF_GUARDIAN",
+        sdesc: "AFF_GUARDIAN",
+        ldesc: "Mobile wakes you if someone walks in while you sleep"
+    }
+};
+
+const MOB_ALIGNMENTS = {
+    LAWFUL_GOOD: {
+        code: 1000,
+        sdesc: "Lawful Good"
+    },
+    NEUTRAL_GOOD: {
+        code: 650,
+        sdesc: "Neutral Good"
+    },
+    CHAOTIC_GOOD: {
+        code: 450,
+        sdesc: "Chaotic Good"
+    },
+    LAWFUL_NEUTRAL: {
+        code: 200,
+        sdesc: "Lawful Neutral"
+    },
+    TRUE_NEUTRAL: {
+        code: 0,
+        sdesc: "True Neutral"
+    },
+    CHAOTIC_NEUTRAL: {
+        code: -200,
+        sdesc: "Chaotic Neutral"
+    },
+    LAWFUL_EVIL: {
+        code: -450,
+        sdesc: "Lawful Evil"
+    },
+    NEUTRAL_EVIL: {
+        code: -650,
+        sdesc: "Neutral Evil"
+    },
+    CHAOTIC_EVIL: {
+        code: -1000,
+        sdesc: "Chaotic Evil"
+    }
+};
+
+const MOB_RIS = {
+    RIS_FIRE: {
+        code: "RIS_FIRE",
+        sdesc: "RIS_FIRE",
+        ldesc: "Spells that are firebased, such as fireball burning hands etc"
+    },
+    RIS_COLD: {
+        code: "RIS_COLD",
+        sdesc: "RIS_COLD",
+        ldesc: "Spells that are cold based, such as chill touch etc"
+    },
+    RIS_ELECTRICITY: {
+        code: "RIS_ELECTRICITY",
+        sdesc: "RIS_ELECTRICITY",
+        ldesc: "Spells that are electricity based, such as call lightning etc"
+    },
+    RIS_ENERGY: {
+        code: "RIS_ENERGY",
+        sdesc: "RIS_ENERGY",
+        ldesc: "Spells that are energy based, such as disintergrate etc."
+    },
+    RIS_BLUNT: {
+        code: "RIS_BLUNT",
+        sdesc: "RIS_BLUNT",
+        ldesc: "Resistant or suseptible to blunt weapons, such as maces etc."
+    },
+    RIS_PIERCE: {
+        code: "RIS_PIERCE",
+        sdesc: "RIS_PIERCE",
+        ldesc: "Resistant or suseptible to piercing weapons, such as daggers etc"
+    },
+    RIS_SLASH: {
+        code: "RIS_SLASH",
+        sdesc: "RIS_SLASH",
+        ldesc: "Resistant or suseptible to slashing weapons, such as swords etc"
+    },
+    RIS_ACID: {
+        code: "RIS_ACID",
+        sdesc: "RIS_ACID",
+        ldesc: "Spells that are acid based such as, acid blast etc."
+    },
+    RIS_POISON: {
+        code: "RIS_POISON",
+        sdesc: "RIS_POISON",
+        ldesc: "Resistant or suseptible to poison, including potions, poisoned foods and drinks, poisoned weapons and poison based spells"
+    },
+    RIS_DRAIN: {
+        code: "RIS_DRAIN",
+        sdesc: "RIS_DRAIN",
+        ldesc: "Spells that a are necromantic based, such as vampiric touch etc."
+    },
+    RIS_SLEEP: {
+        code: "RIS_SLEEP",
+        sdesc: "RIS_SLEEP",
+        ldesc: "Spells that are sleep based, such as the sleep spell etc."
+    },
+    RIS_CHARM: {
+        code: "RIS_CHARM",
+        sdesc: "RIS_CHARM",
+        ldesc: "Spells and skills that are charm based, such as charm person, charm spell, influence etc."
+    },
+    RIS_HOLD: {
+        code: "RIS_HOLD",
+        sdesc: "RIS_HOLD",
+        ldesc: "Spells that are hold based, such as hold, web, paralysis"
+    },
+    RIS_NONMAGIC: {
+        code: "RIS_NONMAGIC",
+        sdesc: "RIS_NONMAGIC",
+        ldesc: "Resistant or suseptible to non magical weapons"
+    },
+    RIS_SUMMON: {
+        code: "RIS_SUMMON",
+        sdesc: "RIS_SUMMON",
+        ldesc: "Resistant or suseptible to being summoned"
+    },
+    RIS_HOLY: {
+        code: "RIS_HOLY",
+        sdesc: "RIS_HOLY",
+        ldesc: "Resistant or suseptible to healing based spells."
+    },
+    RIS_MENTAL: {
+        code: "RIS_MENTAL",
+        sdesc: "RIS_MENTAL",
+        ldesc: "Resistant or suseptible to mental based spells, revive, mind wrench etc"
+    },
+    RIS_DROWNING: {
+        code: "RIS_DROWNING",
+        sdesc: "RIS_DROWNING",
+        ldesc: "Resistant or suseptible to physical attacks like earthquake, drowning"
+    },
+    RIS_LIGHT: {
+        code: "RIS_LIGHT",
+        sdesc: "RIS_LIGHT",
+        ldesc: "Resistant or suseptible to light based spells such as sunray etc"
+    },
+    RIS_SOUND: {
+        code: "RIS_SOUND",
+        sdesc: "RIS_SOUND",
+        ldesc: "Resistant or suseptible to sound based spells such as, sonic resonance etc"
+    },
+    RIS_MAGIC: {
+        code: "RIS_MAGIC",
+        sdesc: "RIS_MAGIC",
+        ldesc: "Resistant or suseptible to magical weapons"
+    },
+    RIS_WOOD: {
+        code: "RIS_WOOD",
+        sdesc: "RIS_WOOD",
+        ldesc: "Resistant or suseptible to non magical weapons made of wood."
+    },
+    RIS_SILVER: {
+        code: "RIS_SILVER",
+        sdesc: "RIS_SILVER",
+        ldesc: "Resistant or suseptible to non magical weapons made of silver"
+    },
+    RIS_IRON: {
+        code: "RIS_IRON",
+        sdesc: "RIS_IRON",
+        ldesc: "Resistant or suseptible to non magical weapons made of iron"
+    }
+};
+
+
 
 // Model classes
 
