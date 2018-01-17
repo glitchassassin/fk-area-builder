@@ -1,7 +1,8 @@
 Outstanding TODOs:
 
 * [ ] Build models
-*   [ ] Flesh out individual flag options for item types
+*   [x] Flesh out individual flag options for item types
+*   [ ] Add a stock vnums library for stock items, mobs, etc.
 *   [ ] Create model(s) for mobiles
 *   [ ] Create model(s) for programs
 *   [ ] Create model(s) for shops

@@ -98,1254 +98,20 @@ const PUNISHMENTS = {
     }
 }
 
-const ITEM_TYPES = {
-    ITEM_TYPE_LIGHT: {
-        code: "ITEM_TYPE_LIGHT",
-        sdesc: "ITEM_TYPE_LIGHT",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: "int",
-            type_enum: null,
-            ldesc: "hours left, 0 is dead, -1 is infinite. Infinite lights are to be rare magical items.",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_SCROLL: {
-        code: "ITEM_TYPE_SCROLL",
-        sdesc: "ITEM_TYPE_SCROLL",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level of spell/s *",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 1",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 2",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number3",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_WAND: {
-        code: "ITEM_TYPE_WAND",
-        sdesc: "ITEM_TYPE_WAND",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level of spell",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "max charges",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "charges left",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_STAFF: {
-        code: "ITEM_TYPE_STAFF",
-        sdesc: "ITEM_TYPE_STAFF",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level of spell",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "max charges",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "charges left",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_WEAPON: {
-        code: "ITEM_TYPE_WEAPON",
-        sdesc: "ITEM_TYPE_WEAPON",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "weapon flag",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "weapon flag modifiers",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "Weapon Type",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_SHEATH: {
-        code: "ITEM_TYPE_SHEATH",
-        sdesc: "ITEM_TYPE_SHEATH",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "capacity in pounds",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "container flags",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "key vnum",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "layers",
-        },
-    },
-    ITEM_TYPE_TREASURE: {
-        code: "ITEM_TYPE_TREASURE",
-        sdesc: "ITEM_TYPE_TREASURE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "layers",
-        },
-    },
-    ITEM_TYPE_ARMOR: {
-        code: "ITEM_TYPE_ARMOR",
-        sdesc: "ITEM_TYPE_ARMOR",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "body type (lesson pending)",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "layers",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "Armor type",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_POTION: {
-        code: "ITEM_TYPE_POTION",
-        sdesc: "ITEM_TYPE_POTION",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level of spells",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 1",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 2",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 3",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_FURNITURE: {
-        code: "ITEM_TYPE_FURNITURE",
-        sdesc: "ITEM_TYPE_FURNITURE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "Furniture State",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_TRASH: {
-        code: "ITEM_TYPE_TRASH",
-        sdesc: "ITEM_TYPE_TRASH",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_CONTAINER: {
-        code: "ITEM_TYPE_CONTAINER",
-        sdesc: "ITEM_TYPE_CONTAINER",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "capacity in pounds",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "container flags",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "key vnum",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "layers",
-        },
-    },
-    ITEM_TYPE_DRINKCON: {
-        code: "ITEM_TYPE_DRINKCON",
-        sdesc: "ITEM_TYPE_DRINKCON",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "total amount of drinks",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "current amount of drinks",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "liquid #",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "component/herb value",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "junks on use or not",
-        },
-    },
-    ITEM_TYPE_KEY: {
-        code: "ITEM_TYPE_KEY",
-        sdesc: "ITEM_TYPE_KEY",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_FOOD: {
-        code: "ITEM_TYPE_FOOD",
-        sdesc: "ITEM_TYPE_FOOD",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "nourishment value",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "decay timer",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "FOOD_RAW or FOOD_COOKED, 0 is raw",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "component/herb value",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_MONEY: {
-        code: "ITEM_TYPE_MONEY",
-        sdesc: "ITEM_TYPE_MONEY",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "# of coins",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "coin type",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_PEN: {
-        code: "ITEM_TYPE_PEN",
-        sdesc: "ITEM_TYPE_PEN",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "amount of ink",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_CORPSE_NPC: {
-        code: "ITEM_TYPE_CORPSE_NPC",
-        sdesc: "ITEM_TYPE_CORPSE_NPC",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "decomposition timer",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "25 * Race Size",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_CORPSE_PC: {
-        code: "ITEM_TYPE_CORPSE_PC",
-        sdesc: "ITEM_TYPE_CORPSE_PC",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_FOUNTAIN: {
-        code: "ITEM_TYPE_FOUNTAIN",
-        sdesc: "ITEM_TYPE_FOUNTAIN",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "Amount of drinks",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "Liquid Type",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_PILL: {
-        code: "ITEM_TYPE_PILL",
-        sdesc: "ITEM_TYPE_PILL",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level of spells",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 1",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 2",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number 3",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_BLOOD: {
-        code: "ITEM_TYPE_BLOOD",
-        sdesc: "ITEM_TYPE_BLOOD",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "quantity",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "decay timer",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_BLOODSTAIN: {
-        code: "ITEM_TYPE_BLOODSTAIN",
-        sdesc: "ITEM_TYPE_BLOODSTAIN",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "decay timer",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_SCRAPS: {
-        code: "ITEM_TYPE_SCRAPS",
-        sdesc: "ITEM_TYPE_SCRAPS",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "decay timer",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_PIPE: {
-        code: "ITEM_TYPE_PIPE",
-        sdesc: "ITEM_TYPE_PIPE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "maximum capacity of pipe",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "amount of herb in the pipe",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "herb type",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "pipe flags",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_FIRE: {
-        code: "ITEM_TYPE_FIRE",
-        sdesc: "ITEM_TYPE_FIRE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "hours left, 0 is dead, -1 is infinite",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_BOOK: {
-        code: "ITEM_TYPE_BOOK",
-        sdesc: "ITEM_TYPE_BOOK",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "Language",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "Skill Level (From 1 to 25)",
-        },
-    },
-    ITEM_TYPE_LEVER: {
-        code: "ITEM_TYPE_LEVER",
-        sdesc: "ITEM_TYPE_LEVER",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "lever trigger flag",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "vnum of teleport room or spell number or start room or room to be randomised",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "room to load the mob or object into",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "object or mob to loaded",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_BUTTON: {
-        code: "ITEM_TYPE_BUTTON",
-        sdesc: "ITEM_TYPE_BUTTON",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "lever trigger flag",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "vnum of teleport room or spell number",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_TRAP: {
-        code: "ITEM_TYPE_TRAP",
-        sdesc: "ITEM_TYPE_TRAP",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "trap type",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "number of reloads",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "trap trigger",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_MAP: {
-        code: "ITEM_TYPE_MAP",
-        sdesc: "ITEM_TYPE_MAP",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "low room vnum",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "high room vnum",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_PORTAL: {
-        code: "ITEM_TYPE_PORTAL",
-        sdesc: "ITEM_TYPE_PORTAL",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_PAPER: {
-        code: "ITEM_TYPE_PAPER",
-        sdesc: "ITEM_TYPE_PAPER",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "text status",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "subject status",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "to status",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "language number",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "language skill level",
-        },
-    },
-    ITEM_TYPE_PROJECTILE: {
-        code: "ITEM_TYPE_PROJECTILE",
-        sdesc: "ITEM_TYPE_PROJECTILE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "weapon flag",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "weapon flag modifiers",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "Weapon Type",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_QUIVER: {
-        code: "ITEM_TYPE_QUIVER",
-        sdesc: "ITEM_TYPE_QUIVER",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "capacity in pounds",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "container flags",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "key vnum",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "layers",
-        },
-    },
-    ITEM_TYPE_SHOVEL: {
-        code: "ITEM_TYPE_SHOVEL",
-        sdesc: "ITEM_TYPE_SHOVEL",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_SALVE: {
-        code: "ITEM_TYPE_SALVE",
-        sdesc: "ITEM_TYPE_SALVE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "Number of uses",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "herb type",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell slot number",
-        },
-    },
-    ITEM_TYPE_SYMBOL: {
-        code: "ITEM_TYPE_SYMBOL",
-        sdesc: "ITEM_TYPE_SYMBOL",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "NO. spell component uses",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_TRADEGOODS: {
-        code: "ITEM_TYPE_TRADEGOODS",
-        sdesc: "ITEM_TYPE_TRADEGOODS",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_INSTRUMENT: {
-        code: "ITEM_TYPE_INSTRUMENT",
-        sdesc: "ITEM_TYPE_INSTRUMENT",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "level of spell",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "max charges",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "charges left",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "spell number",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_HIDE: {
-        code: "ITEM_TYPE_HIDE",
-        sdesc: "ITEM_TYPE_HIDE",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "mob vnum",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "race number",
-        },
-    },
-    ITEM_TYPE_CART: {
-        code: "ITEM_TYPE_CART",
-        sdesc: "ITEM_TYPE_CART",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "capacity",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "container flags",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "key vnum",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    },
-    ITEM_TYPE_COMPONENT: {
-        code: "ITEM_TYPE_COMPONENT",
-        sdesc: "ITEM_TYPE_COMPONENT",
-        value0: {
-            type: null,
-            type_enum: null,
-            ldesc: "number of uses for the component and amount of herb",
-        },
-        value1: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value2: {
-            type: null,
-            type_enum: null,
-            ldesc: "herb type",
-        },
-        value3: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-        value4: {
-            type: null,
-            type_enum: null,
-            ldesc: "unused",
-        },
-    }
+const VALUE_TYPES = {
+    INT: "int",
+    POS_INT: "positive int",
+    FLAG: "flag",
+    MULTI_FLAGS: "multiple flags",
+    STRING: "string",
+    VNUM: "vnum",
+    BOOLEAN: "boolean" // 0 = true, 1 = false
+}
+
+const VNUM_TYPES = {
+    OBJECT: "object",
+    ROOM: "room",
+    MOB: "mob"
 }
 
 const MAGIC_ITEM_SPELLS = {
@@ -3492,6 +2258,3034 @@ const OBJECT_APPLIES = {
     }
 };
 
+const WEAPON_FLAGS = {
+    WFLAG_ARROW_DEFLECTION: {
+        code: "WFLAG_ARROW_DEFLECTION",
+        sdesc: "WFLAG_ARROW_DEFLECTION",
+        ldesc: "Acts as if the PC has the arrow deflection feat while wielding a weapon",
+        do_not_use: true
+    },
+    WFLAG_REFLECTIVE: {
+        code: "WFLAG_REFLECTIVE",
+        sdesc: "WFLAG_REFLECTIVE",
+        ldesc: "Weapon will reflect spells back at the caster",
+        do_not_use: true
+    },
+    WFLAG_BANE: {
+        code: "WFLAG_BANE",
+        sdesc: "WFLAG_BANE",
+        ldesc: "Increased modifiers against a specific race",
+        do_not_use: true
+    },
+    WFLAG_DISRUPTION: {
+        code: "WFLAG_DISRUPTION",
+        sdesc: "WFLAG_DISRUPTION",
+        ldesc: "Critical hits have a chance of destroying undead - doing 2-4 times normal damage",
+        do_not_use: true
+    },
+    WFLAG_RETURNING: {
+        code: "WFLAG_RETURNING",
+        sdesc: "WFLAG_RETURNING",
+        ldesc: "Thrown weapons or projectiles to the PC's inventory after use",
+        do_not_use: true
+    },
+    WFLAG_SPEED: {
+        code: "WFLAG_SPEED",
+        sdesc: "WFLAG_SPEED",
+        ldesc: "Increased number of attacks",
+        do_not_use: true
+    },
+    WFLAG_THROWING: {
+        code: "WFLAG_THROWING",
+        sdesc: "WFLAG_THROWING",
+        ldesc: "A normally unthrown weapon has the ability to be thrown",
+        do_not_use: true
+    },
+    WFLAG_WOUNDING: {
+        code: "WFLAG_WOUNDING",
+        sdesc: "WFLAG_WOUNDING",
+        ldesc: "Causes the victim to bleed",
+        do_not_use: true
+    },
+    WFLAG_VENOMOUS: {
+        code: "WFLAG_VENOMOUS",
+        sdesc: "WFLAG_VENOMOUS",
+        ldesc: "The weapon is always poisonous, it does not need poison to be reapplied",
+        do_not_use: true
+    },
+    WFLAG_SMITING: {
+        code: "WFLAG_SMITING",
+        sdesc: "WFLAG_SMITING",
+        ldesc: "Critical hit gives the weapon a chance of destroying constructs",
+        do_not_use: true
+    },
+    WFLAG_VAMPIRIC: {
+        code: "WFLAG_VAMPIRIC",
+        sdesc: "WFLAG_VAMPIRIC",
+        ldesc: "The weapon will give hitpoints to the wielder and take them from the victim",
+        do_not_use: true
+    },
+    WFLAG_KEEN: {
+        code: "WFLAG_KEEN",
+        sdesc: "WFLAG_KEEN",
+        ldesc: "Increased critical threat range",
+        do_not_use: true
+    },
+    WFLAG_VORPAL: {
+        code: "WFLAG_VORPAL",
+        sdesc: "WFLAG_VORPAL",
+        ldesc: "Chance of severing limbs",
+        do_not_use: true
+    },
+    WFLAG_BACKSTABBING: {
+        code: "WFLAG_BACKSTABBING",
+        sdesc: "WFLAG_BACKSTABBING",
+        ldesc: "Increased damage from backstabs",
+        do_not_use: true
+    },
+    WFLAG_HOLY: {
+        code: "WFLAG_HOLY",
+        sdesc: "WFLAG_HOLY",
+        ldesc: "Increased damage to undead and outsiders",
+        do_not_use: true
+    },
+    WFLAG_DEFENDER: {
+        code: "WFLAG_DEFENDER",
+        sdesc: "WFLAG_DEFENDER",
+        ldesc: "Increased AC",
+        do_not_use: true
+    }
+};
+
+const WEAPON_TYPES = {
+    WEAPON_TYPE_BASTARD_SWORD: {
+        code: "WEAPON_TYPE_BASTARD_SWORD",
+        sdesc: "WEAPON_TYPE_BASTARD_SWORD",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_BATTLE_AXE: {
+        code: "WEAPON_TYPE_BATTLE_AXE",
+        sdesc: "WEAPON_TYPE_BATTLE_AXE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_BLACKJACK: {
+        code: "WEAPON_TYPE_BLACKJACK",
+        sdesc: "WEAPON_TYPE_BLACKJACK",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_BOAR_SPEAR: {
+        code: "WEAPON_TYPE_BOAR_SPEAR",
+        sdesc: "WEAPON_TYPE_BOAR_SPEAR",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_BOLA: {
+        code: "WEAPON_TYPE_BOLA",
+        sdesc: "WEAPON_TYPE_BOLA",
+        projectile: false,
+        thrown: true,
+        exotic: true
+    },
+    WEAPON_TYPE_BOOMERANG: {
+        code: "WEAPON_TYPE_BOOMERANG",
+        sdesc: "WEAPON_TYPE_BOOMERANG",
+        projectile: false,
+        thrown: true,
+        exotic: true
+    },
+    WEAPON_TYPE_BROAD_SWORD: {
+        code: "WEAPON_TYPE_BROAD_SWORD",
+        sdesc: "WEAPON_TYPE_BROAD_SWORD",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_CAT_O_NINE_TAILS: {
+        code: "WEAPON_TYPE_CAT_O_NINE_TAILS",
+        sdesc: "WEAPON_TYPE_CAT_O_NINE_TAILS",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_FULLBLADE: {
+        code: "WEAPON_TYPE_FULLBLADE",
+        sdesc: "WEAPON_TYPE_FULLBLADE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_CLUB: {
+        code: "WEAPON_TYPE_CLUB",
+        sdesc: "WEAPON_TYPE_CLUB",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_COMPOSITE_BOW: {
+        code: "WEAPON_TYPE_COMPOSITE_BOW",
+        sdesc: "WEAPON_TYPE_COMPOSITE_BOW",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_GREATCLUB: {
+        code: "WEAPON_TYPE_GREATCLUB",
+        sdesc: "WEAPON_TYPE_GREATCLUB",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_CUTLASS: {
+        code: "WEAPON_TYPE_CUTLASS",
+        sdesc: "WEAPON_TYPE_CUTLASS",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_DAGGER: {
+        code: "WEAPON_TYPE_DAGGER",
+        sdesc: "WEAPON_TYPE_DAGGER",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_DARTS: {
+        code: "WEAPON_TYPE_DARTS",
+        sdesc: "WEAPON_TYPE_DARTS",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_DIRK: {
+        code: "WEAPON_TYPE_DIRK",
+        sdesc: "WEAPON_TYPE_DIRK",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_FALCHION: {
+        code: "WEAPON_TYPE_FALCHION",
+        sdesc: "WEAPON_TYPE_FALCHION",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_FLAIL: {
+        code: "WEAPON_TYPE_FLAIL",
+        sdesc: "WEAPON_TYPE_FLAIL",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_FISHING_NET: {
+        code: "WEAPON_TYPE_FISHING_NET",
+        sdesc: "WEAPON_TYPE_FISHING_NET",
+        projectile: false,
+        thrown: true,
+        exotic: true
+    },
+    WEAPON_TYPE_FOIL: {
+        code: "WEAPON_TYPE_FOIL",
+        sdesc: "WEAPON_TYPE_FOIL",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_GLADIATOR_NET: {
+        code: "WEAPON_TYPE_GLADIATOR_NET",
+        sdesc: "WEAPON_TYPE_GLADIATOR_NET",
+        projectile: false,
+        thrown: true,
+        exotic: true
+    },
+    WEAPON_TYPE_HALBERD: {
+        code: "WEAPON_TYPE_HALBERD",
+        sdesc: "WEAPON_TYPE_HALBERD",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_HANDAXE: {
+        code: "WEAPON_TYPE_HANDAXE",
+        sdesc: "WEAPON_TYPE_HANDAXE",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_HEAVY_CROSSBOW: {
+        code: "WEAPON_TYPE_HEAVY_CROSSBOW",
+        sdesc: "WEAPON_TYPE_HEAVY_CROSSBOW",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_HARPOON: {
+        code: "WEAPON_TYPE_HARPOON",
+        sdesc: "WEAPON_TYPE_HARPOON",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_JAVELIN: {
+        code: "WEAPON_TYPE_JAVELIN",
+        sdesc: "WEAPON_TYPE_JAVELIN",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_JO: {
+        code: "WEAPON_TYPE_JO",
+        sdesc: "WEAPON_TYPE_JO",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_KATANA: {
+        code: "WEAPON_TYPE_KATANA",
+        sdesc: "WEAPON_TYPE_KATANA",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_LANCE: {
+        code: "WEAPON_TYPE_LANCE",
+        sdesc: "WEAPON_TYPE_LANCE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_LASSO: {
+        code: "WEAPON_TYPE_LASSO",
+        sdesc: "WEAPON_TYPE_LASSO",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_LIGHT_CROSSBOW: {
+        code: "WEAPON_TYPE_LIGHT_CROSSBOW",
+        sdesc: "WEAPON_TYPE_LIGHT_CROSSBOW",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_LONG_BOW: {
+        code: "WEAPON_TYPE_LONG_BOW",
+        sdesc: "WEAPON_TYPE_LONG_BOW",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_LONG_SWORD: {
+        code: "WEAPON_TYPE_LONG_SWORD",
+        sdesc: "WEAPON_TYPE_LONG_SWORD",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_MACE: {
+        code: "WEAPON_TYPE_MACE",
+        sdesc: "WEAPON_TYPE_MACE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_MAIN_GAUCHE: {
+        code: "WEAPON_TYPE_MAIN_GAUCHE",
+        sdesc: "WEAPON_TYPE_MAIN_GAUCHE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_MORNING_STAR: {
+        code: "WEAPON_TYPE_MORNING_STAR",
+        sdesc: "WEAPON_TYPE_MORNING_STAR",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_NAGINATA: {
+        code: "WEAPON_TYPE_NAGINATA",
+        sdesc: "WEAPON_TYPE_NAGINATA",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_NUNCHAKU: {
+        code: "WEAPON_TYPE_NUNCHAKU",
+        sdesc: "WEAPON_TYPE_NUNCHAKU",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_PICK: {
+        code: "WEAPON_TYPE_PICK",
+        sdesc: "WEAPON_TYPE_PICK",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_PILUM: {
+        code: "WEAPON_TYPE_PILUM",
+        sdesc: "WEAPON_TYPE_PILUM",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_QUARTERSTAFF: {
+        code: "WEAPON_TYPE_QUARTERSTAFF",
+        sdesc: "WEAPON_TYPE_QUARTERSTAFF",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_RAPIER: {
+        code: "WEAPON_TYPE_RAPIER",
+        sdesc: "WEAPON_TYPE_RAPIER",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SABRE: {
+        code: "WEAPON_TYPE_SABRE",
+        sdesc: "WEAPON_TYPE_SABRE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SAI: {
+        code: "WEAPON_TYPE_SAI",
+        sdesc: "WEAPON_TYPE_SAI",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_SCIMITAR: {
+        code: "WEAPON_TYPE_SCIMITAR",
+        sdesc: "WEAPON_TYPE_SCIMITAR",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SHORT_BOW: {
+        code: "WEAPON_TYPE_SHORT_BOW",
+        sdesc: "WEAPON_TYPE_SHORT_BOW",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SHORT_SWORD: {
+        code: "WEAPON_TYPE_SHORT_SWORD",
+        sdesc: "WEAPON_TYPE_SHORT_SWORD",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SHURIKEN: {
+        code: "WEAPON_TYPE_SHURIKEN",
+        sdesc: "WEAPON_TYPE_SHURIKEN",
+        projectile: false,
+        thrown: true,
+        exotic: true
+    },
+    WEAPON_TYPE_SLING: {
+        code: "WEAPON_TYPE_SLING",
+        sdesc: "WEAPON_TYPE_SLING",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SPEAR: {
+        code: "WEAPON_TYPE_SPEAR",
+        sdesc: "WEAPON_TYPE_SPEAR",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_STAFF_SLING: {
+        code: "WEAPON_TYPE_STAFF_SLING",
+        sdesc: "WEAPON_TYPE_STAFF_SLING",
+        projectile: true,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_TOMAHAWK: {
+        code: "WEAPON_TYPE_TOMAHAWK",
+        sdesc: "WEAPON_TYPE_TOMAHAWK",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_TONFA: {
+        code: "WEAPON_TYPE_TONFA",
+        sdesc: "WEAPON_TYPE_TONFA",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_TRIDENT: {
+        code: "WEAPON_TYPE_TRIDENT",
+        sdesc: "WEAPON_TYPE_TRIDENT",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_GREATSWORD: {
+        code: "WEAPON_TYPE_GREATSWORD",
+        sdesc: "WEAPON_TYPE_GREATSWORD",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_LIGHT_HAMMER: {
+        code: "WEAPON_TYPE_LIGHT_HAMMER",
+        sdesc: "WEAPON_TYPE_LIGHT_HAMMER",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_WARHAMMER: {
+        code: "WEAPON_TYPE_WARHAMMER",
+        sdesc: "WEAPON_TYPE_WARHAMMER",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_WHIP: {
+        code: "WEAPON_TYPE_WHIP",
+        sdesc: "WEAPON_TYPE_WHIP",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_KNIFE: {
+        code: "WEAPON_TYPE_KNIFE",
+        sdesc: "WEAPON_TYPE_KNIFE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SICKLE: {
+        code: "WEAPON_TYPE_SICKLE",
+        sdesc: "WEAPON_TYPE_SICKLE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_SCYTHE: {
+        code: "WEAPON_TYPE_SCYTHE",
+        sdesc: "WEAPON_TYPE_SCYTHE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_BOULDER: {
+        code: "WEAPON_TYPE_BOULDER",
+        sdesc: "WEAPON_TYPE_BOULDER",
+        projectile: false,
+        thrown: true,
+        exotic: false
+    },
+    WEAPON_TYPE_CESTUS: {
+        code: "WEAPON_TYPE_CESTUS",
+        sdesc: "WEAPON_TYPE_CESTUS",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_GREATAXE: {
+        code: "WEAPON_TYPE_GREATAXE",
+        sdesc: "WEAPON_TYPE_GREATAXE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_LIGHT_MACE: {
+        code: "WEAPON_TYPE_LIGHT_MACE",
+        sdesc: "WEAPON_TYPE_LIGHT_MACE",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_DWARVEN_WARAXE: {
+        code: "WEAPON_TYPE_DWARVEN_WARAXE",
+        sdesc: "WEAPON_TYPE_DWARVEN_WARAXE",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_SPIKED_CHAIN: {
+        code: "WEAPON_TYPE_SPIKED_CHAIN",
+        sdesc: "WEAPON_TYPE_SPIKED_CHAIN",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_KAMA: {
+        code: "WEAPON_TYPE_KAMA",
+        sdesc: "WEAPON_TYPE_KAMA",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_SIANGHAM: {
+        code: "WEAPON_TYPE_SIANGHAM",
+        sdesc: "WEAPON_TYPE_SIANGHAM",
+        projectile: false,
+        thrown: false,
+        exotic: true
+    },
+    WEAPON_TYPE_KUKRI: {
+        code: "WEAPON_TYPE_KUKRI",
+        sdesc: "WEAPON_TYPE_KUKRI",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    },
+    WEAPON_TYPE_LIGHT_PICK: {
+        code: "WEAPON_TYPE_LIGHT_PICK",
+        sdesc: "WEAPON_TYPE_LIGHT_PICK",
+        projectile: false,
+        thrown: false,
+        exotic: false
+    }
+};
+
+const CONTAINER_FLAGS = {
+    CONT_CLOSEABLE: {
+        code: 1,
+        sdesc: "CONT_CLOSEABLE"
+    },
+    CONT_PICKPROOF: {
+        code: 2,
+        sdesc: "CONT_PICKPROOF"
+    },
+    CONT_CLOSED: {
+        code: 4,
+        sdesc: "CONT_CLOSED"
+    },
+    CONT_LOCKED: {
+        code: 8,
+        sdesc: "CONT_LOCKED"
+    }
+};
+
+const BODY_TYPES = {
+    HUMANOID: {
+        code: "0",
+        sdesc: "BODY_TYPE_HUMANOID"
+    }
+}
+
+const ARMOR_TYPES = {
+    ARMOR_TYPE_NONE: {
+        code: "ARMOR_TYPE_NONE",
+        sdesc: "ARMOR_TYPE_NONE"
+    },
+    ARMOR_TYPE_BANDED: {
+        code: "ARMOR_TYPE_BANDED",
+        sdesc: "ARMOR_TYPE_BANDED"
+    },
+    ARMOR_TYPE_BRIGANDINE: {
+        code: "ARMOR_TYPE_BRIGANDINE",
+        sdesc: "ARMOR_TYPE_BRIGANDINE"
+    },
+    ARMOR_TYPE_CHAIN_MAIL: {
+        code: "ARMOR_TYPE_CHAIN_MAIL",
+        sdesc: "ARMOR_TYPE_CHAIN_MAIL"
+    },
+    ARMOR_TYPE_HALF_PLATE: {
+        code: "ARMOR_TYPE_HALF_PLATE",
+        sdesc: "ARMOR_TYPE_HALF_PLATE"
+    },
+    ARMOR_TYPE_FULL_PLATE: {
+        code: "ARMOR_TYPE_FULL_PLATE",
+        sdesc: "ARMOR_TYPE_FULL_PLATE"
+    },
+    ARMOR_TYPE_HIDE: {
+        code: "ARMOR_TYPE_HIDE",
+        sdesc: "ARMOR_TYPE_HIDE"
+    },
+    ARMOR_TYPE_LEATHER: {
+        code: "ARMOR_TYPE_LEATHER",
+        sdesc: "ARMOR_TYPE_LEATHER"
+    },
+    ARMOR_TYPE_PADDED: {
+        code: "ARMOR_TYPE_PADDED",
+        sdesc: "ARMOR_TYPE_PADDED"
+    },
+    ARMOR_TYPE_RING_MAIL: {
+        code: "ARMOR_TYPE_RING_MAIL",
+        sdesc: "ARMOR_TYPE_RING_MAIL"
+    },
+    ARMOR_TYPE_SCALE_MAIL: {
+        code: "ARMOR_TYPE_SCALE_MAIL",
+        sdesc: "ARMOR_TYPE_SCALE_MAIL"
+    },
+    ARMOR_TYPE_SPLINT_MAIL: {
+        code: "ARMOR_TYPE_SPLINT_MAIL",
+        sdesc: "ARMOR_TYPE_SPLINT_MAIL"
+    },
+    ARMOR_TYPE_STUDDED_LEATHER: {
+        code: "ARMOR_TYPE_STUDDED_LEATHER",
+        sdesc: "ARMOR_TYPE_STUDDED_LEATHER"
+    },
+    ARMOR_TYPE_CLOTH: {
+        code: "ARMOR_TYPE_CLOTH",
+        sdesc: "ARMOR_TYPE_CLOTH"
+    },
+    ARMOR_TYPE_BUCKLER: {
+        code: "ARMOR_TYPE_BUCKLER",
+        sdesc: "ARMOR_TYPE_BUCKLER"
+    },
+    ARMOR_TYPE_WOODEN_LIGHT_SHIELD: {
+        code: "ARMOR_TYPE_WOODEN_LIGHT_SHIELD",
+        sdesc: "ARMOR_TYPE_WOODEN_LIGHT_SHIELD"
+    },
+    ARMOR_TYPE_WOODEN_HEAVY_SHIELD: {
+        code: "ARMOR_TYPE_WOODEN_HEAVY_SHIELD",
+        sdesc: "ARMOR_TYPE_WOODEN_HEAVY_SHIELD"
+    },
+    ARMOR_TYPE_METAL_LIGHT_SHIELD: {
+        code: "ARMOR_TYPE_METAL_LIGHT_SHIELD",
+        sdesc: "ARMOR_TYPE_METAL_LIGHT_SHIELD"
+    },
+    ARMOR_TYPE_METAL_HEAVY_SHIELD: {
+        code: "ARMOR_TYPE_METAL_HEAVY_SHIELD",
+        sdesc: "ARMOR_TYPE_METAL_HEAVY_SHIELD"
+    },
+    ARMOR_TYPE_TOWER_SHIELD: {
+        code: "ARMOR_TYPE_TOWER_SHIELD",
+        sdesc: "ARMOR_TYPE_TOWER_SHIELD"
+    },
+    ARMOR_TYPE_CHAIN_SHIRT: {
+        code: "ARMOR_TYPE_CHAIN_SHIRT",
+        sdesc: "ARMOR_TYPE_CHAIN_SHIRT"
+    }
+};
+
+const FURNITURE_STATES = {
+    FURNITURE_CHAIR: {
+        code: "FURNITURE_CHAIR",
+        sdesc: "FURNITURE_CHAIR"
+    },
+    FURNITURE_BED: {
+        code: "FURNITURE_BED",
+        sdesc: "FURNITURE_BED"
+    },
+    FURNITURE_LECTERN: {
+        code: "FURNITURE_LECTERN",
+        sdesc: "FURNITURE_LECTERN"
+    },
+    FURNITURE_ALTAR: {
+        code: "FURNITURE_ALTAR",
+        sdesc: "FURNITURE_ALTAR"
+    }
+};
+
+const DRINK_TYPES = {
+    LIQ_WATER: {
+        code: "LIQ_WATER",
+        sdesc: "LIQ_WATER"
+    },
+    LIQ_BEER: {
+        code: "LIQ_BEER",
+        sdesc: "LIQ_BEER"
+    },
+    LIQ_WINE: {
+        code: "LIQ_WINE",
+        sdesc: "LIQ_WINE"
+    },
+    LIQ_ALE: {
+        code: "LIQ_ALE",
+        sdesc: "LIQ_ALE"
+    },
+    LIQ_DARK_ALE: {
+        code: "LIQ_DARK_ALE",
+        sdesc: "LIQ_DARK_ALE"
+    },
+    LIQ_WHISKEY: {
+        code: "LIQ_WHISKEY",
+        sdesc: "LIQ_WHISKEY"
+    },
+    LIQ_JUICE: {
+        code: "LIQ_JUICE",
+        sdesc: "LIQ_JUICE"
+    },
+    LIQ_SPIRITS: {
+        code: "LIQ_SPIRITS",
+        sdesc: "LIQ_SPIRITS"
+    },
+    LIQ_PORT: {
+        code: "LIQ_PORT",
+        sdesc: "LIQ_PORT"
+    },
+    LIQ_SLIME_MOLD: {
+        code: "LIQ_SLIME_MOLD",
+        sdesc: "LIQ_SLIME_MOLD"
+    },
+    LIQ_MILK: {
+        code: "LIQ_MILK",
+        sdesc: "LIQ_MILK"
+    },
+    LIQ_TEA: {
+        code: "LIQ_TEA",
+        sdesc: "LIQ_TEA"
+    },
+    LIQ_COFFEE: {
+        code: "LIQ_COFFEE",
+        sdesc: "LIQ_COFFEE"
+    },
+    LIQ_BLOOD: {
+        code: "LIQ_BLOOD",
+        sdesc: "LIQ_BLOOD"
+    },
+    LIQ_SALTWATER: {
+        code: "LIQ_SALTWATER",
+        sdesc: "LIQ_SALTWATER"
+    },
+    LIQ_COLA: {
+        code: "LIQ_COLA",
+        sdesc: "LIQ_COLA"
+    },
+    LIQ_MEAD: {
+        code: "LIQ_MEAD",
+        sdesc: "LIQ_MEAD"
+    },
+    LIQ_GROG: {
+        code: "LIQ_GROG",
+        sdesc: "LIQ_GROG"
+    }
+};
+
+const HERB_TYPES = {
+    NOT_POISONED: {
+        code: "NOT_POISONED",
+        sdesc: "NOT_POISONED"
+    },
+    HERB_PIPEWEED: {
+        code: "HERB_PIPEWEED",
+        sdesc: "HERB_PIPEWEED"
+    },
+    HERB_DHAT: {
+        code: "HERB_DHAT",
+        sdesc: "HERB_DHAT"
+    },
+    HERB_DWALE: {
+        code: "HERB_DWALE",
+        sdesc: "HERB_DWALE"
+    },
+    HERB_KONEION: {
+        code: "HERB_KONEION",
+        sdesc: "HERB_KONEION"
+    },
+    HERB_MONKSHOOD: {
+        code: "HERB_MONKSHOOD",
+        sdesc: "HERB_MONKSHOOD"
+    },
+    HERB_CATNIP: {
+        code: "HERB_CATNIP",
+        sdesc: "HERB_CATNIP"
+    },
+    HERB_CANDLESTICK_PLANT: {
+        code: "HERB_CANDLESTICK_PLANT",
+        sdesc: "HERB_CANDLESTICK_PLANT"
+    },
+    HERB_ADDERS_TONGUE: {
+        code: "HERB_ADDERS_TONGUE",
+        sdesc: "HERB_ADDERS_TONGUE"
+    },
+    HERB_ALLCURE: {
+        code: "HERB_ALLCURE",
+        sdesc: "HERB_ALLCURE"
+    },
+    HERB_ALOE: {
+        code: "HERB_ALOE",
+        sdesc: "HERB_ALOE"
+    },
+    HERB_ARNICA: {
+        code: "HERB_ARNICA",
+        sdesc: "HERB_ARNICA"
+    },
+    HERB_BLOODROOT: {
+        code: "HERB_BLOODROOT",
+        sdesc: "HERB_BLOODROOT"
+    },
+    HERB_COMFREY: {
+        code: "HERB_COMFREY",
+        sdesc: "HERB_COMFREY"
+    },
+    HERB_DWALE: {
+        code: "HERB_DWALE",
+        sdesc: "HERB_DWALE"
+    },
+    HERB_ECHINACEA: {
+        code: "HERB_ECHINACEA",
+        sdesc: "HERB_ECHINACEA"
+    },
+    HERB_WOUNDWORT: {
+        code: "HERB_WOUNDWORT",
+        sdesc: "HERB_WOUNDWORT"
+    },
+    HERB_WORMWOOD: {
+        code: "HERB_WORMWOOD",
+        sdesc: "HERB_WORMWOOD"
+    },
+    HERB_ALL_SAINTS_WORT: {
+        code: "HERB_ALL_SAINTS_WORT",
+        sdesc: "HERB_ALL_SAINTS_WORT"
+    },
+    HERB_CURE_ALL: {
+        code: "HERB_CURE_ALL",
+        sdesc: "HERB_CURE_ALL"
+    },
+    HERB_SHANGNUM_MOSS: {
+        code: "HERB_SHANGNUM_MOSS",
+        sdesc: "HERB_SHANGNUM_MOSS"
+    },
+    HERB_MARSH_MALLOW: {
+        code: "HERB_MARSH-MALLOW",
+        sdesc: "HERB_MARSH-MALLOW"
+    },
+    HERB_LUNGWORT: {
+        code: "HERB_LUNGWORT",
+        sdesc: "HERB_LUNGWORT"
+    },
+    HERB_BIRTHWORT: {
+        code: "HERB_BIRTHWORT",
+        sdesc: "HERB_BIRTHWORT"
+    },
+    HERB_BUGSBANE: {
+        code: "HERB_BUGSBANE",
+        sdesc: "HERB_BUGSBANE"
+    },
+    HERB_SNAKESALVE: {
+        code: "HERB_SNAKESALVE",
+        sdesc: "HERB_SNAKESALVE"
+    },
+    HERB_SKULLCUP: {
+        code: "HERB_SKULLCUP",
+        sdesc: "HERB_SKULLCUP"
+    },
+    HERB_BING_LANG: {
+        code: "HERB_BING_LANG",
+        sdesc: "HERB_BING_LANG"
+    },
+    HERB_HEATHER: {
+        code: "HERB_HEATHER",
+        sdesc: "HERB_HEATHER"
+    },
+    HERB_HENBANE: {
+        code: "HERB_HENBANE",
+        sdesc: "HERB_HENBANE"
+    },
+    HERB_HUSHTHORN: {
+        code: "HERB_HUSHTHORN",
+        sdesc: "HERB_HUSHTHORN"
+    },
+    HERB_JUNIPER: {
+        code: "HERB_JUNIPER",
+        sdesc: "HERB_JUNIPER"
+    },
+    HERB_KOLO: {
+        code: "HERB_KOLO",
+        sdesc: "HERB_KOLO"
+    },
+    HERB_BILLBERRY: {
+        code: "HERB_BILLBERRY",
+        sdesc: "HERB_BILLBERRY"
+    },
+    HERB_DARKWEED: {
+        code: "HERB_DARKWEED",
+        sdesc: "HERB_DARKWEED"
+    },
+    HERB_GINKO: {
+        code: "HERB_GINKO",
+        sdesc: "HERB_GINKO"
+    },
+    HERB_WINTERSALVE: {
+        code: "HERB_WINTERSALVE",
+        sdesc: "HERB_WINTERSALVE"
+    }
+};
+
+const COIN_TYPES = {
+    COIN_COPPER: {
+        code: "COIN_COPPER",
+        sdesc: "COIN_COPPER"
+    },
+    COIN_SILVER: {
+        code: "COIN_SILVER",
+        sdesc: "COIN_SILVER"
+    },
+    COIN_ELECTRUM: {
+        code: "COIN_ELECTRUM",
+        sdesc: "COIN_ELECTRUM"
+    },
+    COIN_GOLD: {
+        code: "COIN_GOLD",
+        sdesc: "COIN_GOLD"
+    },
+    COIN_PLATINUM: {
+        code: "COIN_PLATINUM",
+        sdesc: "COIN_PLATINUM"
+    }
+};
+
+const PIPE_FLAGS = {
+    PIPE_EMPTY: {
+        code: 0,
+        sdesc: "PIPE_EMPTY",
+    },
+    PIPE_TAMPED: {
+        code: "PIPE_TAMPED",
+        sdesc: "PIPE_TAMPED",
+    },
+    PIPE_LIT: {
+        code: "PIPE_LIT",
+        sdesc: "PIPE_LIT",
+    },
+    PIPE_HOT: {
+        code: "PIPE_HOT",
+        sdesc: "PIPE_HOT",
+    },
+    PIPE_DIRTY: {
+        code: "PIPE_DIRTY",
+        sdesc: "PIPE_DIRTY",
+    },
+    PIPE_FILTHY: {
+        code: "PIPE_FILTHY",
+        sdesc: "PIPE_FILTHY",
+    },
+    PIPE_GOINGOUT: {
+        code: "PIPE_GOINGOUT",
+        sdesc: "PIPE_GOINGOUT",
+    },
+    PIPE_BURNT: {
+        code: "PIPE_BURNT",
+        sdesc: "PIPE_BURNT",
+    },
+    PIPE_FULLOFASH: {
+        code: "PIPE_FULLOFASH",
+        sdesc: "PIPE_FULLOFASH",
+    }
+};
+
+const LANGUAGE_FLAGS = {
+    LANG_COMMON: {
+        code: "LANG_COMMON",
+        sdesc: "LANG_COMMON"
+    },
+    LANG_ELVEN: {
+        code: "LANG_ELVEN",
+        sdesc: "LANG_ELVEN"
+    },
+    LANG_DWARVEN: {
+        code: "LANG_DWARVEN",
+        sdesc: "LANG_DWARVEN"
+    },
+    LANG_SYLVAN: {
+        code: "LANG_SYLVAN",
+        sdesc: "LANG_SYLVAN"
+    },
+    LANG_DARKSPEAK: {
+        code: "LANG_DARKSPEAK",
+        sdesc: "LANG_DARKSPEAK"
+    },
+    LANG_ORCISH: {
+        code: "LANG_ORCISH",
+        sdesc: "LANG_ORCISH"
+    },
+    LANG_ABYSSAL: {
+        code: "LANG_ABYSSAL",
+        sdesc: "LANG_ABYSSAL"
+    },
+    LANG_AQUAN: {
+        code: "LANG_AQUAN",
+        sdesc: "LANG_AQUAN"
+    },
+    LANG_INSECTOID: {
+        code: "LANG_INSECTOID",
+        sdesc: "LANG_INSECTOID"
+    },
+    LANG_AURAN: {
+        code: "LANG_AURAN",
+        sdesc: "LANG_AURAN"
+    },
+    LANG_GIANT: {
+        code: "LANG_GIANT",
+        sdesc: "LANG_GIANT"
+    },
+    LANG_DRACONIC: {
+        code: "LANG_DRACONIC",
+        sdesc: "LANG_DRACONIC"
+    },
+    LANG_THIEVES: {
+        code: "LANG_THIEVES",
+        sdesc: "LANG_THIEVES"
+    },
+    LANG_MAGICAL: {
+        code: "LANG_MAGICAL",
+        sdesc: "LANG_MAGICAL"
+    },
+    LANG_GOBLIN: {
+        code: "LANG_GOBLIN",
+        sdesc: "LANG_GOBLIN"
+    },
+    LANG_GOD: {
+        code: "LANG_GOD",
+        sdesc: "LANG_GOD"
+    },
+    LANG_ANCIENT: {
+        code: "LANG_ANCIENT",
+        sdesc: "LANG_ANCIENT"
+    },
+    LANG_HALFLING: {
+        code: "LANG_HALFLING",
+        sdesc: "LANG_HALFLING"
+    },
+    LANG_CLAN: {
+        code: "LANG_CLAN",
+        sdesc: "LANG_CLAN"
+    },
+    LANG_GNOLL: {
+        code: "LANG_GNOLL",
+        sdesc: "LANG_GNOLL"
+    },
+    LANG_GITH: {
+        code: "LANG_GITH",
+        sdesc: "LANG_GITH"
+    },
+    LANG_GNOME: {
+        code: "LANG_GNOME",
+        sdesc: "LANG_GNOME"
+    },
+    LANG_ANIMAL: {
+        code: "LANG_ANIMAL",
+        sdesc: "LANG_ANIMAL"
+    },
+    LANG_CELESTIAL: {
+        code: "LANG_CELESTIAL",
+        sdesc: "LANG_CELESTIAL"
+    },
+    LANG_IGNAN: {
+        code: "LANG_IGNAN",
+        sdesc: "LANG_IGNAN"
+    },
+    LANG_INFERNAL: {
+        code: "LANG_INFERNAL",
+        sdesc: "LANG_INFERNAL"
+    },
+    LANG_TERRAN: {
+        code: "LANG_TERRAN",
+        sdesc: "LANG_TERRAN"
+    }
+};
+
+const LEVER_BUTTON_FLAGS = {
+    TRIG_NONE: {
+        code: "TRIG_NONE",
+        sdesc: "TRIG_NONE",
+        ldesc: "Use 0 when there are no triggers",
+        do_not_use: false
+    },
+    TRIG_UP: {
+        code: "TRIG_UP",
+        sdesc: "TRIG_UP",
+        ldesc: "Lever starts out in the up position",
+        do_not_use: false
+    },
+    TRIG_UNLOCK: {
+        code: "TRIG_UNLOCK",
+        sdesc: "TRIG_UNLOCK",
+        ldesc: "This will set a newly created exit or existing one to unlocked",
+        do_not_use: false
+    },
+    TRIG_LOCK: {
+        code: "TRIG_LOCK",
+        sdesc: "TRIG_LOCK",
+        ldesc: "This will set a newly crated exit or exiting one to locked",
+        do_not_use: false
+    },
+    TRIG_D_NORTH: {
+        code: "TRIG_D_NORTH",
+        sdesc: "TRIG_D_NORTH",
+        ldesc: "Sets the exit to open to the north",
+        do_not_use: false
+    },
+    TRIG_D_SOUTH: {
+        code: "TRIG_D_SOUTH",
+        sdesc: "TRIG_D_SOUTH",
+        ldesc: "Sets the exit to open to the south",
+        do_not_use: false
+    },
+    TRIG_D_EAST: {
+        code: "TRIG_D_EAST",
+        sdesc: "TRIG_D_EAST",
+        ldesc: "Sets the exit to open to the east",
+        do_not_use: false
+    },
+    TRIG_D_WEST: {
+        code: "TRIG_D_WEST",
+        sdesc: "TRIG_D_WEST",
+        ldesc: "Sets the exit to open to the west",
+        do_not_use: false
+    },
+    TRIG_D_UP: {
+        code: "TRIG_D_UP",
+        sdesc: "TRIG_D_UP",
+        ldesc: "Sets the exit open up",
+        do_not_use: false
+    },
+    TRIG_D_DOWN: {
+        code: "TRIG_D_DOWN",
+        sdesc: "TRIG_D_DOWN",
+        ldesc: "Sets the exit to open down",
+        do_not_use: false
+    },
+    TRIG_DOOR: {
+        code: "TRIG_DOOR",
+        sdesc: "TRIG_DOOR",
+        ldesc: "This is required to make any of the triggers utilising exits work",
+        do_not_use: false
+    },
+    TRIG_CONTAINER: {
+        code: "TRIG_CONTAINER",
+        sdesc: "TRIG_CONTAINER",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_OPEN: {
+        code: "TRIG_OPEN",
+        sdesc: "TRIG_OPEN",
+        ldesc: "This trigger opens any door that is generated with other triggers",
+        do_not_use: false
+    },
+    TRIG_CLOSE: {
+        code: "TRIG_CLOSE",
+        sdesc: "TRIG_CLOSE",
+        ldesc: "This trigger closes any door that is generated with other exit triggers",
+        do_not_use: false
+    },
+    TRIG_PASSAGE: {
+        code: "TRIG_PASSAGE",
+        sdesc: "TRIG_PASSAGE",
+        ldesc: "This trigger is needed to create a new exit.",
+        do_not_use: false
+    },
+    TRIG_OLOAD: {
+        code: "TRIG_OLOAD",
+        sdesc: "TRIG_OLOAD",
+        ldesc: "Loads up an object. Value1 is the Room. Value2 is the mob number.",
+        do_not_use: false
+    },
+    TRIG_MLOAD: {
+        code: "TRIG_MLOAD",
+        sdesc: "TRIG_MLOAD",
+        ldesc: "Loads up a mobile. Value1 is the Room. Value2 is the mob number.",
+        do_not_use: false
+    },
+    TRIG_TELEPORT: {
+        code: "TRIG_TELEPORT",
+        sdesc: "TRIG_TELEPORT",
+        ldesc: "Teleports lever puller or button pusher to set vnum",
+        do_not_use: false
+    },
+    TRIG_TELEPORTALL: {
+        code: "TRIG_TELEPORTALL",
+        sdesc: "TRIG_TELEPORTALL",
+        ldesc: "Teleports everyone in the room to set vnum",
+        do_not_use: false
+    },
+    TRIG_TELEPORTPLUS: {
+        code: "TRIG_TELEPORTPLUS",
+        sdesc: "TRIG_TELEPORTPLUS",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_DEATH: {
+        code: "TRIG_DEATH",
+        sdesc: "TRIG_DEATH",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_CAST: {
+        code: "TRIG_CAST",
+        sdesc: "TRIG_CAST",
+        ldesc: "Casts a spell on lever/button pusher. Value1 needs to contain the spell number",
+        do_not_use: false
+    },
+    TRIG_FAKEBLADE: {
+        code: "TRIG_FAKEBLADE",
+        sdesc: "TRIG_FAKEBLADE",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_RANDFOUR: {
+        code: "TRIG_RANDFOUR",
+        sdesc: "TRIG_RANDFOUR",
+        ldesc: "Randomises the existing exits of the vnum in value1 to NSEW. It will not add new exits, just change where the existing ones go.",
+        do_not_use: false
+    },
+    TRIG_RANDSIX: {
+        code: "TRIG_RANDSIX",
+        sdesc: "TRIG_RANDSIX",
+        ldesc: "Randomises the existing exits of the vnum in value1 to NSEWDU. It will not add new exits, just change where the existing ones go.",
+        do_not_use: false
+    },
+    TRIG_TRAPDOOR: {
+        code: "TRIG_TRAPDOOR",
+        sdesc: "TRIG_TRAPDOOR",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_ANOTHEROOM: {
+        code: "TRIG_ANOTHEROOM",
+        sdesc: "TRIG_ANOTHEROOM",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_USEDIAL: {
+        code: "TRIG_USEDIAL",
+        sdesc: "TRIG_USEDIAL",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_ABSOLUTEVNUM: {
+        code: "TRIG_ABSOLUTEVNUM",
+        sdesc: "TRIG_ABSOLUTEVNUM",
+        ldesc: "This trigger is not used",
+        do_not_use: true
+    },
+    TRIG_SHOWROOMDESC: {
+        code: "TRIG_SHOWROOMDESC",
+        sdesc: "TRIG_SHOWROOMDESC",
+        ldesc: "Required in order to allow the teleported to know that they have been teleported",
+        do_not_use: false
+    },
+    TRIG_AUTORETURN: {
+        code: "TRIG_AUTORETURN",
+        sdesc: "TRIG_AUTORETURN",
+        ldesc: "This will make the trigger go back to the original position",
+        do_not_use: false
+    },
+    TRIG_NOTRAP: {
+        code: "TRIG_NOTRAP",
+        sdesc: "TRIG_NOTRAP",
+        ldesc: "Will bypass any traps on the exit if used. It allows for a trap to be on a door that will not trigger if the lever is used to open it instead of other means.",
+        do_not_use: false
+    }
+};
+
+const TRAP_TYPES = {
+    TTYPE_NONE: {
+        code: "TTYPE_NONE",
+        sdesc: "TTYPE_NONE",
+        ldesc: "No trap at all"
+    },
+    TTYPE_SPIKE_MINOR: {
+        code: "TTYPE_SPIKE_MINOR",
+        sdesc: "TTYPE_SPIKE_MINOR",
+        ldesc: "a minor spike trap : 5d6/PIERCE on CHAR"
+    },
+    TTYPE_SPIKE_AVERAGE: {
+        code: "TTYPE_SPIKE_AVERAGE",
+        sdesc: "TTYPE_SPIKE_AVERAGE",
+        ldesc: "an average spike trap : 10d6/PIERCE on CHAR"
+    },
+    TTYPE_SPIKE_STRONG: {
+        code: "TTYPE_SPIKE_STRONG",
+        sdesc: "TTYPE_SPIKE_STRONG",
+        ldesc: "a strong spike trap : 15d6/PIERCE on CHAR"
+    },
+    TTYPE_SPIKE_DEADLY: {
+        code: "TTYPE_SPIKE_DEADLY",
+        sdesc: "TTYPE_SPIKE_DEADLY",
+        ldesc: "a deadly spike trap : 25d6/PIERCE on CHAR"
+    },
+    TTYPE_BLADE_MINOR: {
+        code: "TTYPE_BLADE_MINOR",
+        sdesc: "TTYPE_BLADE_MINOR",
+        ldesc: "a minor spinning blade trap : 5d6/SLASH on CHAR"
+    },
+    TTYPE_BLADE_AVERAGE: {
+        code: "TTYPE_BLADE_AVERAGE",
+        sdesc: "TTYPE_BLADE_AVERAGE",
+        ldesc: "an average spinning blade trap : 10d6/SLASH on CHAR"
+    },
+    TTYPE_BLADE_STRONG: {
+        code: "TTYPE_BLADE_STRONG",
+        sdesc: "TTYPE_BLADE_STRONG",
+        ldesc: "a strong spinning blade trap : 15d6/SLASH on CHAR"
+    },
+    TTYPE_BLADE_DEADLY: {
+        code: "TTYPE_BLADE_DEADLY",
+        sdesc: "TTYPE_BLADE_DEADLY",
+        ldesc: "a deadly spinning blade trap : 25d6/SLASH on CHAR"
+    },
+    TTYPE_STONE_MINOR: {
+        code: "TTYPE_STONE_MINOR",
+        sdesc: "TTYPE_STONE_MINOR",
+        ldesc: "a minor falling stone trap : 5d6/BASH on CHAR"
+    },
+    TTYPE_STONE_AVERAGE: {
+        code: "TTYPE_STONE_AVERAGE",
+        sdesc: "TTYPE_STONE_AVERAGE",
+        ldesc: "an average falling stone trap : 10d6/BASH on CHAR"
+    },
+    TTYPE_STONE_STRONG: {
+        code: "TTYPE_STONE_STRONG",
+        sdesc: "TTYPE_STONE_STRONG",
+        ldesc: "a strong falling stone trap : 15d6/BASH on CHAR"
+    },
+    TTYPE_STONE_DEADLY: {
+        code: "TTYPE_STONE_DEADLY",
+        sdesc: "TTYPE_STONE_DEADLY",
+        ldesc: "a deadly falling stone trap : 25d6/BASH on CHAR"
+    },
+    TTYPE_ACID_MINOR: {
+        code: "TTYPE_ACID_MINOR",
+        sdesc: "TTYPE_ACID_MINOR",
+        ldesc: "a minor acid trap : 5d8/ACID on CHAR"
+    },
+    TTYPE_ACID_AVERAGE: {
+        code: "TTYPE_ACID_AVERAGE",
+        sdesc: "TTYPE_ACID_AVERAGE",
+        ldesc: "an average acid trap : 10d8/ACID on CHAR"
+    },
+    TTYPE_ACID_STRONG: {
+        code: "TTYPE_ACID_STRONG",
+        sdesc: "TTYPE_ACID_STRONG",
+        ldesc: "a strong acid trap : 15d8/ACID on CHAR"
+    },
+    TTYPE_ACID_DEADLY: {
+        code: "TTYPE_ACID_DEADLY",
+        sdesc: "TTYPE_ACID_DEADLY",
+        ldesc: "a deadly acid trap : 25d8/ACID on CHAR"
+    },
+    TTYPE_FROST_MINOR: {
+        code: "TTYPE_FROST_MINOR",
+        sdesc: "TTYPE_FROST_MINOR",
+        ldesc: "a minor frost trap : 10d4/COLD on CHAR"
+    },
+    TTYPE_FROST_AVERAGE: {
+        code: "TTYPE_FROST_AVERAGE",
+        sdesc: "TTYPE_FROST_AVERAGE",
+        ldesc: "an average frost trap : 20d4/COLD on CHAR"
+    },
+    TTYPE_FROST_STRONG: {
+        code: "TTYPE_FROST_STRONG",
+        sdesc: "TTYPE_FROST_STRONG",
+        ldesc: "a strong frost trap : 30d4/COLD on CHAR"
+    },
+    TTYPE_FROST_DEADLY: {
+        code: "TTYPE_FROST_DEADLY",
+        sdesc: "TTYPE_FROST_DEADLY",
+        ldesc: "a deadly frost trap : 50d4/COLD on CHAR"
+    },
+    TTYPE_FIRE_MINOR: {
+        code: "TTYPE_FIRE_MINOR",
+        sdesc: "TTYPE_FIRE_MINOR",
+        ldesc: "a minor fire trap : 10d4/FIRE on CHAR"
+    },
+    TTYPE_FIRE_AVERAGE: {
+        code: "TTYPE_FIRE_AVERAGE",
+        sdesc: "TTYPE_FIRE_AVERAGE",
+        ldesc: "an average fire trap : 20d4/FIRE on CHAR"
+    },
+    TTYPE_FIRE_STRONG: {
+        code: "TTYPE_FIRE_STRONG",
+        sdesc: "TTYPE_FIRE_STRONG",
+        ldesc: "a strong fire trap : 30d4/FIRE on CHAR"
+    },
+    TTYPE_FIRE_DEADLY: {
+        code: "TTYPE_FIRE_DEADLY",
+        sdesc: "TTYPE_FIRE_DEADLY",
+        ldesc: "a deadly fire trap : 50d4/FIRE on CHAR"
+    },
+    TTYPE_ELECTRICITY_MINOR: {
+        code: "TTYPE_ELECTRICITY_MINOR",
+        sdesc: "TTYPE_ELECTRICITY_MINOR",
+        ldesc: "a minor electrical trap : 8d6/ELECTRICITY on CHAR"
+    },
+    TTYPE_ELECTRICITY_AVERAGE: {
+        code: "TTYPE_ELECTRICITY_AVERAGE",
+        sdesc: "TTYPE_ELECTRICITY_AVERAGE",
+        ldesc: "an average electrical trap : 16d6/ELECTRICITY on CHAR"
+    },
+    TTYPE_ELECTRICITY_STRONG: {
+        code: "TTYPE_ELECTRICITY_STRONG",
+        sdesc: "TTYPE_ELECTRICITY_STRONG",
+        ldesc: "a strong electrical trap : 25d6/ELECTRICITY on CHAR"
+    },
+    TTYPE_ELECTRICITY_DEADLY: {
+        code: "TTYPE_ELECTRICITY_DEADLY",
+        sdesc: "TTYPE_ELECTRICITY_DEADLY",
+        ldesc: "a deadly electrical trap : 42d6/ELECTRICITY on CHAR"
+    },
+    TTYPE_NEG_ENERGY_MINOR: {
+        code: "TTYPE_NEG_ENERGY_MINOR",
+        sdesc: "TTYPE_NEG_ENERGY_MINOR",
+        ldesc: "a minor negative energy trap : 8d8/HEALING on CHAR"
+    },
+    TTYPE_NEG_ENERGY_AVERAGE: {
+        code: "TTYPE_NEG_ENERGY_AVERAGE",
+        sdesc: "TTYPE_NEG_ENERGY_AVERAGE",
+        ldesc: "an average negative energy trap : 16d8/HEALING on CHAR"
+    },
+    TTYPE_NEG_ENERGY_STRONG: {
+        code: "TTYPE_NEG_ENERGY_STRONG",
+        sdesc: "TTYPE_NEG_ENERGY_STRONG",
+        ldesc: "a strong negative energy trap : 25d8/HEALING on CHAR"
+    },
+    TTYPE_NEG_ENERGY_DEADLY: {
+        code: "TTYPE_NEG_ENERGY_DEADLY",
+        sdesc: "TTYPE_NEG_ENERGY_DEADLY",
+        ldesc: "a deadly negative energy trap : 42d8/HEALING on CHAR"
+    },
+    TTYPE_SPELL_RAZORBAIT: {
+        code: "TTYPE_SPELL_RAZORBAIT",
+        sdesc: "TTYPE_SPELL_RAZORBAIT",
+        ldesc: "a razorbait spell trap"
+    },
+    TTYPE_SPELL_SWORDBAIT: {
+        code: "TTYPE_SPELL_SWORDBAIT",
+        sdesc: "TTYPE_SPELL_SWORDBAIT",
+        ldesc: "a swordbait spell trap"
+    },
+    TTYPE_SPELL_WINTER_MIST: {
+        code: "TTYPE_SPELL_WINTER_MIST",
+        sdesc: "TTYPE_SPELL_WINTER_MIST",
+        ldesc: "a winter mist spell trap"
+    },
+    TTYPE_SPELL_BLAZEBANE: {
+        code: "TTYPE_SPELL_BLAZEBANE",
+        sdesc: "TTYPE_SPELL_BLAZEBANE",
+        ldesc: "a blazebane spell trap"
+    },
+    TTYPE_SPELL_CHARGED_BEACON: {
+        code: "TTYPE_SPELL_CHARGED_BEACON",
+        sdesc: "TTYPE_SPELL_CHARGED_BEACON",
+        ldesc: "a charged beacon spell trap"
+    },
+    TTYPE_SPELL_WEAKEN: {
+        code: "TTYPE_SPELL_WEAKEN",
+        sdesc: "TTYPE_SPELL_WEAKEN",
+        ldesc: "a weaken spell trap"
+    },
+    TTYPE_SPELL_FUMBLE: {
+        code: "TTYPE_SPELL_FUMBLE",
+        sdesc: "TTYPE_SPELL_FUMBLE",
+        ldesc: "a fumble spell trap"
+    },
+    TTYPE_SPELL_CURSE: {
+        code: "TTYPE_SPELL_CURSE",
+        sdesc: "TTYPE_SPELL_CURSE",
+        ldesc: "a curse spell trap"
+    },
+    TTYPE_SPELL_ILL_FORTUNE: {
+        code: "TTYPE_SPELL_ILL_FORTUNE",
+        sdesc: "TTYPE_SPELL_ILL_FORTUNE",
+        ldesc: "an ill fortune spell trap"
+    },
+    TTYPE_SPELL_BLINDNESS: {
+        code: "TTYPE_SPELL_BLINDNESS",
+        sdesc: "TTYPE_SPELL_BLINDNESS",
+        ldesc: "a blindness spell trap"
+    },
+    TTYPE_SPELL_ENTANGLE: {
+        code: "TTYPE_SPELL_ENTANGLE",
+        sdesc: "TTYPE_SPELL_ENTANGLE",
+        ldesc: "an entangle spell trap"
+    },
+    TTYPE_SPELL_HOLD_MONSTER: {
+        code: "TTYPE_SPELL_HOLD_MONSTER",
+        sdesc: "TTYPE_SPELL_HOLD_MONSTER",
+        ldesc: "a hold monster spell trap"
+    },
+    TTYPE_SPELL_RAINBOW_PATTERN: {
+        code: "TTYPE_SPELL_RAINBOW_PATTERN",
+        sdesc: "TTYPE_SPELL_RAINBOW_PATTERN",
+        ldesc: "a rainbow pattern spell trap"
+    },
+    TTYPE_SPELL_COLOR_SPRAY: {
+        code: "TTYPE_SPELL_COLOR_SPRAY",
+        sdesc: "TTYPE_SPELL_COLOR_SPRAY",
+        ldesc: "a color spray spell trap"
+    },
+    TTYPE_SPELL_FAERIE_FIRE: {
+        code: "TTYPE_SPELL_FAERIE_FIRE",
+        sdesc: "TTYPE_SPELL_FAERIE_FIRE",
+        ldesc: "a faerie fire spell trap"
+    },
+    TTYPE_SPELL_POISON: {
+        code: "TTYPE_SPELL_POISON",
+        sdesc: "TTYPE_SPELL_POISON",
+        ldesc: "a poison spell trap"
+    },
+    TTYPE_SPELL_DISPEL_MAGIC: {
+        code: "TTYPE_SPELL_DISPEL_MAGIC",
+        sdesc: "TTYPE_SPELL_DISPEL_MAGIC",
+        ldesc: "a dispel magic spell trap"
+    },
+    TTYPE_SPELL_CAUSE_LIGHT: {
+        code: "TTYPE_SPELL_CAUSE_LIGHT",
+        sdesc: "TTYPE_SPELL_CAUSE_LIGHT",
+        ldesc: "a cause light spell trap"
+    },
+    TTYPE_SPELL_CAUSE_SERIOUS: {
+        code: "TTYPE_SPELL_CAUSE_SERIOUS",
+        sdesc: "TTYPE_SPELL_CAUSE_SERIOUS",
+        ldesc: "a cause serious spell trap"
+    },
+    TTYPE_SPELL_CAUSE_CRITICAL: {
+        code: "TTYPE_SPELL_CAUSE_CRITICAL",
+        sdesc: "TTYPE_SPELL_CAUSE_CRITICAL",
+        ldesc: "a cause critical spell trap"
+    },
+    TTYPE_SPELL_HARM: {
+        code: "TTYPE_SPELL_HARM",
+        sdesc: "TTYPE_SPELL_HARM",
+        ldesc: "a harm spell trap"
+    },
+    TTYPE_SPELL_SHOCKING_GRASP: {
+        code: "TTYPE_SPELL_SHOCKING_GRASP",
+        sdesc: "TTYPE_SPELL_SHOCKING_GRASP",
+        ldesc: "a shocking grasp spell trap"
+    },
+    TTYPE_SPELL_BURNING_HANDS: {
+        code: "TTYPE_SPELL_BURNING_HANDS",
+        sdesc: "TTYPE_SPELL_BURNING_HANDS",
+        ldesc: "a burning hands spell trap"
+    },
+    TTYPE_SPELL_CHILL_TOUCH: {
+        code: "TTYPE_SPELL_CHILL_TOUCH",
+        sdesc: "TTYPE_SPELL_CHILL_TOUCH",
+        ldesc: "a chill touch spell trap"
+    },
+    TTYPE_SPELL_MAGIC_MISSILE: {
+        code: "TTYPE_SPELL_MAGIC_MISSILE",
+        sdesc: "TTYPE_SPELL_MAGIC_MISSILE",
+        ldesc: "a magic missile spell trap"
+    },
+    TTYPE_SPELL_ACID_ARROW: {
+        code: "TTYPE_SPELL_ACID_ARROW",
+        sdesc: "TTYPE_SPELL_ACID_ARROW",
+        ldesc: "an acid arrow spell trap"
+    },
+    TTYPE_SPELL_FLAME_ARROW: {
+        code: "TTYPE_SPELL_FLAME_ARROW",
+        sdesc: "TTYPE_SPELL_FLAME_ARROW",
+        ldesc: "a flame arrow spell trap"
+    },
+    TTYPE_SPELL_FLAMESTRIKE: {
+        code: "TTYPE_SPELL_FLAMESTRIKE",
+        sdesc: "TTYPE_SPELL_FLAMESTRIKE",
+        ldesc: "a flamestrike spell trap"
+    },
+    TTYPE_SPELL_PHOENIX_CLAW: {
+        code: "TTYPE_SPELL_PHOENIX_CLAW",
+        sdesc: "TTYPE_SPELL_PHOENIX_CLAW",
+        ldesc: "a phoenix claw spell trap"
+    },
+    TTYPE_SPELL_FIREBALL: {
+        code: "TTYPE_SPELL_FIREBALL",
+        sdesc: "TTYPE_SPELL_FIREBALL",
+        ldesc: "a fireball spell trap"
+    },
+    TTYPE_SPELL_SOUND_BURST: {
+        code: "TTYPE_SPELL_SOUND_BURST",
+        sdesc: "TTYPE_SPELL_SOUND_BURST",
+        ldesc: "a sound burst spell trap"
+    },
+    TTYPE_SPELL_ACID_BLAST: {
+        code: "TTYPE_SPELL_ACID_BLAST",
+        sdesc: "TTYPE_SPELL_ACID_BLAST",
+        ldesc: "an acid blast spell trap"
+    },
+    TTYPE_SPELL_LIGHTNING_BOLT: {
+        code: "TTYPE_SPELL_LIGHTNING_BOLT",
+        sdesc: "TTYPE_SPELL_LIGHTNING_BOLT",
+        ldesc: "a lightning bolt spell trap"
+    },
+    TTYPE_SPELL_CHAIN_LIGHTNING: {
+        code: "TTYPE_SPELL_CHAIN_LIGHTNING",
+        sdesc: "TTYPE_SPELL_CHAIN_LIGHTNING",
+        ldesc: "a chain lightning spell trap"
+    },
+    TTYPE_SPELL_CONE_OF_COLD: {
+        code: "TTYPE_SPELL_CONE_OF_COLD",
+        sdesc: "TTYPE_SPELL_CONE_OF_COLD",
+        ldesc: "a cone of cold spell trap"
+    },
+    TTYPE_SPELL_ICE_STORM: {
+        code: "TTYPE_SPELL_ICE_STORM",
+        sdesc: "TTYPE_SPELL_ICE_STORM",
+        ldesc: "an ice storm spell trap"
+    },
+    TTYPE_SPELL_ENERGY_DRAIN: {
+        code: "TTYPE_SPELL_ENERGY_DRAIN",
+        sdesc: "TTYPE_SPELL_ENERGY_DRAIN",
+        ldesc: "an energy drain spell trap"
+    },
+    TTYPE_SPELL_PHANTASMAL_KILLER: {
+        code: "TTYPE_SPELL_PHANTASMAL_KILLER",
+        sdesc: "TTYPE_SPELL_PHANTASMAL_KILLER",
+        ldesc: "a phantasmal killer spell trap"
+    },
+    TTYPE_SPELL_DISINTEGRATE: {
+        code: "TTYPE_SPELL_DISINTEGRATE",
+        sdesc: "TTYPE_SPELL_DISINTEGRATE",
+        ldesc: "a disintegrate spell trap"
+    }
+};
+
+const TRAP_TRIGGERS = {
+    TRIGGER_NONE: {
+        code: "TRIGGER_NONE",
+        sdesc: "TRIGGER_NONE"
+    }
+    TRIGGER_GET: {
+        code: "TRIGGER_GET",
+        sdesc: "TRIGGER_GET"
+    }
+    TRIGGER_OPEN: {
+        code: "TRIGGER_OPEN",
+        sdesc: "TRIGGER_OPEN"
+    }
+    TRIGGER_SHOVE: {
+        code: "TRIGGER_SHOVE",
+        sdesc: "TRIGGER_SHOVE"
+    }
+    TRIGGER_PUT: {
+        code: "TRIGGER_PUT",
+        sdesc: "TRIGGER_PUT"
+    }
+    TRIGGER_EXAMINE: {
+        code: "TRIGGER_EXAMINE",
+        sdesc: "TRIGGER_EXAMINE"
+    }
+    TRIGGER_USE: {
+        code: "TRIGGER_USE",
+        sdesc: "TRIGGER_USE"
+    }
+    TRIGGER_UNLOCK: {
+        code: "TRIGGER_UNLOCK",
+        sdesc: "TRIGGER_UNLOCK"
+    }
+    TRIGGER_CLOSE: {
+        code: "TRIGGER_CLOSE",
+        sdesc: "TRIGGER_CLOSE"
+    }
+    TRIGGER_MOVE: {
+        code: "TRIGGER_MOVE",
+        sdesc: "TRIGGER_MOVE"
+    }
+    TRIGGER_PICK: {
+        code: "TRIGGER_PICK",
+        sdesc: "TRIGGER_PICK"
+    }
+};
+
+const ITEM_TYPES = {
+    ITEM_TYPE_LIGHT: {
+        code: "ITEM_TYPE_LIGHT",
+        sdesc: "ITEM_TYPE_LIGHT",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: VALUE_TYPES.INT,
+            type_enum: null,
+            ldesc: "hours left, 0 is dead, -1 is infinite. Infinite lights are to be rare magical items.",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_SCROLL: {
+        code: "ITEM_TYPE_SCROLL",
+        sdesc: "ITEM_TYPE_SCROLL",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level of spell(s) (The level of the spell determines the cost. For scrolls that are sold make the spell level high. For scrolls that are found make the spell level low.)",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 1",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 2",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 3",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_WAND: {
+        code: "ITEM_TYPE_WAND",
+        sdesc: "ITEM_TYPE_WAND",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level of spell",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "max charges",
+        },
+        value2: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "charges left",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: null,
+            ldesc: "spell number",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_STAFF: {
+        code: "ITEM_TYPE_STAFF",
+        sdesc: "ITEM_TYPE_STAFF",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level of spell",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "max charges",
+        },
+        value2: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "charges left",
+        },
+        value3: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_WEAPON: {
+        code: "ITEM_TYPE_WEAPON",
+        sdesc: "ITEM_TYPE_WEAPON",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: WEAPON_FLAGS,
+            ldesc: "weapon flag",
+        },
+        value2: {
+            type: VALUE_TYPES.STRING,
+            type_enum: null,
+            ldesc: "weapon flag modifiers",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: WEAPON_TYPES,
+            ldesc: "Weapon Type",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_SHEATH: {
+        code: "ITEM_TYPE_SHEATH",
+        sdesc: "ITEM_TYPE_SHEATH",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "capacity in pounds",
+        },
+        value1: {
+            type: VALUE_TYPES.SUM_FLAGS,
+            type_enum: CONTAINER_FLAGS,
+            ldesc: "container flags",
+        },
+        value2: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.OBJECT,
+            ldesc: "key vnum",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: OBJECT_LAYERS,
+            ldesc: "layers",
+        },
+    },
+    ITEM_TYPE_TREASURE: {
+        code: "ITEM_TYPE_TREASURE",
+        sdesc: "ITEM_TYPE_TREASURE",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: OBJECT_LAYERS,
+            ldesc: "layers",
+        },
+    },
+    ITEM_TYPE_ARMOR: {
+        code: "ITEM_TYPE_ARMOR",
+        sdesc: "ITEM_TYPE_ARMOR",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: BODY_TYPES,
+            ldesc: "body type (lesson pending)",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: OBJECT_LAYERS,
+            ldesc: "layers",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: ARMOR_TYPES,
+            ldesc: "Armor type",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_POTION: {
+        code: "ITEM_TYPE_POTION",
+        sdesc: "ITEM_TYPE_POTION",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level of spells",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 1",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 2",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 3",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_FURNITURE: {
+        code: "ITEM_TYPE_FURNITURE",
+        sdesc: "ITEM_TYPE_FURNITURE",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: FURNITURE_STATES,
+            ldesc: "Furniture State",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_TRASH: {
+        code: "ITEM_TYPE_TRASH",
+        sdesc: "ITEM_TYPE_TRASH",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_CONTAINER: {
+        code: "ITEM_TYPE_CONTAINER",
+        sdesc: "ITEM_TYPE_CONTAINER",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "capacity in pounds",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: CONTAINER_FLAGS,
+            ldesc: "container flags",
+        },
+        value2: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.OBJECT,
+            ldesc: "key vnum",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: OBJECT_LAYERS,
+            ldesc: "layers",
+        },
+    },
+    ITEM_TYPE_DRINKCON: {
+        code: "ITEM_TYPE_DRINKCON",
+        sdesc: "ITEM_TYPE_DRINKCON",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "total amount of drinks",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "current amount of drinks",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: DRINK_TYPES,
+            ldesc: "liquid #",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: HERB_TYPES,
+            ldesc: "component/herb value",
+        },
+        value4: {
+            type: VALUE_TYPES.BOOLEAN,
+            type_enum: null,
+            ldesc: "junks on use or not",
+        },
+    },
+    ITEM_TYPE_KEY: {
+        code: "ITEM_TYPE_KEY",
+        sdesc: "ITEM_TYPE_KEY",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_FOOD: {
+        code: "ITEM_TYPE_FOOD",
+        sdesc: "ITEM_TYPE_FOOD",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "nourishment value",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "decay timer",
+        },
+        value2: {
+            type: VALUE_TYPES.BOOLEAN,
+            type_enum: null,
+            ldesc: "FOOD_RAW or FOOD_COOKED, 0 is raw",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: HERB_TYPES,
+            ldesc: "component/herb value",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_MONEY: {
+        code: "ITEM_TYPE_MONEY",
+        sdesc: "ITEM_TYPE_MONEY",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "# of coins",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: COIN_TYPES,
+            ldesc: "coin type",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_PEN: {
+        code: "ITEM_TYPE_PEN",
+        sdesc: "ITEM_TYPE_PEN",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "amount of ink",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_CORPSE_NPC: {
+        code: "ITEM_TYPE_CORPSE_NPC",
+        sdesc: "ITEM_TYPE_CORPSE_NPC",
+        do_not_use: true,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "decomposition timer",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "25 * Race Size",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_CORPSE_PC: {
+        code: "ITEM_TYPE_CORPSE_PC",
+        sdesc: "ITEM_TYPE_CORPSE_PC",
+        do_not_use: true,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_FOUNTAIN: {
+        code: "ITEM_TYPE_FOUNTAIN",
+        sdesc: "ITEM_TYPE_FOUNTAIN",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "Amount of drinks",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: DRINK_TYPES,
+            ldesc: "Liquid Type",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_PILL: {
+        code: "ITEM_TYPE_PILL",
+        sdesc: "ITEM_TYPE_PILL",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level of spells",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 1",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 2",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number 3",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_BLOOD: {
+        code: "ITEM_TYPE_BLOOD",
+        sdesc: "ITEM_TYPE_BLOOD",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "quantity",
+        },
+        value2: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "decay timer",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_BLOODSTAIN: {
+        code: "ITEM_TYPE_BLOODSTAIN",
+        sdesc: "ITEM_TYPE_BLOODSTAIN",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "decay timer",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_SCRAPS: {
+        code: "ITEM_TYPE_SCRAPS",
+        sdesc: "ITEM_TYPE_SCRAPS",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "decay timer",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_PIPE: {
+        code: "ITEM_TYPE_PIPE",
+        sdesc: "ITEM_TYPE_PIPE",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "maximum capacity of pipe",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "amount of herb in the pipe",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: HERB_TYPES,
+            ldesc: "herb type",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: PIPE_FLAGS,
+            ldesc: "pipe flags",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_FIRE: {
+        code: "ITEM_TYPE_FIRE",
+        sdesc: "ITEM_TYPE_FIRE",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: VALUE_TYPES.INT,
+            type_enum: null,
+            ldesc: "hours left, 0 is dead, -1 is infinite",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_BOOK: {
+        code: "ITEM_TYPE_BOOK",
+        sdesc: "ITEM_TYPE_BOOK",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: LANGUAGE_FLAGS,
+            ldesc: "Language",
+        },
+        value4: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "Skill Level (From 1 to 25)",
+        },
+    },
+    ITEM_TYPE_LEVER: {
+        code: "ITEM_TYPE_LEVER",
+        sdesc: "ITEM_TYPE_LEVER",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: LEVER_BUTTON_FLAGS,
+            ldesc: "lever trigger flag",
+        },
+        value1: {
+            type: VALUE_TYPES.STRING,
+            type_enum: null,
+            ldesc: "vnum of teleport room or spell number or start room or room to be randomised",
+        },
+        value2: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.ROOM,
+            ldesc: "room to load the mob or object into",
+        },
+        value3: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: null,
+            ldesc: "object or mob to loaded",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_BUTTON: {
+        code: "ITEM_TYPE_BUTTON",
+        sdesc: "ITEM_TYPE_BUTTON",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: LEVER_BUTTON_FLAGS,
+            ldesc: "lever trigger flag",
+        },
+        value1: {
+            type: VALUE_TYPES.STRING,
+            type_enum: null,
+            ldesc: "vnum of teleport room or spell number",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_TRAP: {
+        code: "ITEM_TYPE_TRAP",
+        sdesc: "ITEM_TYPE_TRAP",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: TRAP_TYPES,
+            ldesc: "trap type",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "number of reloads",
+        },
+        value2: {
+            type: VALUE_TYPES.MULTI_FLAGS,
+            type_enum: TRAP_TRIGGERS,
+            ldesc: "trap trigger",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_MAP: {
+        code: "ITEM_TYPE_MAP",
+        sdesc: "ITEM_TYPE_MAP",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.ROOM,
+            ldesc: "low room vnum",
+        },
+        value2: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.ROOM,
+            ldesc: "high room vnum",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_PORTAL: {
+        code: "ITEM_TYPE_PORTAL",
+        sdesc: "ITEM_TYPE_PORTAL",
+        do_not_use: true,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_PAPER: {
+        code: "ITEM_TYPE_PAPER",
+        sdesc: "ITEM_TYPE_PAPER",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "text status",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "subject status",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "to status",
+        },
+        value3: {
+            type: VALUES_TYPES.FLAG,
+            type_enum: LANGUAGE_FLAGS,
+            ldesc: "language number",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "language skill level",
+        },
+    },
+    ITEM_TYPE_PROJECTILE: {
+        code: "ITEM_TYPE_PROJECTILE",
+        sdesc: "ITEM_TYPE_PROJECTILE",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: WEAPON_FLAGS,
+            ldesc: "weapon flag",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "weapon flag modifiers",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: WEAPON_TYPES,
+            ldesc: "Weapon Type",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_QUIVER: {
+        code: "ITEM_TYPE_QUIVER",
+        sdesc: "ITEM_TYPE_QUIVER",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "capacity in pounds",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: CONTAINER_FLAGS,
+            ldesc: "container flags",
+        },
+        value2: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.OBJECT,
+            ldesc: "key vnum",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: OBJECT_LAYERS,
+            ldesc: "layers",
+        },
+    },
+    ITEM_TYPE_SHOVEL: {
+        code: "ITEM_TYPE_SHOVEL",
+        sdesc: "ITEM_TYPE_SHOVEL",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_SALVE: {
+        code: "ITEM_TYPE_SALVE",
+        sdesc: "ITEM_TYPE_SALVE",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "Number of uses",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: HERB_TYPES,
+            ldesc: "herb type",
+        },
+        value4: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "spell slot number",
+        },
+    },
+    ITEM_TYPE_SYMBOL: {
+        code: "ITEM_TYPE_SYMBOL",
+        sdesc: "ITEM_TYPE_SYMBOL",
+        do_not_use: true,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "NO. spell component uses",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_TRADEGOODS: {
+        code: "ITEM_TYPE_TRADEGOODS",
+        sdesc: "ITEM_TYPE_TRADEGOODS",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_INSTRUMENT: {
+        code: "ITEM_TYPE_INSTRUMENT",
+        sdesc: "ITEM_TYPE_INSTRUMENT",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "level of spell",
+        },
+        value1: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "max charges",
+        },
+        value2: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "charges left",
+        },
+        value3: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: MAGIC_ITEM_SPELLS,
+            ldesc: "spell number",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_HIDE: {
+        code: "ITEM_TYPE_HIDE",
+        sdesc: "ITEM_TYPE_HIDE",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.MOB,
+            ldesc: "mob vnum",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "race number",
+        },
+    },
+    ITEM_TYPE_CART: {
+        code: "ITEM_TYPE_CART",
+        sdesc: "ITEM_TYPE_CART",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "capacity",
+        },
+        value1: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: CONTAINER_FLAGS,
+            ldesc: "container flags",
+        },
+        value2: {
+            type: VALUE_TYPES.VNUM,
+            type_enum: VNUM_TYPES.OBJECT,
+            ldesc: "key vnum",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    },
+    ITEM_TYPE_COMPONENT: {
+        code: "ITEM_TYPE_COMPONENT",
+        sdesc: "ITEM_TYPE_COMPONENT",
+        do_not_use: false,
+        value0: {
+            type: VALUE_TYPES.POS_INT,
+            type_enum: null,
+            ldesc: "number of uses for the component and amount of herb",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: VALUE_TYPES.FLAG,
+            type_enum: HERB_TYPES,
+            ldesc: "herb type",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+    }
+}
+
 const EXIT_DIRECTIONS = {
     DDIR_EAST: {
         code: "DDIR_EAST",
@@ -4010,6 +5804,2440 @@ const SECTOR_FLAGS = {
         do_not_use: false
     }
 };
+
+const MOB_CLASSES = {
+    // Warrior Classes
+    CLASS_WARRIOR: {
+        code: "CLASS_WARRIOR",
+        sdesc: "CLASS_WARRIOR",
+        category: "Warrior"
+    },
+    CLASS_RANGERS: {
+        code: "CLASS_RANGERS",
+        sdesc: "CLASS_RANGERS",
+        category: "Warrior"
+    },
+    CLASS_FIGHTERS: {
+        code: "CLASS_FIGHTERS",
+        sdesc: "CLASS_FIGHTERS",
+        category: "Warrior"
+    },
+    CLASS_PALADINS: {
+        code: "CLASS_PALADINS",
+        sdesc: "CLASS_PALADINS",
+        category: "Warrior"
+    },
+    // Wizard Classes
+    CLASS_WIZARD: {
+        code: "CLASS_WIZARD",
+        sdesc: "CLASS_WIZARD",
+        category: "Wizard"
+    },
+    CLASS_ILLUSIONISTS: {
+        code: "CLASS_ILLUSIONISTS",
+        sdesc: "CLASS_ILLUSIONISTS",
+        category: "Wizard"
+    },
+    CLASS_INVOKERS: {
+        code: "CLASS_INVOKERS",
+        sdesc: "CLASS_INVOKERS",
+        category: "Wizard"
+    },
+    CLASS_MAGES: {
+        code: "CLASS_MAGES",
+        sdesc: "CLASS_MAGES",
+        category: "Wizard"
+    },
+    CLASS_NECROMANCERS: {
+        code: "CLASS_NECROMANCERS",
+        sdesc: "CLASS_NECROMANCERS",
+        category: "Wizard"
+    },
+    CLASS_TRANSMUTERS: {
+        code: "CLASS_TRANSMUTERS",
+        sdesc: "CLASS_TRANSMUTERS",
+        category: "Wizard"
+    },
+    CLASS_ABJURER: {
+        code: "CLASS_ABJURER",
+        sdesc: "CLASS_ABJURER",
+        category: "Wizard"
+    },
+    CLASS_CONJURER: {
+        code: "CLASS_CONJURER",
+        sdesc: "CLASS_CONJURER",
+        category: "Wizard"
+    },
+    // Rogue classes
+    CLASS_ROGUE: {
+        code: "CLASS_ROGUE",
+        sdesc: "CLASS_ROGUE",
+        category: "Rogue"
+    },
+    CLASS_THIEVES: {
+        code: "CLASS_THIEVES",
+        sdesc: "CLASS_THIEVES",
+        category: "Rogue"
+    },
+    CLASS_BARDS: {
+        code: "CLASS_BARDS",
+        sdesc: "CLASS_BARDS",
+        category: "Rogue"
+    },
+    // Priest classes
+    CLASS_PRIEST: {
+        code: "CLASS_PRIEST",
+        sdesc: "CLASS_PRIEST",
+        category: "Priest"
+    },
+    CLASS_BANE: {
+        code: "CLASS_BANE",
+        sdesc: "CLASS_BANE",
+        category: "Priest"
+    },
+    CLASS_BESHABA: {
+        code: "CLASS_BESHABA",
+        sdesc: "CLASS_BESHABA",
+        category: "Priest"
+    },
+    CLASS_CHAUNTEA: {
+        code: "CLASS_CHAUNTEA",
+        sdesc: "CLASS_CHAUNTEA",
+        category: "Priest"
+    },
+    CLASS_CORELLON: {
+        code: "CLASS_CORELLON",
+        sdesc: "CLASS_CORELLON",
+        category: "Priest"
+    },
+    CLASS_CYRIC: {
+        code: "CLASS_CYRIC",
+        sdesc: "CLASS_CYRIC",
+        category: "Priest"
+    },
+    CLASS_GARL: {
+        code: "CLASS_GARL",
+        sdesc: "CLASS_GARL",
+        category: "Priest"
+    },
+    CLASS_GOND: {
+        code: "CLASS_GOND",
+        sdesc: "CLASS_GOND",
+        category: "Priest"
+    },
+    CLASS_GRUUMSH: {
+        code: "CLASS_GRUUMSH",
+        sdesc: "CLASS_GRUUMSH",
+        category: "Priest"
+    },
+    CLASS_HELM: {
+        code: "CLASS_HELM",
+        sdesc: "CLASS_HELM",
+        category: "Priest"
+    },
+    CLASS_ILMATER: {
+        code: "CLASS_ILMATER",
+        sdesc: "CLASS_ILMATER",
+        category: "Priest"
+    },
+    CLASS_KELEMVOR: {
+        code: "CLASS_KELEMVOR",
+        sdesc: "CLASS_KELEMVOR",
+        category: "Priest"
+    },
+    CLASS_LATHANDER: {
+        code: "CLASS_LATHANDER",
+        sdesc: "CLASS_LATHANDER",
+        category: "Priest"
+    },
+    CLASS_LLOTH: {
+        code: "CLASS_LLOTH",
+        sdesc: "CLASS_LLOTH",
+        category: "Priest"
+    },
+    CLASS_LOVIATAR: {
+        code: "CLASS_LOVIATAR",
+        sdesc: "CLASS_LOVIATAR",
+        category: "Priest"
+    },
+    CLASS_MALAR: {
+        code: "CLASS_MALAR",
+        sdesc: "CLASS_MALAR",
+        category: "Priest"
+    },
+    CLASS_MASK: {
+        code: "CLASS_MASK",
+        sdesc: "CLASS_MASK",
+        category: "Priest"
+    },
+    CLASS_MIELIKKI: {
+        code: "CLASS_MIELIKKI",
+        sdesc: "CLASS_MIELIKKI",
+        category: "Priest"
+    },
+    CLASS_MORADIN: {
+        code: "CLASS_MORADIN",
+        sdesc: "CLASS_MORADIN",
+        category: "Priest"
+    },
+    CLASS_MYSTRA: {
+        code: "CLASS_MYSTRA",
+        sdesc: "CLASS_MYSTRA",
+        category: "Priest"
+    },
+    CLASS_OGHMA: {
+        code: "CLASS_OGHMA",
+        sdesc: "CLASS_OGHMA",
+        category: "Priest"
+    },
+    CLASS_SELUNE: {
+        code: "CLASS_SELUNE",
+        sdesc: "CLASS_SELUNE",
+        category: "Priest"
+    },
+    CLASS_SHAR: {
+        code: "CLASS_SHAR",
+        sdesc: "CLASS_SHAR",
+        category: "Priest"
+    },
+    CLASS_SUNE: {
+        code: "CLASS_SUNE",
+        sdesc: "CLASS_SUNE",
+        category: "Priest"
+    },
+    CLASS_TALONA: {
+        code: "CLASS_TALONA",
+        sdesc: "CLASS_TALONA",
+        category: "Priest"
+    },
+    CLASS_TALOS: {
+        code: "CLASS_TALOS",
+        sdesc: "CLASS_TALOS",
+        category: "Priest"
+    },
+    CLASS_TEMPUS: {
+        code: "CLASS_TEMPUS",
+        sdesc: "CLASS_TEMPUS",
+        category: "Priest"
+    },
+    CLASS_TORM: {
+        code: "CLASS_TORM",
+        sdesc: "CLASS_TORM",
+        category: "Priest"
+    },
+    CLASS_TYMORA: {
+        code: "CLASS_TYMORA",
+        sdesc: "CLASS_TYMORA",
+        category: "Priest"
+    },
+    CLASS_TYR: {
+        code: "CLASS_TYR",
+        sdesc: "CLASS_TYR",
+        category: "Priest"
+    },
+    CLASS_UMBERLEE: {
+        code: "CLASS_UMBERLEE",
+        sdesc: "CLASS_UMBERLEE",
+        category: "Priest"
+    },
+    CLASS_WAUKEEN: {
+        code: "CLASS_WAUKEEN",
+        sdesc: "CLASS_WAUKEEN",
+        category: "Priest"
+    },
+    CLASS_YONDALLA: {
+        code: "CLASS_YONDALLA",
+        sdesc: "CLASS_YONDALLA",
+        category: "Priest"
+    },
+    // Other classes
+    CLASS_VAMPIRE: {
+        code: "CLASS_VAMPIRE",
+        sdesc: "CLASS_VAMPIRE",
+        category: "Other"
+    },
+    CLASS_MONSTER: {
+        code: "CLASS_MONSTER",
+        sdesc: "CLASS_MONSTER",
+        category: "Other"
+    },
+    CLASS_NONE: {
+        code: "CLASS_NONE",
+        sdesc: "CLASS_NONE",
+        category: "Other"
+    }
+};
+
+const MOB_RACES = {
+    RACE_BEHOLDER: {
+        code: "RACE_BEHOLDER",
+        sdesc: "beholder",
+        category: "aberration"
+    },
+    RACE_CORRUPTED_EAGLE: {
+        code: "RACE_CORRUPTED_EAGLE",
+        sdesc: "corrupted eagle",
+        category: "aberration"
+    },
+    RACE_DARKMANTLE: {
+        code: "RACE_DARKMANTLE",
+        sdesc: "darkmantle",
+        category: "aberration"
+    },
+    RACE_DRIDER: {
+        code: "RACE_DRIDER",
+        sdesc: "drider",
+        category: "aberration"
+    },
+    RACE_ETTERCAP: {
+        code: "RACE_ETTERCAP",
+        sdesc: "ettercap",
+        category: "aberration"
+    },
+    RACE_GRELL: {
+        code: "RACE_GRELL",
+        sdesc: "grell",
+        category: "aberration"
+    },
+    RACE_HARPOON_SPIDER: {
+        code: "RACE_HARPOON_SPIDER",
+        sdesc: "harpoon spider",
+        category: "aberration"
+    },
+    RACE_HARPOON_SPIDER_DREAD: {
+        code: "RACE_HARPOON_SPIDER_DREAD",
+        sdesc: "dread harpoon spider",
+        category: "aberration"
+    },
+    RACE_HOOKHORROR: {
+        code: "RACE_HOOKHORROR",
+        sdesc: "hookhorror",
+        category: "aberration"
+    },
+    RACE_ILLITHID: {
+        code: "RACE_ILLITHID",
+        sdesc: "illithid",
+        category: "aberration"
+    },
+    RACE_ELDER_BRAIN: {
+        code: "RACE_ELDER_BRAIN",
+        sdesc: "elder brain",
+        category: "aberration"
+    },
+    RACE_KYTHON_ADULT: {
+        code: "RACE_KYTHON_ADULT",
+        sdesc: "kython adult",
+        category: "aberration"
+    },
+    RACE_KYTHON_BROODLING: {
+        code: "RACE_KYTHON_BROODLING",
+        sdesc: "kython broodling",
+        category: "aberration"
+    },
+    RACE_KYTHON_JUVENILE: {
+        code: "RACE_KYTHON_JUVENILE",
+        sdesc: "kython juvenile",
+        category: "aberration"
+    },
+    RACE_KYTHON_SLAUGHTERKING: {
+        code: "RACE_KYTHON_SLAUGHTERKING",
+        sdesc: "kython slaughterking",
+        category: "aberration"
+    },
+    RACE_LURKER: {
+        code: "RACE_LURKER",
+        sdesc: "lurker",
+        category: "aberration"
+    },
+    RACE_MIMIC: {
+        code: "RACE_MIMIC",
+        sdesc: "mimic",
+        category: "aberration"
+    },
+    RACE_NAGA: {
+        code: "RACE_NAGA",
+        sdesc: "naga",
+        category: "aberration"
+    },
+    RACE_RUST_MONSTER: {
+        code: "RACE_RUST_MONSTER",
+        sdesc: "rust monster",
+        category: "aberration"
+    },
+    RACE_UMBERHULK: {
+        code: "RACE_UMBERHULK",
+        sdesc: "umberhulk",
+        category: "aberration"
+    }
+    RACE_APE: {
+        code: "RACE_APE",
+        sdesc: "ape",
+        category: "animal"
+    },
+    RACE_APE_DIRE: {
+        code: "RACE_APE_DIRE",
+        sdesc: "ape dire",
+        category: "animal"
+    },
+    RACE_BABOON: {
+        code: "RACE_BABOON",
+        sdesc: "baboon",
+        category: "animal"
+    },
+    RACE_BADGER: {
+        code: "RACE_BADGER",
+        sdesc: "badger",
+        category: "animal"
+    },
+    RACE_BADGER_DIRE: {
+        code: "RACE_BADGER_DIRE",
+        sdesc: "dire badger",
+        category: "animal"
+    },
+    RACE_BAT: {
+        code: "RACE_BAT",
+        sdesc: "bat",
+        category: "animal"
+    },
+    RACE_BAT_DIRE: {
+        code: "RACE_BAT_DIRE",
+        sdesc: "dire bat",
+        category: "animal"
+    },
+    RACE_BEAR: {
+        code: "RACE_BEAR",
+        sdesc: "bear",
+        category: "animal"
+    },
+    RACE_BEAR_BLACK: {
+        code: "RACE_BEAR_BLACK",
+        sdesc: "black bear",
+        category: "animal"
+    },
+    RACE_BEAR_BROWN: {
+        code: "RACE_BEAR_BROWN",
+        sdesc: "brown bear",
+        category: "animal"
+    },
+    RACE_BEAR_DIRE: {
+        code: "RACE_BEAR_DIRE",
+        sdesc: "dire bear",
+        category: "animal"
+    },
+    RACE_BEAR_POLAR: {
+        code: "RACE_BEAR_POLAR",
+        sdesc: "polar bear",
+        category: "animal"
+    },
+    RACE_BIRD: {
+        code: "RACE_BIRD",
+        sdesc: "bird",
+        category: "animal"
+    },
+    RACE_EAGLE: {
+        code: "RACE_EAGLE",
+        sdesc: "eagle",
+        category: "animal"
+    },
+    RACE_HAWK: {
+        code: "RACE_HAWK",
+        sdesc: "hawk",
+        category: "animal"
+    },
+    RACE_RAVEN: {
+        code: "RACE_RAVEN",
+        sdesc: "raven",
+        category: "animal"
+    },
+    RACE_OWL: {
+        code: "RACE_OWL",
+        sdesc: "owl",
+        category: "animal"
+    },
+    RACE_BISON: {
+        code: "RACE_BISON",
+        sdesc: "bison",
+        category: "animal"
+    },
+    RACE_BOAR: {
+        code: "RACE_BOAR",
+        sdesc: "boar",
+        category: "animal"
+    },
+    RACE_BOAR_DIRE: {
+        code: "RACE_BOAR_DIRE",
+        sdesc: "dire boar",
+        category: "animal"
+    },
+    RACE_PIG: {
+        code: "RACE_PIG",
+        sdesc: "pig",
+        category: "animal"
+    },
+    RACE_CAMEL: {
+        code: "RACE_CAMEL",
+        sdesc: "camel",
+        category: "animal"
+    },
+    RACE_CAT: {
+        code: "RACE_CAT",
+        sdesc: "cat",
+        category: "animal"
+    },
+    RACE_CHEETAH: {
+        code: "RACE_CHEETAH",
+        sdesc: "cheetah",
+        category: "animal"
+    },
+    RACE_COW: {
+        code: "RACE_COW",
+        sdesc: "cow",
+        category: "animal"
+    },
+    RACE_CRAB: {
+        code: "RACE_CRAB",
+        sdesc: "crab",
+        category: "animal"
+    },
+    RACE_CROCODILE: {
+        code: "RACE_CROCODILE",
+        sdesc: "crocodile",
+        category: "animal"
+    },
+    RACE_CROCODILE_GIANT: {
+        code: "RACE_CROCODILE_GIANT",
+        sdesc: "giant crocodile",
+        category: "animal"
+    },
+    RACE_BAT_DEEP: {
+        code: "RACE_BAT_DEEP",
+        sdesc: "deep bat",
+        category: "animal"
+    },
+    RACE_BAT_DEEP_NIGHT_HUNTER: {
+        code: "RACE_BAT_DEEP_NIGHT_HUNTER",
+        sdesc: "night hunter",
+        category: "animal"
+    },
+    RACE_DEINONYCHUS: {
+        code: "RACE_DEINONYCHUS",
+        sdesc: "deinonychus",
+        category: "animal"
+    },
+    RACE_DOG: {
+        code: "RACE_DOG",
+        sdesc: "dog",
+        category: "animal"
+    },
+    RACE_DOG_RIDING: {
+        code: "RACE_DOG_RIDING",
+        sdesc: "riding dog",
+        category: "animal"
+    },
+    RACE_ELASMOSAURUS: {
+        code: "RACE_ELASMOSAURUS",
+        sdesc: "elasmosaurus",
+        category: "animal"
+    },
+    RACE_ELEPHANT: {
+        code: "RACE_ELEPHANT",
+        sdesc: "elephant",
+        category: "animal"
+    },
+    RACE_FISH: {
+        code: "RACE_FISH",
+        sdesc: "fish",
+        category: "animal"
+    },
+    RACE_HORSE: {
+        code: "RACE_HORSE",
+        sdesc: "horse",
+        category: "animal"
+    },
+    RACE_DONKEY: {
+        code: "RACE_DONKEY",
+        sdesc: "donkey",
+        category: "animal"
+    },
+    RACE_HORSE_HEAVY: {
+        code: "RACE_HORSE_HEAVY",
+        sdesc: "heavy horse",
+        category: "animal"
+    },
+    RACE_HORSE_HEAVYWAR: {
+        code: "RACE_HORSE_HEAVYWAR",
+        sdesc: "heavy warhorse",
+        category: "animal"
+    },
+    RACE_HORSE_LIGHT: {
+        code: "RACE_HORSE_LIGHT",
+        sdesc: "light horse",
+        category: "animal"
+    },
+    RACE_HORSE_LIGHTWAR: {
+        code: "RACE_HORSE_LIGHTWAR",
+        sdesc: "light warhorse",
+        category: "animal"
+    },
+    RACE_MULE: {
+        code: "RACE_MULE",
+        sdesc: "mule",
+        category: "animal"
+    },
+    RACE_PONY: {
+        code: "RACE_PONY",
+        sdesc: "pony",
+        category: "animal"
+    },
+    RACE_PONY_WAR: {
+        code: "RACE_PONY_WAR",
+        sdesc: "war pony",
+        category: "animal"
+    },
+    RACE_HYENA: {
+        code: "RACE_HYENA",
+        sdesc: "hyena",
+        category: "animal"
+    },
+    RACE_LION: {
+        code: "RACE_LION",
+        sdesc: "lion",
+        category: "animal"
+    },
+    RACE_LION_DIRE: {
+        code: "RACE_LION_DIRE",
+        sdesc: "dire lion",
+        category: "animal"
+    },
+    RACE_LIZARD: {
+        code: "RACE_LIZARD",
+        sdesc: "lizard",
+        category: "animal"
+    },
+    RACE_LIZARD_MONITOR: {
+        code: "RACE_LIZARD_MONITOR",
+        sdesc: "monitor lizard",
+        category: "animal"
+    },
+    RACE_LIZARD_RIDING: {
+        code: "RACE_LIZARD_RIDING",
+        sdesc: "riding lizard",
+        category: "animal"
+    },
+    RACE_MANTARAY: {
+        code: "RACE_MANTARAY",
+        sdesc: "manta ray",
+        category: "animal"
+    },
+    RACE_MEGARAPTOR: {
+        code: "RACE_MEGARAPTOR",
+        sdesc: "megaraptor",
+        category: "animal"
+    },
+    RACE_MONKEY: {
+        code: "RACE_MONKEY",
+        sdesc: "monkey",
+        category: "animal"
+    },
+    RACE_OCTOPUS: {
+        code: "RACE_OCTOPUS",
+        sdesc: "octopus",
+        category: "animal"
+    },
+    RACE_OCTOPUS_GIANT: {
+        code: "RACE_OCTOPUS_GIANT",
+        sdesc: "giant octopus",
+        category: "animal"
+    },
+    RACE_PANTHER: {
+        code: "RACE_PANTHER",
+        sdesc: "panther",
+        category: "animal"
+    },
+    RACE_PORPOISE: {
+        code: "RACE_PORPOISE",
+        sdesc: "porpoise",
+        category: "animal"
+    },
+    RACE_PTERANODON: {
+        code: "RACE_PTERANODON",
+        sdesc: "pteranodon",
+        category: "animal"
+    },
+    RACE_RABBIT: {
+        code: "RACE_RABBIT",
+        sdesc: "rabbit",
+        category: "animal"
+    },
+    RACE_RAT: {
+        code: "RACE_RAT",
+        sdesc: "rat",
+        category: "animal"
+    },
+    RACE_RAT_DIRE: {
+        code: "RACE_RAT_DIRE",
+        sdesc: "dire rat",
+        category: "animal"
+    },
+    RACE_RHINOCEROS: {
+        code: "RACE_RHINOCEROS",
+        sdesc: "rhinoceros",
+        category: "animal"
+    },
+    RACE_SHARK: {
+        code: "RACE_SHARK",
+        sdesc: "shark",
+        category: "animal"
+    },
+    RACE_SHARK_DIRE: {
+        code: "RACE_SHARK_DIRE",
+        sdesc: "dire shark",
+        category: "animal"
+    },
+    RACE_SNAKE: {
+        code: "RACE_SNAKE",
+        sdesc: "snake",
+        category: "animal"
+    },
+    RACE_SNAKE_CONSTRICTOR: {
+        code: "RACE_SNAKE_CONSTRICTOR",
+        sdesc: "constrictor snake",
+        category: "animal"
+    },
+    RACE_SNAKE_CONSTRICTOR_GIANT: {
+        code: "RACE_SNAKE_CONSTRICTOR_GIANT",
+        sdesc: "giant constrictor snake",
+        category: "animal"
+    },
+    RACE_SQUID: {
+        code: "RACE_SQUID",
+        sdesc: "squid",
+        category: "animal"
+    },
+    RACE_SQUID_GIANT: {
+        code: "RACE_SQUID_GIANT",
+        sdesc: "giant squid",
+        category: "animal"
+    },
+    RACE_TIGER: {
+        code: "RACE_TIGER",
+        sdesc: "tiger",
+        category: "animal"
+    },
+    RACE_TIGER_DIRE: {
+        code: "RACE_TIGER_DIRE",
+        sdesc: "dire tiger",
+        category: "animal"
+    },
+    RACE_TOAD: {
+        code: "RACE_TOAD",
+        sdesc: "toad",
+        category: "animal"
+    },
+    RACE_FROG: {
+        code: "RACE_FROG",
+        sdesc: "frog",
+        category: "animal"
+    },
+    RACE_TRESSYM: {
+        code: "RACE_TRESSYM",
+        sdesc: "tressym",
+        category: "animal"
+    },
+    RACE_TRICERATOPS: {
+        code: "RACE_TRICERATOPS",
+        sdesc: "triceratops",
+        category: "animal"
+    },
+    RACE_TYRANNOSAURUS: {
+        code: "RACE_TYRANNOSAURUS",
+        sdesc: "tyrannosaurus",
+        category: "animal"
+    },
+    RACE_WEASEL: {
+        code: "RACE_WEASEL",
+        sdesc: "weasel",
+        category: "animal"
+    },
+    RACE_WEASEL_DIRE: {
+        code: "RACE_WEASEL_DIRE",
+        sdesc: "dire weasel",
+        category: "animal"
+    },
+    RACE_WHALE_BALEEN: {
+        code: "RACE_WHALE_BALEEN",
+        sdesc: "whale baleen",
+        category: "animal"
+    },
+    RACE_WHALE_CACHALOT: {
+        code: "RACE_WHALE_CACHALOT",
+        sdesc: "cachalot",
+        category: "animal"
+    },
+    RACE_WHALE_ORCA: {
+        code: "RACE_WHALE_ORCA",
+        sdesc: "orca",
+        category: "animal"
+    },
+    RACE_WOLF: {
+        code: "RACE_WOLF",
+        sdesc: "wolf",
+        category: "animal"
+    },
+    RACE_WOLF_DIRE: {
+        code: "RACE_WOLF_DIRE",
+        sdesc: "dire wolf",
+        category: "animal"
+    },
+    RACE_WOLVERINE: {
+        code: "RACE_WOLVERINE",
+        sdesc: "wolverine",
+        category: "animal"
+    },
+    RACE_WOLVERINE_DIRE: {
+        code: "RACE_WOLVERINE_DIRE",
+        sdesc: "dire wolverine",
+        category: "animal"
+    },
+    RACE_ANIMATED: {
+        code: "RACE_ANIMATED",
+        sdesc: "animated",
+        category: "construct"
+    },
+    RACE_CRAWLING_CLAW: {
+        code: "RACE_CRAWLING_CLAW",
+        sdesc: "crawling_claw",
+        category: "construct"
+    },
+    RACE_DUMMY: {
+        code: "RACE_DUMMY",
+        sdesc: "dummy",
+        category: "construct"
+    },
+    RACE_GOLEM: {
+        code: "RACE_GOLEM",
+        sdesc: "golem",
+        category: "construct"
+    },
+    RACE_GOLEM_CLAY: {
+        code: "RACE_GOLEM_CLAY",
+        sdesc: "clay golem",
+        category: "construct"
+    },
+    RACE_GOLEM_FLESH: {
+        code: "RACE_GOLEM_FLESH",
+        sdesc: "flesh golem",
+        category: "construct"
+    },
+    RACE_GOLEM_IRON: {
+        code: "RACE_GOLEM_IRON",
+        sdesc: "iron golem",
+        category: "construct"
+    },
+    RACE_MAGICAL: {
+        code: "RACE_MAGICAL",
+        sdesc: "magical",
+        category: "construct"
+    },
+    RACE_GOLEM_STONE: {
+        code: "RACE_GOLEM_STONE",
+        sdesc: "stone golem",
+        category: "construct"
+    },
+    RACE_HAMMERER_AUTOMATON: {
+        code: "RACE_HAMMERER_AUTOMATON",
+        sdesc: "hammerer automaton",
+        category: "construct"
+    },
+    RACE_HELMED_HORROR: {
+        code: "RACE_HELMED_HORROR",
+        sdesc: "helmed horror",
+        category: "construct"
+    },
+    RACE_PULVERIZER_AUTOMATON: {
+        code: "RACE_PULVERIZER_AUTOMATON",
+        sdesc: "pulverizer automaton",
+        category: "construct"
+    },
+    RACE_RETRIEVER: {
+        code: "RACE_RETRIEVER",
+        sdesc: "retriever",
+        category: "construct"
+    },
+    RACE_DRAGON: {
+        code: "RACE_DRAGON",
+        sdesc: "dragon",
+        category: "dragon"
+    },
+    RACE_BLACK_DRAGON: {
+        code: "RACE_BLACK_DRAGON",
+        sdesc: "black dragon",
+        category: "dragon"
+    },
+    RACE_BLUE_DRAGON: {
+        code: "RACE_BLUE_DRAGON",
+        sdesc: "blue dragon",
+        category: "dragon"
+    },
+    RACE_BRASS_DRAGON: {
+        code: "RACE_BRASS_DRAGON",
+        sdesc: "brass dragon",
+        category: "dragon"
+    },
+    RACE_BRONZE_DRAGON: {
+        code: "RACE_BRONZE_DRAGON",
+        sdesc: "bronze dragon",
+        category: "dragon"
+    },
+    RACE_BROWN_DRAGON: {
+        code: "RACE_BROWN_DRAGON",
+        sdesc: "brown dragon",
+        category: "dragon"
+    },
+    RACE_COPPER_DRAGON: {
+        code: "RACE_COPPER_DRAGON",
+        sdesc: "copper dragon",
+        category: "dragon"
+    },
+    RACE_DEEP_DRAGON: {
+        code: "RACE_DEEP_DRAGON",
+        sdesc: "deep dragon",
+        category: "dragon"
+    },
+    RACE_FAERIE_DRAGON: {
+        code: "RACE_FAERIE_DRAGON",
+        sdesc: "faerie dragon",
+        category: "dragon"
+    },
+    RACE_GOLD_DRAGON: {
+        code: "RACE_GOLD_DRAGON",
+        sdesc: "gold dragon",
+        category: "dragon"
+    },
+    RACE_GREEN_DRAGON: {
+        code: "RACE_GREEN_DRAGON",
+        sdesc: "green dragon",
+        category: "dragon"
+    },
+    RACE_RED_DRAGON: {
+        code: "RACE_RED_DRAGON",
+        sdesc: "red dragon",
+        category: "dragon"
+    },
+    RACE_SILVER_DRAGON: {
+        code: "RACE_SILVER_DRAGON",
+        sdesc: "silver dragon",
+        category: "dragon"
+    },
+    RACE_WHITE_DRAGON: {
+        code: "RACE_WHITE_DRAGON",
+        sdesc: "white dragon",
+        category: "dragon"
+    },
+    RACE_WYVERN: {
+        code: "RACE_WYVERN",
+        sdesc: "wyvern",
+        category: "dragon"
+    },
+    RACE_AIRELEM: {
+        code: "RACE_AIRELEM",
+        sdesc: "air elemental",
+        category: "elemental"
+    },
+    RACE_FIRELEM: {
+        code: "RACE_FIRELEM",
+        sdesc: "fire elemental",
+        category: "elemental"
+    },
+    RACE_EARELEM: {
+        code: "RACE_EARELEM",
+        sdesc: "earth elemental",
+        category: "elemental"
+    },
+    RACE_ICE_ELEMENTAL: {
+        code: "RACE_ICE_ELEMENTAL",
+        sdesc: "ice elemental",
+        category: "elemental"
+    },
+    RACE_WATELEM: {
+        code: "RACE_WATELEM",
+        sdesc: "water elemental",
+        category: "elemental"
+    },
+    RACE_SPRITE: {
+        code: "RACE_SPRITE",
+        sdesc: "sprite",
+        category: "fey"
+    },
+    RACE_PIXIE: {
+        code: "RACE_PIXIE",
+        sdesc: "pixie",
+        category: "fey"
+    },
+    RACE_GIANT: {
+        code: "RACE_GIANT",
+        sdesc: "giant",
+        category: "giant"
+    },
+    RACE_GIANTCYCLOPS: {
+        code: "RACE_GIANTCYCLOPS",
+        sdesc: "cyclops",
+        category: "giant"
+    },
+    RACE_ETTIN: {
+        code: "RACE_ETTIN",
+        sdesc: "ettin",
+        category: "giant"
+    },
+    RACE_GIANT_HILL: {
+        code: "RACE_GIANT_HILL",
+        sdesc: "hill giant",
+        category: "giant"
+    },
+    RACE_GIANT_OCEAN: {
+        code: "RACE_GIANT_OCEAN",
+        sdesc: "ocean giant",
+        category: "giant"
+    },
+    RACE_OGRE: {
+        code: "RACE_OGRE",
+        sdesc: "ogre",
+        category: "giant"
+    },
+    RACE_DEEPIMASKARI: {
+        code: "RACE_DEEPIMASKARI",
+        sdesc: "deep imaskari",
+        category: "humanoid"
+    },
+    RACE_DWARF: {
+        code: "RACE_DWARF",
+        sdesc: "dwarf",
+        category: "humanoid"
+    },
+    RACE_DWARFARCTIC: {
+        code: "RACE_DWARFARCTIC",
+        sdesc: "arctic dwarf",
+        category: "humanoid"
+    },
+    RACE_DUERGAR: {
+        code: "RACE_DUERGAR",
+        sdesc: "duergar",
+        category: "humanoid"
+    },
+    RACE_DWARFGOLD: {
+        code: "RACE_DWARFGOLD",
+        sdesc: "gold dwarf",
+        category: "humanoid"
+    },
+    RACE_DWARFSHIELD: {
+        code: "RACE_DWARFSHIELD",
+        sdesc: "shield dwarf",
+        category: "humanoid"
+    },
+    RACE_DWARFURDUNNIR: {
+        code: "RACE_DWARFURDUNNIR",
+        sdesc: "urdunnir dwarf",
+        category: "humanoid"
+    },
+    RACE_DWARFWILD: {
+        code: "RACE_DWARFWILD",
+        sdesc: "wilf dwarf",
+        category: "humanoid"
+    },
+    RACE_ELF: {
+        code: "RACE_ELF",
+        sdesc: "elf",
+        category: "humanoid"
+    },
+    RACE_ELFAQUATIC: {
+        code: "RACE_ELFAQUATIC",
+        sdesc: "aquatic elf",
+        category: "humanoid"
+    },
+    RACE_ELFAVARIEL: {
+        code: "RACE_ELFAVARIEL",
+        sdesc: "avariel elf",
+        category: "humanoid"
+    },
+    RACE_DROW: {
+        code: "RACE_DROW",
+        sdesc: "drow",
+        category: "humanoid"
+    },
+    RACE_ELFMOON: {
+        code: "RACE_ELFMOON",
+        sdesc: "moon elf",
+        category: "humanoid"
+    },
+    RACE_ELFSUN: {
+        code: "RACE_ELFSUN",
+        sdesc: "sun elf",
+        category: "humanoid"
+    },
+    RACE_ELFWILD: {
+        code: "RACE_ELFWILD",
+        sdesc: "wild elf",
+        category: "humanoid"
+    },
+    RACE_ELFWOOD: {
+        code: "RACE_ELFWOOD",
+        sdesc: "wood elf",
+        category: "humanoid"
+    },
+    RACE_FISHMAN: {
+        code: "RACE_FISHMAN",
+        sdesc: "fishman",
+        category: "humanoid"
+    },
+    RACE_KUOTOA: {
+        code: "RACE_KUOTOA",
+        sdesc: "kuotoa",
+        category: "humanoid"
+    },
+    RACE_GIBBERLING: {
+        code: "RACE_GIBBERLING",
+        sdesc: "gibberling",
+        category: "humanoid"
+    },
+    RACE_GITH: {
+        code: "RACE_GITH",
+        sdesc: "gith",
+        category: "humanoid"
+    },
+    RACE_GITHZERAI: {
+        code: "RACE_GITHZERAI",
+        sdesc: "githzerai",
+        category: "humanoid"
+    },
+    RACE_GNOLL: {
+        code: "RACE_GNOLL",
+        sdesc: "gnoll",
+        category: "humanoid"
+    },
+    RACE_GNOME: {
+        code: "RACE_GNOME",
+        sdesc: "gnome",
+        category: "humanoid"
+    },
+    RACE_GNOMEDEEP: {
+        code: "RACE_GNOMEDEEP",
+        sdesc: "deep gnome",
+        category: "humanoid"
+    },
+    RACE_GNOMEFOREST: {
+        code: "RACE_GNOMEFOREST",
+        sdesc: "forest gnome",
+        category: "humanoid"
+    },
+    RACE_GNOMEROCK: {
+        code: "RACE_GNOMEROCK",
+        sdesc: "rock gnome",
+        category: "humanoid"
+    },
+    RACE_GOBLINOID: {
+        code: "RACE_GOBLINOID",
+        sdesc: "goblinoid",
+        category: "humanoid"
+    },
+    RACE_BUGBEAR: {
+        code: "RACE_BUGBEAR",
+        sdesc: "bugbear",
+        category: "humanoid"
+    },
+    RACE_GOBLIN: {
+        code: "RACE_GOBLIN",
+        sdesc: "goblin",
+        category: "humanoid"
+    },
+    RACE_HOBGOBLIN: {
+        code: "RACE_HOBGOBLIN",
+        sdesc: "hobgoblin",
+        category: "humanoid"
+    },
+    RACE_GREMLIN: {
+        code: "RACE_GREMLIN",
+        sdesc: "gremlin",
+        category: "humanoid"
+    },
+    RACE_HALFELF: {
+        code: "RACE_HALFELF",
+        sdesc: "halfelf",
+        category: "humanoid"
+    },
+    RACE_HALFELFAQUATIC: {
+        code: "RACE_HALFELFAQUATIC",
+        sdesc: "aquatic halfelf",
+        category: "humanoid"
+    },
+    RACE_HALFELFDROW: {
+        code: "RACE_HALFELFDROW",
+        sdesc: "halfdrow",
+        category: "humanoid"
+    },
+    RACE_HALFLING: {
+        code: "RACE_HALFLING",
+        sdesc: "halfling",
+        category: "humanoid"
+    },
+    RACE_HALFLINGGHOSTWISE: {
+        code: "RACE_HALFLINGGHOSTWISE",
+        sdesc: "ghostwise halfling",
+        category: "humanoid"
+    },
+    RACE_HALFLINGLIGHTFOOT: {
+        code: "RACE_HALFLINGLIGHTFOOT",
+        sdesc: "lightfoot halfling",
+        category: "humanoid"
+    },
+    RACE_HALFLINGSTRONGHEART: {
+        code: "RACE_HALFLINGSTRONGHEART",
+        sdesc: "strongheart halfling",
+        category: "humanoid"
+    },
+    RACE_HALFORC: {
+        code: "RACE_HALFORC",
+        sdesc: "halforc",
+        category: "humanoid"
+    },
+    RACE_HUMAN: {
+        code: "RACE_HUMAN",
+        sdesc: "human",
+        category: "humanoid"
+    },
+    RACE_SHAPESHIFTER: {
+        code: "RACE_SHAPESHIFTER",
+        sdesc: "shapeshifter",
+        category: "humanoid"
+    },
+    RACE_LYCANTHROPE: {
+        code: "RACE_LYCANTHROPE",
+        sdesc: "lycanthrope",
+        category: "humanoid"
+    },
+    RACE_LYCANTHROPE_WEREWOLF: {
+        code: "RACE_LYCANTHROPE_WEREWOLF",
+        sdesc: "werewolf",
+        category: "humanoid"
+    },
+    RACE_ORC: {
+        code: "RACE_ORC",
+        sdesc: "orc",
+        category: "humanoid"
+    },
+    RACE_ORCGRAY: {
+        code: "RACE_ORCGRAY",
+        sdesc: "gray orc",
+        category: "humanoid"
+    },
+    RACE_ORCMOUNTAIN: {
+        code: "RACE_ORCMOUNTAIN",
+        sdesc: "mountain orc",
+        category: "humanoid"
+    },
+    RACE_ORCOROG: {
+        code: "RACE_ORCOROG",
+        sdesc: "orog orc",
+        category: "humanoid"
+    },
+    RACE_REPTILIAN: {
+        code: "RACE_REPTILIAN",
+        sdesc: "reptilian",
+        category: "humanoid"
+    },
+    RACE_LIZARDMAN: {
+        code: "RACE_LIZARDMAN",
+        sdesc: "lizardman",
+        category: "humanoid"
+    },
+    RACE_KOBOLD: {
+        code: "RACE_KOBOLD",
+        sdesc: "kobold",
+        category: "humanoid"
+    },
+    RACE_TROGLODYTE: {
+        code: "RACE_TROGLODYTE",
+        sdesc: "troglodyte",
+        category: "humanoid"
+    },
+    RACE_TABAXI: {
+        code: "RACE_TABAXI",
+        sdesc: "tabaxi",
+        category: "humanoid"
+    },
+    RACE_TROLL: {
+        code: "RACE_TROLL",
+        sdesc: "troll",
+        category: "humanoid"
+    },
+    RACE_ANKHEG: {
+        code: "RACE_ANKHEG",
+        sdesc: "ankheg",
+        category: "magical"
+    },
+    RACE_ASPERI: {
+        code: "RACE_ASPERI",
+        sdesc: "asperi",
+        category: "magical"
+    },
+    RACE_BEHIR: {
+        code: "RACE_BEHIR",
+        sdesc: "behir",
+        category: "magical"
+    },
+    RACE_BULETTE: {
+        code: "RACE_BULETTE",
+        sdesc: "bulette",
+        category: "magical"
+    },
+    RACE_CHIMERA: {
+        code: "RACE_CHIMERA",
+        sdesc: "chimera",
+        category: "magical"
+    },
+    RACE_CHIMERA_BLACK: {
+        code: "RACE_CHIMERA_BLACK",
+        sdesc: "black chimera",
+        category: "magical"
+    },
+    RACE_CHIMERA_BLUE: {
+        code: "RACE_CHIMERA_BLUE",
+        sdesc: "blue chimera",
+        category: "magical"
+    },
+    RACE_CHIMERA_GREEN: {
+        code: "RACE_CHIMERA_GREEN",
+        sdesc: "green chimera",
+        category: "magical"
+    },
+    RACE_CHIMERA_RED: {
+        code: "RACE_CHIMERA_RED",
+        sdesc: "red chimera",
+        category: "magical"
+    },
+    RACE_CHIMERA_WHITE: {
+        code: "RACE_CHIMERA_WHITE",
+        sdesc: "white chimera",
+        category: "magical"
+    },
+    RACE_DISPLACER_BEAST: {
+        code: "RACE_DISPLACER_BEAST",
+        sdesc: "displacer beast",
+        category: "magical"
+    },
+    RACE_FROST_SALAMANDER: {
+        code: "RACE_FROST_SALAMANDER",
+        sdesc: "frost salamander",
+        category: "magical"
+    },
+    RACE_EAGLE_GIANT: {
+        code: "RACE_EAGLE_GIANT",
+        sdesc: "giant eagle",
+        category: "magical"
+    },
+    RACE_GIRALLON: {
+        code: "RACE_GIRALLON",
+        sdesc: "girallon",
+        category: "magical"
+    },
+    RACE_GRIFFON: {
+        code: "RACE_GRIFFON",
+        sdesc: "griffon",
+        category: "magical"
+    },
+    RACE_HIPPOGRIFF: {
+        code: "RACE_HIPPOGRIFF",
+        sdesc: "hippogriff",
+        category: "magical"
+    },
+    RACE_LAMIA: {
+        code: "RACE_LAMIA",
+        sdesc: "lamia",
+        category: "magical"
+    },
+    RACE_MANTICORE: {
+        code: "RACE_MANTICORE",
+        sdesc: "manticore",
+        category: "magical"
+    },
+    RACE_OWLBEAR: {
+        code: "RACE_OWLBEAR",
+        sdesc: "owlbear",
+        category: "magical"
+    },
+    RACE_PEGASUS: {
+        code: "RACE_PEGASUS",
+        sdesc: "pegasus",
+        category: "magical"
+    },
+    RACE_WORMPURPLE: {
+        code: "RACE_WORMPURPLE",
+        sdesc: "purple worm",
+        category: "magical"
+    },
+    RACE_REMORHAZ: {
+        code: "RACE_REMORHAZ",
+        sdesc: "remorhaz",
+        category: "magical"
+    },
+    RACE_BAT_DEEP_SINISTER: {
+        code: "RACE_BAT_DEEP_SINISTER",
+        sdesc: "sinister",
+        category: "magical"
+    },
+    RACE_SPHINX: {
+        code: "RACE_SPHINX",
+        sdesc: "sphinx",
+        category: "magical"
+    },
+    RACE_SPHINX_ANDRO: {
+        code: "RACE_SPHINX_ANDRO",
+        sdesc: "andro sphinx",
+        category: "magical"
+    },
+    RACE_STIRGE: {
+        code: "RACE_STIRGE",
+        sdesc: "stirge",
+        category: "magical"
+    },
+    RACE_SWARM: {
+        code: "RACE_SWARM",
+        sdesc: "swarm",
+        category: "magical"
+    },
+    RACE_SWARM_LOCUST: {
+        code: "RACE_SWARM_LOCUST",
+        sdesc: "locust swarm",
+        category: "magical"
+    },
+    RACE_SWARM_WASP: {
+        code: "RACE_SWARM_WASP",
+        sdesc: "wasp swarm",
+        category: "magical"
+    },
+    RACE_AARAKOCRA: {
+        code: "RACE_AARAKOCRA",
+        sdesc: "aarakocra",
+        category: "monstrous"
+    },
+    RACE_CENTAUR: {
+        code: "RACE_CENTAUR",
+        sdesc: "centaur",
+        category: "monstrous"
+    },
+    RACE_CHITINE: {
+        code: "RACE_CHITINE",
+        sdesc: "chitine",
+        category: "monstrous"
+    },
+    RACE_GARGOYLE: {
+        code: "RACE_GARGOYLE",
+        sdesc: "gargoyle",
+        category: "monstrous"
+    },
+    RACE_HARPY: {
+        code: "RACE_HARPY",
+        sdesc: "harpy",
+        category: "monstrous"
+    },
+    RACE_KIRLANAN: {
+        code: "RACE_KIRLANAN",
+        sdesc: "kirlanan",
+        category: "monstrous"
+    },
+    RACE_MINOTAUR: {
+        code: "RACE_MINOTAUR",
+        sdesc: "minotaur",
+        category: "monstrous"
+    },
+    RACE_QUAGGOTH: {
+        code: "RACE_QUAGGOTH",
+        sdesc: "quaggoth",
+        category: "monstrous"
+    },
+    RACE_SAHUAGIN: {
+        code: "RACE_SAHUAGIN",
+        sdesc: "sahuagin",
+        category: "monstrous"
+    },
+    RACE_SAHUAGIN_SAVAGE: {
+        code: "RACE_SAHUAGIN_SAVAGE",
+        sdesc: "savage sahuagin",
+        category: "monstrous"
+    },
+    RACE_THRIKREEN: {
+        code: "RACE_THRIKREEN",
+        sdesc: "thrikreen",
+        category: "monstrous"
+    },
+    RACE_WEMIC: {
+        code: "RACE_WEMIC",
+        sdesc: "wemic",
+        category: "monstrous"
+    },
+    RACE_YUANTI: {
+        code: "RACE_YUANTI",
+        sdesc: "yuanti",
+        category: "monstrous"
+    },
+    RACE_SLIME: {
+        code: "RACE_SLIME",
+        sdesc: "slime",
+        category: "ooze"
+    },
+    RACE_OOZE: {
+        code: "RACE_OOZE",
+        sdesc: "ooze",
+        category: "ooze"
+    },
+    RACE_GELATIN: {
+        code: "RACE_GELATIN",
+        sdesc: "gelatin",
+        category: "ooze"
+    },
+    RACE_OOZEGREY: {
+        code: "RACE_OOZEGREY",
+        sdesc: "grey ooze",
+        category: "ooze"
+    },
+    RACE_AASIMAR: {
+        code: "RACE_AASIMAR",
+        sdesc: "aasimar",
+        category: "outsider"
+    },
+    RACE_ACHAIERAI: {
+        code: "RACE_ACHAIERAI",
+        sdesc: "achaierai",
+        category: "outsider"
+    },
+    RACE_ANGEL: {
+        code: "RACE_ANGEL",
+        sdesc: "angel",
+        category: "outsider"
+    },
+    RACE_ANGEL_ASTRAL_DEVA: {
+        code: "RACE_ANGEL_ASTRAL_DEVA",
+        sdesc: "angel astral deva",
+        category: "outsider"
+    },
+    RACE_ARCHON: {
+        code: "RACE_ARCHON",
+        sdesc: "archon",
+        category: "outsider"
+    },
+    RACE_ARCHON_HOUND: {
+        code: "RACE_ARCHON_HOUND",
+        sdesc: "hound archon",
+        category: "outsider"
+    },
+    RACE_SWORD_ARCHON: {
+        code: "RACE_SWORD_ARCHON",
+        sdesc: "sword archon",
+        category: "outsider"
+    },
+    RACE_WARDEN_ARCHON: {
+        code: "RACE_WARDEN_ARCHON",
+        sdesc: "warden archon",
+        category: "outsider"
+    },
+    RACE_ARROWHAWK: {
+        code: "RACE_ARROWHAWK",
+        sdesc: "arrowhawk",
+        category: "outsider"
+    },
+    RACE_BARGHEST: {
+        code: "RACE_BARGHEST",
+        sdesc: "barghest",
+        category: "outsider"
+    },
+    RACE_COLCHILN: {
+        code: "RACE_COLCHILN",
+        sdesc: "colchiln",
+        category: "outsider"
+    },
+    RACE_DEMON: {
+        code: "RACE_DEMON",
+        sdesc: "demon",
+        category: "outsider"
+    },
+    RACE_BABAU: {
+        code: "RACE_BABAU",
+        sdesc: "babau",
+        category: "outsider"
+    },
+    RACE_BALOR: {
+        code: "RACE_BALOR",
+        sdesc: "balor",
+        category: "outsider"
+    },
+    RACE_BARLGURA: {
+        code: "RACE_BARLGURA",
+        sdesc: "bar-lgura",
+        category: "outsider"
+    },
+    RACE_BEBILITH: {
+        code: "RACE_BEBILITH",
+        sdesc: "bebilith",
+        category: "outsider"
+    },
+    RACE_CHASME: {
+        code: "RACE_CHASME",
+        sdesc: "chasme",
+        category: "outsider"
+    },
+    RACE_DRETCH: {
+        code: "RACE_DRETCH",
+        sdesc: "dretch",
+        category: "outsider"
+    },
+    RACE_GLABREZU: {
+        code: "RACE_GLABREZU",
+        sdesc: "glabrezu",
+        category: "outsider"
+    },
+    RACE_HEZROU: {
+        code: "RACE_HEZROU",
+        sdesc: "hezrou",
+        category: "outsider"
+    },
+    RACE_MANE: {
+        code: "RACE_MANE",
+        sdesc: "mane",
+        category: "outsider"
+    },
+    RACE_MARILITH: {
+        code: "RACE_MARILITH",
+        sdesc: "marilith",
+        category: "outsider"
+    },
+    RACE_NABASSU: {
+        code: "RACE_NABASSU",
+        sdesc: "nabassu",
+        category: "outsider"
+    },
+    RACE_NALFESHNEE: {
+        code: "RACE_NALFESHNEE",
+        sdesc: "nalfeshnee",
+        category: "outsider"
+    },
+    RACE_QUASIT: {
+        code: "RACE_QUASIT",
+        sdesc: "quasit",
+        category: "outsider"
+    },
+    RACE_RUTTERKIN: {
+        code: "RACE_RUTTERKIN",
+        sdesc: "rutterkin",
+        category: "outsider"
+    },
+    RACE_SHADOW_DEMON: {
+        code: "RACE_SHADOW_DEMON",
+        sdesc: "shadow demon",
+        category: "outsider"
+    },
+    RACE_SUCCUBUS: {
+        code: "RACE_SUCCUBUS",
+        sdesc: "succubus",
+        category: "outsider"
+    },
+    RACE_VROCK: {
+        code: "RACE_VROCK",
+        sdesc: "vrock",
+        category: "outsider"
+    },
+    RACE_DEVIL: {
+        code: "RACE_DEVIL",
+        sdesc: "devil",
+        category: "outsider"
+    },
+    RACE_ABISHAI: {
+        code: "RACE_ABISHAI",
+        sdesc: "abishai",
+        category: "outsider"
+    },
+    RACE_ABISHAI_BLACK: {
+        code: "RACE_ABISHAI_BLACK",
+        sdesc: "black abishai",
+        category: "outsider"
+    },
+    RACE_ABISHAI_BLUE: {
+        code: "RACE_ABISHAI_BLUE",
+        sdesc: "blue abishai",
+        category: "outsider"
+    },
+    RACE_ABISHAI_GREEN: {
+        code: "RACE_ABISHAI_GREEN",
+        sdesc: "green abishai",
+        category: "outsider"
+    },
+    RACE_ABISHAI_RED: {
+        code: "RACE_ABISHAI_RED",
+        sdesc: "red abishai",
+        category: "outsider"
+    },
+    RACE_ABISHAI_WHITE: {
+        code: "RACE_ABISHAI_WHITE",
+        sdesc: "white abishai",
+        category: "outsider"
+    },
+    RACE_GELUGON: {
+        code: "RACE_GELUGON",
+        sdesc: "gelugon",
+        category: "outsider"
+    },
+    RACE_HAMATULA: {
+        code: "RACE_HAMATULA",
+        sdesc: "hamatula",
+        category: "outsider"
+    },
+    RACE_IMP: {
+        code: "RACE_IMP",
+        sdesc: "imp",
+        category: "outsider"
+    },
+    RACE_PIT_FIEND: {
+        code: "RACE_PIT_FIEND",
+        sdesc: "pit fiend",
+        category: "outsider"
+    },
+    RACE_LEMURE: {
+        code: "RACE_LEMURE",
+        sdesc: "lemure",
+        category: "outsider"
+    },
+    RACE_NUPPERIBO: {
+        code: "RACE_NUPPERIBO",
+        sdesc: "nupperibo",
+        category: "outsider"
+    },
+    RACE_OSYLUTH: {
+        code: "RACE_OSYLUTH",
+        sdesc: "osyluth",
+        category: "outsider"
+    },
+    RACE_SPINAGON: {
+        code: "RACE_SPINAGON",
+        sdesc: "spinagon",
+        category: "outsider"
+    },
+    RACE_DRAEGLOTH: {
+        code: "RACE_DRAEGLOTH",
+        sdesc: "draegloth",
+        category: "outsider"
+    },
+    RACE_FORMIAN: {
+        code: "RACE_FORMIAN",
+        sdesc: "formian",
+        category: "outsider"
+    },
+    RACE_FORMIAN_WARRIOR: {
+        code: "RACE_FORMIAN_WARRIOR",
+        sdesc: "formian warrior",
+        category: "outsider"
+    },
+    RACE_FORMIAN_WORKER: {
+        code: "RACE_FORMIAN_WORKER",
+        sdesc: "formian worker",
+        category: "outsider"
+    },
+    RACE_GENASI: {
+        code: "RACE_GENASI",
+        sdesc: "genasi",
+        category: "outsider"
+    },
+    RACE_GENSAIAIR: {
+        code: "RACE_GENSAIAIR",
+        sdesc: "air genasi",
+        category: "outsider"
+    },
+    RACE_GENSAIEARTH: {
+        code: "RACE_GENSAIEARTH",
+        sdesc: "earth genasi",
+        category: "outsider"
+    },
+    RACE_GENSAIFIRE: {
+        code: "RACE_GENSAIFIRE",
+        sdesc: "fire genasi",
+        category: "outsider"
+    },
+    RACE_GENSAIWATER: {
+        code: "RACE_GENSAIWATER",
+        sdesc: "water genasi",
+        category: "outsider"
+    },
+    RACE_GENIE: {
+        code: "RACE_GENIE",
+        sdesc: "genie",
+        category: "outsider"
+    },
+    RACE_EFREETI: {
+        code: "RACE_EFREETI",
+        sdesc: "efreeti",
+        category: "outsider"
+    },
+    RACE_LILLEND: {
+        code: "RACE_LILLEND",
+        sdesc: "lillend",
+        category: "outsider"
+    },
+    RACE_MEPHIT: {
+        code: "RACE_MEPHIT",
+        sdesc: "mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_AIR: {
+        code: "RACE_MEPHIT_AIR",
+        sdesc: "air mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_DUST: {
+        code: "RACE_MEPHIT_DUST",
+        sdesc: "dust mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_EARTH: {
+        code: "RACE_MEPHIT_EARTH",
+        sdesc: "earth mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_FIRE: {
+        code: "RACE_MEPHIT_FIRE",
+        sdesc: "fire mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_ICE: {
+        code: "RACE_MEPHIT_ICE",
+        sdesc: "ice mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_MAGMA: {
+        code: "RACE_MEPHIT_MAGMA",
+        sdesc: "magma mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_OOZE: {
+        code: "RACE_MEPHIT_OOZE",
+        sdesc: "ooze mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_SALT: {
+        code: "RACE_MEPHIT_SALT",
+        sdesc: "salt mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_STEAM: {
+        code: "RACE_MEPHIT_STEAM",
+        sdesc: "steam mephit",
+        category: "outsider"
+    },
+    RACE_MEPHIT_WATER: {
+        code: "RACE_MEPHIT_WATER",
+        sdesc: "water mephit",
+        category: "outsider"
+    },
+    RACE_NIGHTMARE: {
+        code: "RACE_NIGHTMARE",
+        sdesc: "nightmare",
+        category: "outsider"
+    },
+    RACE_NIIATH: {
+        code: "RACE_NIIATH",
+        sdesc: "ni'iath",
+        category: "outsider"
+    },
+    RACE_RAKSHASA: {
+        code: "RACE_RAKSHASA",
+        sdesc: "rakshasa",
+        category: "outsider"
+    },
+    RACE_RAST: {
+        code: "RACE_RAST",
+        sdesc: "rast",
+        category: "outsider"
+    },
+    RACE_RAVID: {
+        code: "RACE_RAVID",
+        sdesc: "ravid",
+        category: "outsider"
+    },
+    RACE_SHADE: {
+        code: "RACE_SHADE",
+        sdesc: "shade",
+        category: "outsider"
+    },
+    RACE_SLAAD: {
+        code: "RACE_SLAAD",
+        sdesc: "slaad",
+        category: "outsider"
+    },
+    RACE_SLAADDEATH: {
+        code: "RACE_SLAADDEATH",
+        sdesc: "death slaad",
+        category: "outsider"
+    },
+    RACE_SLAADGREEN: {
+        code: "RACE_SLAADGREEN",
+        sdesc: "green slaad",
+        category: "outsider"
+    },
+    RACE_TIEFLING: {
+        code: "RACE_TIEFLING",
+        sdesc: "tiefling",
+        category: "outsider"
+    },
+    RACE_FEYRI: {
+        code: "RACE_FEYRI",
+        sdesc: "feyri",
+        category: "outsider"
+    },
+    RACE_TANARUKK: {
+        code: "RACE_TANARUKK",
+        sdesc: "tanarukk",
+        category: "outsider"
+    },
+    RACE_TITAN: {
+        code: "RACE_TITAN",
+        sdesc: "titan",
+        category: "outsider"
+    },
+    RACE_TOJANIDA: {
+        code: "RACE_TOJANIDA",
+        sdesc: "tojanida",
+        category: "outsider"
+    },
+    RACE_XORN: {
+        code: "RACE_XORN",
+        sdesc: "xorn",
+        category: "outsider"
+    },
+    RACE_GREENWARDER: {
+        code: "RACE_GREENWARDER",
+        sdesc: "green warder",
+        category: "plant"
+    },
+    RACE_MYCONOID: {
+        code: "RACE_MYCONOID",
+        sdesc: "myconoid",
+        category: "plant"
+    },
+    RACE_MYCONOID_SOVEREIGN: {
+        code: "RACE_MYCONOID_SOVEREIGN",
+        sdesc: "myconoid sovereign",
+        category: "plant"
+    },
+    RACE_MYCONOID_LEADER: {
+        code: "RACE_MYCONOID_LEADER",
+        sdesc: "myconoid leader",
+        category: "plant"
+    },
+    RACE_MYCONOID_GUARD: {
+        code: "RACE_MYCONOID_GUARD",
+        sdesc: "myconoid guard",
+        category: "plant"
+    },
+    RACE_MYCONOID_WORKER: {
+        code: "RACE_MYCONOID_WORKER",
+        sdesc: "myconoid worker",
+        category: "plant"
+    },
+    RACE_PLANT: {
+        code: "RACE_PLANT",
+        sdesc: "plant",
+        category: "plant"
+    },
+    RACE_BLOODTHORN: {
+        code: "RACE_BLOODTHORN",
+        sdesc: "bloodthorn",
+        category: "plant"
+    },
+    RACE_SHRIEKER: {
+        code: "RACE_SHRIEKER",
+        sdesc: "shrieker",
+        category: "plant"
+    },
+    RACE_TREANT: {
+        code: "RACE_TREANT",
+        sdesc: "treant",
+        category: "plant"
+    },
+    RACE_VIPER_TREE: {
+        code: "RACE_VIPER_TREE",
+        sdesc: "viper tree",
+        category: "plant"
+    },
+    RACE_CORPOREAL: {
+        code: "RACE_CORPOREAL",
+        sdesc: "corporeal",
+        category: "undead"
+    },
+    RACE_BAT_DEEP_BONEBAT: {
+        code: "RACE_BAT_DEEP_BONEBAT",
+        sdesc: "bonebat",
+        category: "undead"
+    },
+    RACE_GHOUL: {
+        code: "RACE_GHOUL",
+        sdesc: "ghoul",
+        category: "undead"
+    },
+    RACE_GHAST: {
+        code: "RACE_GHAST",
+        sdesc: "ghast",
+        category: "undead"
+    },
+    RACE_LACEDON: {
+        code: "RACE_LACEDON",
+        sdesc: "lacedon",
+        category: "undead"
+    },
+    RACE_LICH: {
+        code: "RACE_LICH",
+        sdesc: "lich",
+        category: "undead"
+    },
+    RACE_MUMMY: {
+        code: "RACE_MUMMY",
+        sdesc: "mummy",
+        category: "undead"
+    },
+    RACE_SKELETON: {
+        code: "RACE_SKELETON",
+        sdesc: "skeleton",
+        category: "undead"
+    },
+    RACE_UNDEAD: {
+        code: "RACE_UNDEAD",
+        sdesc: "undead",
+        category: "undead"
+    },
+    RACE_VAMPIRE: {
+        code: "RACE_VAMPIRE",
+        sdesc: "vampire",
+        category: "undead"
+    },
+    RACE_WIGHT: {
+        code: "RACE_WIGHT",
+        sdesc: "wight",
+        category: "undead"
+    },
+    RACE_ZOMBIE: {
+        code: "RACE_ZOMBIE",
+        sdesc: "zombie",
+        category: "undead"
+    },
+    RACE_INCORPOREAL: {
+        code: "RACE_INCORPOREAL",
+        sdesc: "incorporeal",
+        category: "undead"
+    },
+    RACE_GHOST: {
+        code: "RACE_GHOST",
+        sdesc: "ghost",
+        category: "undead"
+    },
+    RACE_SPIRIT: {
+        code: "RACE_SPIRIT",
+        sdesc: "spirit",
+        category: "undead"
+    },
+    RACE_WRAITH: {
+        code: "RACE_WRAITH",
+        sdesc: "wraith",
+        category: "undead"
+    },
+    RACE_BEETLE: {
+        code: "RACE_BEETLE",
+        sdesc: "beetle",
+        category: "vermin"
+    },
+    RACE_BEETLE_BOMBARDIER: {
+        code: "RACE_BEETLE_BOMBARDIER",
+        sdesc: "bombardier beetle",
+        category: "vermin"
+    },
+    RACE_BEETLE_GIANT_FIRE: {
+        code: "RACE_BEETLE_GIANT_FIRE",
+        sdesc: "giant fire beetle",
+        category: "vermin"
+    },
+    RACE_BEETLE_GIANT_STAG: {
+        code: "RACE_BEETLE_GIANT_STAG",
+        sdesc: "giant stag beetle",
+        category: "vermin"
+    },
+    RACE_BEETLE_GIANT_WATER: {
+        code: "RACE_BEETLE_GIANT_WATER",
+        sdesc: "giant water beetle",
+        category: "vermin"
+    },
+    RACE_CAVE_FISHER: {
+        code: "RACE_CAVE_FISHER",
+        sdesc: "cave fisher",
+        category: "vermin"
+    },
+    RACE_ANT_GIANT: {
+        code: "RACE_ANT_GIANT",
+        sdesc: "giant ant",
+        category: "vermin"
+    },
+    RACE_ANT_GIANT_WORKER: {
+        code: "RACE_ANT_GIANT_WORKER",
+        sdesc: "giant worker ant",
+        category: "vermin"
+    },
+    RACE_ANT_GIANT_SOLDIER: {
+        code: "RACE_ANT_GIANT_SOLDIER",
+        sdesc: "giant soldier ant",
+        category: "vermin"
+    },
+    RACE_ANT_GIANT_QUEEN: {
+        code: "RACE_ANT_GIANT_QUEEN",
+        sdesc: "giant queen ant",
+        category: "vermin"
+    },
+    RACE_BEE_GIANT: {
+        code: "RACE_BEE_GIANT",
+        sdesc: "giant bee",
+        category: "vermin"
+    },
+    RACE_GIANTCOACKROACH: {
+        code: "RACE_GIANTCOACKROACH",
+        sdesc: "giant coackroach",
+        category: "vermin"
+    },
+    RACE_WASP_GIANT: {
+        code: "RACE_WASP_GIANT",
+        sdesc: "giant wasp",
+        category: "vermin"
+    },
+    RACE_INSECT: {
+        code: "RACE_INSECT",
+        sdesc: "insect",
+        category: "vermin"
+    },
+    RACE_CENTIPEDE_MONSTROUS: {
+        code: "RACE_CENTIPEDE_MONSTROUS",
+        sdesc: "monstrous centipede",
+        category: "vermin"
+    },
+    RACE_SCORPION: {
+        code: "RACE_SCORPION",
+        sdesc: "monstrous scorpion",
+        category: "vermin"
+    },
+    RACE_SPIDER: {
+        code: "RACE_SPIDER",
+        sdesc: "spider",
+        category: "vermin"
+    }
+};
+
+const MOB_SEXES = {
+    SEX_MALE: {
+        code: "SEX_MALE",
+        sdesc: "SEX_MALE"
+    },
+    SEX_FEMALE: {
+        code: "SEX_FEMALE",
+        sdesc: "SEX_FEMALE"
+    },
+    SEX_NEUTRAL: {
+        code: "SEX_NEUTRAL",
+        sdesc: "SEX_NEUTRAL"
+    }
+};
+
+const MOB_POSITIONS = {
+    POS_DEAD: {
+        code: "POS_DEAD",
+        sdesc: "POS_DEAD"
+    },
+    POS_MORTAL: {
+        code: "POS_MORTAL",
+        sdesc: "POS_MORTAL"
+    },
+    POS_INCAP: {
+        code: "POS_INCAP",
+        sdesc: "POS_INCAP"
+    },
+    POS_STUNNED: {
+        code: "POS_STUNNED",
+        sdesc: "POS_STUNNED"
+    },
+    POS_SLEEPING: {
+        code: "POS_SLEEPING",
+        sdesc: "POS_SLEEPING"
+    },
+    POS_MEDITATING: {
+        code: "POS_MEDITATING",
+        sdesc: "POS_MEDITATING"
+    },
+    POS_RESTING: {
+        code: "POS_RESTING",
+        sdesc: "POS_RESTING"
+    },
+    POS_KNEELING: {
+        code: "POS_KNEELING",
+        sdesc: "POS_KNEELING"
+    },
+    POS_FIGHTING: {
+        code: "POS_FIGHTING",
+        sdesc: "POS_FIGHTING"
+    },
+    POS_STANDING: {
+        code: "POS_STANDING",
+        sdesc: "POS_STANDING"
+    },
+    POS_MOUNTED: {
+        code: "POS_MOUNTED",
+        sdesc: "POS_MOUNTED"
+    },
+    POS_SHOVE: {
+        code: "POS_SHOVE",
+        sdesc: "POS_SHOVE"
+    },
+    POS_DRAG: {
+        code: "POS_DRAG",
+        sdesc: "POS_DRAG"
+    }
+};
+
+const MOB_DEITIES = {
+    DEITY_NONE: {
+        code: "DEITY_NONE",
+        sdesc: "DEITY_NONE"
+    },
+    DEITY_CHAUNTEA: {
+        code: "DEITY_CHAUNTEA",
+        sdesc: "DEITY_CHAUNTEA"
+    },
+    DEITY_TYR: {
+        code: "DEITY_TYR",
+        sdesc: "DEITY_TYR"
+    },
+    DEITY_MYSTRA: {
+        code: "DEITY_MYSTRA",
+        sdesc: "DEITY_MYSTRA"
+    },
+    DEITY_ILMATER: {
+        code: "DEITY_ILMATER",
+        sdesc: "DEITY_ILMATER"
+    },
+    DEITY_MASK: {
+        code: "DEITY_MASK",
+        sdesc: "DEITY_MASK"
+    },
+    DEITY_KELEMVOR: {
+        code: "DEITY_KELEMVOR",
+        sdesc: "DEITY_KELEMVOR"
+    },
+    DEITY_SUNE: {
+        code: "DEITY_SUNE",
+        sdesc: "DEITY_SUNE"
+    },
+    DEITY_MIELIKKI: {
+        code: "DEITY_MIELIKKI",
+        sdesc: "DEITY_MIELIKKI"
+    },
+    DEITY_TEMPUS: {
+        code: "DEITY_TEMPUS",
+        sdesc: "DEITY_TEMPUS"
+    },
+    DEITY_CYRIC: {
+        code: "DEITY_CYRIC",
+        sdesc: "DEITY_CYRIC"
+    },
+    DEITY_LATHANDER: {
+        code: "DEITY_LATHANDER",
+        sdesc: "DEITY_LATHANDER"
+    },
+    DEITY_MALAR: {
+        code: "DEITY_MALAR",
+        sdesc: "DEITY_MALAR"
+    },
+    DEITY_GOND: {
+        code: "DEITY_GOND",
+        sdesc: "DEITY_GOND"
+    },
+    DEITY_SELUNE: {
+        code: "DEITY_SELUNE",
+        sdesc: "DEITY_SELUNE"
+    },
+    DEITY_TYMORA: {
+        code: "DEITY_TYMORA",
+        sdesc: "DEITY_TYMORA"
+    },
+    DEITY_LOVIATAR: {
+        code: "DEITY_LOVIATAR",
+        sdesc: "DEITY_LOVIATAR"
+    },
+    DEITY_HELM: {
+        code: "DEITY_HELM",
+        sdesc: "DEITY_HELM"
+    },
+    DEITY_TALOS: {
+        code: "DEITY_TALOS",
+        sdesc: "DEITY_TALOS"
+    },
+    DEITY_BESHABA: {
+        code: "DEITY_BESHABA",
+        sdesc: "DEITY_BESHABA"
+    },
+    DEITY_OGHMA: {
+        code: "DEITY_OGHMA",
+        sdesc: "DEITY_OGHMA"
+    },
+    DEITY_LLOTH: {
+        code: "DEITY_LLOTH",
+        sdesc: "DEITY_LLOTH"
+    },
+    DEITY_CORELLON: {
+        code: "DEITY_CORELLON",
+        sdesc: "DEITY_CORELLON"
+    },
+    DEITY_MORADIN: {
+        code: "DEITY_MORADIN",
+        sdesc: "DEITY_MORADIN"
+    },
+    DEITY_GRUUMSH: {
+        code: "DEITY_GRUUMSH",
+        sdesc: "DEITY_GRUUMSH"
+    },
+    DEITY_TORM: {
+        code: "DEITY_TORM",
+        sdesc: "DEITY_TORM"
+    },
+    DEITY_YONDALLA: {
+        code: "DEITY_YONDALLA",
+        sdesc: "DEITY_YONDALLA"
+    },
+    DEITY_GARL: {
+        code: "DEITY_GARL",
+        sdesc: "DEITY_GARL"
+    },
+    DEITY_SHAR: {
+        code: "DEITY_SHAR",
+        sdesc: "DEITY_SHAR"
+    },
+    DEITY_UMBERLEE: {
+        code: "DEITY_UMBERLEE",
+        sdesc: "DEITY_UMBERLEE"
+    },
+    DEITY_WAUKEEN: {
+        code: "DEITY_WAUKEEN",
+        sdesc: "DEITY_WAUKEEN"
+    },
+    DEITY_BANE: {
+        code: "DEITY_BANE",
+        sdesc: "DEITY_BANE"
+    },
+    DEITY_TALONA: {
+        code: "DEITY_TALONA",
+        sdesc: "DEITY_TALONA"
+    },
+
+};
+
+const MOB_ACT_FLAGS = {
+    ACT_SENTINEL: {
+        code: "ACT_SENTINEL",
+        sdesc: "ACT_SENTINEL",
+        ldesc: "The mobile stays in one room"
+    },
+    ACT_SCAVENGER: {
+        code: "ACT_SCAVENGER",
+        sdesc: "ACT_SCAVENGER",
+        ldesc: "The mobile picks up objects on the ground"
+    },
+    ACT_IS_HEALER: {
+        code: "ACT_IS_HEALER",
+        sdesc: "ACT_IS_HEALER",
+        ldesc: "Mobile is a healer using the 'heal' command"
+    },
+    ACT_AGGRESSIVE: {
+        code: "ACT_AGGRESSIVE",
+        sdesc: "ACT_AGGRESSIVE",
+        ldesc: "The mobile attacks PC's when they enter the room the mob is in"
+    },
+    ACT_STAY_AREA: {
+        code: "ACT_STAY_AREA",
+        sdesc: "ACT_STAY_AREA",
+        ldesc: "The mobile will not leave the area it has been loaded into. If this is not set the mobile can wander into other areas unless stopped by a nomob flag on a room or an exit."
+    },
+    ACT_WIMPY: {
+        code: "ACT_WIMPY",
+        sdesc: "ACT_WIMPY",
+        ldesc: "The mobile flees when hurt. Many pets and mounts will be flagged with this, unless they are bred for war. In addition mobiles with this flag, will submit to the demand command."
+    },
+    ACT_PET: {
+        code: "ACT_PET",
+        sdesc: "ACT_PET",
+        ldesc: "For mobiles that are to be pets and animals that can be claimed. Do not use on horses or anything that should be considered a mount."
+    },
+    ACT_UNDEAD: {
+        code: "ACT_UNDEAD",
+        sdesc: "ACT_UNDEAD",
+        ldesc: "For undead mobiles. Make sure to use this on undead mobs as it is used by the favour system."
+    },
+    ACT_NOSHOVE: {
+        code: "ACT_NOSHOVE",
+        sdesc: "ACT_NOSHOVE",
+        ldesc: "Mobile cannot be shoved. This is important for mobiles who should always be found in a certain spot."
+    },
+    ACT_NOFIGHT: {
+        code: "ACT_NOFIGHT",
+        sdesc: "ACT_NOFIGHT",
+        ldesc: "Mobile will not fight back. Part of the killmode code."
+    },
+    ACT_BANK: {
+        code: "ACT_BANK",
+        sdesc: "ACT_BANK",
+        ldesc: "Mobile is a banker"
+    },
+    ACT_NOWANDER: {
+        code: "ACT_NOWANDER",
+        sdesc: "ACT_NOWANDER",
+        ldesc: "Doesn't wander outside the sector type it is loaded in"
+    },
+    ACT_MOUNTABLE: {
+        code: "ACT_MOUNTABLE",
+        sdesc: "ACT_MOUNTABLE",
+        ldesc: "The mobile can be mounted."
+    },
+    ACT_SECRETIVE: {
+        code: "ACT_SECRETIVE",
+        sdesc: "ACT_SECRETIVE",
+        ldesc: "The mobile's actions are not seen."
+    },
+    ACT_CITIZEN: {
+        code: "ACT_CITIZEN",
+        sdesc: "ACT_CITIZEN",
+        ldesc: "Mobile is a citizen and affects a character's lawful status if killed. This is also used in the games justice system."
+    },
+    ACT_MOBINVIS: {
+        code: "ACT_MOBINVIS",
+        sdesc: "ACT_MOBINVIS",
+        ldesc: "Mobile's cannot be seen by mortals even with detect invis. It is like an immortals wizinvis. Can only be seen by immortals."
+    },
+    ACT_NOASSIST: {
+        code: "ACT_NOASSIST",
+        sdesc: "ACT_NOASSIST",
+        ldesc: "Does not assist other mobiles or characters in battle."
+    },
+    ACT_REQUEST: {
+        code: "ACT_REQUEST",
+        sdesc: "ACT_REQUEST",
+        ldesc: "The armour that the mobile wears can be requested by good aligned with the request command. Do not use on shop-keepers."
+    },
+    ACT_NOCORPSE: {
+        code: "ACT_NOCORPSE",
+        sdesc: "ACT_NOCORPSE",
+        ldesc: "The mobile drops no corpse on death. Ideal for dummies."
+    }
+
+};
+
+
+// Model classes
 
 class Loader {
     constructor(are_string="") {
@@ -4577,6 +8805,10 @@ class GameObject {
     }
     
     toString() {
+        errors = this.validate()
+        if (errors.length) {
+            return this.errors.join("\n")
+        }
         return `#${this.vnum}
 ${this.keywords}~
 ${this.sdesc}~
@@ -4595,17 +8827,109 @@ ${this.programs.map((program) => (program.toString())).join("\n")}
     }
 }
 
-class Mob {
+class SimpleMob {
     constructor() {
-        
+        this.vnum = null;
+        this.sdesc = null;
+        this.ldesc = null;
+        this.fulldesc = null;
+        this.keywords = null;
+        this.level = null;
+        this.class = null;
+        this.race = null;
+        this.sex = null;
+        this.position = null;
+        this.deity = MOB_DEITIES.DEITY_NONE;
+        this.act_flags = [];
+        this.understood_languages = [];
+        this.spoken_languages = [];
+    }
+    get _error_prefix() {
+        return `[Mob:(${this.vnum}) ${this.sdesc}]`
     }
     
     validate() {
-        
+        if (this.vnum == null) {
+            errors.push(`${this._error_prefix} No vnum defined`);
+        }
+        if (this.sdesc == null) {
+            errors.push(`${this._error_prefix} No short description defined`);
+        }
+        if (this.ldesc == null) {
+            errors.push(`${this._error_prefix} No long description defined`);
+        }
+        if (this.fulldesc == null) {
+            errors.push(`${this._error_prefix} No full description defined`);
+        }
+        if (this.keywords == null) {
+            errors.push(`${this._error_prefix} No keywords defined`);
+        }
+        if (this.level == null) {
+            errors.push(`${this._error_prefix} No level defined`);
+        }
+        if (this.class == null) {
+            errors.push(`${this._error_prefix} No class defined`);
+        }
+        else if (!(this.class.code in MOB_CLASSES)) {
+            errors.push(`${this._error_prefix} Invalid class defined`);
+        }
+        if (this.race == null) {
+            errors.push(`${this._error_prefix} No race defined`);
+        }
+        else if (!(this.race.code in MOB_RACES)) {
+            errors.push(`${this._error_prefix} Invalid race defined`);
+        }
+        if (this.sex == null) {
+            errors.push(`${this._error_prefix} No sex defined`);
+        }
+        if (this.position == null) {
+            errors.push(`${this._error_prefix} No position defined`);
+        }
+        else if (!(this.position.code in MOB_POSITIONS)) {
+            errors.push(`${this._error_prefix} Invalid position defined`);
+        }
+        for (let i = 0; i < this.act_flags.length; i++) {
+            if (!(this.act_flags[i].code in MOB_ACT_FLAGS)) {
+                errors.push(`${this._error_prefix} Invalid ACT_FLAG defined`);
+            }
+            else if (this.act_flags[i].do_not_use) {
+                errors.push(`${this._error_prefix} ACT_FLAG "${this.act_flags[i].code}" should not be used`);
+            }
+        }
+        for (let i = 0; i < this.understood_languages.length; i++) {
+            if (!(this.understood_languages[i].code in LANGUAGE_FLAGS)) {
+                errors.push(`${this._error_prefix} Invalid ACT_FLAG defined`);
+            }
+            else if (this.understood_languages[i].do_not_use) {
+                errors.push(`${this._error_prefix} ACT_FLAG "${this.understood_languages[i].code}" should not be used`);
+            }
+        }
+        for (let i = 0; i < this.spoken_languages.length; i++) {
+            if (!(this.spoken_languages[i].code in LANGUAGE_FLAGS)) {
+                errors.push(`${this._error_prefix} Invalid ACT_FLAG defined`);
+            }
+            else if (this.spoken_languages[i].do_not_use) {
+                errors.push(`${this._error_prefix} ACT_FLAG "${this.spoken_languages[i].code}" should not be used`);
+            }
+        }
     }
     
     toString() {
-        
+        errors = this.validate()
+        if (errors.length) {
+            return this.errors.join("\n")
+        }
+        return `#${this.vnum}
+${this.keywords}~
+${this.sdesc}~
+${this.ldesc}~
+${this.fulldesc}
+~
+S ${this.level} ${this.class} ${this.race} ${this.sex} ${this.position} ${this.deity}
+${this.act_flags.map((flag)=>(flag.code)).join("|")}
+${this.understood_languages.map((lang)=>(lang.code)).join("|")}
+${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
+|`
     }
 }
 
