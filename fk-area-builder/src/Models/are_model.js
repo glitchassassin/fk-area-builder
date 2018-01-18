@@ -10338,7 +10338,7 @@ ${this.flags.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.flags.do
     }
 }
 
-class ExtraDescription {
+class ExtraDescription extends Model {
     constructor() {
         this.keywords = null;
         this.ldesc = null;
@@ -10402,8 +10402,10 @@ class GameObject extends Model {
     
     validate() {
         let errors = super.validate();
+        
         if (this.action_description !== "") {
-            errors.push(`${this._error_prefix} "action_description" is not used and should be empty`);
+            console.log(this.action_description)
+            errors.push(`${this._error_prefix}.action_description is not used and should be empty`);
         }
         return errors;
     }
@@ -10422,7 +10424,7 @@ ${this.item_type.code}
 ${this.attributes.map((attribute)=>(attribute.code)).join("|")||0}
 ${this.wear_flags.map((flag)=>(flag.code)).join("|")||0}
 ${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.code}
-${this.values.value0} ${this.values.value1} ${this.values.value2} ${this.values.value3} ${this.values.value4} ${this.values.value5}
+${this.value0} ${this.value1} ${this.value2} ${this.value3} ${this.value4} ${this.value5}
 ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.special_applies.map((spec) => (`A ${spec.code} ${spec.value}`)).join("\n")}
 ${this.identify_message != null ? `I\n${this.identify_message}\n~` : "" }
@@ -10584,7 +10586,6 @@ function testLoader() {
     loader.area.rooms.push(dungeon)
     
     let trapdoor_key = new GameObject();
-    console.log(trapdoor_key.name)
     trapdoor_key.vnum = "QQ01";
     trapdoor_key.sdesc = "{80}A large iron key";
     trapdoor_key.ldesc = "{80}A large iron key is lying about for anyone to take";
@@ -10600,8 +10601,6 @@ function testLoader() {
     trapdoor_key.condition = OBJECT_CONDITION.COND_USABLE;
     trapdoor_key.material = OBJECT_MATERIALS.MATERIAL_IRON;
     trapdoor_key.size = OBJECT_SIZES.SIZE_TINY;
-    
-    console.log(trapdoor_key.constructor.name)
     
     loader.area.objects.push(trapdoor_key);
     

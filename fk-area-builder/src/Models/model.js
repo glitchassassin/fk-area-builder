@@ -1,40 +1,40 @@
 class Field {
     constructor(options) {
         this.name = options.field_name;
-        this.value = options.default_value||null;
+        this.value = options.default_value;
         this.options = {
-            in_flags: options.in_flags||null,
-            optional: options.optional||true
+            in_flags: options.in_flags,
+            optional: options.optional
         };
     }
     
-    validate() {
+    validate(value) {
         let errors = [];
-        if (this.value == null) {
+        if (value == null) {
             if (!this.options.optional) {
-                errors.append(`.${this.name} should not be empty`)
+                errors.push(`.${this.name} should not be empty`)
             }
         }
         else {
-            if (this.value instanceof Array) {
-                for (let i = 0; i < this.value.length; i++) {
-                    if (this.options.in_flags && (this.value[i].code in this.options.in_flags)) {
-                        errors.append(`.${this.name} "${this.value[i].code}" is not valid`)
+            if (value instanceof Array) {
+                for (let i = 0; i < value.length; i++) {
+                    if (this.options.in_flags && !(value[i].code in this.options.in_flags)) {
+                        errors.push(`.${this.name} "${value[i].code}" is not valid`)
                     }
-                    if (this.value[i].do_not_use) {
-                        errors.append(`.${this.name} "${this.value[i].code}" should not be used`)
+                    if (value[i].do_not_use) {
+                        errors.push(`.${this.name} "${value[i].code}" should not be used`)
                     }
                 }
             }
-            else if (this.value instanceof Model) {
-                errors = errors.concat(this.value.validate().map((err)=>(`${this.name}.${err}`)))
+            else if (value instanceof Model) {
+                errors = errors.concat(value.validate().map((err)=>(`${this.name}.${err}`)))
             }
             else {
-                if (this.options.in_flags && (this.value.code in this.options.in_flags)) {
-                    errors.append(`.${this.name} "${this.value.code}" is not valid`)
+                if (this.options.in_flags && !(value.code in this.options.in_flags)) {
+                    errors.push(`.${this.name} "${value.code}" is not valid`)
                 }
-                if (this.value.do_not_use) {
-                    errors.append(`.${this.name} "${this.value.code}" should not be used`)
+                if (value.do_not_use) {
+                    errors.push(`.${this.name} "${value.code}" should not be used`)
                 }
             }
         }
@@ -44,25 +44,24 @@ class Field {
 
 class Model {
     constructor(field_list) {
-        var p = new Proxy(field_list, {
-            get: (container, property) => (property in container ? "value" in container[property]? container[property].value : container[property] : undefined),
-            set: (container, property, value) => ((container[property] = value) ? true : true)
-        });
-        p.validate = function() {
-            let errors = [];
-            for (let prop in this._fields) {
-                errors = errors.concat(this._fields[prop].validate().map((err)=>(`${this._error_prefix}.${err}`)));
-            }
-            return errors;
+        this._fields = field_list
+        
+        for (let p in field_list) {
+            this[p] = field_list[p].value
         }
-        return p;
     }
     
-    /*get _error_prefix() {
+    get _error_prefix() {
         return "[Model]"
-    }*/
+    }
     
-    
+    validate() {
+        let errors = [];
+        for (let prop in this._fields) {
+            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
+        }
+        return errors;
+    }
 }
 
 module.exports = {
