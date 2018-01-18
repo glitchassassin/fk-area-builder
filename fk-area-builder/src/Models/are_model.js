@@ -1,3 +1,7 @@
+m = require("model.js")
+Field = m.Field
+Model = m.Model
+
 // Flag tables
 
 const AREA_CATEGORIES = {
@@ -10501,91 +10505,27 @@ ${this.programs.map((program) => (program.toString())).join("\n")}
     }
 }
 
-class SimpleMob {
-    constructor() {
-        this.vnum = null;
-        this.sdesc = null;
-        this.ldesc = null;
-        this.fulldesc = null;
-        this.keywords = null;
-        this.level = null;
-        this.class = null;
-        this.race = null;
-        this.sex = null;
-        this.position = null;
-        this.deity = MOB_DEITIES.DEITY_NONE;
-        this.act_flags = [];
-        this.understood_languages = [];
-        this.spoken_languages = [];
+class SimpleMob (Model) {
+    constructor(fields) {
+        super(Object.assign({
+            vnum:                   Field(field_name="vnum",                    default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
+            sdesc:                  Field(field_name="sdesc",                   default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
+            ldesc:                  Field(field_name="ldesc",                   default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
+            fulldesc:               Field(field_name="fulldesc",                default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
+            keywords:               Field(field_name="keywords",                default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
+            level:                  Field(field_name="level",                   default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
+            mob_class:              Field(field_name="mob_class",               default_value=null,                     in_flags=MOB_CLASSES,       optional=false, check_do_not_use=false),
+            race:                   Field(field_name="race",                    default_value=null,                     in_flags=MOB_RACES,         optional=false, check_do_not_use=false),
+            sex:                    Field(field_name="sex",                     default_value=null,                     in_flags=MOB_SEXES,         optional=false, check_do_not_use=false),
+            position:               Field(field_name="position",                default_value=null,                     in_flags=MOB_POSITIONS,     optional=false, check_do_not_use=false),
+            deity:                  Field(field_name="deity",                   default_value=MOB_DEITIES.DEITY_NONE,   in_flags=MOB_DEITIES,       optional=true,  check_do_not_use=false),
+            act_flags:              Field(field_name="act_flags",               default_value=[],                       in_flags=MOB_ACT_FLAGS,     optional=false, check_do_not_use=true),
+            understood_languages:   Field(field_name="understood_languages",    default_value=[],                       in_flags=LANGUAGE_FLAGS,    optional=false, check_do_not_use=true),
+            spoken_languages:       Field(field_name="spoken_languages",        default_value=[],                       in_flags=LANGUAGE_FLAGS,    optional=false, check_do_not_use=true),
+        }, fields))
     }
     get _error_prefix() {
         return `[SimpleMob:(${this.vnum}) ${this.sdesc}]`
-    }
-    
-    validate() {
-        if (this.vnum == null) {
-            errors.push(`${this._error_prefix} No vnum defined`);
-        }
-        if (this.sdesc == null) {
-            errors.push(`${this._error_prefix} No short description defined`);
-        }
-        if (this.ldesc == null) {
-            errors.push(`${this._error_prefix} No long description defined`);
-        }
-        if (this.fulldesc == null) {
-            errors.push(`${this._error_prefix} No full description defined`);
-        }
-        if (this.keywords == null) {
-            errors.push(`${this._error_prefix} No keywords defined`);
-        }
-        if (this.level == null) {
-            errors.push(`${this._error_prefix} No level defined`);
-        }
-        if (this.class == null) {
-            errors.push(`${this._error_prefix} No class defined`);
-        }
-        else if (!(this.class.code in MOB_CLASSES)) {
-            errors.push(`${this._error_prefix} Invalid class defined`);
-        }
-        if (this.race == null) {
-            errors.push(`${this._error_prefix} No race defined`);
-        }
-        else if (!(this.race.code in MOB_RACES)) {
-            errors.push(`${this._error_prefix} Invalid race defined`);
-        }
-        if (this.sex == null) {
-            errors.push(`${this._error_prefix} No sex defined`);
-        }
-        if (this.position == null) {
-            errors.push(`${this._error_prefix} No position defined`);
-        }
-        else if (!(this.position.code in MOB_POSITIONS)) {
-            errors.push(`${this._error_prefix} Invalid position defined`);
-        }
-        for (let i = 0; i < this.act_flags.length; i++) {
-            if (!(this.act_flags[i].code in MOB_ACT_FLAGS)) {
-                errors.push(`${this._error_prefix} Invalid ACT_FLAG defined`);
-            }
-            else if (this.act_flags[i].do_not_use) {
-                errors.push(`${this._error_prefix} ACT_FLAG "${this.act_flags[i].code}" should not be used`);
-            }
-        }
-        for (let i = 0; i < this.understood_languages.length; i++) {
-            if (!(this.understood_languages[i].code in LANGUAGE_FLAGS)) {
-                errors.push(`${this._error_prefix} Invalid ACT_FLAG defined`);
-            }
-            else if (this.understood_languages[i].do_not_use) {
-                errors.push(`${this._error_prefix} ACT_FLAG "${this.understood_languages[i].code}" should not be used`);
-            }
-        }
-        for (let i = 0; i < this.spoken_languages.length; i++) {
-            if (!(this.spoken_languages[i].code in LANGUAGE_FLAGS)) {
-                errors.push(`${this._error_prefix} Invalid ACT_FLAG defined`);
-            }
-            else if (this.spoken_languages[i].do_not_use) {
-                errors.push(`${this._error_prefix} ACT_FLAG "${this.spoken_languages[i].code}" should not be used`);
-            }
-        }
     }
     
     toString() {
@@ -10605,26 +10545,25 @@ ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
 |`
     }
+    
+    
 }
 
 class UniqueMob (SimpleMob) {
-    constructor() {
-        super()
-        this.affect_flags = [];
-        this.virtual_armor = {
-            armor_type: null,
-            material: null
-        };
-        this.alignment = null;
-        this.stats = {
-            str: 13,
-            int: 13,
-            wis: 13,
-            dex: 13,
-            con: 13,
-            cha: 13,
-            lck: 13,
-        }
+    constructor(fields) {
+        super(Object.assign({
+            affect_flags: Field(field_name="affect_flags", default_value=[], in_flags=MOB_AFFECTS, optional=false, check_do_not_use=true),
+            virtual_armor_type: Field(field_name="virtual_armor_type", default_value=null, in_flags=ARMOR_TYPES, optional=false, check_do_not_use=true),
+            virtual_armor_material: Field(field_name="virtual_armor_material", default_value=null, in_flags=OBJECT_MATERIALS, optional=false, check_do_not_use=true),
+            alignment: Field(field_name="alignment", default_value=null, in_flags=MOB_ALIGNMENTS, optional=false, check_do_not_use=true),
+            str: Field(field_name="str", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            int: Field(field_name="int", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            wis: Field(field_name="wis", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            dex: Field(field_name="dex", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            con: Field(field_name="con", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            cha: Field(field_name="cha", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            lck: Field(field_name="lck", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+        }, fields))
     }
     get _error_prefix() {
         return `[UniqueMob:(${this.vnum}) ${this.sdesc}]`
@@ -10632,7 +10571,12 @@ class UniqueMob (SimpleMob) {
     
     validate() {
         errors = super.validate()
-        
+        for (stat in ["str", "int", "wis", "dex", "con", "cha", "lck"]) {
+            if (!(3 <= this.stats[stat] <= 22)) {
+                errors.push(`${this._error_prefix}.${stat} should be between 3 and 22`);
+            }
+        }
+        return errors;
     }
     
     toString() {
@@ -10649,9 +10593,9 @@ ${this.fulldesc}
 U ${this.level} ${this.class} ${this.race} ${this.sex} ${this.position} ${this.deity}
 ${this.act_flags.map((flag)=>(flag.code)).join("|")}
 ${this.affect_flags.map((flag)=>(flag.code)).join("|")}
-${this.virtual_armor.armor_type} ${this.virtual_armor.material}
+${this.virtual_armor_type} ${this.virtual_armor_material}
 ${this.alignment}
-${this.stats.str} ${this.stats.int} ${this.stats.wis} ${this.stats.dex} ${this.stats.con} ${this.stats.cha} ${this.stats.lck}
+${this.str} ${this.int} ${this.wis} ${this.dex} ${this.con} ${this.cha} ${this.lck}
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
 |`
