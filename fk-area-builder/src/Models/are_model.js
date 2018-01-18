@@ -1,6 +1,6 @@
-m = require("model.js")
-Field = m.Field
-Model = m.Model
+var m = require("./model.js")
+var Field = m.Field
+var Model = m.Model
 
 // Flag tables
 
@@ -3954,43 +3954,43 @@ const TRAP_TRIGGERS = {
     TRIGGER_NONE: {
         code: "TRIGGER_NONE",
         sdesc: "TRIGGER_NONE"
-    }
+    },
     TRIGGER_GET: {
         code: "TRIGGER_GET",
         sdesc: "TRIGGER_GET"
-    }
+    },
     TRIGGER_OPEN: {
         code: "TRIGGER_OPEN",
         sdesc: "TRIGGER_OPEN"
-    }
+    },
     TRIGGER_SHOVE: {
         code: "TRIGGER_SHOVE",
         sdesc: "TRIGGER_SHOVE"
-    }
+    },
     TRIGGER_PUT: {
         code: "TRIGGER_PUT",
         sdesc: "TRIGGER_PUT"
-    }
+    },
     TRIGGER_EXAMINE: {
         code: "TRIGGER_EXAMINE",
         sdesc: "TRIGGER_EXAMINE"
-    }
+    },
     TRIGGER_USE: {
         code: "TRIGGER_USE",
         sdesc: "TRIGGER_USE"
-    }
+    },
     TRIGGER_UNLOCK: {
         code: "TRIGGER_UNLOCK",
         sdesc: "TRIGGER_UNLOCK"
-    }
+    },
     TRIGGER_CLOSE: {
         code: "TRIGGER_CLOSE",
         sdesc: "TRIGGER_CLOSE"
-    }
+    },
     TRIGGER_MOVE: {
         code: "TRIGGER_MOVE",
         sdesc: "TRIGGER_MOVE"
-    }
+    },
     TRIGGER_PICK: {
         code: "TRIGGER_PICK",
         sdesc: "TRIGGER_PICK"
@@ -4978,7 +4978,7 @@ const ITEM_TYPES = {
             ldesc: "to status",
         },
         value3: {
-            type: VALUES_TYPES.FLAG,
+            type: VALUE_TYPES.FLAG,
             type_enum: LANGUAGE_FLAGS,
             ldesc: "language number",
         },
@@ -6172,7 +6172,7 @@ const MOB_RACES = {
         code: "RACE_UMBERHULK",
         sdesc: "umberhulk",
         category: "aberration"
-    }
+    },
     RACE_APE: {
         code: "RACE_APE",
         sdesc: "ape",
@@ -10053,6 +10053,7 @@ class Area {
         }
         // Check objects
         for (let i = 0; i < this.objects.length; i++) {
+            //console.log(this.objects[i])
             let object_errors = this.objects[i].validate();
             if (object_errors.length) {
                 errors = errors.concat(object_errors.map((error) => (`${this._error_prefix} ${error}`)))
@@ -10369,121 +10370,46 @@ ${this.ldesc}
     }
 }
 
-class GameObject {
-    constructor() {
-        this.vnum = null;
-        this.sdesc = null;
-        this.ldesc - null;
-        this.keywords = null;
-        this.action_description = ""; // Not used
-        this.item_type = null;
-        this.attributes = [];
-        this.wear_flags = [];
-        this.extra_descriptions = [];
-        this.quality = null;
-        this.material = null;
-        this.condition = null;
-        this.size = null;
-        this.values = {
-            value0: 0,
-            value1: 0,
-            value2: 0,
-            value3: 0,
-            value4: 0,
-            value5: 0,
-        }
-        this.special_applies = [];
-        this.programs = [];
-        this.identify_message = null;
+class GameObject extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            vnum:               new Field({field_name:"vnum",               default_value: null,    in_flags:null,              optional:false}),
+            sdesc:              new Field({field_name:"sdesc",              default_value: null,    in_flags:null,              optional:false}),
+            ldesc:              new Field({field_name:"ldesc",              default_value: null,    in_flags:null,              optional:false}),
+            keywords:           new Field({field_name:"keywords",           default_value: null,    in_flags:null,              optional:false}),
+            action_description: new Field({field_name:"action_description", default_value: "",      in_flags:null,              optional:false}), // Not used
+            item_type:          new Field({field_name:"item_type",          default_value: null,    in_flags:ITEM_TYPES,        optional:false}),
+            attributes:         new Field({field_name:"attributes",         default_value: [],      in_flags:OBJECT_ATTRIBUTES, optional:false}),
+            wear_flags:         new Field({field_name:"wear_flags",         default_value: [],      in_flags:WEAR_LOCATIONS,    optional:false}),
+            extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,              optional:false}),
+            quality:            new Field({field_name:"quality",            default_value: null,    in_flags:OBJECT_QUALITY,    optional:false}),
+            material:           new Field({field_name:"material",           default_value: null,    in_flags:OBJECT_MATERIALS,  optional:false}),
+            condition:          new Field({field_name:"condition",          default_value: null,    in_flags:OBJECT_CONDITION,  optional:false}),
+            value0:             new Field({field_name:"value0",             default_value: 0,       in_flags:null,              optional:true}),
+            value1:             new Field({field_name:"value1",             default_value: 0,       in_flags:null,              optional:true}),
+            value2:             new Field({field_name:"value2",             default_value: 0,       in_flags:null,              optional:true}),
+            value3:             new Field({field_name:"value3",             default_value: 0,       in_flags:null,              optional:true}),
+            value4:             new Field({field_name:"value4",             default_value: 0,       in_flags:null,              optional:true}),
+            value5:             new Field({field_name:"value5",             default_value: 0,       in_flags:null,              optional:true}),
+            special_applies:    new Field({field_name:"special_applies",    default_value: [],      in_flags:MOB_AFFECTS,       optional:true}),
+            programs:           new Field({field_name:"programs",           default_value: [],      in_flags:MOB_AFFECTS,       optional:true}),
+            identify_message:   new Field({field_name:"identify_message",   default_value: null,    in_flags:MOB_AFFECTS,       optional:true}),
+        }, fields));
     }
     get _error_prefix() {
         return `[GameObject:(${this.vnum}) ${this.sdesc}]`;
     }
     
     validate() {
-        let errors = [];
-        if (this.vnum == null) {
-            errors.push(`${this._error_prefix} No vnum defined`);
-        }
-        if (this.sdesc == null) {
-            errors.push(`${this._error_prefix} No short description defined`);
-        }
-        if (this.ldesc == null) {
-            errors.push(`${this._error_prefix} No long description defined`);
-        }
-        if (this.keywords == null) {
-            errors.push(`${this._error_prefix} No keywords defined`);
-        }
+        let errors = super.validate();
         if (this.action_description !== "") {
             errors.push(`${this._error_prefix} "action_description" is not used and should be empty`);
-        }
-        if (this.item_type == null) {
-            errors.push(`${this._error_prefix} No item type defined`);
-        }
-        else if (!(this.item_type.code in ITEM_TYPES)) {
-            errors.push(`${this._error_prefix} Invalid item type defined`);
-        }
-        for (let i = 0; i < this.attributes.length; i++) {
-            if (!(this.attributes[i].code in OBJECT_ATTRIBUTES)) {
-                errors.push(`${this._error_prefix} Invalid attribute defined`);
-            }
-            else if (this.attributes[i].do_not_use) {
-                errors.push(`${this._error_prefix} Attribute "${this.attributes[i].code}" should not be used`);
-            }
-        }
-        for (let i = 0; i < this.wear_flags.length; i++) {
-            if (!(this.wear_flags[i].code in WEAR_LOCATIONS)) {
-                errors.push(`${this._error_prefix} Invalid wear flag defined`);
-            }
-            else if (this.wear_flags[i].do_not_use) {
-                errors.push(`${this._error_prefix} Wear flag "${this.wear_flags[i].code}" should not be used`);
-            }
-        }
-        for (let i = 0; i < this.extra_descriptions.length; i++) {
-            let ed_errors = this.extra_descriptions[i].validate()
-            if (ed_errors.length) {
-                errors = errors.concat(ed_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
-        }
-        if (this.quality == null) {
-            errors.push(`${this._error_prefix} No quality defined`);
-        }
-        else if (!(this.quality.code in OBJECT_QUALITY)) {
-            errors.push(`${this._error_prefix} Invalid quality defined`);
-        }
-        if (this.condition == null) {
-            errors.push(`${this._error_prefix} No condition defined`);
-        }
-        else if (!(this.condition.code in OBJECT_CONDITION)) {
-            errors.push(`${this._error_prefix} Invalid condition defined`);
-        }
-        if (this.material == null) {
-            errors.push(`${this._error_prefix} No material defined`);
-        }
-        else if (!(this.material.code in OBJECT_MATERIALS)) {
-            errors.push(`${this._error_prefix} Invalid material defined`);
-        }
-        if (this.size == null) {
-            errors.push(`${this._error_prefix} No size defined`);
-        }
-        else if (!(this.size.code in OBJECT_SIZES)) {
-            errors.push(`${this._error_prefix} Invalid size defined`);
-        }
-        for (let i = 0; i < this.special_applies.length; i++) {
-            if (!(this.special_applies[i].code in OBJECT_APPLIES)) {
-                errors.push(`${this._error_prefix} Invalid APPLY defined`);
-            }
-            else if (["APPLY_CLASS","APPLY_LEVEL","APPLY_AGE","APPLY_EXP",
-                      "APPLY_RESISTANT","APPLY_IMMUNE","APPLY_SUSCEPTIBLE",
-                      "APPLY_PALM","APPLY_SCAN","APPLY_BLOOD"].indexOf(this.special_applies[i].code) != -1) {
-                errors.push(`${this._error_prefix} Unused APPLY code "${this.special_applies[i].code}" defined`);
-            }
         }
         return errors;
     }
     
     toString() {
-        errors = this.validate()
+        let errors = this.validate()
         if (errors.length) {
             return this.errors.join("\n")
         }
@@ -10505,23 +10431,23 @@ ${this.programs.map((program) => (program.toString())).join("\n")}
     }
 }
 
-class SimpleMob (Model) {
+class SimpleMob extends Model {
     constructor(fields) {
         super(Object.assign({
-            vnum:                   Field(field_name="vnum",                    default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
-            sdesc:                  Field(field_name="sdesc",                   default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
-            ldesc:                  Field(field_name="ldesc",                   default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
-            fulldesc:               Field(field_name="fulldesc",                default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
-            keywords:               Field(field_name="keywords",                default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
-            level:                  Field(field_name="level",                   default_value=null,                     in_flags=null,              optional=false, check_do_not_use=false),
-            mob_class:              Field(field_name="mob_class",               default_value=null,                     in_flags=MOB_CLASSES,       optional=false, check_do_not_use=false),
-            race:                   Field(field_name="race",                    default_value=null,                     in_flags=MOB_RACES,         optional=false, check_do_not_use=false),
-            sex:                    Field(field_name="sex",                     default_value=null,                     in_flags=MOB_SEXES,         optional=false, check_do_not_use=false),
-            position:               Field(field_name="position",                default_value=null,                     in_flags=MOB_POSITIONS,     optional=false, check_do_not_use=false),
-            deity:                  Field(field_name="deity",                   default_value=MOB_DEITIES.DEITY_NONE,   in_flags=MOB_DEITIES,       optional=true,  check_do_not_use=false),
-            act_flags:              Field(field_name="act_flags",               default_value=[],                       in_flags=MOB_ACT_FLAGS,     optional=false, check_do_not_use=true),
-            understood_languages:   Field(field_name="understood_languages",    default_value=[],                       in_flags=LANGUAGE_FLAGS,    optional=false, check_do_not_use=true),
-            spoken_languages:       Field(field_name="spoken_languages",        default_value=[],                       in_flags=LANGUAGE_FLAGS,    optional=false, check_do_not_use=true),
+            vnum:                   new Field({field_name:"vnum",                    default_value:null,                     in_flags:null,              optional:false}),
+            sdesc:                  new Field({field_name:"sdesc",                   default_value:null,                     in_flags:null,              optional:false}),
+            ldesc:                  new Field({field_name:"ldesc",                   default_value:null,                     in_flags:null,              optional:false}),
+            fulldesc:               new Field({field_name:"fulldesc",                default_value:null,                     in_flags:null,              optional:false}),
+            keywords:               new Field({field_name:"keywords",                default_value:null,                     in_flags:null,              optional:false}),
+            level:                  new Field({field_name:"level",                   default_value:null,                     in_flags:null,              optional:false}),
+            mob_class:              new Field({field_name:"mob_class",               default_value:null,                     in_flags:MOB_CLASSES,       optional:false}),
+            race:                   new Field({field_name:"race",                    default_value:null,                     in_flags:MOB_RACES,         optional:false}),
+            sex:                    new Field({field_name:"sex",                     default_value:null,                     in_flags:MOB_SEXES,         optional:false}),
+            position:               new Field({field_name:"position",                default_value:null,                     in_flags:MOB_POSITIONS,     optional:false}),
+            deity:                  new Field({field_name:"deity",                   default_value:MOB_DEITIES.DEITY_NONE,   in_flags:MOB_DEITIES,       optional:true}),
+            act_flags:              new Field({field_name:"act_flags",               default_value:[],                       in_flags:MOB_ACT_FLAGS,     optional:false}),
+            understood_languages:   new Field({field_name:"understood_languages",    default_value:[],                       in_flags:LANGUAGE_FLAGS,    optional:false}),
+            spoken_languages:       new Field({field_name:"spoken_languages",        default_value:[],                       in_flags:LANGUAGE_FLAGS,    optional:false}),
         }, fields))
     }
     get _error_prefix() {
@@ -10529,7 +10455,7 @@ class SimpleMob (Model) {
     }
     
     toString() {
-        errors = this.validate()
+        let errors = this.validate()
         if (errors.length) {
             return this.errors.join("\n")
         }
@@ -10549,20 +10475,21 @@ ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
     
 }
 
-class UniqueMob (SimpleMob) {
+class UniqueMob extends SimpleMob {
     constructor(fields) {
         super(Object.assign({
-            affect_flags: Field(field_name="affect_flags", default_value=[], in_flags=MOB_AFFECTS, optional=false, check_do_not_use=true),
-            virtual_armor_type: Field(field_name="virtual_armor_type", default_value=null, in_flags=ARMOR_TYPES, optional=false, check_do_not_use=true),
-            virtual_armor_material: Field(field_name="virtual_armor_material", default_value=null, in_flags=OBJECT_MATERIALS, optional=false, check_do_not_use=true),
-            alignment: Field(field_name="alignment", default_value=null, in_flags=MOB_ALIGNMENTS, optional=false, check_do_not_use=true),
-            str: Field(field_name="str", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
-            int: Field(field_name="int", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
-            wis: Field(field_name="wis", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
-            dex: Field(field_name="dex", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
-            con: Field(field_name="con", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
-            cha: Field(field_name="cha", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
-            lck: Field(field_name="lck", default_value=13, in_flags=null, optional=false, check_do_not_use=false),
+            //                            Field name                 Default value  In flags...         Optional    Check do_not_use
+            affect_flags:           new Field({field_name:"affect_flags",           default_value:[],             in_flags:MOB_AFFECTS,        optional:false}),
+            virtual_armor_type:     new Field({field_name:"virtual_armor_type",     default_value:null,           in_flags:ARMOR_TYPES,        optional:false}),
+            virtual_armor_material: new Field({field_name:"virtual_armor_material", default_value:null,           in_flags:OBJECT_MATERIALS,   optional:false}),
+            alignment:              new Field({field_name:"alignment",              default_value:null,           in_flags:MOB_ALIGNMENTS,     optional:false}),
+            str:                    new Field({field_name:"str",                    default_value:13,             in_flags:null,               optional:false}),
+            int:                    new Field({field_name:"int",                    default_value:13,             in_flags:null,               optional:false}),
+            wis:                    new Field({field_name:"wis",                    default_value:13,             in_flags:null,               optional:false}),
+            dex:                    new Field({field_name:"dex",                    default_value:13,             in_flags:null,               optional:false}),
+            con:                    new Field({field_name:"con",                    default_value:13,             in_flags:null,               optional:false}),
+            cha:                    new Field({field_name:"cha",                    default_value:13,             in_flags:null,               optional:false}),
+            lck:                    new Field({field_name:"lck",                    default_value:13,             in_flags:null,               optional:false}),
         }, fields))
     }
     get _error_prefix() {
@@ -10570,8 +10497,8 @@ class UniqueMob (SimpleMob) {
     }
     
     validate() {
-        errors = super.validate()
-        for (stat in ["str", "int", "wis", "dex", "con", "cha", "lck"]) {
+        let errors = super.validate()
+        for (let stat in ["str", "int", "wis", "dex", "con", "cha", "lck"]) {
             if (!(3 <= this.stats[stat] <= 22)) {
                 errors.push(`${this._error_prefix}.${stat} should be between 3 and 22`);
             }
@@ -10580,7 +10507,7 @@ class UniqueMob (SimpleMob) {
     }
     
     toString() {
-        errors = this.validate()
+        let errors = this.validate()
         if (errors.length) {
             return this.errors.join("\n")
         }
@@ -10657,6 +10584,7 @@ function testLoader() {
     loader.area.rooms.push(dungeon)
     
     let trapdoor_key = new GameObject();
+    console.log(trapdoor_key.name)
     trapdoor_key.vnum = "QQ01";
     trapdoor_key.sdesc = "{80}A large iron key";
     trapdoor_key.ldesc = "{80}A large iron key is lying about for anyone to take";
@@ -10672,6 +10600,8 @@ function testLoader() {
     trapdoor_key.condition = OBJECT_CONDITION.COND_USABLE;
     trapdoor_key.material = OBJECT_MATERIALS.MATERIAL_IRON;
     trapdoor_key.size = OBJECT_SIZES.SIZE_TINY;
+    
+    console.log(trapdoor_key.constructor.name)
     
     loader.area.objects.push(trapdoor_key);
     

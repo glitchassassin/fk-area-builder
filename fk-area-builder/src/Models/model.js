@@ -1,11 +1,10 @@
 class Field {
-    constructor(field_name, default_value=null, in_flags=null, optional=true, check_do_not_use=false) {
-        this.name = field_name;
-        this.value = default_value;
+    constructor(options) {
+        this.name = options.field_name;
+        this.value = options.default_value||null;
         this.options = {
-            in_flags: in_flags,
-            optional: optional,
-            check_do_not_use: check_do_not_use
+            in_flags: options.in_flags||null,
+            optional: options.optional||true
         };
     }
     
@@ -22,7 +21,7 @@ class Field {
                     if (this.options.in_flags && (this.value[i].code in this.options.in_flags)) {
                         errors.append(`.${this.name} "${this.value[i].code}" is not valid`)
                     }
-                    if (this.options.check_do_not_use && this.value[i].do_not_use) {
+                    if (this.value[i].do_not_use) {
                         errors.append(`.${this.name} "${this.value[i].code}" should not be used`)
                     }
                 }
@@ -34,7 +33,7 @@ class Field {
                 if (this.options.in_flags && (this.value.code in this.options.in_flags)) {
                     errors.append(`.${this.name} "${this.value.code}" is not valid`)
                 }
-                if (this.options.check_do_not_use && this.value.do_not_use) {
+                if (this.value.do_not_use) {
                     errors.append(`.${this.name} "${this.value.code}" should not be used`)
                 }
             }
@@ -45,24 +44,25 @@ class Field {
 
 class Model {
     constructor(field_list) {
-        this._fields = field_list;
-        this.__proto__ = new Proxy(this._fields, {
-            get: (container, property) => (property in container ? container[property].value : undefined),
+        var p = new Proxy(field_list, {
+            get: (container, property) => (property in container ? "value" in container[property]? container[property].value : container[property] : undefined),
             set: (container, property, value) => ((container[property] = value) ? true : true)
         });
-    }
-    
-    get _error_prefix() {
-        return "[Model]"
-    }
-    
-    validate() {
-        let errors = [];
-        for (let prop in this._fields) {
-            errors = errors.concat(this._fields[prop].validate().map((err)=>(`${this._error_prefix}.${err}`)));
+        p.validate = function() {
+            let errors = [];
+            for (let prop in this._fields) {
+                errors = errors.concat(this._fields[prop].validate().map((err)=>(`${this._error_prefix}.${err}`)));
+            }
+            return errors;
         }
-        return errors;
+        return p;
     }
+    
+    /*get _error_prefix() {
+        return "[Model]"
+    }*/
+    
+    
 }
 
 module.exports = {
