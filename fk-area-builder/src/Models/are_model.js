@@ -10563,7 +10563,7 @@ const MOB_REPAIR_MATERIAL = {
         sdesc: "SUBSTANCE_EXOTIC",
         do_not_use: false,
     }
-}
+};
 
 const MOB_REPAIR_RECHARGE = {
     SHOP_FIX: {
@@ -10574,6 +10574,299 @@ const MOB_REPAIR_RECHARGE = {
         code: "SHOP_RECHARGE",
         sdesc: "SHOP_RECHARGE",
     }
+};
+
+const MOB_WEAR_RESETS = {
+    WEAR_FINGER_L: {
+        code: "WEAR_FINGER_L",
+        sdesc: "WEAR_FINGER_L"
+    },
+    WEAR_FINGER_R: {
+        code: "WEAR_FINGER_R",
+        sdesc: "WEAR_FINGER_R"
+    },
+    WEAR_NECK_A: {
+        code: "WEAR_NECK_A",
+        sdesc: "WEAR_NECK_A"
+    },
+    WEAR_NECK_B: {
+        code: "WEAR_NECK_B",
+        sdesc: "WEAR_NECK_B"
+    },
+    WEAR_BODY: {
+        code: "WEAR_BODY",
+        sdesc: "WEAR_BODY"
+    },
+    WEAR_HEAD: {
+        code: "WEAR_HEAD",
+        sdesc: "WEAR_HEAD"
+    },
+    WEAR_LEGS: {
+        code: "WEAR_LEGS",
+        sdesc: "WEAR_LEGS"
+    },
+    WEAR_FEET: {
+        code: "WEAR_FEET",
+        sdesc: "WEAR_FEET"
+    },
+    WEAR_HANDS: {
+        code: "WEAR_HANDS",
+        sdesc: "WEAR_HANDS"
+    },
+    WEAR_ARMS: {
+        code: "WEAR_ARMS",
+        sdesc: "WEAR_ARMS"
+    },
+    WEAR_WAIST: {
+        code: "WEAR_WAIST",
+        sdesc: "WEAR_WAIST"
+    },
+    WEAR_WRIST_L: {
+        code: "WEAR_WRIST_L",
+        sdesc: "WEAR_WRIST_L"
+    },
+    WEAR_WRIST_R: {
+        code: "WEAR_WRIST_R",
+        sdesc: "WEAR_WRIST_R"
+    },
+    WEAR_LEFT_HAND: {
+        code: "WEAR_LEFT_HAND",
+        sdesc: "WEAR_LEFT_HAND"
+    },
+    WEAR_RIGHT_HAND: {
+        code: "WEAR_RIGHT_HAND",
+        sdesc: "WEAR_RIGHT_HAND"
+    },
+    WEAR_BOTH_HANDS: {
+        code: "WEAR_BOTH_HANDS",
+        sdesc: "WEAR_BOTH_HANDS"
+    },
+    WEAR_EARS: {
+        code: "WEAR_EARS",
+        sdesc: "WEAR_EARS"
+    },
+    WEAR_EYES: {
+        code: "WEAR_EYES",
+        sdesc: "WEAR_EYES"
+    }
+};
+
+const DOOR_RESETS = {
+    DOOR_OPEN_UNLOCKED: {
+        code: "DOOR_OPEN_UNLOCKED",
+        sdesc: "DOOR_OPEN_UNLOCKED"
+    },
+    DOOR_CLOSED_UNLOCKED: {
+        code: "DOOR_CLOSED_UNLOCKED",
+        sdesc: "DOOR_CLOSED_UNLOCKED"
+    },
+    DOOR_CLOSED_LOCKED: {
+        code: "DOOR_CLOSED_LOCKED",
+        sdesc: "DOOR_CLOSED_LOCKED"
+    },
+    DOOR_NONE: {
+        code: "DOOR_NONE",
+        sdesc: "DOOR_NONE"
+    },
+};
+
+const RESET_BIT_CODES = {
+    BIT_RESET_ROOM: {
+        code: "BIT_RESET_ROOM",
+        sdesc: "BIT_RESET_ROOM"
+    },
+    BIT_RESET_TOGGLE: {
+        code: "BIT_RESET_TOGGLE",
+        sdesc: "BIT_RESET_TOGGLE"
+    },
+    BIT_RESET_SET: {
+        code: "BIT_RESET_SET",
+        sdesc: "BIT_RESET_SET"
+    },
+    BIT_RESET_REMOVE: {
+        code: "BIT_RESET_REMOVE",
+        sdesc: "BIT_RESET_REMOVE"
+    }
+};
+
+const MOB_SPECIALS = {
+    spec_fido: {
+        code: "spec_fido",
+        sdesc: "spec_fido",
+        ldesc: "Eats corpses",
+        do_not_use: false
+    },
+    spec_cast_adept: {
+        code: "spec_cast_adept",
+        sdesc: "spec_cast_adept",
+        ldesc: "For constantly healing mobs",
+        do_not_use: false
+    },
+    spec_breath_fire: {
+        code: "spec_breath_fire",
+        sdesc: "spec_breath_fire",
+        ldesc: "Uses fire breath weapon",
+        do_not_use: false
+    },
+    spec_breath_frost: {
+        code: "spec_breath_frost",
+        sdesc: "spec_breath_frost",
+        ldesc: "Uses frost breath weapon",
+        do_not_use: false
+    },
+    spec_breath_acid: {
+        code: "spec_breath_acid",
+        sdesc: "spec_breath_acid",
+        ldesc: "Uses acid breath weapon",
+        do_not_use: false
+    },
+    spec_breath_gas: {
+        code: "spec_breath_gas",
+        sdesc: "spec_breath_gas",
+        ldesc: "Uses gas breath weapon",
+        do_not_use: false
+    },
+    spec_breath_lightning: {
+        code: "spec_breath_lightning",
+        sdesc: "spec_breath_lightning",
+        ldesc: "Uses fire lightning weapon",
+        do_not_use: false
+    },
+    spec_breath_any: {
+        code: "spec_breath_any",
+        sdesc: "spec_breath_any",
+        ldesc: "Uses a random breath weapon in battle",
+        do_not_use: false
+    },
+    spec_poison: {
+        code: "spec_poison",
+        sdesc: "spec_poison",
+        ldesc: "Poisons foe with a bite",
+        do_not_use: false
+    },
+    spec_guard: {
+        code: "spec_guard",
+        sdesc: "spec_guard",
+        ldesc: "For guards in the justice system",
+        do_not_use: false
+    },
+    spec_cast_cleric: {
+        code: "spec_cast_cleric",
+        sdesc: "spec_cast_cleric",
+        ldesc: "General Cleric in battle",
+        do_not_use: false
+    },
+    spec_janitor: {
+        code: "spec_janitor",
+        sdesc: "spec_janitor",
+        ldesc: "Cleans up trash and drinks",
+        do_not_use: false
+    },
+    spec_cast_undead: {
+        code: "spec_cast_undead",
+        sdesc: "spec_cast_undead",
+        ldesc: "Casts curse, drain type spells in battle",
+        do_not_use: false
+    },
+    spec_executioner: {
+        code: "spec_executioner",
+        sdesc: "spec_executioner",
+        ldesc: "Old justice for dealing with killers and thieves. Do not use.",
+        do_not_use: true
+    },
+    spec_judge: {
+        code: "spec_judge",
+        sdesc: "spec_judge",
+        ldesc: "For judges in the justice system",
+        do_not_use: false
+    },
+    spec_pet_gen: {
+        code: "spec_pet_gen",
+        sdesc: "spec_pet_gen",
+        ldesc: "Looks for master, rests when master does",
+        do_not_use: false
+    },
+    spec_paladin_warhorse: {
+        code: "spec_paladin_warhorse",
+        sdesc: "spec_paladin_warhorse",
+        ldesc: "For a paladins warhorse, looks for master, aids, rescues, alerts to evil, doesn't tire",
+        do_not_use: false
+    },
+    spec_pet_hawk: {
+        code: "spec_pet_hawk",
+        sdesc: "spec_pet_hawk",
+        ldesc: "Will work for all pet birds",
+        do_not_use: false
+    },
+    spec_pet_dog: {
+        code: "spec_pet_dog",
+        sdesc: "spec_pet_dog",
+        ldesc: "Does spec_pet_gen plus also rescues master, race echos, sniffs invis chars",
+        do_not_use: false
+    },
+    spec_pet_panther: {
+        code: "spec_pet_panther",
+        sdesc: "spec_pet_panther",
+        ldesc: "For companion large cats, see dog",
+        do_not_use: false
+    },
+    spec_pet_bear: {
+        code: "spec_pet_bear",
+        sdesc: "spec_pet_bear",
+        ldesc: "For companion bears, see dog",
+        do_not_use: false
+    },
+    spec_pet_wolverine: {
+        code: "spec_pet_wolverine",
+        sdesc: "spec_pet_wolverine",
+        ldesc: "For companion wolves, see dog",
+        do_not_use: false
+    }
+};
+
+const QUEST_EVENT_CODES = {
+    SPECIAL_EVENT: {
+        code: "SPECIAL_EVENT",
+        sdesc: "SPECIAL_EVENT",
+        color_code: "{F0}", 
+        ldesc: "Special Event or Misc."
+    },
+    IN_PROGRESS: {
+        code: "IN_PROGRESS",
+        sdesc: "IN_PROGRESS",
+        color_code: "{E0}", 
+        ldesc: "Quest in progress."
+    },
+    COMPLETED: {
+        code: "COMPLETED",
+        sdesc: "COMPLETED",
+        color_code: "{A0}", 
+        ldesc: "Completed quest."
+    },
+    FAILED: {
+        code: "FAILED",
+        sdesc: "FAILED",
+        color_code: "{90}", 
+        ldesc: "Failed quest."
+    },
+    KNOWLEDGE: {
+        code: "KNOWLEDGE",
+        sdesc: "KNOWLEDGE",
+        color_code: "{20}", 
+        ldesc: "Knowledge Geography etc."
+    },
+    TRADE: {
+        code: "TRADE",
+        sdesc: "TRADE",
+        color_code: "{30}", 
+        ldesc: "Trade learned."
+    },
+    NOT_STARTED: {
+        code: "NOT_STARTED",
+        sdesc: "NOT_STARTED",
+        color_code: "{B0}", 
+        ldesc: "Quest not yet started."
+    },
 }
 
 // Model classes
@@ -10611,10 +10904,16 @@ class Area extends Model {
             mining_material:        new Field({field_name:"mining_material",        default_value: null,    in_flags:OBJECT_MATERIALS,  optional:true}),
             logging_material:       new Field({field_name:"logging_material",       default_value: null,    in_flags:OBJECT_MATERIALS,  optional:true}),
             rooms:                  new Field({field_name:"rooms",                  default_value: [],      in_flags:null,              optional:true}),
+            room_resets:            new Field({field_name:"room_resets",            default_value: [],      in_flags:null,              optional:true}),
+            door_resets:            new Field({field_name:"door_resets",            default_value: [],      in_flags:null,              optional:true}),
             objects:                new Field({field_name:"objects",                default_value: [],      in_flags:null,              optional:true}),
+            item_resets:            new Field({field_name:"item_resets",            default_value: [],      in_flags:null,              optional:true}),
             mobs:                   new Field({field_name:"mobs",                   default_value: [],      in_flags:null,              optional:true}),
+            mob_resets:             new Field({field_name:"mob_resets",             default_value: [],      in_flags:null,              optional:true}),
+            mob_specials:           new Field({field_name:"mob_specials",           default_value: [],      in_flags:null,              optional:true}),
             shops:                  new Field({field_name:"shops",                  default_value: [],      in_flags:null,              optional:true}),
             repairs:                new Field({field_name:"repairs",                default_value: [],      in_flags:null,              optional:true}),
+            quest_log:              new Field({field_name:"quest_log",              default_value: [],      in_flags:null,              optional:true}),
         }, fields))
     }
     get _error_prefix() {
@@ -10687,8 +10986,33 @@ ${this.wilderness_flag} ${this.reset_duration}
 ${this.justice_system != null ? this.justice_system.toString() : ""}
 ${this.mining_material != null ? "#MINING " + this.mining_material.code : ""}
 ${this.logging_material != null ? "#LOGGING " + this.logging_material.code : ""}
-${this.rooms.length ? "#ROOMS\n" + this.rooms.map((room)=>(room.toString())).join("\n") : ""}
-${this.objects.length ? "#OBJECTS\n" + this.objects.map((obj)=>(obj.toString())).join("\n") : ""}
+${this.rooms.length ? `#ROOMS
+${this.rooms.map((room)=>(room.toString())).join("\n")}
+S` : ""}
+${this.objects.length ? `#OBJECTS
+${this.objects.map((obj)=>(obj.toString())).join("\n")}
+#0`: ""}
+${this.quest_log.length ? `#QUESTS
+${this.quest_log.map((quest)=>(quest.toString())).join("\n")}
+#0`: ""}
+${this.mobs.length ? `#MOBILES
+${this.mobs.map((mob)=>(mob.toString())).join("\n")}
+#0` : ""}
+#RESETS
+${this.mob_resets.map((res)=>(res.toString())).join("\n") /* Includes equipment resets */}
+${this.item_resets.map((res)=>(res.toString())).join("\n")}
+${this.room_resets.map((res)=>(res.toString())).join("\n")}
+${this.door_resets.map((res)=>(res.toString())).join("\n")}
+S
+${this.shops.length ? `#SHOPS
+${this.shops.map((obj)=>(obj.toString())).join("\n")}
+0` : ""}
+${this.repairs.length ? `#REPAIRS
+${this.repairs.map((obj)=>(obj.toString())).join("\n")}
+0` : ""}
+#SPECIALS
+${this.mob_specials.map((res)=>(res.toString())).join("\n")}
+S
 #$
 `.replace(/\n[\n]+/g, "\n");
     }
@@ -10780,6 +11104,7 @@ class Room extends Model {
             teleport_target:    new Field({field_name:"teleport_target",    default_value: 0,       in_flags:null,          optional:false}),
             tunnel:             new Field({field_name:"tunnel",             default_value: 0,       in_flags:null,          optional:false}),
             exits:              new Field({field_name:"exits",              default_value: [],      in_flags:null,          optional:true}),
+            door_resets:        new Field({field_name:"door_resets",        default_value: [],      in_flags:null,          optional:true}),
             extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,          optional:true}),
         }, fields));
     }
@@ -10943,20 +11268,22 @@ ${this.programs.map((program) => (program.toString())).join("\n")}
 class SimpleMob extends Model {
     constructor(fields) {
         super(Object.assign({
-            vnum:                   new Field({field_name:"vnum",                    default_value:null,                     in_flags:null,              optional:false}),
-            sdesc:                  new Field({field_name:"sdesc",                   default_value:null,                     in_flags:null,              optional:false}),
-            ldesc:                  new Field({field_name:"ldesc",                   default_value:null,                     in_flags:null,              optional:false}),
-            fulldesc:               new Field({field_name:"fulldesc",                default_value:null,                     in_flags:null,              optional:false}),
-            keywords:               new Field({field_name:"keywords",                default_value:null,                     in_flags:null,              optional:false}),
-            level:                  new Field({field_name:"level",                   default_value:null,                     in_flags:null,              optional:false}),
-            mob_class:              new Field({field_name:"mob_class",               default_value:null,                     in_flags:MOB_CLASSES,       optional:false}),
-            race:                   new Field({field_name:"race",                    default_value:null,                     in_flags:MOB_RACES,         optional:false}),
-            sex:                    new Field({field_name:"sex",                     default_value:null,                     in_flags:MOB_SEXES,         optional:false}),
-            position:               new Field({field_name:"position",                default_value:null,                     in_flags:MOB_POSITIONS,     optional:false}),
-            deity:                  new Field({field_name:"deity",                   default_value:MOB_DEITIES.DEITY_NONE,   in_flags:MOB_DEITIES,       optional:true}),
-            act_flags:              new Field({field_name:"act_flags",               default_value:[],                       in_flags:MOB_ACT_FLAGS,     optional:false}),
-            understood_languages:   new Field({field_name:"understood_languages",    default_value:[],                       in_flags:LANGUAGE_FLAGS,    optional:false}),
-            spoken_languages:       new Field({field_name:"spoken_languages",        default_value:[],                       in_flags:LANGUAGE_FLAGS,    optional:false}),
+            vnum:                   new Field({field_name:"vnum",                   default_value:null,                     in_flags:null,              optional:false}),
+            sdesc:                  new Field({field_name:"sdesc",                  default_value:null,                     in_flags:null,              optional:false}),
+            ldesc:                  new Field({field_name:"ldesc",                  default_value:null,                     in_flags:null,              optional:false}),
+            fulldesc:               new Field({field_name:"fulldesc",               default_value:null,                     in_flags:null,              optional:false}),
+            keywords:               new Field({field_name:"keywords",               default_value:null,                     in_flags:null,              optional:false}),
+            level:                  new Field({field_name:"level",                  default_value:null,                     in_flags:null,              optional:false}),
+            mob_class:              new Field({field_name:"mob_class",              default_value:null,                     in_flags:MOB_CLASSES,       optional:false}),
+            race:                   new Field({field_name:"race",                   default_value:null,                     in_flags:MOB_RACES,         optional:false}),
+            sex:                    new Field({field_name:"sex",                    default_value:null,                     in_flags:MOB_SEXES,         optional:false}),
+            position:               new Field({field_name:"position",               default_value:null,                     in_flags:MOB_POSITIONS,     optional:false}),
+            deity:                  new Field({field_name:"deity",                  default_value:MOB_DEITIES.DEITY_NONE,   in_flags:MOB_DEITIES,       optional:true}),
+            act_flags:              new Field({field_name:"act_flags",              default_value:[],                       in_flags:MOB_ACT_FLAGS,     optional:false}),
+            understood_languages:   new Field({field_name:"understood_languages",   default_value:[],                       in_flags:LANGUAGE_FLAGS,    optional:false}),
+            spoken_languages:       new Field({field_name:"spoken_languages",       default_value:[],                       in_flags:LANGUAGE_FLAGS,    optional:false}),
+            can_train:              new Field({field_name:"can_train",              default_value:[],                       in_flags:null,              optional:false}),
+            equipment_resets:       new Field({field_name:"equipment_resets",       default_value:[],                       in_flags:null,              optional:false}),
         }, fields))
     }
     get _error_prefix() {
@@ -10978,6 +11305,7 @@ S ${this.level} ${this.class} ${this.race} ${this.sex} ${this.position} ${this.d
 ${this.act_flags.map((flag)=>(flag.code)).join("|")}
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
+${this.can_train.map((train)=>(train.toString())).join("\n")}
 |`
     }
     
@@ -11197,6 +11525,258 @@ ${this.profit_modifier} ${this.repair} ${this.open_hour} ${this.close_hour} ; ${
     }
 }
 
+class MobReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:    new Field({field_name:"defunct",    default_value: 0,       in_flags:null,  optional:false}),
+            mob:        new Field({field_name:"mob",        default_value: null,    in_flags:null,  optional:false}),
+            mob_limit:  new Field({field_name:"mob_limit",  default_value: 1,       in_flags:null,  optional:false}),
+            room:       new Field({field_name:"room",       default_value: null,    in_flags:null,  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[MobReset:${this.mob.vnum} in ${this.room.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room.vnum} ; ${this.mob.sdesc} in ${this.room.sdesc}
+${this.mob.equipment_resets.map((equip)=>(equip.toString())).join("\n")}`
+    }
+}
+
+class EquipmentReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,              optional:false}),
+            item:           new Field({field_name:"item",           default_value: 1,       in_flags:null,              optional:false}),
+            equip_limit:    new Field({field_name:"equip_limit",    default_value: 1,       in_flags:null,              optional:false}),
+            wear_loc:       new Field({field_name:"wear_loc",       default_value: null,    in_flags:MOB_WEAR_RESETS,   optional:true}),
+            trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,              optional:true}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[EquipmentReset:${this.mob.vnum} in ${this.room.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        if (this.wear_loc) {
+            // Equipped
+            return ` E ${this.defunct} ${this.item.vnum} ${this.equip_limit} ${this.wear_loc.code} ; ${this.item.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+        }
+        else {
+            // Held
+            return ` G ${this.defunct} ${this.item.vnum} ${this.equip_limit} ; ${this.item.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+        }
+    }
+}
+
+class ItemReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,  optional:false}),
+            item:           new Field({field_name:"item",           default_value: null,    in_flags:null,  optional:false}),
+            item_limit:     new Field({field_name:"item_limit",     default_value: 1,       in_flags:null,  optional:false}),
+            room_container: new Field({field_name:"room_container", default_value: null,    in_flags:null,  optional:false}),
+            hidden:         new Field({field_name:"hidden",         default_value: false,   in_flags:null,  optional:false}),
+            buried:         new Field({field_name:"buried",         default_value: false,   in_flags:null,  optional:false}),
+            trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,  optional:true}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[ItemReset:${this.mob.vnum} in ${this.room_container.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        if (this.room_container instanceof GameObject) {
+            // Container (hidden is handled differently)
+            return `P ${this.hidden ? 1 : 0} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+        }
+        else if (this.hidden) {
+            return `H ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+        }
+        else if (this.buried) {
+            return `U ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+        }
+        return `O ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+    }
+}
+
+class DoorReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,          optional:false}),
+            room:           new Field({field_name:"room",           default_value: null,    in_flags:null,          optional:false}),
+            exit:           new Field({field_name:"exit",           default_value: null,    in_flags:null,          optional:false}),
+            exit_state:     new Field({field_name:"exit_state",     default_value: null,    in_flags:DOOR_RESETS,   optional:false}),
+            trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,          optional:true}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[DoorReset:${this.exit.code} from ${this.room.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `D ${this.defunct} ${this.room.vnum} ${this.exit.direction} ${this.exit_state.code} ; ${this.room.sdesc}
+${this.trap_reset ? this.trap_reset.toString() : ""}`
+    }
+}
+
+class RandomDoorReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:        new Field({field_name:"defunct",    default_value: 0,       in_flags:null,  optional:false}),
+            room:           new Field({field_name:"room",       default_value: null,    in_flags:null,  optional:false}),
+            last_door:      new Field({field_name:"last_door",  default_value: null,    in_flags:null,  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[RandomDoorReset:0-${this.last_door} from ${this.room.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `R ${this.defunct} ${this.room.vnum} ${this.last_door} ; ${this.room.sdesc} rearrange exits 0-${this.last_door} randomly`
+    }
+}
+
+class RoomReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,              optional:false}),
+            room:           new Field({field_name:"room",           default_value: null,    in_flags:null,              optional:false}),
+            bit_type:       new Field({field_name:"bit_type",       default_value: null,    in_flags:RESET_BIT_CODES,   optional:false}),
+            flag:           new Field({field_name:"flag",           default_value: null,    in_flags:ROOM_FLAGS,        optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[RoomReset:${this.room.vnum}: ${this.bit_type.code} ${this.flag.code}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `B ${this.defunct} ${this.room.vnum} ${ROOM_FLAGS.BIT_RESET_ROOM}|${this.bit_type} ${this.flag.code} ; ${this.room.sdesc}`
+    }
+}
+
+// TrapResets can be attached to DoorRests, ItemResets, or EquipmentResets
+class TrapReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            reset_interval: new Field({field_name:"reset_interval", default_value: 0,                           in_flags:null,              optional:false}),
+            trap_type:      new Field({field_name:"trap_type",      default_value: null,                        in_flags:TRAP_TYPES,        optional:false}),
+            trap_charges:   new Field({field_name:"trap_charges",   default_value: null,                        in_flags:RESET_BIT_CODES,   optional:false}),
+            trigger_1:      new Field({field_name:"trigger_1",      default_value: TRAP_TRIGGERS.TRIGGER_NONE,  in_flags:TRAP_TRIGGERS,     optional:false}),
+            trigger_2:      new Field({field_name:"trigger_2",      default_value: TRAP_TRIGGERS.TRIGGER_NONE,  in_flags:TRAP_TRIGGERS,     optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrapReset:${this.trap_type.code}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return ` T ${this.reset_interval} ${this.trap_type.code} ${this.trap_type.code} ${this.trigger_1.code}|${this.trigger_2.code}`
+    }
+}
+
+// CoinResets go in mob's equipment_resets list
+class CoinReset extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            defunct:        new Field({field_name:"defunct",        default_value: 1,                           in_flags:null,          optional:false}),
+            coin_type:      new Field({field_name:"coin_type",      default_value: null,                        in_flags:COIN_TYPES,    optional:false}),
+            dice_count:     new Field({field_name:"dice_count",     default_value: null,                        in_flags:null,          optional:false}),
+            dice_sides:     new Field({field_name:"dice_sides",     default_value: null,                        in_flags:null,          optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[CoinReset:${this.trap_type.code}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return ` C ${this.defunt} ${this.coin_type.code} ${this.dice_count} ${this.dice_sides}`
+    }
+}
+
+class MobSpecial extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            mob:        new Field({field_name:"mob",        default_value: null,    in_flags:null,          optional:false}),
+            special:    new Field({field_name:"special",    default_value: null,    in_flags:MOB_SPECIALS,  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[MobSpecial:${this.mob.vnum} ${this.special.code}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `M ${this.mob.vnum} ${this.special.code}`
+    }
+}
+
+class QuestLog extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            area_vnum:  new Field({field_name:"area_vnum",  default_value: "QQ00",  in_flags:null,              optional:false}),
+            qbit_start: new Field({field_name:"qbit_start", default_value: null,    in_flags:null,              optional:false}),
+            qbit_stop:  new Field({field_name:"qbit_stop",  default_value: null,    in_flags:null,              optional:false}),
+            min_qbit:   new Field({field_name:"min_qbit",   default_value: null,    in_flags:null,              optional:false}),
+            max_qbit:   new Field({field_name:"max_qbit",   default_value: null,    in_flags:null,              optional:false}),
+            event_code: new Field({field_name:"event_code", default_value: null,    in_flags:QUEST_EVENT_CODES, optional:false}),
+            qlog_text:  new Field({field_name:"qlog_text",  default_value: null,    in_flags:null,              optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[QuestLog:${this.qlog_text}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `${this.area_vnum} ${this.qbit_start} ${this.qbit_stop} ${this.min_qbit} ${this.max_qbit} ${this.event_code}${this.qlog_text}`
+    }
+}
 
 //export default Loader;
 
