@@ -6,58 +6,72 @@ var Model = m.Model
 
 const AREA_CATEGORIES = {
     WILDERNESS: {
+        code: "WILDERNESS",
         color_code: "{20}",
         sdesc: "Wilderness areas"
     },
     LOW_LEVEL: {
+        code: "LOW_LEVEL",
         color_code: "{30}",
         sdesc: "Low level dungeons/quest areas"
     },
     INCOMPLETE: {
+        code: "INCOMPLETE",
         color_code: "{40}",
         sdesc: "Incomplete areas"
     },
     MID_LEVEL: {
+        code: "MID_LEVEL",
         color_code: "{50}",
         sdesc: "Mid level dungeons/quest areas"
     },
     HIGH_LEVEL: {
+        code: "HIGH_LEVEL",
         color_code: "{60}",
         sdesc: "High level dungeons/quest areas"
     },
     OTHER_PLANES: {
+        code: "OTHER_PLANES",
         color_code: "{70}",
         sdesc: "Areas from other planes"
     },
     UNDERDARK: {
+        code: "UNDERDARK",
         color_code: "{80}",
         sdesc: "Underdark Areas"
     },
     SPECIAL: {
+        code: "SPECIAL",
         color_code: "{90}",
         sdesc: "Special areas"
     },
     VILLAGES: {
+        code: "VILLAGES",
         color_code: "{A0}",
         sdesc: "Villages and encampments"
     },
     CITIES: {
+        code: "CITIES",
         color_code: "{B0}",
         sdesc: "Major cities and towns"
     },
     IMMS_RPS: {
+        code: "IMMS_RPS",
         color_code: "{C0}",
         sdesc: "Areas for imms and special rps"
     },
     GUILDHOUSES_ACADEMIES: {
+        code: "GUILDHOUSES_ACADEMIES",
         color_code: "{D0}",
         sdesc: "Guildhouses and Academies"
     },
     ORGANIZATIONS: {
+        code: "ORGANIZATIONS",
         color_code: "{E0}",
         sdesc: "Organization HQ and side areas"
     },
     TEMPLES: {
+        code: "TEMPLES",
         color_code: "{F0}",
         sdesc: "Temples"
     },
@@ -5436,39 +5450,35 @@ const EXIT_DOOR_FLAGS = {
 
 const EXIT_SIZES = {
     EXIT_SIZE_ANY: {
-        code: 0,
+        code: "EXIT_SIZE_ANY",
         sdesc: "EXIT_SIZE_ANY",
     },
-    EXIT_SIZE_ANY_1: {
-        code: 1,
-        sdesc: "EXIT_SIZE_ANY_1",
-    },
     EXIT_SIZE_TINY: {
-        code: 1000,
+        code: "EXIT_SIZE_TINY",
         sdesc: "EXIT_SIZE_TINY",
     },
     EXIT_SIZE_SMALL: {
-        code: 1001,
+        code: "EXIT_SIZE_SMALL",
         sdesc: "EXIT_SIZE_SMALL",
     },
     EXIT_SIZE_MEDIUM: {
-        code: 1002,
+        code: "EXIT_SIZE_MEDIUM",
         sdesc: "EXIT_SIZE_MEDIUM",
     },
     EXIT_SIZE_NORMAL: {
-        code: 1002,
+        code: "EXIT_SIZE_NORMAL",
         sdesc: "EXIT_SIZE_NORMAL",
     },
     EXIT_SIZE_LARGE: {
-        code: 1003,
+        code: "EXIT_SIZE_LARGE",
         sdesc: "EXIT_SIZE_LARGE",
     },
     EXIT_SIZE_HUGE: {
-        code: 1004,
+        code: "EXIT_SIZE_HUGE",
         sdesc: "EXIT_SIZE_HUGE",
     },
     EXIT_SIZE_GIANT: {
-        code: 1005,
+        code: "EXIT_SIZE_GIANT",
         sdesc: "EXIT_SIZE_GIANT",
     }
 };
@@ -8546,982 +8556,982 @@ const MOB_RIS = {
 };
 
 const MOB_SPELLS = {
-    ACID_ARROW: {
+    "acid arrow": {
         code: "acid arrow",
         sdesc: "acid arrow",
         do_not_use: false
     },
-    ACID_BLAST: {
+    "acid blast": {
         code: "acid blast",
         sdesc: "acid blast",
         do_not_use: false
     },
-    ACID_BREATH: {
+    "acid breath": {
         code: "acid breath",
         sdesc: "acid breath",
         do_not_use: false
     },
-    ALERTNESS: {
+    "alertness": {
         code: "alertness",
         sdesc: "alertness",
         do_not_use: false
     },
-    ANIMATE_DEAD: {
+    "animate dead": {
         code: "animate dead",
         sdesc: "animate dead",
         do_not_use: false
     },
-    ANIMATE_OBJECT: {
+    "animate object": {
         code: "animate object",
         sdesc: "animate object",
         do_not_use: false
     },
-    ANTIMAGIC_SHELL: {
+    "antimagic shell": {
         code: "antimagic shell",
         sdesc: "antimagic shell",
         do_not_use: false
     },
-    ARMOR: {
+    "armor": {
         code: "armor",
         sdesc: "armor",
         do_not_use: false
     },
-    ASTRAL_WALK: {
+    "astral walk": {
         code: "astral walk",
         sdesc: "astral walk",
         do_not_use: false
     },
-    BARKSKIN: {
+    "barkskin": {
         code: "barkskin",
         sdesc: "barkskin",
         do_not_use: false
     },
-    BLAZEBANE: {
+    "blazebane": {
         code: "blazebane",
         sdesc: "blazebane",
         do_not_use: false
     },
-    BLESS: {
+    "bless": {
         code: "bless",
         sdesc: "bless",
         do_not_use: false
     },
-    BLINDNESS: {
+    "blindness": {
         code: "blindness",
         sdesc: "blindness",
         do_not_use: false
     },
-    BLOOD_OF_CYRIC: {
+    "blood of cyric": {
         code: "blood of cyric",
         sdesc: "blood of cyric",
         do_not_use: false
     },
-    BULLS_STRENGTH: {
+    "bulls strength": {
         code: "bulls strength",
         sdesc: "bulls strength",
         do_not_use: false
     },
-    BURNING_HANDS: {
+    "burning hands": {
         code: "burning hands",
         sdesc: "burning hands",
         do_not_use: false
     },
-    CALL_LIGHTNING: {
+    "call lightning": {
         code: "call lightning",
         sdesc: "call lightning",
         do_not_use: false
     },
-    CAUSE_CRITICAL: {
+    "cause critical": {
         code: "cause critical",
         sdesc: "cause critical",
         do_not_use: false
     },
-    CAUSE_LIGHT: {
+    "cause light": {
         code: "cause light",
         sdesc: "cause light",
         do_not_use: false
     },
-    CAUSE_SERIOUS: {
+    "cause serious": {
         code: "cause serious",
         sdesc: "cause serious",
         do_not_use: false
     },
-    CHAIN_LIGHTNING: {
+    "chain lightning": {
         code: "chain lightning",
         sdesc: "chain lightning",
         do_not_use: false
     },
-    CHANGE_SEX: {
+    "change sex": {
         code: "change sex",
         sdesc: "change sex",
         do_not_use: false
     },
-    CHARGED_BEACON: {
+    "charged beacon": {
         code: "charged beacon",
         sdesc: "charged beacon",
         do_not_use: false
     },
-    CHARIOT_OF_THE_SUN: {
+    "chariot of the sun": {
         code: "chariot of the sun",
         sdesc: "chariot of the sun",
         do_not_use: false
     },
-    CHARM_MONSTER: {
+    "charm monster": {
         code: "charm monster",
         sdesc: "charm monster",
         do_not_use: false
     },
-    CHARM_PERSON: {
+    "charm person": {
         code: "charm person",
         sdesc: "charm person",
         do_not_use: false
     },
-    CHILL_TOUCH: {
+    "chill touch": {
         code: "chill touch",
         sdesc: "chill touch",
         do_not_use: false
     },
-    CLAIRVOYANCE: {
+    "clairvoyance": {
         code: "clairvoyance",
         sdesc: "clairvoyance",
         do_not_use: false
     },
-    COLOR_SPRAY: {
+    "color spray": {
         code: "color spray",
         sdesc: "color spray",
         do_not_use: false
     },
-    COMPREHEND_LANGUAGES: {
+    "comprehend languages": {
         code: "comprehend languages",
         sdesc: "comprehend languages",
         do_not_use: false
     },
-    CONE_OF_COLD: {
+    "cone of cold": {
         code: "cone of cold",
         sdesc: "cone of cold",
         do_not_use: false
     },
-    CONJURE_ELEMENTAL: {
+    "conjure elemental": {
         code: "conjure elemental",
         sdesc: "conjure elemental",
         do_not_use: false
     },
-    CONTINUAL_LIGHT: {
+    "continual light": {
         code: "continual light",
         sdesc: "continual light",
         do_not_use: false
     },
-    CONTROL_UNDEAD: {
+    "control undead": {
         code: "control undead",
         sdesc: "control undead",
         do_not_use: false
     },
-    CONTROL_WEATHER: {
+    "control weather": {
         code: "control weather",
         sdesc: "control weather",
         do_not_use: false
     },
-    CREATE_FOOD: {
+    "create food": {
         code: "create food",
         sdesc: "create food",
         do_not_use: false
     },
-    CREATE_OBJECT: {
+    "create object": {
         code: "create object",
         sdesc: "create object",
         do_not_use: false
     },
-    CREATE_SPRING: {
+    "create spring": {
         code: "create spring",
         sdesc: "create spring",
         do_not_use: false
     },
-    CREATE_WATER: {
+    "create water": {
         code: "create water",
         sdesc: "create water",
         do_not_use: false
     },
-    CURE_BLINDNESS: {
+    "cure blindness": {
         code: "cure blindness",
         sdesc: "cure blindness",
         do_not_use: false
     },
-    CURE_CRITICAL: {
+    "cure critical": {
         code: "cure critical",
         sdesc: "cure critical",
         do_not_use: false
     },
-    CURE_LIGHT: {
+    "cure light": {
         code: "cure light",
         sdesc: "cure light",
         do_not_use: false
     },
-    CURE_POISON: {
+    "cure poison": {
         code: "cure poison",
         sdesc: "cure poison",
         do_not_use: false
     },
-    CURE_SERIOUS: {
+    "cure serious": {
         code: "cure serious",
         sdesc: "cure serious",
         do_not_use: false
     },
-    CURSE: {
+    "curse": {
         code: "curse",
         sdesc: "curse",
         do_not_use: false
     },
-    DELAYED_BLAST: {
+    "delayed blast": {
         code: "delayed blast",
         sdesc: "delayed blast",
         do_not_use: false
     },
-    DETECT_BURIED: {
+    "detect buried": {
         code: "detect buried",
         sdesc: "detect buried",
         do_not_use: false
     },
-    DETECT_EVIL: {
+    "detect evil": {
         code: "detect evil",
         sdesc: "detect evil",
         do_not_use: false
     },
-    DETECT_HIDDEN: {
+    "detect hidden": {
         code: "detect hidden",
         sdesc: "detect hidden",
         do_not_use: false
     },
-    DETECT_INVIS: {
+    "detect invis": {
         code: "detect invis",
         sdesc: "detect invis",
         do_not_use: false
     },
-    DETECT_MAGIC: {
+    "detect magic": {
         code: "detect magic",
         sdesc: "detect magic",
         do_not_use: false
     },
-    DETECT_POISON: {
+    "detect poison": {
         code: "detect poison",
         sdesc: "detect poison",
         do_not_use: false
     },
-    DISINTEGRATE: {
+    "disintegrate": {
         code: "disintegrate",
         sdesc: "disintegrate",
         do_not_use: false
     },
-    DISJUNCTION: {
+    "disjunction": {
         code: "disjunction",
         sdesc: "disjunction",
         do_not_use: false
     },
-    DISPEL_EVIL: {
+    "dispel evil": {
         code: "dispel evil",
         sdesc: "dispel evil",
         do_not_use: false
     },
-    DISPEL_MAGIC: {
+    "dispel magic": {
         code: "dispel magic",
         sdesc: "dispel magic",
         do_not_use: false
     },
-    DIVINITY: {
+    "divinity": {
         code: "divinity",
         sdesc: "divinity",
         do_not_use: false
     },
-    DRAGONSKIN: {
+    "dragonskin": {
         code: "dragonskin",
         sdesc: "dragonskin",
         do_not_use: false
     },
-    DREAM: {
+    "dream": {
         code: "dream",
         sdesc: "dream",
         do_not_use: false
     },
-    EARTHQUAKE: {
+    "earthquake": {
         code: "earthquake",
         sdesc: "earthquake",
         do_not_use: false
     },
-    ELTSACS_FEAR: {
+    "eltsacs fear": {
         code: "eltsacs fear",
         sdesc: "eltsacs fear",
         do_not_use: false
     },
-    ENCHANT_ARMOR: {
+    "enchant armor": {
         code: "enchant armor",
         sdesc: "enchant armor",
         do_not_use: false
     },
-    ENCHANT_WEAPON: {
+    "enchant weapon": {
         code: "enchant weapon",
         sdesc: "enchant weapon",
         do_not_use: false
     },
-    ENERGY_DRAIN: {
+    "energy drain": {
         code: "energy drain",
         sdesc: "energy drain",
         do_not_use: false
     },
-    ENTANGLE: {
+    "entangle": {
         code: "entangle",
         sdesc: "entangle",
         do_not_use: false
     },
-    ETHEREAL_FLYER: {
+    "ethereal flyer": {
         code: "ethereal flyer",
         sdesc: "ethereal flyer",
         do_not_use: false
     },
-    FAERIE_FIRE: {
+    "faerie fire": {
         code: "faerie fire",
         sdesc: "faerie fire",
         do_not_use: false
     },
-    FAERIE_FOG: {
+    "faerie fog": {
         code: "faerie fog",
         sdesc: "faerie fog",
         do_not_use: false
     },
-    FARHEAL: {
+    "farheal": {
         code: "farheal",
         sdesc: "farheal",
         do_not_use: false
     },
-    FATIGUE: {
+    "fatigue": {
         code: "fatigue",
         sdesc: "fatigue",
         do_not_use: false
     },
-    FEEBLEMIND: {
+    "feeblemind": {
         code: "feeblemind",
         sdesc: "feeblemind",
         do_not_use: false
     },
-    FIND_FAMILIAR: {
+    "find familiar": {
         code: "find familiar",
         sdesc: "find familiar",
         do_not_use: false
     },
-    FIND_TRAPS: {
+    "find traps": {
         code: "find traps",
         sdesc: "find traps",
         do_not_use: false
     },
-    FIRE_BREATH: {
+    "fire breath": {
         code: "fire breath",
         sdesc: "fire breath",
         do_not_use: false
     },
-    FIREBALL: {
+    "fireball": {
         code: "fireball",
         sdesc: "fireball",
         do_not_use: false
     },
-    FIRESHIELD: {
+    "fireshield": {
         code: "fireshield",
         sdesc: "fireshield",
         do_not_use: false
     },
-    FLAME_ARROW: {
+    "flame arrow": {
         code: "flame arrow",
         sdesc: "flame arrow",
         do_not_use: false
     },
-    FLAME_JAWS: {
+    "flame jaws": {
         code: "flame jaws",
         sdesc: "flame jaws",
         do_not_use: false
     },
-    FLAMESTRIKE: {
+    "flamestrike": {
         code: "flamestrike",
         sdesc: "flamestrike",
         do_not_use: false
     },
-    FLY: {
+    "fly": {
         code: "fly",
         sdesc: "fly",
         do_not_use: false
     },
-    FREEDOM_OF_MOVEMENT: {
+    "freedom of movement": {
         code: "freedom of movement",
         sdesc: "freedom of movement",
         do_not_use: false
     },
-    FRIENDS: {
+    "friends": {
         code: "friends",
         sdesc: "friends",
         do_not_use: false
     },
-    FROST_BREATH: {
+    "frost breath": {
         code: "frost breath",
         sdesc: "frost breath",
         do_not_use: false
     },
-    FUMBLE: {
+    "fumble": {
         code: "fumble",
         sdesc: "fumble",
         do_not_use: false
     },
-    GAS_BREATH: {
+    "gas breath": {
         code: "gas breath",
         sdesc: "gas breath",
         do_not_use: false
     },
-    GATE: {
+    "gate": {
         code: "gate",
         sdesc: "gate",
         do_not_use: false
     },
-    GLOBE_OF_INVULNERABILITY: {
+    "globe of invulnerability": {
         code: "globe of invulnerability",
         sdesc: "globe of invulnerability",
         do_not_use: false
     },
-    GOOD_FORTUNE: {
+    "good fortune": {
         code: "good fortune",
         sdesc: "good fortune",
         do_not_use: false
     },
-    HAND_OF_CHAOS: {
+    "hand of chaos": {
         code: "hand of chaos",
         sdesc: "hand of chaos",
         do_not_use: false
     },
-    HARM: {
+    "harm": {
         code: "harm",
         sdesc: "harm",
         do_not_use: false
     },
-    HEAL: {
+    "heal": {
         code: "heal",
         sdesc: "heal",
         do_not_use: false
     },
-    HEROISM: {
+    "heroism": {
         code: "heroism",
         sdesc: "heroism",
         do_not_use: false
     },
-    HOLD_MONSTER: {
+    "hold monster": {
         code: "hold monster",
         sdesc: "hold monster",
         do_not_use: false
     },
-    HOLD_PERSON: {
+    "hold person": {
         code: "hold person",
         sdesc: "hold person",
         do_not_use: false
     },
-    HOLY_SANCTITY: {
+    "holy sanctity": {
         code: "holy sanctity",
         sdesc: "holy sanctity",
         do_not_use: false
     },
-    HOLY_SYMBOL: {
+    "holy symbol": {
         code: "holy symbol",
         sdesc: "holy symbol",
         do_not_use: false
     },
-    ICE_STORM: {
+    "ice storm": {
         code: "ice storm",
         sdesc: "ice storm",
         do_not_use: false
     },
-    ICESHIELD: {
+    "iceshield": {
         code: "iceshield",
         sdesc: "iceshield",
         do_not_use: false
     },
-    IDENTIFY: {
+    "identify": {
         code: "identify",
         sdesc: "identify",
         do_not_use: false
     },
-    ILL_FORTUNE: {
+    "ill fortune": {
         code: "ill fortune",
         sdesc: "ill fortune",
         do_not_use: false
     },
-    ILMATERS_BLESS: {
+    "ilmaters bless": {
         code: "ilmaters bless",
         sdesc: "ilmaters bless",
         do_not_use: false
     },
-    INFRAVISION: {
+    "infravision": {
         code: "infravision",
         sdesc: "infravision",
         do_not_use: false
     },
-    INVIS: {
+    "invis": {
         code: "invis",
         sdesc: "invis",
         do_not_use: false
     },
-    INVISIBILITY_PURGE: {
+    "invisibility purge": {
         code: "invisibility purge",
         sdesc: "invisibility purge",
         do_not_use: false
     },
-    KNOCK: {
+    "knock": {
         code: "knock",
         sdesc: "knock",
         do_not_use: false
     },
-    KNOW_ALIGNMENT: {
+    "know alignment": {
         code: "know alignment",
         sdesc: "know alignment",
         do_not_use: false
     },
-    LEVITATE: {
+    "levitate": {
         code: "levitate",
         sdesc: "levitate",
         do_not_use: false
     },
-    LIGHTNING_BOLT: {
+    "lightning bolt": {
         code: "lightning bolt",
         sdesc: "lightning bolt",
         do_not_use: false
     },
-    LIGHTNING_BREATH: {
+    "lightning breath": {
         code: "lightning breath",
         sdesc: "lightning breath",
         do_not_use: false
     },
-    LLANTHYRS_MEND: {
+    "llanthyrs mend": {
         code: "llanthyrs mend",
         sdesc: "llanthyrs mend",
         do_not_use: false
     },
-    LOCATE_OBJECT: {
+    "locate object": {
         code: "locate object",
         sdesc: "locate object",
         do_not_use: false
     },
-    MAGIC_MIRROR: {
+    "magic mirror": {
         code: "magic mirror",
         sdesc: "magic mirror",
         do_not_use: false
     },
-    MAGIC_MISSILE: {
+    "magic missile": {
         code: "magic missile",
         sdesc: "magic missile",
         do_not_use: false
     },
-    MAGNETIC_THRUS: {
+    "magnetic thrus": {
         code: "magnetic thrus",
         sdesc: "magnetic thrus",
         do_not_use: false
     },
-    MASS_INVIS: {
+    "mass invis": {
         code: "mass invis",
         sdesc: "mass invis",
         do_not_use: false
     },
-    MIND_BLANK: {
+    "mind blank": {
         code: "mind blank",
         sdesc: "mind blank",
         do_not_use: false
     },
-    MIND_WRACK: {
+    "mind wrack": {
         code: "mind wrack",
         sdesc: "mind wrack",
         do_not_use: false
     },
-    MIND_WRENCH: {
+    "mind wrench": {
         code: "mind wrench",
         sdesc: "mind wrench",
         do_not_use: false
     },
-    MIRROR_IMAGE: {
+    "mirror image": {
         code: "mirror image",
         sdesc: "mirror image",
         do_not_use: false
     },
-    MNEMONIC_ENHAN: {
+    "mnemonic enhan": {
         code: "mnemonic enhan",
         sdesc: "mnemonic enhan",
         do_not_use: false
     },
-    MONSTER_SUMMON: {
+    "monster summon": {
         code: "monster summon",
         sdesc: "monster summon",
         do_not_use: false
     },
-    MOONBEAM: {
+    "moonbeam": {
         code: "moonbeam",
         sdesc: "moonbeam",
         do_not_use: false
     },
-    NONDETECTION: {
+    "nondetection": {
         code: "nondetection",
         sdesc: "nondetection",
         do_not_use: false
     },
-    NULL_SPHERE: {
+    "null sphere": {
         code: "null sphere",
         sdesc: "null sphere",
         do_not_use: false
     },
-    PASS_DOOR: {
+    "pass door": {
         code: "pass door",
         sdesc: "pass door",
         do_not_use: false
     },
-    PASS_PLANT: {
+    "pass plant": {
         code: "pass plant",
         sdesc: "pass plant",
         do_not_use: false
     },
-    PHANTASMAL_KILLER: {
+    "phantasmal killer": {
         code: "phantasmal killer",
         sdesc: "phantasmal killer",
         do_not_use: false
     },
-    PHOENIX_CLAW: {
+    "phoenix claw": {
         code: "phoenix claw",
         sdesc: "phoenix claw",
         do_not_use: false
     },
-    POISON: {
+    "poison": {
         code: "poison",
         sdesc: "poison",
         do_not_use: false
     },
-    POLYMORPH: {
+    "polymorph": {
         code: "polymorph",
         sdesc: "polymorph",
         do_not_use: false
     },
-    POSSESS: {
+    "possess": {
         code: "possess",
         sdesc: "possess",
         do_not_use: false
     },
-    PRODUCE_FLAME: {
+    "produce flame": {
         code: "produce flame",
         sdesc: "produce flame",
         do_not_use: false
     },
-    PROTECTION: {
+    "protection": {
         code: "protection",
         sdesc: "protection",
         do_not_use: false
     },
-    QUANTUM_SPIKE: {
+    "quantum spike": {
         code: "quantum spike",
         sdesc: "quantum spike",
         do_not_use: false
     },
-    RAINBOW_PATTERN: {
+    "rainbow pattern": {
         code: "rainbow pattern",
         sdesc: "rainbow pattern",
         do_not_use: false
     },
-    RAISE_DEAD: {
+    "raise dead": {
         code: "raise dead",
         sdesc: "raise dead",
         do_not_use: false
     },
-    RAZORBAIT: {
+    "razorbait": {
         code: "razorbait",
         sdesc: "razorbait",
         do_not_use: false
     },
-    RECHARGE: {
+    "recharge": {
         code: "recharge",
         sdesc: "recharge",
         do_not_use: false
     },
-    REFRESH: {
+    "refresh": {
         code: "refresh",
         sdesc: "refresh",
         do_not_use: false
     },
-    REGENERATE: {
+    "regenerate": {
         code: "regenerate",
         sdesc: "regenerate",
         do_not_use: false
     },
-    REMOVE_CURSE: {
+    "remove curse": {
         code: "remove curse",
         sdesc: "remove curse",
         do_not_use: false
     },
-    REMOVE_TRAP: {
+    "remove trap": {
         code: "remove trap",
         sdesc: "remove trap",
         do_not_use: false
     },
-    RESILIENCE: {
+    "resilience": {
         code: "resilience",
         sdesc: "resilience",
         do_not_use: false
     },
-    RESIST_COLD: {
+    "resist cold": {
         code: "resist cold",
         sdesc: "resist cold",
         do_not_use: false
     },
-    RESIST_ELECTRICITY: {
+    "resist electricity": {
         code: "resist electricity",
         sdesc: "resist electricity",
         do_not_use: false
     },
-    RESIST_FIRE: {
+    "resist fire": {
         code: "resist fire",
         sdesc: "resist fire",
         do_not_use: false
     },
-    RESTORATION: {
+    "restoration": {
         code: "restoration",
         sdesc: "restoration",
         do_not_use: false
     },
-    RESTORE_MANA: {
+    "restore mana": {
         code: "restore mana",
         sdesc: "restore mana",
         do_not_use: false
     },
-    RESURRECTION: {
+    "resurrection": {
         code: "resurrection",
         sdesc: "resurrection",
         do_not_use: false
     },
-    REVIVE: {
+    "revive": {
         code: "revive",
         sdesc: "revive",
         do_not_use: false
     },
-    SAGACITY: {
+    "sagacity": {
         code: "sagacity",
         sdesc: "sagacity",
         do_not_use: false
     },
-    SANCTUARY: {
+    "sanctuary": {
         code: "sanctuary",
         sdesc: "sanctuary",
         do_not_use: false
     },
-    SCORCHING_SURGE: {
+    "scorching surge": {
         code: "scorching surge",
         sdesc: "scorching surge",
         do_not_use: false
     },
-    SENTRY_OF_HELM: {
+    "sentry of helm": {
         code: "sentry of helm",
         sdesc: "sentry of helm",
         do_not_use: false
     },
-    SHADOW_CONJURATION: {
+    "shadow conjuration": {
         code: "shadow conjuration",
         sdesc: "shadow conjuration",
         do_not_use: false
     },
-    SHADOW_DOOR: {
+    "shadow door": {
         code: "shadow door",
         sdesc: "shadow door",
         do_not_use: false
     },
-    SHADOW_FIST: {
+    "shadow fist": {
         code: "shadow fist",
         sdesc: "shadow fist",
         do_not_use: false
     },
-    SHADOW_FUNNEL: {
+    "shadow funnel": {
         code: "shadow funnel",
         sdesc: "shadow funnel",
         do_not_use: false
     },
-    SHADOW_WALK: {
+    "shadow walk": {
         code: "shadow walk",
         sdesc: "shadow walk",
         do_not_use: false
     },
-    SHIELD: {
+    "shield": {
         code: "shield",
         sdesc: "shield",
         do_not_use: false
     },
-    SHOCKING_GRASP: {
+    "shocking grasp": {
         code: "shocking grasp",
         sdesc: "shocking grasp",
         do_not_use: false
     },
-    SHOCKSHIELD: {
+    "shockshield": {
         code: "shockshield",
         sdesc: "shockshield",
         do_not_use: false
     },
-    SILENCE: {
+    "silence": {
         code: "silence",
         sdesc: "silence",
         do_not_use: false
     },
-    SLEEP: {
+    "sleep": {
         code: "sleep",
         sdesc: "sleep",
         do_not_use: false
     },
-    SLINK: {
+    "slink": {
         code: "slink",
         sdesc: "slink",
         do_not_use: false
     },
-    SOUND_BURST: {
+    "sound burst": {
         code: "sound burst",
         sdesc: "sound burst",
         do_not_use: false
     },
-    SPEAK_WITH_DEAD: {
+    "speak with dead": {
         code: "speak with dead",
         sdesc: "speak with dead",
         do_not_use: false
     },
-    SPECTRAL_FIST: {
+    "spectral fist": {
         code: "spectral fist",
         sdesc: "spectral fist",
         do_not_use: false
     },
-    SPECTRAL_HAND: {
+    "spectral hand": {
         code: "spectral hand",
         sdesc: "spectral hand",
         do_not_use: false
     },
-    SPECTRAL_LIGHT: {
+    "spectral light": {
         code: "spectral light",
         sdesc: "spectral light",
         do_not_use: false
     },
-    STONE_SKIN: {
+    "stone skin": {
         code: "stone skin",
         sdesc: "stone skin",
         do_not_use: false
     },
-    STONE_WALK: {
+    "stone walk": {
         code: "stone walk",
         sdesc: "stone walk",
         do_not_use: false
     },
-    SULFUROUS_SPRAY: {
+    "sulfurous spray": {
         code: "sulfurous spray",
         sdesc: "sulfurous spray",
         do_not_use: false
     },
-    SUMMON: {
+    "summon": {
         code: "summon",
         sdesc: "summon",
         do_not_use: false
     },
-    SUNRAY: {
+    "sunray": {
         code: "sunray",
         sdesc: "sunray",
         do_not_use: false
     },
-    SWORDBAIT: {
+    "swordbait": {
         code: "swordbait",
         sdesc: "swordbait",
         do_not_use: false
     },
-    TAYZAS_ACIDSHIELD: {
+    "tayzas acidshield": {
         code: "tayzas acidshield",
         sdesc: "tayzas acidshield",
         do_not_use: false
     },
-    TELEPORT: {
+    "teleport": {
         code: "teleport",
         sdesc: "teleport",
         do_not_use: false
     },
-    TOUCH_OF_JUSTICE: {
+    "touch of justice": {
         code: "touch of justice",
         sdesc: "touch of justice",
         do_not_use: false
     },
-    TRANSPORT: {
+    "transport": {
         code: "transport",
         sdesc: "transport",
         do_not_use: false
     },
-    TROLLISH_VIGOR: {
+    "trollish vigor": {
         code: "trollish vigor",
         sdesc: "trollish vigor",
         do_not_use: false
     },
-    TRUE_SIGHT: {
+    "true sight": {
         code: "true sight",
         sdesc: "true sight",
         do_not_use: false
     },
-    TURN_UNDEAD: {
+    "turn undead": {
         code: "turn undead",
         sdesc: "turn undead",
         do_not_use: false
     },
-    VALIANCE: {
+    "valiance": {
         code: "valiance",
         sdesc: "valiance",
         do_not_use: false
     },
-    VAMPIRIC_TOUCH: {
+    "vampiric touch": {
         code: "vampiric touch",
         sdesc: "vampiric touch",
         do_not_use: false
     },
-    VENTRILOQUISM: {
+    "ventriloquism": {
         code: "ventriloquism",
         sdesc: "ventriloquism",
         do_not_use: false
     },
-    WARHORSE: {
+    "warhorse": {
         code: "warhorse",
         sdesc: "warhorse",
         do_not_use: false
     },
-    WATER_BREATHING: {
+    "water breathing": {
         code: "water breathing",
         sdesc: "water breathing",
         do_not_use: false
     },
-    WATER_TO_WINE: {
+    "water to wine": {
         code: "water to wine",
         sdesc: "water to wine",
         do_not_use: false
     },
-    WEAKEN: {
+    "weaken": {
         code: "weaken",
         sdesc: "weaken",
         do_not_use: false
     },
-    WEB: {
+    "web": {
         code: "web",
         sdesc: "web",
         do_not_use: false
     },
-    WIND_WALK: {
+    "wind walk": {
         code: "wind walk",
         sdesc: "wind walk",
         do_not_use: false
     },
-    WINTER_MIST: {
+    "winter mist": {
         code: "winter mist",
         sdesc: "winter mist",
         do_not_use: false
     },
-    WITCH_LIGHT: {
+    "witch light": {
         code: "witch light",
         sdesc: "witch light",
         do_not_use: false
     },
-    WORD_OF_RECALL: {
+    "word of recall": {
         code: "word of recall",
         sdesc: "word of recall",
         do_not_use: false
     },
-    WRAITHFORM: {
+    "wraithform": {
         code: "wraithform",
         sdesc: "wraithform",
         do_not_use: false
@@ -9530,390 +9540,1041 @@ const MOB_SPELLS = {
 };
 
 const MOB_SKILLS = {
-    AID: {
+    "aid": {
         code: "aid",
         sdesc: "aid",
     },
-    ANIMAL_EMPATHY: {
+    "animal empathy": {
         code: "animal empathy",
         sdesc: "animal empathy",
     },
-    BACKSTAB: {
+    "backstab": {
         code: "backstab",
         sdesc: "backstab",
     },
-    BASH: {
+    "bash": {
         code: "bash",
         sdesc: "bash",
     },
-    BITE: {
+    "bite": {
         code: "bite",
         sdesc: "bite",
     },
-    BREW: {
+    "brew": {
         code: "brew",
         sdesc: "brew",
     },
-    CIRCLE_STAB: {
+    "circle stab": {
         code: "circle stab",
         sdesc: "circle stab",
     },
-    CLAW: {
+    "claw": {
         code: "claw",
         sdesc: "claw",
     },
-    CLIMB: {
+    "climb": {
         code: "climb",
         sdesc: "climb",
     },
-    COMPANION: {
+    "companion": {
         code: "companion",
         sdesc: "companion",
     },
-    CONCENTRATION: {
+    "concentration": {
         code: "concentration",
         sdesc: "concentration",
     },
-    COOK: {
+    "cook": {
         code: "cook",
         sdesc: "cook",
     },
-    DETRAP: {
+    "detrap": {
         code: "detrap",
         sdesc: "detrap",
     },
-    DIG: {
+    "dig": {
         code: "dig",
         sdesc: "dig",
     },
-    DIRTKICK: {
+    "dirtkick": {
         code: "dirtkick",
         sdesc: "dirtkick",
     },
-    DISARM: {
+    "disarm": {
         code: "disarm",
         sdesc: "disarm",
     },
-    DISCERN: {
+    "discern": {
         code: "discern",
         sdesc: "discern",
     },
-    DISGUISE: {
+    "disguise": {
         code: "disguise",
         sdesc: "disguise",
     },
-    DODGE: {
+    "dodge": {
         code: "dodge",
         sdesc: "dodge",
     },
-    DOORBASH: {
+    "doorbash": {
         code: "doorbash",
         sdesc: "doorbash",
     },
-    DUAL_BACKSTAB: {
+    "dual backstab": {
         code: "dual backstab",
         sdesc: "dual backstab",
     },
-    DUAL_WIELD: {
+    "dual wield": {
         code: "dual wield",
         sdesc: "dual wield",
     },
-    ENHANCED_DAMAGE: {
+    "enhanced damage": {
         code: "enhanced damage",
         sdesc: "enhanced damage",
     },
-    FEED: {
+    "feed": {
         code: "feed",
         sdesc: "feed",
     },
-    FIFTH_ATTACK: {
+    "fifth attack": {
         code: "fifth attack",
         sdesc: "fifth attack",
     },
-    FOURTH_ATTACK: {
+    "fourth attack": {
         code: "fourth attack",
         sdesc: "fourth attack",
     },
-    GOUGE: {
+    "gouge": {
         code: "gouge",
         sdesc: "gouge",
     },
-    GRIP: {
+    "grip": {
         code: "grip",
         sdesc: "grip",
     },
-    HAGGLE: {
+    "haggle": {
         code: "haggle",
         sdesc: "haggle",
     },
-    HANDLE_ANIMAL: {
+    "handle animal": {
         code: "handle animal",
         sdesc: "handle animal",
     },
-    HIDE: {
+    "hide": {
         code: "hide",
         sdesc: "hide",
     },
-    HITALL: {
+    "hitall": {
         code: "hitall",
         sdesc: "hitall",
     },
-    IGNITE: {
+    "ignite": {
         code: "ignite",
         sdesc: "ignite",
     },
-    INFLUENCE: {
+    "influence": {
         code: "influence",
         sdesc: "influence",
     },
-    KICK: {
+    "kick": {
         code: "kick",
         sdesc: "kick",
     },
-    LAYONHANDS: {
+    "layonhands": {
         code: "layonhands",
         sdesc: "layonhands",
     },
-    LIMBER: {
+    "limber": {
         code: "limber",
         sdesc: "limber",
     },
-    LISTEN: {
+    "listen": {
         code: "listen",
         sdesc: "listen",
     },
-    MEDITATE: {
+    "meditate": {
         code: "meditate",
         sdesc: "meditate",
     },
-    MOUNT: {
+    "mount": {
         code: "mount",
         sdesc: "mount",
     },
-    PARRY: {
+    "parry": {
         code: "parry",
         sdesc: "parry",
     },
-    PATHFINDING: {
+    "pathfinding": {
         code: "pathfinding",
         sdesc: "pathfinding",
     },
-    PEEK: {
+    "peek": {
         code: "peek",
         sdesc: "peek",
     },
-    PICK_LOCK: {
+    "pick lock": {
         code: "pick lock",
         sdesc: "pick lock",
     },
-    POISON_WEAPON: {
+    "poison weapon": {
         code: "poison weapon",
         sdesc: "poison weapon",
     },
-    PUNCH: {
+    "punch": {
         code: "punch",
         sdesc: "punch",
     },
-    RAGE: {
+    "rage": {
         code: "rage",
         sdesc: "rage",
     },
-    RESCUE: {
+    "rescue": {
         code: "rescue",
         sdesc: "rescue",
     },
-    RIPOSTE: {
+    "riposte": {
         code: "riposte",
         sdesc: "riposte",
     },
-    SAP: {
+    "sap": {
         code: "sap",
         sdesc: "sap",
     },
-    SCRIBE: {
+    "scribe": {
         code: "scribe",
         sdesc: "scribe",
     },
-    SEARCH: {
+    "search": {
         code: "search",
         sdesc: "search",
     },
-    SECOND_ATTACK: {
+    "second attack": {
         code: "second attack",
         sdesc: "second attack",
     },
-    SECOND_DODGE: {
+    "second dodge": {
         code: "second dodge",
         sdesc: "second dodge",
     },
-    SECOND_PARRY: {
+    "second parry": {
         code: "second parry",
         sdesc: "second parry",
     },
-    SHAPECHANGE: {
+    "shapechange": {
         code: "shapechange",
         sdesc: "shapechange",
     },
-    SING: {
+    "sing": {
         code: "sing",
         sdesc: "sing",
     },
-    SLICE: {
+    "slice": {
         code: "slice",
         sdesc: "slice",
     },
-    SNEAK: {
+    "sneak": {
         code: "sneak",
         sdesc: "sneak",
     },
-    SPELLCRAFT: {
+    "spellcraft": {
         code: "spellcraft",
         sdesc: "spellcraft",
     },
-    STEAL: {
+    "steal": {
         code: "steal",
         sdesc: "steal",
     },
-    STING: {
+    "sting": {
         code: "sting",
         sdesc: "sting",
     },
-    STUN: {
+    "stun": {
         code: "stun",
         sdesc: "stun",
     },
-    SWIM: {
+    "swim": {
         code: "swim",
         sdesc: "swim",
     },
-    TAIL: {
+    "tail": {
         code: "tail",
         sdesc: "tail",
     },
-    THIRD_ATTACK: {
+    "third attack": {
         code: "third attack",
         sdesc: "third attack",
     },
-    THIRD_DODGE: {
+    "third dodge": {
         code: "third dodge",
         sdesc: "third dodge",
     },
-    THIRD_PARRY: {
+    "third parry": {
         code: "third parry",
         sdesc: "third parry",
     },
-    TRACK: {
+    "track": {
         code: "track",
         sdesc: "track",
     },
-    TRIP: {
+    "trip": {
         code: "trip",
         sdesc: "trip",
     },
-    USE_MAGIC_DEVICE: {
+    "use magic device": {
         code: "use magic device",
         sdesc: "use magic device",
     },
 };
 
 const MOB_WEAPON_SKILLS = {
-    BOWS: {
+    "bows": {
         code: "bows",
         sdesc: "bows"
     },
-    BRAWLING: {
+    "brawling": {
         code: "brawling",
         sdesc: "brawling"
     },
-    CHAINS: {
+    "chains": {
         code: "chains",
         sdesc: "chains"
     },
-    CLUBS: {
+    "clubs": {
         code: "clubs",
         sdesc: "clubs"
     },
-    CROSSBOWS: {
+    "crossbows": {
         code: "crossbows",
         sdesc: "crossbows"
     },
-    DOUBLE_EDGED_BLADES: {
+    "double-edged blades": {
         code: "double-edged blades",
         sdesc: "double-edged blades"
     },
-    GREAT_BLADES: {
+    "great blades": {
         code: "great blades",
         sdesc: "great blades"
     },
-    GREAT_CHAINS: {
+    "great chains": {
         code: "great chains",
         sdesc: "great chains"
     },
-    LINES: {
+    "lines": {
         code: "lines",
         sdesc: "lines"
     },
-    LONG_AXES: {
+    "long axes": {
         code: "long axes",
         sdesc: "long axes"
     },
-    LONG_SPIKES: {
+    "long spikes": {
         code: "long spikes",
         sdesc: "long spikes"
     },
-    MOUNTED_POLEARMS: {
+    "mounted polearms": {
         code: "mounted polearms",
         sdesc: "mounted polearms"
     },
-    POLEARMS: {
+    "polearms": {
         code: "polearms",
         sdesc: "polearms"
     },
-    ROPE_WEAPONS: {
+    "rope weapons": {
         code: "rope weapons",
         sdesc: "rope weapons"
     },
-    SHIELDWORK: {
+    "shieldwork": {
         code: "shieldwork",
         sdesc: "shieldwork"
     },
-    SHORT_AXES: {
+    "short axes": {
         code: "short axes",
         sdesc: "short axes"
     },
-    SHORT_BLADES: {
+    "short blades": {
         code: "short blades",
         sdesc: "short blades"
     },
-    SHORT_SPIKES: {
+    "short spikes": {
         code: "short spikes",
         sdesc: "short spikes"
     },
-    SINGLE_EDGED_BLADES: {
+    "single-edged blades": {
         code: "single-edged blades",
         sdesc: "single-edged blades"
     },
-    SLINGS: {
+    "slings": {
         code: "slings",
         sdesc: "slings"
     },
-    STAVES: {
+    "staves": {
         code: "staves",
         sdesc: "staves"
     },
-    THROWN_PROJECTILES: {
+    "thrown projectiles": {
         code: "thrown projectiles",
         sdesc: "thrown projectiles"
     },
-    THRUSTING_BLADES: {
+    "thrusting blades": {
         code: "thrusting blades",
         sdesc: "thrusting blades"
     },
-    WHIPS: {
+    "whips": {
         code: "whips",
         sdesc: "whips"
     },
 };
+
+const MOB_LANGUAGES = {
+    "ancient": {
+        code: "ancient",
+        sdesc: "ancient"
+    },
+    "animal": {
+        code: "animal",
+        sdesc: "animal"
+    },
+    "aquan": {
+        code: "aquan",
+        sdesc: "aquan"
+    },
+    "thieves cant": {
+        code: "thieves cant",
+        sdesc: "thieves cant"
+    },
+    "auran": {
+        code: "auran",
+        sdesc: "auran"
+    },
+    "common": {
+        code: "common",
+        sdesc: "common"
+    },
+    "darkspeak": {
+        code: "darkspeak",
+        sdesc: "darkspeak"
+    },
+    "draconic": {
+        code: "draconic",
+        sdesc: "draconic"
+    },
+    "dwarven": {
+        code: "dwarven",
+        sdesc: "dwarven"
+    },
+    "elven": {
+        code: "elven",
+        sdesc: "elven"
+    },
+    "giant": {
+        code: "giant",
+        sdesc: "giant"
+    },
+    "gith": {
+        code: "gith",
+        sdesc: "gith"
+    },
+    "gnoll": {
+        code: "gnoll",
+        sdesc: "gnoll"
+    },
+    "gnome": {
+        code: "gnome",
+        sdesc: "gnome"
+    },
+    "goblin": {
+        code: "goblin",
+        sdesc: "goblin"
+    },
+    "halfling": {
+        code: "halfling",
+        sdesc: "halfling"
+    },
+    "ignan": {
+        code: "ignan",
+        sdesc: "ignan"
+    },
+    "insectoid": {
+        code: "insectoid",
+        sdesc: "insectoid"
+    },
+    "magical": {
+        code: "magical",
+        sdesc: "magical"
+    },
+    "orcish": {
+        code: "orcish",
+        sdesc: "orcish"
+    },
+    "sylvan": {
+        code: "sylvan",
+        sdesc: "sylvan"
+    },
+    "terran": {
+        code: "terran",
+        sdesc: "terran"
+    },
+    "abyssal": {
+        code: "abyssal",
+        sdesc: "abyssal"
+    },
+    "celestial": {
+        code: "celestial",
+        sdesc: "celestial"
+    }
+};
+
+const MOB_STATISTICS = {
+    constitution: {
+        code: "constitution",
+        sdesc: "constitution"
+    },
+    strength: {
+        code: "strength",
+        sdesc: "strength"
+    },
+    wisdom: {
+        code: "wisdom",
+        sdesc: "wisdom"
+    },
+    intelligence: {
+        code: "intelligence",
+        sdesc: "intelligence"
+    },
+    charisma: {
+        code: "charisma",
+        sdesc: "charisma"
+    },
+    luck: {
+        code: "luck",
+        sdesc: "luck"
+    },
+    dexterity: {
+        code: "dexterity",
+        sdesc: "dexterity"
+    },
+};
+
+const MOB_FEATS = {
+    "awareness": {
+        code: "awareness",
+        sdesc: "awareness",
+        do_not_use: false
+    },
+    "armor proficiency": {
+        code: "armor proficiency",
+        sdesc: "armor proficiency",
+        do_not_use: false
+    },
+    "blind-fight": {
+        code: "blind-fight",
+        sdesc: "blind-fight",
+        do_not_use: false
+    },
+    "blooded": {
+        code: "blooded",
+        sdesc: "blooded",
+        do_not_use: false
+    },
+    "bloodline of fire": {
+        code: "bloodline of fire",
+        sdesc: "bloodline of fire",
+        do_not_use: false
+    },
+    "bullheaded": {
+        code: "bullheaded",
+        sdesc: "bullheaded",
+        do_not_use: false
+    },
+    "cleave": {
+        code: "cleave",
+        sdesc: "cleave",
+        do_not_use: false
+    },
+    "combat casting": {
+        code: "combat casting",
+        sdesc: "combat casting",
+        do_not_use: false
+    },
+    "courteous magocracy": {
+        code: "courteous magocracy",
+        sdesc: "courteous magocracy",
+        do_not_use: false
+    },
+    "daylight adaptation": {
+        code: "daylight adaptation",
+        sdesc: "daylight adaptation",
+        do_not_use: false
+    },
+    "deflect arrows": {
+        code: "deflect arrows",
+        sdesc: "deflect arrows",
+        do_not_use: false
+    },
+    "empower spell": {
+        code: "empower spell",
+        sdesc: "empower spell",
+        do_not_use: false
+    },
+    "endurance": {
+        code: "endurance",
+        sdesc: "endurance",
+        do_not_use: false
+    },
+    "enlarge spell": {
+        code: "enlarge spell",
+        sdesc: "enlarge spell",
+        do_not_use: false
+    },
+    "evasion": {
+        code: "evasion",
+        sdesc: "evasion",
+        do_not_use: false
+    },
+    "expertise": {
+        code: "expertise",
+        sdesc: "expertise",
+        do_not_use: false
+    },
+    "extend spell": {
+        code: "extend spell",
+        sdesc: "extend spell",
+        do_not_use: false
+    },
+    "extra turning": {
+        code: "extra turning",
+        sdesc: "extra turning",
+        do_not_use: false
+    },
+    "far shot": {
+        code: "far shot",
+        sdesc: "far shot",
+        do_not_use: false
+    },
+    "foe hunter": {
+        code: "foe hunter",
+        sdesc: "foe hunter",
+        do_not_use: false
+    },
+    "great cleave": {
+        code: "great cleave",
+        sdesc: "great cleave",
+        do_not_use: false
+    },
+    "heighten spell": {
+        code: "heighten spell",
+        sdesc: "heighten spell",
+        do_not_use: false
+    },
+    "improved bash": {
+        code: "improved bash",
+        sdesc: "improved bash",
+        do_not_use: false
+    },
+    "improved counterspell": {
+        code: "improved counterspell",
+        sdesc: "improved counterspell",
+        do_not_use: false
+    },
+    "improved critical": {
+        code: "improved critical",
+        sdesc: "improved critical",
+        do_not_use: false
+    },
+    "improved disarm": {
+        code: "improved disarm",
+        sdesc: "improved disarm",
+        do_not_use: false
+    },
+    "improved familiar": {
+        code: "improved familiar",
+        sdesc: "improved familiar",
+        do_not_use: false
+    },
+    "improved initiative": {
+        code: "improved initiative",
+        sdesc: "improved initiative",
+        do_not_use: false
+    },
+    "improved trip": {
+        code: "improved trip",
+        sdesc: "improved trip",
+        do_not_use: false
+    },
+    "improved brawling": {
+        code: "improved brawling",
+        sdesc: "improved brawling",
+        do_not_use: false
+    },
+    "luck of heroes": {
+        code: "luck of heroes",
+        sdesc: "luck of heroes",
+        do_not_use: false
+    },
+    "maximize spell": {
+        code: "maximize spell",
+        sdesc: "maximize spell",
+        do_not_use: false
+    },
+    "militia": {
+        code: "militia",
+        sdesc: "militia",
+        do_not_use: false
+    },
+    "mind over body": {
+        code: "mind over body",
+        sdesc: "mind over body",
+        do_not_use: false
+    },
+    "mounted archery": {
+        code: "mounted archery",
+        sdesc: "mounted archery",
+        do_not_use: false
+    },
+    "mounted combat": {
+        code: "mounted combat",
+        sdesc: "mounted combat",
+        do_not_use: false
+    },
+    "persistent spell": {
+        code: "persistent spell",
+        sdesc: "persistent spell",
+        do_not_use: false
+    },
+    "point blank shot": {
+        code: "point blank shot",
+        sdesc: "point blank shot",
+        do_not_use: false
+    },
+    "poison resist": {
+        code: "poison resist",
+        sdesc: "poison resist",
+        do_not_use: false
+    },
+    "power attack": {
+        code: "power attack",
+        sdesc: "power attack",
+        do_not_use: false
+    },
+    "precise shot": {
+        code: "precise shot",
+        sdesc: "precise shot",
+        do_not_use: false
+    },
+    "quick draw": {
+        code: "quick draw",
+        sdesc: "quick draw",
+        do_not_use: false
+    },
+    "quicken spell": {
+        code: "quicken spell",
+        sdesc: "quicken spell",
+        do_not_use: false
+    },
+    "rapid shot": {
+        code: "rapid shot",
+        sdesc: "rapid shot",
+        do_not_use: false
+    },
+    "run": {
+        code: "run",
+        sdesc: "run",
+        do_not_use: false
+    },
+    "saddleback": {
+        code: "saddleback",
+        sdesc: "saddleback",
+        do_not_use: false
+    },
+    "shadow weave magic": {
+        code: "shadow weave magic",
+        sdesc: "shadow weave magic",
+        do_not_use: false
+    },
+    "silent spell": {
+        code: "silent spell",
+        sdesc: "silent spell",
+        do_not_use: false
+    },
+    "silver palm": {
+        code: "silver palm",
+        sdesc: "silver palm",
+        do_not_use: false
+    },
+    "skill focus": {
+        code: "skill focus",
+        sdesc: "skill focus",
+        do_not_use: false
+    },
+    "smooth talk": {
+        code: "smooth talk",
+        sdesc: "smooth talk",
+        do_not_use: false
+    },
+    "spellcasting prodigy": {
+        code: "spellcasting prodigy",
+        sdesc: "spellcasting prodigy",
+        do_not_use: false
+    },
+    "spell focus": {
+        code: "spell focus",
+        sdesc: "spell focus",
+        do_not_use: false
+    },
+    "spell mastery": {
+        code: "spell mastery",
+        sdesc: "spell mastery",
+        do_not_use: false
+    },
+    "spell penetration": {
+        code: "spell penetration",
+        sdesc: "spell penetration",
+        do_not_use: false
+    },
+    "spirited charge": {
+        code: "spirited charge",
+        sdesc: "spirited charge",
+        do_not_use: false
+    },
+    "stealthy": {
+        code: "stealthy",
+        sdesc: "stealthy",
+        do_not_use: false
+    },
+    "still spell": {
+        code: "still spell",
+        sdesc: "still spell",
+        do_not_use: false
+    },
+    "strong arm": {
+        code: "strong arm",
+        sdesc: "strong arm",
+        do_not_use: false
+    },
+    "strong soul": {
+        code: "strong soul",
+        sdesc: "strong soul",
+        do_not_use: false
+    },
+    "sunder": {
+        code: "sunder",
+        sdesc: "sunder",
+        do_not_use: false
+    },
+    "teacher": {
+        code: "teacher",
+        sdesc: "teacher",
+        do_not_use: false
+    },
+    "thug": {
+        code: "thug",
+        sdesc: "thug",
+        do_not_use: false
+    },
+    "toughness": {
+        code: "toughness",
+        sdesc: "toughness",
+        do_not_use: false
+    },
+    "trample": {
+        code: "trample",
+        sdesc: "trample",
+        do_not_use: false
+    },
+    "twin spell": {
+        code: "twin spell",
+        sdesc: "twin spell",
+        do_not_use: false
+    },
+    "twin sword style": {
+        code: "twin sword style",
+        sdesc: "twin sword style",
+        do_not_use: false
+    },
+    "weapon focus": {
+        code: "weapon focus",
+        sdesc: "weapon focus",
+        do_not_use: false
+    },
+    "weapon proficiency": {
+        code: "weapon proficiency",
+        sdesc: "weapon proficiency",
+        do_not_use: false
+    }
+};
+
+const MOB_BARDSONGS = {
+    "song of heroism": {
+        code: "song of heroism",
+        sdesc: "song of heroism",
+        do_not_use: false
+    },
+    "shadows cloak": {
+        code: "shadows cloak",
+        sdesc: "shadows cloak",
+        do_not_use: false
+    },
+    "song of selune": {
+        code: "song of selune",
+        sdesc: "song of selune",
+        do_not_use: false
+    },
+    "helms watch": {
+        code: "helms watch",
+        sdesc: "helms watch",
+        do_not_use: false
+    },
+    "elemental compassion": {
+        code: "elemental compassion",
+        sdesc: "elemental compassion",
+        do_not_use: false
+    }
+};
+
+const MOB_TRADES = {
+    appraise: {
+        code: "appraise",
+        sdesc: "appraise",
+        do_not_use: false,
+    },
+    armorsmithing: {
+        code: "armorsmithing",
+        sdesc: "armorsmithing",
+        do_not_use: false,
+    },
+    fletching: {
+        code: "fletching",
+        sdesc: "fletching",
+        do_not_use: false,
+    },
+    lapidary: {
+        code: "lapidary",
+        sdesc: "lapidary",
+        do_not_use: false,
+    },
+    leathermaking: {
+        code: "leathermaking",
+        sdesc: "leathermaking",
+        do_not_use: false,
+    },
+    logging: {
+        code: "logging",
+        sdesc: "logging",
+        do_not_use: false,
+    },
+    mining: {
+        code: "mining",
+        sdesc: "mining",
+        do_not_use: false,
+    },
+    smelting: {
+        code: "smelting",
+        sdesc: "smelting",
+        do_not_use: false,
+    },
+    tanning: {
+        code: "tanning",
+        sdesc: "tanning",
+        do_not_use: false,
+    },
+    weaponsmithing: {
+        code: "weaponsmithing",
+        sdesc: "weaponsmithing",
+        do_not_use: false,
+    },
+    woodworking: {
+        code: "woodworking",
+        sdesc: "woodworking",
+        do_not_use: false,
+    },
+    clothmaking: {
+        code: "clothmaking",
+        sdesc: "clothmaking",
+        do_not_use: false,
+    },
+    herbalism: {
+        code: "herbalism",
+        sdesc: "herbalism",
+        do_not_use: false,
+    },
+    tailoring: {
+        code: "tailoring",
+        sdesc: "tailoring",
+        do_not_use: false,
+    }
+};
+
+const MOB_KNOWLEDGE_SKILLS = {
+    "knowledge-geography": {
+        code: "knowledge-geography",
+        sdesc: "knowledge-geography",
+        do_not_use: false
+    },
+    "knowledge-history": {
+        code: "knowledge-history",
+        sdesc: "knowledge-history",
+        do_not_use: false
+    },
+    "knowledge-nature": {
+        code: "knowledge-nature",
+        sdesc: "knowledge-nature",
+        do_not_use: false
+    },
+    "knowledge-planes": {
+        code: "knowledge-planes",
+        sdesc: "knowledge-planes",
+        do_not_use: false
+    },
+    "knowledge-religion": {
+        code: "knowledge-religion",
+        sdesc: "knowledge-religion",
+        do_not_use: false
+    },
+    "knowledge-arcana": {
+        code: "knowledge-arcana",
+        sdesc: "knowledge-arcana",
+        do_not_use: false
+    }
+};
+
+const MOB_REPAIR_MATERIAL = {
+    SUBSTANCE_WOOD: {
+        code: "SUBSTANCE_WOOD",
+        sdesc: "SUBSTANCE_WOOD",
+        do_not_use: false,
+    },
+    SUBSTANCE_METAL: {
+        code: "SUBSTANCE_METAL",
+        sdesc: "SUBSTANCE_METAL",
+        do_not_use: false,
+    },
+    SUBSTANCE_GEMSTONE: {
+        code: "SUBSTANCE_GEMSTONE",
+        sdesc: "SUBSTANCE_GEMSTONE",
+        do_not_use: false,
+    },
+    SUBSTANCE_LEATHER: {
+        code: "SUBSTANCE_LEATHER",
+        sdesc: "SUBSTANCE_LEATHER",
+        do_not_use: false,
+    },
+    SUBSTANCE_EXOTIC: {
+        code: "SUBSTANCE_EXOTIC",
+        sdesc: "SUBSTANCE_EXOTIC",
+        do_not_use: false,
+    }
+}
+
+const MOB_REPAIR_RECHARGE = {
+    SHOP_FIX: {
+        code: "SHOP_FIX",
+        sdesc: "SHOP_FIX",
+    },
+    SHOP_RECHARGE: {
+        code: "SHOP_RECHARGE",
+        sdesc: "SHOP_RECHARGE",
+    }
+}
 
 // Model classes
 
@@ -9929,135 +10590,80 @@ class Loader {
     }
 }
 
-class Area {
-    constructor() {
-        this.name = null;
-        this.category = null;
-        this.authors = [];
-        this.justice_system = null;
-        this.level_range = {
-            min_recommended: 1,
-            max_recommended: 65,
-            min_enforced: 0,
-            max_enforced: 65
-        };
-        this.reset_msg = null;
-        this.wilderness_flag = 0;
-        this.reset_duration = 0;
-        this.economy = {
-            min: 5000,
-            max: 5000
-        };
-        this.weather = {
-            humidity: 5,
-            temperature: 5
-        };
-        this.mining_material = null;
-        this.logging_material = null;
-        
-        this.rooms = [];
-        this.objects = [];
-        this.mobs = [];
-        
+class Area extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            name:                   new Field({field_name:"name",                   default_value: null,    in_flags:null,              optional:false}),
+            category:               new Field({field_name:"category",               default_value: null,    in_flags:AREA_CATEGORIES,   optional:false}),
+            authors:                new Field({field_name:"authors",                default_value: [],      in_flags:null,              optional:false}),
+            justice_system:         new Field({field_name:"justice_system",         default_value: null,    in_flags:null,              optional:true}),
+            min_recommended_level:  new Field({field_name:"min_recommended_level",  default_value: 1,       in_flags:null,              optional:false}),
+            max_recommended_level:  new Field({field_name:"max_recommended_level",  default_value: 65,      in_flags:null,              optional:false}),
+            min_enforced_level:     new Field({field_name:"min_enforced_level",     default_value: 0,       in_flags:null,              optional:false}),
+            max_enforced_level:     new Field({field_name:"max_enforced_level",     default_value: 65,      in_flags:null,              optional:false}),
+            reset_msg:              new Field({field_name:"reset_msg",              default_value: null,    in_flags:null,              optional:false}),
+            wilderness_flag:        new Field({field_name:"wilderness_flag",        default_value: 0,       in_flags:null,              optional:false}),
+            reset_duration:         new Field({field_name:"reset_duration",         default_value: 0,       in_flags:null,              optional:false}),
+            economy_min:            new Field({field_name:"economy_min",            default_value: 5000,    in_flags:null,              optional:false}),
+            economy_max:            new Field({field_name:"economy_max",            default_value: 5000,    in_flags:null,              optional:false}),
+            weather_humidity:       new Field({field_name:"weather_humidity",       default_value: 5,       in_flags:null,              optional:false}),
+            weather_temperature:    new Field({field_name:"weather_temperature",    default_value: 5,       in_flags:null,              optional:false}),
+            mining_material:        new Field({field_name:"mining_material",        default_value: null,    in_flags:OBJECT_MATERIALS,  optional:true}),
+            logging_material:       new Field({field_name:"logging_material",       default_value: null,    in_flags:OBJECT_MATERIALS,  optional:true}),
+            rooms:                  new Field({field_name:"rooms",                  default_value: [],      in_flags:null,              optional:true}),
+            objects:                new Field({field_name:"objects",                default_value: [],      in_flags:null,              optional:true}),
+            mobs:                   new Field({field_name:"mobs",                   default_value: [],      in_flags:null,              optional:true}),
+            shops:                  new Field({field_name:"shops",                  default_value: [],      in_flags:null,              optional:true}),
+            repairs:                new Field({field_name:"repairs",                default_value: [],      in_flags:null,              optional:true}),
+        }, fields))
     }
     get _error_prefix() {
         return `[Area:${this.name}]`;
     }
     validate() {
-        let errors = []
-        // Area name
-        if (this.name == null) {
-            errors.push(`${this._error_prefix} No area name defined`);
+        let errors = super.validate()
+        if (this.authors.join(" ").length >= 36) {
+            errors.push(`${this._error_prefix}.authors List too long (max 36 characters)`);
         }
-        // Category
-        if (this.category == null) {
-            errors.push(`${this._error_prefix} No area category defined`);
-        }
-        // Authors list
-        if (!this.authors.length) {
-            errors.push(`${this._error_prefix} No authors defined`);
-        }
-        else if (this.authors.join(" ").length >= 36) {
-            errors.push(`${this._error_prefix} Authors list too long (max 36 characters)`);
-        }
-        else {
-            for (let i = 0; i < this.authors.length; i++) {
-                if (this.authors[i].indexOf(" ") != -1) {
-                    errors.push(`${this._error_prefix} Spaces are not permitted for author names ("${this.authors[i]}")`);
-                }
-            }
-        }
-        // Justice system
-        if (this.justice_system != null) {
-            let justice_system_errors = this.justice_system.validate()
-            if (justice_system_errors.length) {
-                errors = errors.concat(justice_system_errors.map((error) => `${this._error_prefix} ${error}`));
+        for (let i = 0; i < this.authors.length; i++) {
+            if (this.authors[i].indexOf(" ") != -1) {
+                errors.push(`${this._error_prefix}.authors Spaces are not permitted in author names ("${this.authors[i]}")`);
             }
         }
         // Level range
-        if (!(0 < this.level_range.min_recommended <= 65)) {
-            errors.push(`${this._error_prefix} Minimum recommended level is invalid`);
+        if (!(0 < this.min_recommended_level <= 65)) {
+            errors.push(`${this._error_prefix}.min_recommended_level must be between 0 and 65`);
         }
-        if (!(0 < this.level_range.max_recommended <= 65)) {
-            errors.push(`${this._error_prefix} Maximum recommended level is invalid`);
+        if (!(0 < this.max_recommended_level <= 65)) {
+            errors.push(`${this._error_prefix}.max_recommended_level must be between 0 and 65`);
         }
-        if (!(0 < this.level_range.min_enforced <= 65)) {
-            errors.push(`${this._error_prefix} Minimum enforced level is invalid`);
+        if (!(0 < this.min_enforced_level <= 65)) {
+            errors.push(`${this._error_prefix}.min_enforced_level must be between 0 and 65`);
         }
-        if (!(0 < this.level_range.max_enforced <= 65)) {
-            errors.push(`${this._error_prefix} Maximum enforced level is invalid`);
-        }
-        // Reset message
-        if (this.reset_msg == null) {
-            errors.push(`${this._error_prefix} No reset message defined`);
+        if (!(0 < this.max_enforced_level <= 65)) {
+            errors.push(`${this._error_prefix}.max_enforced_level must be between 0 and 65`);
         }
         // Reset duration
-        if (this.reset_duration == null) {
-            errors.push(`${this._error_prefix} No reset duration defined`);
-        }
-        else if (this.reset_duration < -1) {
-            errors.push(`${this._error_prefix} Invalid reset duration`);
+        if (this.reset_duration < -1) {
+            errors.push(`${this._error_prefix}.reset_duration Invalid reset duration`);
         }
         // Flags
         if (this.wilderness_flag != 0) {
-            errors.push(`${this._error_prefix} Wilderness flag should be 0 for most areas`);
+            errors.push(`${this._error_prefix}.wilderness_flag should be 0 for most areas`);
         }
         // Economy
-        if (this.economy.min < 0) {
-            errors.push(`${this._error_prefix} Invalid economy minimum value`);
+        if (this.economy_min < 0) {
+            errors.push(`${this._error_prefix}.economy_min should be a positive number`);
         }
-        if (this.economy.max < 0) {
-            errors.push(`${this._error_prefix} Invalid economy maximum value`);
+        if (this.economy_max < 0) {
+            errors.push(`${this._error_prefix}.economy_max should be a positive number`);
         }
         // Weather
-        if (!(1 <= this.weather.humidity <= 10)) {
-            errors.push(`${this._error_prefix} Invalid weather humidity`);
+        if (!(1 <= this.weather_humidity <= 10)) {
+            errors.push(`${this._error_prefix}.weather_humidity must be between 1 and 10`);
         }
-        if (!(1 <= this.weather.temperature <= 10)) {
-            errors.push(`${this._error_prefix} Invalid weather temperature`);
-        }
-        // Mining materials
-        if (this.mining_material != null && !(this.mining_material.code in OBJECT_MATERIALS)) {
-            errors.push(`${this._error_prefix} Invalid mining material`);
-        }
-        // Logging materials
-        if (this.logging_material != null && !(this.logging_material.code in OBJECT_MATERIALS)) {
-            errors.push(`${this._error_prefix} Invalid logging material`);
-        }
-        // Check rooms
-        for (let i = 0; i < this.rooms.length; i++) {
-            let room_errors = this.rooms[i].validate();
-            if (room_errors.length) {
-                errors = errors.concat(room_errors.map((error) => (`${this._error_prefix} ${error}`)))
-            }
-        }
-        // Check objects
-        for (let i = 0; i < this.objects.length; i++) {
-            //console.log(this.objects[i])
-            let object_errors = this.objects[i].validate();
-            if (object_errors.length) {
-                errors = errors.concat(object_errors.map((error) => (`${this._error_prefix} ${error}`)))
-            }
+        if (!(1 <= this.weather_temperature <= 10)) {
+            errors.push(`${this._error_prefix}.weather_temperature must be between 1 and 10`);
         }
         return errors
     }
@@ -10068,16 +10674,16 @@ class Area {
             return "Invalid Area\n" + errors.join("\n");
         }
         
-        return `#AREA ${this.name}~
+        return `#AREA ${this.category.color_code}${this.name}~
 #AUTHOR ${this.authors.join(" ")}~
 #RANGES
-${this.level_range.min_recommended} ${this.level_range.max_recommended} ${this.level_range.min_enforced} ${this.level_range.max_enforced}
+${this.min_recommended_level} ${this.max_recommended_level} ${this.min_enforced_level} ${this.max_enforced_level}
 $
 #RESETMSG ${this.reset_msg}~
 #FLAGS
 ${this.wilderness_flag} ${this.reset_duration}
-#ECONOMY ${this.economy.min} ${this.economy.max}
-#WEATHER ${this.weather.humidity} ${this.weather.temperature}
+#ECONOMY ${this.economy_min} ${this.economy_max}
+#WEATHER ${this.weather_humidity} ${this.weather_temperature}
 ${this.justice_system != null ? this.justice_system.toString() : ""}
 ${this.mining_material != null ? "#MINING " + this.mining_material.code : ""}
 ${this.logging_material != null ? "#LOGGING " + this.logging_material.code : ""}
@@ -10088,98 +10694,55 @@ ${this.objects.length ? "#OBJECTS\n" + this.objects.map((obj)=>(obj.toString()))
     }
 }
 
-class JusticeSystem {
-    constructor() {
-        this.courtroom = null;
-        this.dungeon = null;
-        this.judge = null;
-        this.guard = null;
-        this.crimes = {
-            CRIME_HIGH_MURDER: {
+class JusticeSystem extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            courtroom: new Field({field_name:"courtroom", default_value: null,    in_flags:null,  optional:false}),
+            dungeon: new Field({field_name:"dungeon", default_value: null,    in_flags:null,  optional:false}),
+            judge: new Field({field_name:"judge", default_value: null,    in_flags:null,  optional:false}),
+            guard: new Field({field_name:"guard", default_value: null,    in_flags:null,  optional:false}),
+            CRIME_HIGH_MURDER: new Field({field_name:"CRIME_HIGH_MURDER", default_value: {
                 code: "CRIME_HIGH_MURDER",
                 sdesc: "High Murder",
                 ldesc: "Murdering another PC",
                 punishment: null
-            },
-            CRIME_LOW_MURDER: {
+            }, in_flags:null, optional:false}),
+            CRIME_LOW_MURDER: new Field({field_name:"CRIME_LOW_MURDER", default_value: {
                 code: "CRIME_LOW_MURDER",
                 sdesc: "Low Murder",
                 ldesc: "Killing a mob",
                 punishment: null
-            },
-            CRIME_ASSAULT: {
+            }, in_flags:null, optional:false}),
+            CRIME_ASSAULT: new Field({field_name:"CRIME_ASSAULT", default_value: {
                 code: "CRIME_ASSAULT",
                 sdesc: "Assault",
                 ldesc: "Attacking (but not killing) a PC/mob",
                 punishment: null
-            },
-            CRIME_MUGGING: {
+            }, in_flags:null, optional:false}),
+            CRIME_MUGGING: new Field({field_name:"CRIME_MUGGING", default_value: {
                 code: "CRIME_MUGGING",
                 sdesc: "Mugging",
                 ldesc: "A failed pickpocket/steal attempt",
                 punishment: null
-            }
-        }
+            }, in_flags:null, optional:false}),
+        }, fields))
     }
     get _error_prefix() {
         return "[JusticeSystem]"
     }
     
     validate() {
-        let errors = []
-        
-        // Check courtroom
-        if (this.courtroom == null) {
-            errors.push(`${this._error_prefix} No courtroom defined`);
-        }
-        /*else { // Courtroom room errors will be tracked by Area
-            let courtroom_errors = this.courtroom.validate()
-            if (courtroom_errors.length) {
-                errors = errors.concat(courtroom_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
-        }*/ 
-        
-        // Check dungeon
-        if (this.dungeon == null) {
-            errors.push(`${this._error_prefix} No dungeon defined`);
-        }
-        /* else { // Dungeon room errors will be tracked by Area
-            let dungeon_errors = this.dungeon.validate()
-            if (dungeon_errors.length) {
-                errors = errors.concat(dungeon_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
-        } */
-        
-        // Check judge
-        if (this.judge == null) {
-            errors.push(`${this._error_prefix} No judge defined`);
-        }
-        /* else { // Mob errors will be tracked by Area
-            let judge_errors = this.judge.validate()
-            if (judge_errors.length) {
-                errors = errors.concat(judge_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
-        } */
-        
-        // Check guard
-        if (this.guard == null) {
-            errors.push(`${this._error_prefix} No guard defined`);
-        }
-        /* else { // Mob errors will be tracked by Area
-            let guard_errors = this.guard.validate()
-            if (guard_errors.length) {
-                errors = errors.concat(guard_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
-        } */
+        let errors = super.validate()
         
         // Check crimes
-        for (let c in this.crimes) {
-            let crime = this.crimes[c]
+        let crimes = ["CRIME_HIGH_MURDER","CRIME_LOW_MURDER","CRIME_ASSAULT","CRIME_MUGGING"];
+        for (let c in crimes) {
+            let crime = this[crimes[c]]
             if (crime.punishment == null) {
-                errors.push(`${this._error_prefix} Crime "${crime.sdesc}" has no punishment defined`);
+                errors.push(`${this._error_prefix}.${crime.code} has no punishment defined`);
             }
             else if (crime.punishment.do_not_use) {
-                errors.push(`${this._error_prefix} Crime "${crime.sdesc}" has uncoded punishment "${crime.punishment.code}"`);
+                errors.push(`${this._error_prefix}.${crime.code} has punishment "${crime.punishment.code}" which should not be used`);
             }
         }
         
@@ -10196,82 +10759,51 @@ CourtRoom ${this.courtroom.vnum}
 Dungeon ${this.dungeon.vnum}
 Judge ${this.judge.vnum}
 Guard ${this.guard.vnum}
-Crime CRIME_HIGH_MURDER ${this.crimes.CRIME_HIGH_MURDER.punishment.code}
-Crime CRIME_LOW_MURDER ${this.crimes.CRIME_LOW_MURDER.punishment.code}
-Crime CRIME_ASSAULT ${this.crimes.CRIME_ASSAULT.punishment.code}
-Crime CRIME_MUGGING ${this.crimes.CRIME_MUGGING.punishment.code}
+Crime CRIME_HIGH_MURDER ${this.CRIME_HIGH_MURDER.punishment.code}
+Crime CRIME_LOW_MURDER ${this.CRIME_LOW_MURDER.punishment.code}
+Crime CRIME_ASSAULT ${this.CRIME_ASSAULT.punishment.code}
+Crime CRIME_MUGGING ${this.CRIME_MUGGING.punishment.code}
 $`
     }
 }
 
-class Room {
-    constructor() {
-        this.vnum = null;
-        this.sdesc = null;
-        this.ldesc = null;
-        this.flags = {
-            defunct: 0,
-            room_flags: [],
-            sector: null,
-            teleport_delay: 0,
-            teleport_target: 0,
-            tunnel: 0
-        };
-        this.exits = [];
-        this.extra_descriptions = [];
+class Room extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            vnum:               new Field({field_name:"vnum",               default_value: null,    in_flags:null,          optional:false}),
+            sdesc:              new Field({field_name:"sdesc",              default_value: null,    in_flags:null,          optional:false}),
+            ldesc:              new Field({field_name:"ldesc",              default_value: null,    in_flags:null,          optional:false}),
+            defunct:            new Field({field_name:"defunct",            default_value: 0,       in_flags:null,          optional:false}),
+            room_flags:         new Field({field_name:"room_flags",         default_value: [],      in_flags:ROOM_FLAGS,    optional:true}),
+            sector:             new Field({field_name:"sector",             default_value: null,    in_flags:SECTOR_FLAGS,  optional:false}),
+            teleport_delay:     new Field({field_name:"teleport_delay",     default_value: 0,       in_flags:null,          optional:false}),
+            teleport_target:    new Field({field_name:"teleport_target",    default_value: 0,       in_flags:null,          optional:false}),
+            tunnel:             new Field({field_name:"tunnel",             default_value: 0,       in_flags:null,          optional:false}),
+            exits:              new Field({field_name:"exits",              default_value: [],      in_flags:null,          optional:true}),
+            extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,          optional:true}),
+        }, fields));
     }
     get _error_prefix() {
         return `[Room:(${this.vnum}) ${this.sdesc}]`;
     }
     validate() {
-        let errors = [];
-        if (this.vnum == null) {
-            errors.push(`${this._error_prefix} No vnum defined`);
-        }
-        if (this.sdesc == null) {
-            errors.push(`${this._error_prefix} No room name defined`);
-        }
-        if (this.ldesc == null) {
-            errors.push(`${this._error_prefix} No description defined`);
-        }
-        if (this.flags.sector == null) {
-            errors.push(`${this._error_prefix} No sector defined`);
-        }
-        else if (!(this.flags.sector.code in SECTOR_FLAGS)) {
-            errors.push(`${this._error_prefix} Invalid sector`);
-        }
-        else if (this.flags.sector.do_not_use) {
-            errors.push(`${this._error_prefix} Sector "${this.flags.sector.code}" should not be used`);
-        }
-        for (let i = 0; i < this.flags.room_flags.length; i++) {
-            if (!(this.flags.room_flags[i].code in ROOM_FLAGS)) {
-                errors.push(`${this._error_prefix} Invalid room flag`);
-            }
-            else if (this.flags.room_flags[i].do_not_use) {
-                errors.push(`${this._error_prefix} Room flag ${this.flags.room_flags[i].code} should not be used`);
-            }
-        }
-        for (let i = 0; i < this.exits.length; i++) {
-            let exit_errors = this.exits[i].validate();
-            if (exit_errors.length) {
-                errors = errors.concat(exit_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
-        }
-        for (let i = 0; i < this.extra_descriptions.length; i++) {
-            let extra_description_errors = this.extra_descriptions[i].validate();
-            if (extra_description_errors.length) {
-                errors = errors.concat(extra_description_errors.map((error) => `${this._error_prefix} ${error}`));
-            }
+        let errors = super.validate();
+        if (this.defunct != 0) {
+            errors.push(`${this._error_prefix}.defunct must be 0`);
         }
         return errors;
     }
     
     toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
         return `#${this.vnum}
 ${this.sdesc}~
 ${this.ldesc}
 ~
-${this.flags.defunct} ${this.flags.room_flags.join("|")||"0"} ${this.flags.sector.code} ${this.flags.teleport_delay} ${this.flags.teleport_target} ${this.flags.tunnel}
+${this.defunct} ${this.room_flags.join("|")||"0"} ${this.sector.code} ${this.teleport_delay} ${this.teleport_target} ${this.tunnel}
 ${this.exits.map((exit) => (exit.toString())).join("\n")}
 ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 S
@@ -10279,49 +10811,33 @@ S
     }
 }
 
-class Exit {
-    constructor() {
-        this.direction = null;
-        this.comment = "";
-        this.somewhere_keyword = null;
-        this.door_keyword = "";
-        this.flags = {
-            door_flags: [],
-            door_key: -1,
-            target_vnum: null,
-            exit_size: 0
-        }
+class Exit extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            direction:          new Field({field_name:"direction",          default_value: null,                        in_flags:null,              optional:false}),
+            comment:            new Field({field_name:"comment",            default_value: "",                          in_flags:null,              optional:false}),
+            somewhere_keyword:  new Field({field_name:"somewhere_keyword",  default_value: null,                        in_flags:null,              optional:true}),
+            door_keyword:       new Field({field_name:"door_keyword",       default_value: "",                          in_flags:null,              optional:false}),
+            // Flags                    
+            door_flags:         new Field({field_name:"door_flags",         default_value: [],                          in_flags:EXIT_DOOR_FLAGS,   optional:false}),
+            door_key:           new Field({field_name:"door_key",           default_value: -1,                          in_flags:null,              optional:false}),
+            target_vnum:        new Field({field_name:"target_vnum",        default_value: null,                        in_flags:null,              optional:false}),
+            exit_size:          new Field({field_name:"exit_size",          default_value: EXIT_SIZES.EXIT_SIZE_ANY,    in_flags:EXIT_SIZES,        optional:false}),
+        }, fields))
     }
     get _error_prefix() {
-        return `[Exit:${this.flags.target_vnum}]`
+        return `[Exit:${this.target_vnum}]`
     }
     validate() {
-        let errors = [];
-        if (this.direction == null) {
-            errors.push(`${this._error_prefix} No direction defined`);
-        }
-        if (this.direction in EXIT_DIRECTIONS) {
-            errors.push(`${this._error_prefix} Invalid direction`);
-        }
-        if (this.flags.target_vnum == null) {
-            errors.push(`${this._error_prefix} No target vnum defined`);
-        }
+        let errors = super.validate();
         if (this.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE && this.somewhere_keyword == null) {
-            errors.push(`${this._error_prefix} Somewhere exit defined, but no exit keyword specified`);
+            errors.push(`${this._error_prefix}.somewhere_keyword Somewhere exit defined, but no exit keyword specified`);
         }
-        if (this.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE && this.flags.door_flags.indexOf(EXIT_DOOR_FLAGS.EX_XAUTO) != -1) {
-            errors.push(`${this._error_prefix} Somewhere exit defined, but EX_XAUTO flag not set`);
+        if (this.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE && this.door_flags.indexOf(EXIT_DOOR_FLAGS.EX_XAUTO) != -1) {
+            errors.push(`${this._error_prefix}.door_flags Somewhere exit defined, but EX_XAUTO flag not set`);
         }
-        if (this.door_keyword != "" && this.flags.door_flags.indexOf(EXIT_DOOR_FLAGS.EX_ISDOOR) == -1) {
-            errors.push(`${this._error_prefix} Door keywords defined, but EX_ISDOOR flag not set`);
-        }
-        for (let i = 0; i < this.flags.door_flags.length; i++) {
-            if (!(this.flags.door_flags[i].code in EXIT_DOOR_FLAGS)) {
-                errors.push(`${this._error_prefix} Invalid flag`);
-            }
-        }
-        if (this.flags.exit_size in EXIT_SIZES) {
-            errors.push(`${this._error_prefix} Invalid exit size set`);
+        if (this.door_keyword != "" && this.door_flags.indexOf(EXIT_DOOR_FLAGS.EX_ISDOOR) == -1) {
+            errors.push(`${this._error_prefix}.door_flags Door keywords defined, but EX_ISDOOR flag not set`);
         }
         return errors
     }
@@ -10334,28 +10850,19 @@ class Exit {
         return `${this.direction.code}
 ${this.comment}~
 ${this.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE ? this.somewhere_keyword : this.door_keyword}~
-${this.flags.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.flags.door_key} ${this.flags.target_vnum} ${this.flags.exit_size}`;
+${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key} ${this.target_vnum} ${this.exit_size}`;
     }
 }
 
 class ExtraDescription extends Model {
-    constructor() {
-        this.keywords = null;
-        this.ldesc = null;
+    constructor(fields) {
+        super(Object.assign({
+            keywords: new Field({field_name:"keywords", default_value: null,    in_flags:null,  optional:false}),
+            ldesc:    new Field({field_name:"ldesc",    default_value: null,    in_flags:null,  optional:false}),
+        }, fields))
     }
     get _error_prefix() {
         return `[ExtraDescription:${this.keywords}]`;
-    }
-    
-    validate() {
-        let errors = [];
-        if (this.keywords == null) {
-            errors.push(`${this._error_prefix} No keywords defined`);
-        }
-        if (this.ldesc == null) {
-            errors.push(`${this._error_prefix} No description defined`);
-        }
-        return errors;
     }
     
     toString() {
@@ -10379,7 +10886,7 @@ class GameObject extends Model {
             keywords:           new Field({field_name:"keywords",           default_value: null,    in_flags:null,              optional:false}),
             action_description: new Field({field_name:"action_description", default_value: "",      in_flags:null,              optional:false}), // Not used
             item_type:          new Field({field_name:"item_type",          default_value: null,    in_flags:ITEM_TYPES,        optional:false}),
-            attributes:         new Field({field_name:"attributes",         default_value: [],      in_flags:OBJECT_ATTRIBUTES, optional:false}),
+            attributes:         new Field({field_name:"attributes",         default_value: [],      in_flags:OBJECT_ATTRIBUTES, optional:true}),
             wear_flags:         new Field({field_name:"wear_flags",         default_value: [],      in_flags:WEAR_LOCATIONS,    optional:false}),
             extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,              optional:false}),
             quality:            new Field({field_name:"quality",            default_value: null,    in_flags:OBJECT_QUALITY,    optional:false}),
@@ -10531,47 +11038,207 @@ ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
     }
 }
 
+class TrainSkill extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              default_value: 10,      in_flags:null,          optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,       in_flags:null,          optional:false}),
+            skill:              new Field({field_name:"skill",              default_value: null,    in_flags:MOB_SKILLS,    optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrainSkill:${this.skill}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `%${this.level} ${this.price_multiplier} ${this.skill}~`
+    }
+}
+
+class TrainSpell extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              default_value: 10,      in_flags:null,          optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,       in_flags:null,          optional:false}),
+            spell:              new Field({field_name:"spell",              default_value: null,    in_flags:MOB_SPELLS,    optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrainSpell:${this.spell}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `%${this.level} ${this.price_multiplier} ${this.spell}~`
+    }
+}
+
+class TrainLevel extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              default_value: 10,      in_flags:null,  optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,       in_flags:null,  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrainLevel]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `%${this.level} ${this.price_multiplier} level~`
+    }
+}
+
+class TrainStatistic extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              default_value: 10,      in_flags:null,              optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,       in_flags:null,              optional:false}),
+            statistic:          new Field({field_name:"statistic",          default_value: null,    in_flags:MOB_STATISTICS,    optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrainStatistic:${this.statistic}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `%${this.level} ${this.price_multiplier} ${this.statistic}~`
+    }
+}
+
+class TrainFeat extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              default_value: 1,       in_flags:null,              optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,       in_flags:null,              optional:false}),
+            feat:               new Field({field_name:"feat",               default_value: null,    in_flags:MOB_FEATS,         optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrainFeat:${this.feat}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `%${this.level} ${this.price_multiplier} ${this.feat}~`
+    }
+}
+
+class Shop extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            shopkeeper:     new Field({field_name:"shopkeeper",     default_value: null,                        in_flags:null,          optional:false}),
+            will_buy_1:     new Field({field_name:"will_buy_1",     default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,    optional:false}),
+            will_buy_2:     new Field({field_name:"will_buy_2",     default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,    optional:true}),
+            will_buy_3:     new Field({field_name:"will_buy_3",     default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,    optional:true}),
+            will_buy_4:     new Field({field_name:"will_buy_4",     default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,    optional:true}),
+            will_buy_5:     new Field({field_name:"will_buy_5",     default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,    optional:true}),
+            profit_buy:     new Field({field_name:"profit_buy",     default_value: 150,                         in_flags:null,          optional:false}),
+            profit_sell:    new Field({field_name:"profit_sell",    default_value: 50,                          in_flags:null,          optional:false}),
+            open_hour:      new Field({field_name:"open_hour",      default_value: 7,                           in_flags:null,          optional:false}),
+            close_hour:     new Field({field_name:"close_hour",     default_value: 19,                          in_flags:null,          optional:false}),
+        }, fields))        }
+    get _error_prefix() {
+        return `[Shop:${this.shopkeeper.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `${this.shopkeeper.vnum} ${this.will_buy_1} ${this.will_buy_2} ${this.will_buy_3} ${this.will_buy_4} ${this.will_buy_5}
+${this.profit_buy} ${this.profit_sell} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
+    }
+}
+
+class RepairRecharge extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            shopkeeper:         new Field({field_name:"shopkeeper",         default_value: null,                        in_flags:null,                  optional:false}),
+            will_repair_1:      new Field({field_name:"will_repair_1",      default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,            optional:false}),
+            will_repair_2:      new Field({field_name:"will_repair_2",      default_value: ITEM_TYPES.ITEM_TYPE_NONE,   in_flags:ITEM_TYPES,            optional:true}),
+            repair_material:    new Field({field_name:"repair_material",    default_value: null,                        in_flags:MOB_REPAIR_MATERIAL,   optional:false}),
+            profit_modifier:    new Field({field_name:"profit_modifier",    default_value: 100,                         in_flags:null,                  optional:false}),
+            repair:             new Field({field_name:"repair",             default_value: null,                        in_flags:MOB_REPAIR_RECHARGE,   optional:false}),
+            open_hour:          new Field({field_name:"open_hour",          default_value: null,                        in_flags:MOB_FEATS,             optional:false}),
+            close_hour:         new Field({field_name:"close_hour",         default_value: null,                        in_flags:MOB_FEATS,             optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[RepairRecharge:${this.shopkeeper.vnum}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `${this.shopkeeper.vnum} ${this.will_repair_1} ${this.will_repair_2} ${this.repair_material}
+${this.profit_modifier} ${this.repair} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
+    }
+}
+
+
 //export default Loader;
 
 // DEBUG
 function testLoader() {
     let loader = new Loader();
     //console.log(loader.toString());
-    
     loader.area.name = "Calimport";
     loader.area.category = AREA_CATEGORIES.CITIES;
     loader.area.reset_msg = "{A0}A hot wind blows off the desert.";
     loader.area.authors.push("Grenwyn");
-    loader.area.economy.min = 100000;
-    loader.area.economy.max = 100000;
-    loader.area.weather.humidity = 1;
-    loader.area.weather.temperature = 8;
+    loader.area.economy_min = 100000;
+    loader.area.economy_max = 100000;
+    loader.area.weather_humidity = 1;
+    loader.area.weather_temperature = 8;
     // loader.area.authors.push("Lord Greywether") // should fail
     
     let courtroom = new Room();
     courtroom.vnum = "QQ01";
     courtroom.sdesc = "Courtroom";
     courtroom.ldesc = "A really big courtroom";
-    courtroom.flags.sector = SECTOR_FLAGS.SECT_INSIDE;
+    courtroom.sector = SECTOR_FLAGS.SECT_INSIDE;
+    // courtroom.room_flags.push(ROOM_FLAGS.ROOM_DEATH); // Should fail
     let courtroom_exit = new Exit();
     courtroom_exit.direction = EXIT_DIRECTIONS.DDIR_DOWN;
     courtroom_exit.door_keyword = "trapdoor";
-    courtroom_exit.flags.door_flags.push(EXIT_DOOR_FLAGS.EX_ISDOOR);
-    courtroom_exit.flags.door_flags.push(EXIT_DOOR_FLAGS.EX_LOCKED);
-    courtroom_exit.flags.door_flags.push(EXIT_DOOR_FLAGS.EX_CLOSED);
-    courtroom.exits.push(courtroom_exit)
+    courtroom_exit.door_flags.push(EXIT_DOOR_FLAGS.EX_ISDOOR);
+    courtroom_exit.door_flags.push(EXIT_DOOR_FLAGS.EX_LOCKED);
+    courtroom_exit.door_flags.push(EXIT_DOOR_FLAGS.EX_CLOSED);
+    courtroom.exits.push(courtroom_exit);
     
     let dungeon = new Room();
     dungeon.vnum = "QQ03";
     dungeon.sdesc = "Dungeon";
     dungeon.ldesc = "A really smelly dungeon";
-    dungeon.flags.sector = SECTOR_FLAGS.SECT_INSIDE;
+    dungeon.sector = SECTOR_FLAGS.SECT_INSIDE;
     let dungeon_exit = new Exit();
     dungeon_exit.direction = EXIT_DIRECTIONS.DDIR_UP
     dungeon_exit.door_keyword = "trapdoor"
-    dungeon_exit.flags.door_flags.push(EXIT_DOOR_FLAGS.EX_ISDOOR)
-    dungeon_exit.flags.door_flags.push(EXIT_DOOR_FLAGS.EX_LOCKED)
-    dungeon_exit.flags.door_flags.push(EXIT_DOOR_FLAGS.EX_CLOSED)
+    dungeon_exit.door_flags.push(EXIT_DOOR_FLAGS.EX_ISDOOR)
+    dungeon_exit.door_flags.push(EXIT_DOOR_FLAGS.EX_LOCKED)
+    dungeon_exit.door_flags.push(EXIT_DOOR_FLAGS.EX_CLOSED)
     dungeon.exits.push(dungeon_exit)
     let dungeon_extra_desc = new ExtraDescription()
     dungeon_extra_desc.keywords = "smelly garbage"
@@ -10579,8 +11246,8 @@ function testLoader() {
     dungeon.extra_descriptions.push(dungeon_extra_desc)
     
     
-    dungeon_exit.flags.target_vnum = courtroom.vnum
-    courtroom_exit.flags.target_vnum = dungeon.vnum
+    dungeon_exit.target_vnum = courtroom.vnum
+    courtroom_exit.target_vnum = dungeon.vnum
     
     loader.area.rooms.push(courtroom)
     loader.area.rooms.push(dungeon)
@@ -10615,10 +11282,10 @@ function testLoader() {
         vnum: "QQ04",
         validate: () => (true)
     };
-    loader.area.justice_system.crimes.CRIME_HIGH_MURDER.punishment = PUNISHMENTS.PUNISHMENT_DEATH;
-    loader.area.justice_system.crimes.CRIME_LOW_MURDER.punishment = PUNISHMENTS.PUNISHMENT_SEVER;
-    loader.area.justice_system.crimes.CRIME_ASSAULT.punishment = PUNISHMENTS.PUNISHMENT_JAIL;
-    loader.area.justice_system.crimes.CRIME_MUGGING.punishment = PUNISHMENTS.PUNISHMENT_RANDOM_ITEM;
+    loader.area.justice_system.CRIME_HIGH_MURDER.punishment = PUNISHMENTS.PUNISHMENT_DEATH;
+    loader.area.justice_system.CRIME_LOW_MURDER.punishment = PUNISHMENTS.PUNISHMENT_SEVER;
+    loader.area.justice_system.CRIME_ASSAULT.punishment = PUNISHMENTS.PUNISHMENT_JAIL;
+    loader.area.justice_system.CRIME_MUGGING.punishment = PUNISHMENTS.PUNISHMENT_RANDOM_ITEM;
     
     console.log(loader.toString());
 }

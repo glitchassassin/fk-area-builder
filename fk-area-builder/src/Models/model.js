@@ -17,17 +17,23 @@ class Field {
         }
         else {
             if (value instanceof Array) {
+                if (!this.options.optional && value.length == 0) {
+                    errors.push(`.${this.name} should not be empty`)
+                }
                 for (let i = 0; i < value.length; i++) {
-                    if (this.options.in_flags && !(value[i].code in this.options.in_flags)) {
+                    if (this.options.in_flags && value[i].code && !(value[i].code in this.options.in_flags)) {
                         errors.push(`.${this.name} "${value[i].code}" is not valid`)
                     }
                     if (value[i].do_not_use) {
                         errors.push(`.${this.name} "${value[i].code}" should not be used`)
                     }
+                    if (value[i] instanceof Model) {
+                        errors = errors.concat(value[i].validate().map((err)=>(`.${this.name}${err}`)))
+                    }
                 }
             }
             else if (value instanceof Model) {
-                errors = errors.concat(value.validate().map((err)=>(`${this.name}.${err}`)))
+                errors = errors.concat(value.validate().map((err)=>(`.${this.name}${err}`)))
             }
             else {
                 if (this.options.in_flags && !(value.code in this.options.in_flags)) {
