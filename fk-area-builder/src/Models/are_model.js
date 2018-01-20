@@ -11306,7 +11306,7 @@ ${this.act_flags.map((flag)=>(flag.code)).join("|")}
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
 ${this.can_train.map((train)=>(train.toString())).join("\n")}
-|`
+${this.programs.map((prog)=>(prog.toString())).join("\n")}`
     }
     
     
@@ -11778,6 +11778,28 @@ class QuestLog extends Model {
     }
 }
 
+class Program extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            trigger:    new Field({field_name:"trigger",    default_value: null,    in_flags:null,  optional:false}),
+            percentage: new Field({field_name:"percentage", default_value: null,    in_flags:null,  optional:false}),
+            program:    new Field({field_name:"program",    default_value: null,    in_flags:null,  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[Program:${this.trigger.code}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `>${this.trigger} ${this.percentage}
+${this.program}
+|`
+    }
+}
 //export default Loader;
 
 // DEBUG
