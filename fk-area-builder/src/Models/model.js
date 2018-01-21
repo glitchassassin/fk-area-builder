@@ -21,8 +21,14 @@ class Field {
                     errors.push(`.${this.name} should not be empty`)
                 }
                 for (let i = 0; i < value.length; i++) {
-                    if (this.options.in_flags && value[i].code && !(value[i].code in this.options.in_flags)) {
-                        errors.push(`.${this.name} "${value[i].code}" is not valid`)
+                    try {
+                        if (this.options.in_flags && value[i].code && !(value[i].code in this.options.in_flags)) {
+                            errors.push(`.${this.name} "${value[i].code}" is not valid`)
+                        }
+                    }
+                    catch (e) {
+                        console.log(this);
+                        throw (e)
                     }
                     if (value[i].do_not_use) {
                         errors.push(`.${this.name} "${value[i].code}" should not be used`)

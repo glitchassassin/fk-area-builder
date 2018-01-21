@@ -8347,43 +8347,48 @@ const MOB_AFFECTS = {
         code: "AFF_GUARDIAN",
         sdesc: "AFF_GUARDIAN",
         ldesc: "Mobile wakes you if someone walks in while you sleep"
+    },
+    AFF_NONE: {
+        code: "AFF_NONE",
+        sdesc: "AFF_NONE",
+        ldesc: "Mobile has no affects"
     }
 };
 const MOB_ALIGNMENTS = {
-    LAWFUL_GOOD: {
-        code: 1000,
+    ALIGN_LAWFUL_GOOD: {
+        code: "ALIGN_LAWFUL_GOOD",
         sdesc: "Lawful Good"
     },
-    NEUTRAL_GOOD: {
-        code: 650,
+    ALIGN_NEUTRAL_GOOD: {
+        code: "ALIGN_NEUTRAL_GOOD",
         sdesc: "Neutral Good"
     },
-    CHAOTIC_GOOD: {
-        code: 450,
+    ALIGN_CHAOTIC_GOOD: {
+        code: "ALIGN_CHAOTIC_GOOD",
         sdesc: "Chaotic Good"
     },
-    LAWFUL_NEUTRAL: {
-        code: 200,
+    ALIGN_LAWFUL_NEUTRAL: {
+        code: "ALIGN_LAWFUL_NEUTRAL",
         sdesc: "Lawful Neutral"
     },
-    TRUE_NEUTRAL: {
-        code: 0,
+    ALIGN_TRUE_NEUTRAL: {
+        code: "ALIGN_TRUE_NEUTRAL",
         sdesc: "True Neutral"
     },
-    CHAOTIC_NEUTRAL: {
-        code: -200,
+    ALIGN_CHAOTIC_NEUTRAL: {
+        code: "ALIGN_CHAOTIC_NEUTRAL",
         sdesc: "Chaotic Neutral"
     },
-    LAWFUL_EVIL: {
-        code: -450,
+    ALIGN_LAWFUL_EVIL: {
+        code: "ALIGN_LAWFUL_EVIL",
         sdesc: "Lawful Evil"
     },
-    NEUTRAL_EVIL: {
-        code: -650,
+    ALIGN_NEUTRAL_EVIL: {
+        code: "ALIGN_NEUTRAL_EVIL",
         sdesc: "Neutral Evil"
     },
-    CHAOTIC_EVIL: {
-        code: -1000,
+    ALIGN_CHAOTIC_EVIL: {
+        code: "ALIGN_CHAOTIC_EVIL",
         sdesc: "Chaotic Evil"
     }
 };
@@ -8507,6 +8512,11 @@ const MOB_RIS = {
         code: "RIS_IRON",
         sdesc: "RIS_IRON",
         ldesc: "Resistant or suseptible to non magical weapons made of iron"
+    },
+    RIS_NONE: {
+        code: "RIS_NONE",
+        sdesc: "RIS_NONE",
+        ldesc: "No resistance/immunity/susceptibility"
     }
 };
 const MOB_SPELLS = {
