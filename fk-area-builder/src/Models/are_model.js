@@ -1,3 +1,4 @@
+var fs = require("fs");
 var m = require("./model.js");
 var Field = m.Field;
 var Model = m.Model;
@@ -6,10 +7,50 @@ var flags = require("./flags.js");
 // Model classes
 
 class Loader {
-    constructor(are_string="") {
+    constructor(are_string) {
         // Accepts a string containing a .are file
         // Validates the file, then loads the contents into a new model
         this.area = new Area();
+        
+        var regexes = {
+            area_header: /(#AREA[^]*#WEATHER[^\n]*)/gm,
+            justice_system: /(#JUSTICE[^]*?\$)/gm
+        }
+        
+        let area_text = are_string.match(regexes.area_header);
+        this.parseAreaHeader(area_text[0])
+    }
+    
+    parseAreaHeader(area_text) {
+        let regex = /#AREA ({..})?(.*?)~[^]*#AUTHOR (.*?)~[^]*#RANGES\n([^\s]*) ([^\s]*) ([^\s]*) ([^\s]*)[^]*\$[^]*#RESETMSG (.*)~[^]*#FLAGS[^]*?([^\s]*) ([^\s]*)[^]*#ECONOMY ([^\s]*) ([^\s]*)[^]*#WEATHER ([^\s]*) ([^\s]*)[^]*(?:#MINING (.*))?[^]*(?:#LOGGING (.*))?/gm;
+        let matches = regex.exec(area_text);
+        if (!matches.length) {
+            return;
+        }
+        this.area.category = flags.AREA_CATEGORIES.INCOMPLETE;
+        
+        for (let cat in flags.AREA_CATEGORIES) {
+            if (flags.AREA_CATEGORIES[cat].color_code == matches[1]) {
+                this.area.category = flags.AREA_CATEGORIES[cat];
+                break;
+            }
+        }
+        
+        this.area.name = matches[2];
+        this.area.authors = matches[3].split(" ");
+        this.area.min_recommended_level = matches[4];
+        this.area.max_recommended_level = matches[5];
+        this.area.min_enforced_level = matches[6];
+        this.area.max_enforced_level = matches[7];
+        this.area.reset_msg = matches[8];
+        this.area.wilderness_flag = matches[9];
+        this.area.reset_duration = matches[10];
+        this.area.economy_min = matches[11];
+        this.area.economy_max = matches[12];
+        this.area.weather_humidity = matches[13];
+        this.area.weather_temperature = matches[14];
+        this.area.mining_material = matches[15];
+        this.area.logging_material = matches[16];
     }
     
     toString() {
@@ -128,7 +169,7 @@ ${this.objects.map((obj)=>(obj.toString())).join("\n")}
 #0`: ""}
 ${this.quest_log.length ? `#QUESTS
 ${this.quest_log.map((quest)=>(quest.toString())).join("\n")}
-#0`: ""}
+-1`: ""}
 ${this.mobs.length ? `#MOBILES
 ${this.mobs.map((mob)=>(mob.toString())).join("\n")}
 #0` : ""}
@@ -267,6 +308,7 @@ ${this.defunct} ${this.room_flags.join("|")||"0"} ${this.sector.code} ${this.tel
 ${this.exits.map((exit) => (exit.toString())).join("\n")}
 ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.programs.map((program) => (program.toString())).join("\n")}
+${this.programs.length ? "|" : ""}
 S
 `;
     }
@@ -397,7 +439,7 @@ ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.special_applies.map((spec) => (`A ${spec.code} ${spec.value}`)).join("\n")}
 ${this.identify_message != null ? `I\n${this.identify_message}\n~` : "" }
 ${this.programs.map((program) => (program.toString())).join("\n")}
-`;
+${this.programs.length ? "|" : ""}`;
     }
 }
 
@@ -443,7 +485,8 @@ ${this.act_flags.map((flag)=>(flag.code)).join("|")}
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
 ${this.can_train.map((train)=>(train.toString())).join("\n")}
-${this.programs.map((prog)=>(prog.toString())).join("\n")}`
+${this.programs.map((prog)=>(prog.toString())).join("\n")}
+${this.programs.length ? "|" : ""}`
     }
     
     
@@ -499,7 +542,8 @@ ${this.str} ${this.int} ${this.wis} ${this.dex} ${this.con} ${this.cha} ${this.l
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
 ${this.can_train.map((train)=>(train.toString())).join("\n")}
-${this.programs.map((program) => (program.toString())).join("\n")}`
+${this.programs.map((program) => (program.toString())).join("\n")}
+${this.programs.length ? "|" : ""}`
     }
 }
 
@@ -934,97 +978,14 @@ class Program extends Model {
         }
         return `>${this.trigger} ${this.percentage}
 ${this.program}
-|`
+~`
     }
 }
 //export default Loader;
 
 // DEBUG
 function testLoader() {
-    let loader = new Loader();
-    //console.log(loader.toString());
-    loader.area.name = "Calimport";
-    loader.area.category = flags.AREA_CATEGORIES.CITIES;
-    loader.area.reset_msg = "{A0}A hot wind blows off the desert.";
-    loader.area.authors.push("Grenwyn");
-    loader.area.economy_min = 100000;
-    loader.area.economy_max = 100000;
-    loader.area.weather_humidity = 1;
-    loader.area.weather_temperature = 8;
-    // loader.area.authors.push("Lord Greywether") // should fail
-    
-    let courtroom = new Room();
-    courtroom.vnum = "QQ01";
-    courtroom.sdesc = "Courtroom";
-    courtroom.ldesc = "A really big courtroom";
-    courtroom.sector = flags.ROOM_SECTOR_FLAGS.SECT_INSIDE;
-    // courtroom.room_flags.push(ROOM_FLAGS.ROOM_DEATH); // Should fail
-    let courtroom_exit = new Exit();
-    courtroom_exit.direction = flags.EXIT_DIRECTIONS.DDIR_DOWN;
-    courtroom_exit.door_keyword = "trapdoor";
-    courtroom_exit.door_flags.push(flags.EXIT_DOOR_FLAGS.EX_ISDOOR);
-    courtroom_exit.door_flags.push(flags.EXIT_DOOR_FLAGS.EX_LOCKED);
-    courtroom_exit.door_flags.push(flags.EXIT_DOOR_FLAGS.EX_CLOSED);
-    courtroom.exits.push(courtroom_exit);
-    
-    let dungeon = new Room();
-    dungeon.vnum = "QQ03";
-    dungeon.sdesc = "Dungeon";
-    dungeon.ldesc = "A really smelly dungeon";
-    dungeon.sector = flags.ROOM_SECTOR_FLAGS.SECT_INSIDE;
-    let dungeon_exit = new Exit();
-    dungeon_exit.direction = flags.EXIT_DIRECTIONS.DDIR_UP
-    dungeon_exit.door_keyword = "trapdoor"
-    dungeon_exit.door_flags.push(flags.EXIT_DOOR_FLAGS.EX_ISDOOR)
-    dungeon_exit.door_flags.push(flags.EXIT_DOOR_FLAGS.EX_LOCKED)
-    dungeon_exit.door_flags.push(flags.EXIT_DOOR_FLAGS.EX_CLOSED)
-    dungeon.exits.push(dungeon_exit)
-    let dungeon_extra_desc = new ExtraDescription()
-    dungeon_extra_desc.keywords = "smelly garbage"
-    dungeon_extra_desc.ldesc = "There's a heap of really nasty garbage here. It might be a way out - if you die of food poisoning!"
-    dungeon.extra_descriptions.push(dungeon_extra_desc)
-    
-    
-    dungeon_exit.target_vnum = courtroom.vnum
-    courtroom_exit.target_vnum = dungeon.vnum
-    
-    loader.area.rooms.push(courtroom)
-    loader.area.rooms.push(dungeon)
-    
-    let trapdoor_key = new GameObject();
-    trapdoor_key.vnum = "QQ01";
-    trapdoor_key.sdesc = "{80}A large iron key";
-    trapdoor_key.ldesc = "{80}A large iron key is lying about for anyone to take";
-    trapdoor_key.keywords = "large iron key";
-    trapdoor_key.item_type = flags.ITEM_TYPES.ITEM_TYPE_KEY;
-    trapdoor_key.wear_flags.push(flags.WEAR_LOCATIONS.CAN_WEAR_TAKE);
-    trapdoor_key.wear_flags.push(flags.WEAR_LOCATIONS.CAN_WEAR_HOLD);
-    let trapdoor_key_desc = new ExtraDescription();
-    trapdoor_key_desc.keywords = "large iron key";
-    trapdoor_key_desc.ldesc = "{80}This is a heavy iron key, scratched from years of use.\nIt looks like it might open a trapdoor.";
-    trapdoor_key.extra_descriptions.push(trapdoor_key_desc);
-    trapdoor_key.quality = flags.ITEM_QUALITY.QUALITY_AVERAGE;
-    trapdoor_key.condition = flags.ITEM_CONDITION.COND_USABLE;
-    trapdoor_key.material = flags.ITEM_MATERIALS.MATERIAL_IRON;
-    trapdoor_key.size = flags.ITEM_SIZES.SIZE_TINY;
-    
-    loader.area.objects.push(trapdoor_key);
-    
-    loader.area.justice_system = new JusticeSystem();
-    loader.area.justice_system.courtroom = courtroom
-    loader.area.justice_system.judge = {
-        vnum: "QQ02",
-        validate: () => (true)
-    };
-    loader.area.justice_system.dungeon = dungeon;
-    loader.area.justice_system.guard = {
-        vnum: "QQ04",
-        validate: () => (true)
-    };
-    loader.area.justice_system.CRIME_HIGH_MURDER.punishment = flags.JUSTICE_PUNISHMENTS.PUNISHMENT_DEATH;
-    loader.area.justice_system.CRIME_LOW_MURDER.punishment = flags.JUSTICE_PUNISHMENTS.PUNISHMENT_SEVER;
-    loader.area.justice_system.CRIME_ASSAULT.punishment = flags.JUSTICE_PUNISHMENTS.PUNISHMENT_JAIL;
-    loader.area.justice_system.CRIME_MUGGING.punishment = flags.JUSTICE_PUNISHMENTS.PUNISHMENT_RANDOM_ITEM;
+    let loader = new Loader(fs.readFileSync("../../../areas/sample1.are", "utf-8"));
     
     console.log(loader.toString());
 }
