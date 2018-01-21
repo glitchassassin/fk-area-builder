@@ -110,6 +110,64 @@ if questr(QQ00, 5, 3, $n) == 4
 endif
 ~
 |
+#QQ01
+human man male Steve unique~
+{D0}Steve~
+{D0}Steve the unique mobile stands here.~
+{D0}1234567890123456789012345678901234567890123456789012345678901234567890
+Steve is a unique mobile. He is different from Bob because you can set
+his specific skills and he will not load anything that you do not tell
+him to load (whereas Steve will start with a low amount of cash, Steve
+will have nothing in his inventory).
+~
+U 15 CLASS_WARRIOR RACE_HUMAN SEX_MALE POS_STANDING DEITY_NONE
+ACT_SENTINEL|ACT_CITIZEN|ACT_NOSHOVE
+AFF_NONE|AFF_NONE
+ARMOR_TYPE_LEATHER MATERIAL_LEATHER
+ALIGN_TRUE_NEUTRAL
+16 13 13 16 18 13 13
+LANG_COMMON
+LANG_COMMON
+RIS_NONE RIS_NONE RIS_NONE
+
+>greet_prog 100~
+if questr(QQ00, 5, 3, $n) == 5
+  mpmset $n questr QQ00 5 3 6
+  sayto $n Hi there. Bob must have sent you.
+  sayto $n Let's talk about components of a program.
+  sayto $n Every program has a title, then any if checks, the the results.
+  sayto $n IFs must have an ENDIF.
+  sayto $n Some IFs also have an ELSE in between. See this one and then sit down.
+else
+  sayto $n Go see Bob first!
+endif
+~
+>intercept_prog rest~
+if questr(QQ00, 5, 3, $n) == 6
+  mpmset $n questr QQ00 5 3 7
+  sayto $n You have a whole bunch of echo commands available to show what I am doing, but
+  sayto $n but sometimes it is easier to just use smote. See below.
+  smote waves at @$N.
+  sayto $n Smote uses @ before its targets. So when I do @$N it means that you will see 'you' and everyone else will see your name
+  sayto $n (if they have greeted you) or your adjective (if they have not).
+  mpechoat $n $I waves at you.
+  sayto $n Here, with mpechoat, you just see that ($I means my full short description - so Steve in this case).
+  mpechoaround $n $I waves at @N.
+  sayto $n With mpechoaround it shows to everyone else in the room, so I used @N to just show them your adjective if you are not greeted.
+  sayto $n mpechoat and mpechoaround should be paired up to make sense.
+  pause 1
+  sayto $n Here is one for use when you want to show the same thing to everyone.
+  mpecho {F0}A bright light shines around the room!
+  sayto $n And that pause thing that I keep doing makes the program pause for as many seconds as I tell it to.
+  pause 1
+  sayto $n That's one second.
+  pause 10
+  sayto $n That's ten seconds.
+  wave $n
+  sayto $n Go read the lessons!
+endif
+~
+|
 #QQ02
 horse female mare~
 {30}a mare~
@@ -287,70 +345,22 @@ else
 endif
 ~
 |
-#QQ01
-human man male Steve unique~
-{D0}Steve~
-{D0}Steve the unique mobile stands here.~
-{D0}1234567890123456789012345678901234567890123456789012345678901234567890
-Steve is a unique mobile. He is different from Bob because you can set
-his specific skills and he will not load anything that you do not tell
-him to load (whereas Steve will start with a low amount of cash, Steve
-will have nothing in his inventory).
-~
-U 15 CLASS_WARRIOR RACE_HUMAN SEX_MALE POS_STANDING DEITY_NONE
-ACT_SENTINEL|ACT_CITIZEN|ACT_NOSHOVE
-AFF_NONE|AFF_NONE
-ARMOR_TYPE_LEATHER MATERIAL_LEATHER
-ALIGN_TRUE_NEUTRAL
-16 13 13 16 18 13 13
-LANG_COMMON
-LANG_COMMON
-RIS_NONE RIS_NONE RIS_NONE
-
->greet_prog 100~
-if questr(QQ00, 5, 3, $n) == 5
-  mpmset $n questr QQ00 5 3 6
-  sayto $n Hi there. Bob must have sent you.
-  sayto $n Let's talk about components of a program.
-  sayto $n Every program has a title, then any if checks, the the results.
-  sayto $n IFs must have an ENDIF.
-  sayto $n Some IFs also have an ELSE in between. See this one and then sit down.
-else
-  sayto $n Go see Bob first!
-endif
-~
->intercept_prog rest~
-if questr(QQ00, 5, 3, $n) == 6
-  mpmset $n questr QQ00 5 3 7
-  sayto $n You have a whole bunch of echo commands available to show what I am doing, but
-  sayto $n but sometimes it is easier to just use smote. See below.
-  smote waves at @$N.
-  sayto $n Smote uses @ before its targets. So when I do @$N it means that you will see 'you' and everyone else will see your name
-  sayto $n (if they have greeted you) or your adjective (if they have not).
-  mpechoat $n $I waves at you.
-  sayto $n Here, with mpechoat, you just see that ($I means my full short description - so Steve in this case).
-  mpechoaround $n $I waves at @N.
-  sayto $n With mpechoaround it shows to everyone else in the room, so I used @N to just show them your adjective if you are not greeted.
-  sayto $n mpechoat and mpechoaround should be paired up to make sense.
-  pause 1
-  sayto $n Here is one for use when you want to show the same thing to everyone.
-  mpecho {F0}A bright light shines around the room!
-  sayto $n And that pause thing that I keep doing makes the program pause for as many seconds as I tell it to.
-  pause 1
-  sayto $n That's one second.
-  pause 10
-  sayto $n That's ten seconds.
-  wave $n
-  sayto $n Go read the lessons!
-endif
-~
-|
 #0
+#OBJECTS
 
+#0
+#ROOMS
+
+S
 #RESETS
 
 S
+#SHOPS
 
+0
+#REPAIRS
+
+0
 #SPECIALS
 
 S
