@@ -2,6 +2,26 @@ var fs = require("fs");
 var flags = require("./flags.js");
 var models = require("./are_model.js");
 
+function get_code(code, flag_list) {
+    for (let f in flag_list) {
+        if (flag_list[f].code == code) {
+            return flag_list[f]
+        }
+    }
+}
+
+function get_codes(codes, flag_list) {
+    let to_return = []
+    for (let c in codes) {
+        for (let f in flag_list) {
+            if (flag_list[f].code == codes[c]) {
+                to_return.push(flag_list[f])
+            }
+        }
+    }
+    return to_return;
+}
+
 class Loader {
     constructor(are_string) {
         // Accepts a string containing a .are file
@@ -11,6 +31,7 @@ class Loader {
         this.parseAreaHeader(are_string);
         this.parseQuests(are_string);
         this.parseMobiles(are_string);
+        this.parseItems(are_string);
         
         // JusticeSystem has to wait until mobs & rooms are loaded to establish links
         this.parseJusticeSystem(are_string);
@@ -20,12 +41,7 @@ class Loader {
         let area = /^#AREA ({..})?(.*)~$/gm.exec(area_text)
         this.area.category = flags.AREA_CATEGORIES.INCOMPLETE;
         
-        for (let cat in flags.AREA_CATEGORIES) {
-            if (flags.AREA_CATEGORIES[cat].color_code == area[1]) {
-                this.area.category = flags.AREA_CATEGORIES[cat];
-                break;
-            }
-        }
+        this.area.category = get_code(area[1], flags.AREA_CATEGORIES);
         this.area.name = area[2];
         
         let authors = /^#AUTHOR (.*)~$/gm.exec(area_text)
@@ -83,12 +99,7 @@ class Loader {
             quest.qbit_stop = matches[3];
             quest.min_qbit = matches[4];
             quest.max_qbit = matches[5];
-            for (let code in flags.QUEST_EVENT_CODES) {
-                if (flags.QUEST_EVENT_CODES[code].color_code == matches[6]) {
-                    quest.event_code = flags.QUEST_EVENT_CODES[code];
-                    break;
-                }
-            }
+            quest.event_code = get_code(matches[6], flags.QUEST_EVENT_CODES);
             quest.qlog_text = matches[7];
             this.area.quest_log.push(quest)
         }
@@ -110,55 +121,14 @@ class Loader {
             mob.fulldesc = matches[5];
             // 6 = [S]imple mob
             mob.level = matches[7];
-            for (let f in flags.MOB_CLASSES) {
-                if (flags.MOB_CLASSES[f].code == matches[8]) {
-                    mob.mob_class = flags.MOB_CLASSES[f]
-                }
-            }
-            for (let f in flags.MOB_RACES) {
-                if (flags.MOB_RACES[f].code == matches[9]) {
-                    mob.race = flags.MOB_RACES[f]
-                }
-            }
-            for (let f in flags.MOB_SEXES) {
-                if (flags.MOB_SEXES[f].code == matches[10]) {
-                    mob.sex = flags.MOB_SEXES[f]
-                }
-            }
-            for (let f in flags.MOB_POSITIONS) {
-                if (flags.MOB_POSITIONS[f].code == matches[11]) {
-                    mob.position = flags.MOB_POSITIONS[f]
-                }
-            }
-            for (let f in flags.MOB_DEITIES) {
-                if (flags.MOB_DEITIES[f].code == matches[12]) {
-                    mob.deity = flags.MOB_DEITIES[f]
-                }
-            }
-            let act_flags = matches[13].split("|");
-            for (let i in act_flags) {
-                for (let f in flags.MOB_ACT_FLAGS) {
-                    if (flags.MOB_ACT_FLAGS[f].code == act_flags[i]) {
-                        mob.act_flags.push(flags.MOB_ACT_FLAGS[f])
-                    }
-                }
-            }
-            let understood_languages = matches[14].split("|");
-            for (let i in understood_languages) {
-                for (let f in flags.LANGUAGE_FLAGS) {
-                    if (flags.LANGUAGE_FLAGS[f].code == understood_languages[i]) {
-                        mob.understood_languages.push(flags.LANGUAGE_FLAGS[f])
-                    }
-                }
-            }
-            let spoken_languages = matches[15].split("|");
-            for (let i in spoken_languages) {
-                for (let f in flags.LANGUAGE_FLAGS) {
-                    if (flags.LANGUAGE_FLAGS[f].code == spoken_languages[i]) {
-                        mob.spoken_languages.push(flags.LANGUAGE_FLAGS[f])
-                    }
-                }
-            }
+            mob.mob_class = get_code(matches[8], flags.MOB_CLASSES);
+            mob.race = get_code(matches[9], flags.MOB_RACES);
+            mob.sex = get_code(matches[10], flags.MOB_SEXES);
+            mob.position = get_code(matches[11], flags.MOB_POSITIONS);
+            mob.deity = get_code(matches[12], flags.MOB_DEITIES);
+            mob.act_flags = get_codes(matches[13].split("|"), flags.MOB_ACT_FLAGS);
+            mob.understood_languages = get_codes(matches[14].split("|"), flags.LANGUAGE_FLAGS);
+            mob.spoken_languages = get_codes(matches[15].split("|"), flags.LANGUAGE_FLAGS);
             
             let can_train = matches[16];
             let can_train_regex = /^%([^ ]+) ([^ ]+)( .+)?~$/gm;
@@ -247,65 +217,16 @@ class Loader {
             mob.fulldesc = matches[5];
             // 6 = [U]nique mob
             mob.level = matches[7];
-            for (let f in flags.MOB_CLASSES) {
-                if (flags.MOB_CLASSES[f].code == matches[8]) {
-                    mob.mob_class = flags.MOB_CLASSES[f]
-                }
-            }
-            for (let f in flags.MOB_RACES) {
-                if (flags.MOB_RACES[f].code == matches[9]) {
-                    mob.race = flags.MOB_RACES[f]
-                }
-            }
-            for (let f in flags.MOB_SEXES) {
-                if (flags.MOB_SEXES[f].code == matches[10]) {
-                    mob.sex = flags.MOB_SEXES[f]
-                }
-            }
-            for (let f in flags.MOB_POSITIONS) {
-                if (flags.MOB_POSITIONS[f].code == matches[11]) {
-                    mob.position = flags.MOB_POSITIONS[f]
-                }
-            }
-            for (let f in flags.MOB_DEITIES) {
-                if (flags.MOB_DEITIES[f].code == matches[12]) {
-                    mob.deity = flags.MOB_DEITIES[f]
-                }
-            }
-            let act_flags = matches[13].split("|");
-            for (let i in act_flags) {
-                for (let f in flags.MOB_ACT_FLAGS) {
-                    if (flags.MOB_ACT_FLAGS[f].code == act_flags[i]) {
-                        mob.act_flags.push(flags.MOB_ACT_FLAGS[f])
-                    }
-                }
-            }
-            let affect_flags = matches[14].split("|");
-            for (let i in affect_flags) {
-                for (let f in flags.MOB_AFFECTS) {
-                    if (flags.MOB_AFFECTS[f].code == affect_flags[i]) {
-                        mob.affect_flags.push(flags.MOB_AFFECTS[f])
-                    }
-                }
-            }
-            let virtual_armor_type = matches[15];
-            for (let f in flags.ITEM_ARMOR_TYPES) {
-                if (flags.ITEM_ARMOR_TYPES[f].code == virtual_armor_type) {
-                    mob.virtual_armor_type = flags.ITEM_ARMOR_TYPES[f]
-                }
-            }
-            let virtual_armor_material = matches[16];
-            for (let f in flags.ITEM_MATERIALS) {
-                if (flags.ITEM_MATERIALS[f].code == virtual_armor_material) {
-                    mob.virtual_armor_material = flags.ITEM_MATERIALS[f]
-                }
-            }
-            let alignment = matches[17].trim();
-            for (let f in flags.MOB_ALIGNMENTS) {
-                if (flags.MOB_ALIGNMENTS[f].code == alignment) {
-                    mob.alignment = flags.MOB_ALIGNMENTS[f]
-                }
-            }
+            mob.mob_class = get_code(matches[8], flags.MOB_CLASSES);
+            mob.race = get_code(matches[9], flags.MOB_RACES);
+            mob.sex = get_code(matches[10], flags.MOB_SEXES);
+            mob.position = get_code(matches[11], flags.MOB_POSITIONS);
+            mob.deity = get_code(matches[12], flags.MOB_DEITIES);
+            mob.act_flags = get_codes(matches[13].split("|"), flags.MOB_ACT_FLAGS);
+            mob.affect_flags = get_codes(matches[14].split("|"), flags.MOB_AFFECTS);
+            mob.virtual_armor_type = get_code(matches[15], flags.ITEM_ARMOR_TYPES);
+            mob.virtual_armor_material = get_code(matches[16], flags.ITEM_MATERIALS);
+            mob.alignment = get_code(matches[16], flags.MOB_ALIGNMENTS);
             mob.str = matches[18];
             mob.int = matches[19];
             mob.wis = matches[20];
@@ -313,46 +234,11 @@ class Loader {
             mob.con = matches[22];
             mob.cha = matches[23];
             mob.lck = matches[24];
-            let understood_languages = matches[25].split("|");
-            for (let i in understood_languages) {
-                for (let f in flags.LANGUAGE_FLAGS) {
-                    if (flags.LANGUAGE_FLAGS[f].code == understood_languages[i] && mob.understood_languages.indexOf(flags.LANGUAGE_FLAGS[f]) == -1) {
-                        mob.understood_languages.push(flags.LANGUAGE_FLAGS[f])
-                    }
-                }
-            }
-            let spoken_languages = matches[26].split("|");
-            for (let i in spoken_languages) {
-                for (let f in flags.LANGUAGE_FLAGS) {
-                    if (flags.LANGUAGE_FLAGS[f].code == spoken_languages[i] && mob.spoken_languages.indexOf(flags.LANGUAGE_FLAGS[f]) == -1) {
-                        mob.spoken_languages.push(flags.LANGUAGE_FLAGS[f])
-                    }
-                }
-            }
-            let ris_resistant = matches[27].split("|");
-            for (let i in ris_resistant) {
-                for (let f in flags.MOB_RIS) {
-                    if (flags.MOB_RIS[f].code == ris_resistant[i] && mob.ris_resistant.indexOf(flags.MOB_RIS[f]) == -1) {
-                        mob.ris_resistant.push(flags.MOB_RIS[f])
-                    }
-                }
-            }
-            let ris_immune = matches[28].split("|");
-            for (let i in ris_immune) {
-                for (let f in flags.MOB_RIS) {
-                    if (flags.MOB_RIS[f].code == ris_immune[i] && mob.ris_immune.indexOf(flags.MOB_RIS[f]) == -1) {
-                        mob.ris_immune.push(flags.MOB_RIS[f])
-                    }
-                }
-            }
-            let ris_susceptible = matches[29].split("|");
-            for (let i in ris_susceptible) {
-                for (let f in flags.MOB_RIS) {
-                    if (flags.MOB_RIS[f].code == ris_susceptible[i] && mob.ris_susceptible.indexOf(flags.MOB_RIS[f]) == -1) {
-                        mob.ris_susceptible.push(flags.MOB_RIS[f])
-                    }
-                }
-            }
+            mob.understood_languages = get_codes(matches[25].split("|"), flags.LANGUAGE_FLAGS);
+            mob.spoken_languages = get_codes(matches[26].split("|"), flags.LANGUAGE_FLAGS);
+            mob.ris_resistant = get_codes(matches[27].split("|"), flags.MOB_RIS);
+            mob.ris_immune = get_codes(matches[28].split("|"), flags.MOB_RIS);
+            mob.ris_susceptible = get_codes(matches[29].split("|"), flags.MOB_RIS);
             
             let can_train = matches[30];
             let can_train_regex = /^%([^ ]+) ([^ ]+)( .+)?~$/gm;
@@ -440,6 +326,16 @@ class Loader {
         let matches;
         while ((matches = item_regex.exec(items)) != null) {
             let item = new models.Item();
+            
+            item.vnum = matches[1];
+            item.keywords = matches[2];
+            item.sdesc = matches[3];
+            item.ldesc = matches[4];
+            item.action_description = matches[5];
+            item.item_type = get_code(matches[6], flags.ITEM_TYPES);
+            item.attributes = get_codes(matches[7].split("|"), flags.ITEM_ATTRIBUTES);
+            item.wear_flags = get_codes(matches[8].split("|"), flags.WEAR_LOCATIONS);
+            item.action_description = matches[5];
             
             this.area.items.push(item);
         }
