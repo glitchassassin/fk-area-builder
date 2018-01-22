@@ -40,7 +40,7 @@ class Area extends Model {
             rooms:                  new Field({field_name:"rooms",                  default_value: [],      in_flags:null,                  optional:true}),
             room_resets:            new Field({field_name:"room_resets",            default_value: [],      in_flags:null,                  optional:true}),
             door_resets:            new Field({field_name:"door_resets",            default_value: [],      in_flags:null,                  optional:true}),
-            objects:                new Field({field_name:"objects",                default_value: [],      in_flags:null,                  optional:true}),
+            items:                  new Field({field_name:"items",                  default_value: [],      in_flags:null,                  optional:true}),
             item_resets:            new Field({field_name:"item_resets",            default_value: [],      in_flags:null,                  optional:true}),
             mobs:                   new Field({field_name:"mobs",                   default_value: [],      in_flags:null,                  optional:true}),
             mob_resets:             new Field({field_name:"mob_resets",             default_value: [],      in_flags:null,                  optional:true}),
@@ -109,6 +109,7 @@ class Area extends Model {
         
         return `#AREA ${this.category.color_code}${this.name}~
 #AUTHOR ${this.authors.join(" ")}~
+${this.justice_system != null ? this.justice_system.toString() : ""}
 #RANGES
 ${this.min_recommended_level} ${this.max_recommended_level} ${this.min_enforced_level} ${this.max_enforced_level}
 $
@@ -117,7 +118,6 @@ $
 ${this.wilderness_flag} ${this.reset_duration}
 #ECONOMY ${this.economy_min} ${this.economy_max}
 #WEATHER ${this.weather_humidity} ${this.weather_temperature}
-${this.justice_system != null ? this.justice_system.toString() : ""}
 ${this.mining_material != null ? "#MINING " + this.mining_material.code : ""}
 ${this.logging_material != null ? "#LOGGING " + this.logging_material.code : ""}
 #QUESTS
@@ -127,11 +127,11 @@ ${this.quest_log.map((quest)=>(quest.toString())).join("\n")}
 ${this.mobs.sort(vnum_sort).map((mob)=>(mob.toString())).join("\n")}
 #0
 #OBJECTS
-${this.objects.sort(vnum_sort).map((obj)=>(obj.toString())).join("\n")}
+${this.items.sort(vnum_sort).map((obj)=>(obj.toString())).join("\n")}
 #0
 #ROOMS
 ${this.rooms.sort(vnum_sort).map((room)=>(room.toString())).join("\n")}
-S
+#0
 #RESETS
 ${this.mob_resets.map((res)=>(res.toString())).join("\n") /* Includes equipment resets */}
 ${this.item_resets.map((res)=>(res.toString())).join("\n")}
@@ -155,10 +155,10 @@ S
 class JusticeSystem extends Model {
     constructor(fields) {
         super(Object.assign({
-            courtroom:  new Field({field_name:"courtroom",  default_value: null,    in_flags:null,  optional:false}),
-            dungeon:    new Field({field_name:"dungeon",    default_value: null,    in_flags:null,  optional:false}),
-            judge:      new Field({field_name:"judge",      default_value: null,    in_flags:null,  optional:false}),
-            guard:      new Field({field_name:"guard",      default_value: null,    in_flags:null,  optional:false}),
+            courtroom:  new Field({field_name:"courtroom",  default_value: null,    in_flags:null,  optional:true}),
+            dungeon:    new Field({field_name:"dungeon",    default_value: null,    in_flags:null,  optional:true}),
+            judge:      new Field({field_name:"judge",      default_value: null,    in_flags:null,  optional:true}),
+            guard:      new Field({field_name:"guard",      default_value: null,    in_flags:null,  optional:true}),
             CRIME_HIGH_MURDER: new Field({field_name:"CRIME_HIGH_MURDER", default_value: {
                 code: "CRIME_HIGH_MURDER",
                 sdesc: "High Murder",
@@ -213,10 +213,10 @@ class JusticeSystem extends Model {
             return "Invalid JusticeSystem: \n" + errors.join("\n")
         }
         return `#JUSTICE
-CourtRoom ${this.courtroom.vnum}
-Dungeon ${this.dungeon.vnum}
-Judge ${this.judge.vnum}
-Guard ${this.guard.vnum}
+CourtRoom ${this.courtroom ? this.courtroom.vnum : "0"}
+Dungeon ${this.dungeon ? this.dungeon.vnum : "0"}
+Judge ${this.judge ? this.judge.vnum : "0"}
+Guard ${this.guard ? this.guard.vnum : "0"}
 Crime CRIME_HIGH_MURDER ${this.CRIME_HIGH_MURDER.punishment.code}
 Crime CRIME_LOW_MURDER ${this.CRIME_LOW_MURDER.punishment.code}
 Crime CRIME_ASSAULT ${this.CRIME_ASSAULT.punishment.code}
@@ -263,7 +263,7 @@ class Room extends Model {
 ${this.sdesc}~
 ${this.ldesc}
 ~
-${this.defunct} ${this.room_flags.join("|")||"0"} ${this.sector.code} ${this.teleport_delay} ${this.teleport_target} ${this.tunnel}
+${this.defunct} ${this.room_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.sector.code} ${this.teleport_delay} ${this.teleport_target} ${this.tunnel}
 ${this.exits.map((exit) => (exit.toString())).join("\n")}
 ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.programs.map((program) => (program.toString())).join("\n")}
@@ -278,8 +278,7 @@ class Exit extends Model {
         super(Object.assign({
             direction:          new Field({field_name:"direction",          default_value: null,                            in_flags:null,                  optional:false}),
             comment:            new Field({field_name:"comment",            default_value: "",                              in_flags:null,                  optional:false}),
-            somewhere_keyword:  new Field({field_name:"somewhere_keyword",  default_value: null,                            in_flags:null,                  optional:true}),
-            door_keyword:       new Field({field_name:"door_keyword",       default_value: "",                              in_flags:null,                  optional:false}),
+            somewhere_door_keyword:       new Field({field_name:"door_keyword",       default_value: "",                              in_flags:null,                  optional:false}),
             // Flags                    
             door_flags:         new Field({field_name:"door_flags",         default_value: [],                              in_flags:flags.EXIT_DOOR_FLAGS, optional:false}),
             door_key:           new Field({field_name:"door_key",           default_value: -1,                              in_flags:null,                  optional:false}),
@@ -292,12 +291,6 @@ class Exit extends Model {
     }
     validate() {
         let errors = super.validate();
-        if (this.direction == flags.EXIT_DIRECTIONS.DDIR_SOMEWHERE && this.somewhere_keyword == null) {
-            errors.push(`${this._error_prefix}.somewhere_keyword Somewhere exit defined, but no exit keyword specified`);
-        }
-        if (this.direction == flags.EXIT_DIRECTIONS.DDIR_SOMEWHERE && this.door_flags.indexOf(flags.EXIT_DOOR_FLAGS.EX_XAUTO) != -1) {
-            errors.push(`${this._error_prefix}.door_flags Somewhere exit defined, but EX_XAUTO flag not set`);
-        }
         if (this.door_keyword != "" && this.door_flags.indexOf(flags.EXIT_DOOR_FLAGS.EX_ISDOOR) == -1) {
             errors.push(`${this._error_prefix}.door_flags Door keywords defined, but EX_ISDOOR flag not set`);
         }
@@ -311,8 +304,8 @@ class Exit extends Model {
         }
         return `${this.direction.code}
 ${this.comment}~
-${this.direction == flags.EXIT_DIRECTIONS.DDIR_SOMEWHERE ? this.somewhere_keyword : this.door_keyword}~
-${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key} ${this.target_vnum} ${this.exit_size}`;
+${this.somewhere_door_keyword}~
+${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key} ${this.target_vnum} ${this.exit_size.code}`;
     }
 }
 
@@ -339,6 +332,26 @@ ${this.ldesc}
     }
 }
 
+class ItemApply extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            apply_flag: new Field({field_name:"apply_flag", default_value: null,    in_flags:flags.ITEM_APPLIES,    optional:false}),
+            parameter:  new Field({field_name:"parameter",  default_value: null,    in_flags:null,                  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[ExtraDescription:${this.apply_flag}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `A ${this.apply_flag} ${this.parameter}`;
+    }
+}
+
 class Item extends Model {
     constructor(fields) {
         super(Object.assign({
@@ -354,13 +367,14 @@ class Item extends Model {
             quality:            new Field({field_name:"quality",            default_value: null,    in_flags:flags.ITEM_QUALITY,    optional:false}),
             material:           new Field({field_name:"material",           default_value: null,    in_flags:flags.ITEM_MATERIALS,  optional:false}),
             condition:          new Field({field_name:"condition",          default_value: null,    in_flags:flags.ITEM_CONDITION,  optional:false}),
+            size:               new Field({field_name:"size",               default_value: null,    in_flags:flags.ITEM_SIZES,      optional:false}),
             value0:             new Field({field_name:"value0",             default_value: 0,       in_flags:null,                  optional:true}),
             value1:             new Field({field_name:"value1",             default_value: 0,       in_flags:null,                  optional:true}),
             value2:             new Field({field_name:"value2",             default_value: 0,       in_flags:null,                  optional:true}),
             value3:             new Field({field_name:"value3",             default_value: 0,       in_flags:null,                  optional:true}),
             value4:             new Field({field_name:"value4",             default_value: 0,       in_flags:null,                  optional:true}),
             value5:             new Field({field_name:"value5",             default_value: 0,       in_flags:null,                  optional:true}),
-            special_applies:    new Field({field_name:"special_applies",    default_value: [],      in_flags:flags.MOB_AFFECTS,     optional:true}),
+            special_applies:    new Field({field_name:"special_applies",    default_value: [],      in_flags:null,                  optional:true}),
             programs:           new Field({field_name:"programs",           default_value: [],      in_flags:null,                  optional:true}),
             identify_message:   new Field({field_name:"identify_message",   default_value: null,    in_flags:flags.MOB_AFFECTS,     optional:true}),
         }, fields));
@@ -395,7 +409,7 @@ ${this.wear_flags.map((flag)=>(flag.code)).join("|")||0}
 ${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.code}
 ${this.value0} ${this.value1} ${this.value2} ${this.value3} ${this.value4} ${this.value5}
 ${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
-${this.special_applies.map((spec) => (`A ${spec.code} ${spec.value}`)).join("\n")}
+${this.special_applies.map((spec) => (spec.toString())).join("\n")}
 ${this.identify_message != null ? `I\n${this.identify_message}\n~` : "" }
 ${this.programs.map((program) => (program.toString())).join("\n")}
 ${this.programs.length ? "|" : ""}`;
@@ -687,8 +701,7 @@ class MobReset extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room.vnum} ; ${this.mob.sdesc} in ${this.room.sdesc}
-${this.mob.equipment_resets.map((equip)=>(equip.toString())).join("\n")}`
+        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room.vnum} ; ${this.mob.sdesc} in ${this.room.sdesc}${this.mob.equipment_resets.length ? "\n"+this.mob.equipment_resets.map((equip)=>(equip.toString())).join("\n") : ""}`
     }
 }
 
@@ -713,13 +726,11 @@ class EquipmentReset extends Model {
         }
         if (this.wear_loc) {
             // Equipped
-            return ` E ${this.defunct} ${this.item.vnum} ${this.equip_limit} ${this.wear_loc.code} ; ${this.item.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+            return ` E ${this.defunct} ${this.item.vnum} ${this.equip_limit} ${this.wear_loc.code} ; ${this.item.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
         }
         else {
             // Held
-            return ` G ${this.defunct} ${this.item.vnum} ${this.equip_limit} ; ${this.item.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+            return ` G ${this.defunct} ${this.item.vnum} ${this.equip_limit} ; ${this.item.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
         }
     }
 }
@@ -747,19 +758,15 @@ class ItemReset extends Model {
         }
         if (this.room_container instanceof Item) {
             // Container (hidden is handled differently)
-            return `P ${this.hidden ? 1 : 0} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+            return `P ${this.hidden ? 1 : 0} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
         }
         else if (this.hidden) {
-            return `H ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+            return `H ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
         }
         else if (this.buried) {
-            return `U ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+            return `U ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
         }
-        return `O ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+        return `O ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container.vnum} ; ${this.item.sdesc} in ${this.room_container.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
     }
 }
 
@@ -768,8 +775,8 @@ class DoorReset extends Model {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,              optional:false}),
             room:           new Field({field_name:"room",           default_value: null,    in_flags:null,              optional:false}),
-            exit:           new Field({field_name:"exit",           default_value: null,    in_flags:null,              optional:false}),
-            exit_state:     new Field({field_name:"exit_state",     default_value: null,    in_flags:flags.DOOR_RESETS, optional:false}),
+            exit:           new Field({field_name:"exit",           default_value: null,    in_flags:flags.DOOR_RESET_DIRECTIONS,              optional:false}),
+            exit_state:     new Field({field_name:"exit_state",     default_value: null,    in_flags:flags.DOOR_RESET_FLAGS, optional:false}),
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,              optional:true}),
         }, fields))
     }
@@ -782,8 +789,7 @@ class DoorReset extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `D ${this.defunct} ${this.room.vnum} ${this.exit.direction} ${this.exit_state.code} ; ${this.room.sdesc}
-${this.trap_reset ? this.trap_reset.toString() : ""}`
+        return `D ${this.defunct} ${this.room.vnum} ${this.exit.code} ${this.exit_state.code} ; ${this.room.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
     }
 }
 
@@ -952,6 +958,7 @@ module.exports = {
     Room: Room,
     Exit: Exit,
     ExtraDescription: ExtraDescription,
+    ItemApply: ItemApply,
     Item: Item,
     SimpleMob: SimpleMob,
     UniqueMob: UniqueMob,

@@ -5418,34 +5418,42 @@ const EXIT_SIZES = {
     EXIT_SIZE_ANY: {
         code: "EXIT_SIZE_ANY",
         sdesc: "EXIT_SIZE_ANY",
+        bits: 0
     },
     EXIT_SIZE_TINY: {
         code: "EXIT_SIZE_TINY",
         sdesc: "EXIT_SIZE_TINY",
+        bits: 1000
     },
     EXIT_SIZE_SMALL: {
         code: "EXIT_SIZE_SMALL",
         sdesc: "EXIT_SIZE_SMALL",
+        bits: 1001
     },
     EXIT_SIZE_MEDIUM: {
         code: "EXIT_SIZE_MEDIUM",
         sdesc: "EXIT_SIZE_MEDIUM",
+        bits: 1002
     },
     EXIT_SIZE_NORMAL: {
         code: "EXIT_SIZE_NORMAL",
         sdesc: "EXIT_SIZE_NORMAL",
+        bits: 1002
     },
     EXIT_SIZE_LARGE: {
         code: "EXIT_SIZE_LARGE",
         sdesc: "EXIT_SIZE_LARGE",
+        bits: 1003
     },
     EXIT_SIZE_HUGE: {
         code: "EXIT_SIZE_HUGE",
         sdesc: "EXIT_SIZE_HUGE",
+        bits: 1004
     },
     EXIT_SIZE_GIANT: {
         code: "EXIT_SIZE_GIANT",
         sdesc: "EXIT_SIZE_GIANT",
+        bits: 1005
     }
 };
 const ROOM_FLAGS = {
@@ -10621,6 +10629,38 @@ const DOOR_RESET_FLAGS = {
         sdesc: "DOOR_NONE"
     },
 };
+const DOOR_RESET_DIRECTIONS = {
+    DIR_NORTH: {
+        code: "DIR_NORTH",
+        sdesc: "DIR_NORTH",
+        bits: 0
+    },
+    DIR_EAST: {
+        code: "DIR_EAST",
+        sdesc: "DIR_EAST",
+        bits: 1
+    },
+    DIR_SOUTH: {
+        code: "DIR_SOUTH",
+        sdesc: "DIR_SOUTH",
+        bits: 2
+    },
+    DIR_WEST: {
+        code: "DIR_WEST",
+        sdesc: "DIR_WEST",
+        bits: 3
+    },
+    DIR_UP: {
+        code: "DIR_UP",
+        sdesc: "DIR_UP",
+        bits: 4
+    },
+    DIR_DOWN: {
+        code: "DIR_DOWN",
+        sdesc: "DIR_DOWN",
+        bits: 5
+    },
+}
 const RESET_BIT_CODES = {
     BIT_RESET_ROOM: {
         code: "BIT_RESET_ROOM",
@@ -10876,6 +10916,7 @@ module.exports = Object.freeze({
     MOB_WEAR_POSITIONS: MOB_WEAR_POSITIONS,
     DOOR_RESET_FLAGS: DOOR_RESET_FLAGS,
     RESET_BIT_CODES: RESET_BIT_CODES,
+    DOOR_RESET_DIRECTIONS: DOOR_RESET_DIRECTIONS,
     MOB_SPECIALS: MOB_SPECIALS,
     QUEST_EVENT_CODES: QUEST_EVENT_CODES,
 });
