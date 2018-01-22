@@ -54,7 +54,7 @@ class Loader {
         let area = /^#AREA ({..})?(.*)~$/gm.exec(area_text)
         this.area.category = flags.AREA_CATEGORIES.INCOMPLETE;
         
-        this.area.category = get_color_code(area[1], flags.AREA_CATEGORIES);
+        this.area.category = get_color_code(area[1], flags.AREA_CATEGORIES) || flags.AREA_CATEGORIES.INCOMPLETE;
         this.area.name = area[2];
         
         let authors = /^#AUTHOR (.*)~$/gm.exec(area_text)
@@ -131,7 +131,7 @@ class Loader {
         if (!mobiles) {
             return
         }
-        let simple_mobile_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n(S) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\n(.*)$\n(.*)$\n(.*)$\n((?:%.*~\n)*)?(>[^]*?\|)?/gm
+        let simple_mobile_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n(S) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\n(.*)$\n([^%].*)$\n([^%].*)$\n((?:%.*~\n)*)?(>[^]*?\|)?/gm
         let matches;
         while ((matches = simple_mobile_regex.exec(mobiles)) != null) {
             let mob = new models.SimpleMob();
@@ -152,7 +152,7 @@ class Loader {
             mob.spoken_languages = get_codes(matches[15].split("|"), flags.LANGUAGE_FLAGS);
             
             let can_train = matches[16];
-            let can_train_regex = /^%([^ ]+) ([^ ]+)( .+)?~$/gm;
+            let can_train_regex = /^%([^ ]+) ([^ ]+) ?(.+)?~$/gm;
             let t;
             while ((t = can_train_regex.exec(can_train)) != null) {
                 let train;
@@ -182,6 +182,17 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_SKILLS[f];
+                            break;
+                        }
+                    }
+                }
+                if (!train) {
+                    for (let f in flags.MOB_WEAPON_SKILLS) {
+                        if (flags.MOB_WEAPON_SKILLS[f].code == t[3]) {
+                            train = new models.TrainWeaponSkill();
+                            train.level = t[1];
+                            train.price_multiplier = t[2];
+                            train.weapon_skill = flags.MOB_WEAPON_SKILLS[f];
                             break;
                         }
                     }
@@ -257,15 +268,16 @@ class Loader {
             mob.lck = matches[24];
             mob.understood_languages = get_codes(matches[25].split("|"), flags.LANGUAGE_FLAGS);
             mob.spoken_languages = get_codes(matches[26].split("|"), flags.LANGUAGE_FLAGS);
-            mob.ris_resistant = get_codes(matches[27].split("|"), flags.MOB_RIS);
-            mob.ris_immune = get_codes(matches[28].split("|"), flags.MOB_RIS);
-            mob.ris_susceptible = get_codes(matches[29].split("|"), flags.MOB_RIS);
+            mob.ris_resistant = [get_codes(matches[27].split("|"), flags.MOB_RIS) || flags.MOB_RIS.RIS_NONE];
+            mob.ris_immune = [get_codes(matches[28].split("|"), flags.MOB_RIS) || flags.MOB_RIS.RIS_NONE];
+            mob.ris_susceptible = [get_codes(matches[29].split("|"), flags.MOB_RIS) || flags.MOB_RIS.RIS_NONE];
             
             let can_train = matches[30];
             let can_train_regex = /^%([^ ]+) ([^ ]+)( .+)?~$/gm;
             let t;
             while ((t = can_train_regex.exec(can_train)) != null) {
                 let train;
+                console.log(can_train);
                 if (!train) {
                     if (!t[3]) {
                         train = new models.TrainLevel();
@@ -343,7 +355,7 @@ class Loader {
         if (!items) {
             return
         }
-        let item_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n(.*)\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)(\n(?:E[^]*?^~\n)+)?((?:\nA .*)+)?(?:I\s([^]*?)~$)?(>[^]*?|)?/gm
+        let item_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n(.*)\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)(\n(?:E[^]*?^~\n)+)?((?:\nA .*)+)?(?:I\s([^]*?)~$)?(>[^]*?\|)?/gm
         let matches;
         while ((matches = item_regex.exec(items)) != null) {
             let item = new models.Item();
@@ -351,7 +363,7 @@ class Loader {
             item.vnum = matches[1];
             item.keywords = matches[2];
             item.sdesc = matches[3];
-            item.ldesc = matches[4];
+            item.ldesc = matches[4].trim();
             item.action_description = matches[5];
             item.item_type = get_code(matches[6], flags.ITEM_TYPES);
             item.attributes = get_codes(matches[7].split("|"), flags.ITEM_ATTRIBUTES);
@@ -373,7 +385,7 @@ class Loader {
             while ((ed_matches = ed_regex.exec(extra_descs)) != null) {
                 let ed = new models.ExtraDescription()
                 ed.keywords = ed_matches[1];
-                ed.ldesc = ed_matches[2];
+                ed.ldesc = ed_matches[2].trim();
                 item.extra_descriptions.push(ed);
             }
             
@@ -434,7 +446,7 @@ class Loader {
                 exit.door_flags = get_codes(exit_matches[4].split("|"), flags.EXIT_DOOR_FLAGS);
                 exit.door_key = exit_matches[5];
                 exit.target_vnum = exit_matches[6];
-                exit.exit_size = get_code(exit_matches[7], flags.EXIT_SIZES);
+                exit.exit_size = get_code(exit_matches[7], flags.EXIT_SIZES) || flags.EXIT_SIZES.EXIT_SIZE_ANY;
                 room.exits.push(exit);
             }
             
@@ -467,10 +479,11 @@ class Loader {
         if (!resets) {
             return
         }
-        let reset_regex = /^ *([^\s]) +([^\s]+) +([^\s]+) +([^\s]+) +([^\s]*) *;/gm
+        let reset_regex = /^ *([^\s]) +([^\s]+) +([^\s]+) +([^\s]+) *([^\s]*) *;/gm
         let matches;
         
         let last_reset;
+        let last_mob_reset;
         while ((matches = reset_regex.exec(resets)) != null) {
             if (matches[1] == "M") {
                 let mob_reset = new models.MobReset();
@@ -481,7 +494,8 @@ class Loader {
                 
                 if (mob_reset.mob && mob_reset.room) {
                     this.area.mob_resets.push(mob_reset);
-                    last_reset = this.get_mob(matches[3]);
+                    last_reset = mob_reset;
+                    last_mob_reset = last_reset;
                 }
             }
             else if (matches[1] == "E") {
@@ -490,7 +504,7 @@ class Loader {
                 equip_reset.item = this.get_item(matches[3]);
                 equip_reset.equip_limit = matches[4];
                 equip_reset.wear_loc = get_code(matches[5], flags.MOB_WEAR_POSITIONS);
-                last_reset.equipment_resets.push(equip_reset);
+                last_mob_reset.mob.equipment_resets.push(equip_reset);
                 last_reset = equip_reset;
             }
             else if (matches[1] == "G") {
@@ -498,7 +512,7 @@ class Loader {
                 equip_reset.defunct = matches[2];
                 equip_reset.item = this.get_item(matches[3]);
                 equip_reset.equip_limit = matches[4];
-                last_reset.equipment_resets.push(equip_reset);
+                last_mob_reset.mob.equipment_resets.push(equip_reset);
                 last_reset = equip_reset;
             }
             else if (matches[1] == "T") {
@@ -517,7 +531,7 @@ class Loader {
                 coin_reset.coin_type = get_code(matches[3], flags.COIN_TYPES);
                 coin_reset.dice_count = matches[4];
                 coin_reset.dice_count = matches[5];
-                last_reset.equipment_resets.push(coin_reset);
+                last_mob_reset.mob.equipment_resets.push(coin_reset);
             }
             else if (matches[1] == "P") {
                 let item_reset = new models.ItemReset();
@@ -619,24 +633,24 @@ class Loader {
     }
     
     parseRepairs(area_text) {
-        let shops = area_text.match(/^#REPAIRS[^]*?^0$/gm)[0]
-        if (!shops) {
+        let repairs = area_text.match(/^#REPAIRS[^]*?^0$/gm)[0]
+        if (!repairs) {
             return
         }
-        let shops_regex = /^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\s^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/gm
+        let repairs_regex = /^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\s^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/gm
         let matches;
         
-        while ((matches = shops_regex.exec(shops)) != null) {
-            let shop = new models.Shop();
-            shop.shopkeeper = this.get_mob(matches[1]);
-            shop.will_repair_1 = get_code(matches[2], flags.ITEM_TYPES);
-            shop.will_repair_2 = get_code(matches[3], flags.ITEM_TYPES);
-            shop.repair_material = matches[4];
-            shop.profit_modifier = matches[5];
-            shop.repair = matches[6];
-            shop.open_hour = matches[7];
-            shop.close_hour = matches[8];
-            this.area.shops.push(shop);
+        while ((matches = repairs_regex.exec(repairs)) != null) {
+            let repair = new models.RepairRecharge();
+            repair.shopkeeper = this.get_mob(matches[1]);
+            repair.will_repair_1 = get_code(matches[2], flags.ITEM_TYPES);
+            repair.will_repair_2 = get_code(matches[3], flags.ITEM_TYPES);
+            repair.repair_material = get_code(matches[4], flags.MOB_REPAIR_MATERIAL);
+            repair.profit_modifier = matches[5];
+            repair.repair = get_code(matches[6], flags.MOB_REPAIR_RECHARGE);
+            repair.open_hour = matches[7];
+            repair.close_hour = matches[8];
+            this.area.repairs.push(repair);
         }
     }
     
@@ -649,9 +663,18 @@ class Loader {
                 return this.area.mobs[i]
             }
         }
+        // Not in file; Return empty mob as reference
         let mob = new models.SimpleMob()
         mob.vnum = vnum;
         mob.sdesc = "[MISSING]";
+        mob.ldesc = "[MISSING]";
+        mob.fulldesc = "[MISSING]";
+        mob.keywords = "[MISSING]";
+        mob.level = 1;
+        mob.mob_class = flags.MOB_CLASSES.CLASS_WARRIOR;
+        mob.race = flags.MOB_RACES.RACE_HUMAN;
+        mob.sex = flags.MOB_SEXES.SEX_NEUTRAL;
+        mob.position = flags.MOB_POSITIONS.POS_STANDING;
         return mob;
     }
     
@@ -664,9 +687,17 @@ class Loader {
                 return this.area.items[i]
             }
         }
+        // Not in file; Return empty item as reference
         let item = new models.Item()
         item.vnum = vnum;
         item.sdesc = "[MISSING]";
+        item.ldesc = "[MISSING]";
+        item.keywords = "[MISSING]";
+        item.item_type = flags.ITEM_TYPES.ITEM_TYPE_NONE;
+        item.quality = flags.ITEM_QUALITY.QUALITY_AVERAGE;
+        item.material = flags.ITEM_MATERIALS.MATERIAL_CLOTH;
+        item.condition = flags.ITEM_CONDITION.COND_PERFECT;
+        item.size = flags.ITEM_SIZES.SIZE_MEDIUM;
         return item;
     }
     
@@ -679,9 +710,12 @@ class Loader {
                 return this.area.rooms[i]
             }
         }
+        // Not in file; Return empty room as reference
         let room = new models.Room()
         room.vnum = vnum;
         room.sdesc = "[MISSING]";
+        room.ldesc = "[MISSING]";
+        room.sector = flags.ROOM_SECTOR_FLAGS.SECT_INSIDE;
         return room;
     }
     
@@ -692,7 +726,7 @@ class Loader {
 
 // DEBUG
 function testLoader() {
-    let loader = new Loader(fs.readFileSync("../../../areas/sample1.are", "utf-8"));
+    let loader = new Loader(fs.readFileSync("../../../areas/sample2.1.are", "utf-8"));
     
     console.log(loader.toString());
 }

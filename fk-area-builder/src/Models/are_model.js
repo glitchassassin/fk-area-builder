@@ -20,34 +20,34 @@ function vnum_sort(obj1, obj2) {
 class Area extends Model {
     constructor(fields) {
         super(Object.assign({
-            name:                   new Field({field_name:"name",                   default_value: null,    in_flags:null,                  optional:false}),
-            category:               new Field({field_name:"category",               default_value: null,    in_flags:flags.AREA_CATEGORIES, optional:false}),
-            authors:                new Field({field_name:"authors",                default_value: [],      in_flags:null,                  optional:false}),
-            justice_system:         new Field({field_name:"justice_system",         default_value: null,    in_flags:null,                  optional:true}),
-            min_recommended_level:  new Field({field_name:"min_recommended_level",  default_value: 1,       in_flags:null,                  optional:false}),
-            max_recommended_level:  new Field({field_name:"max_recommended_level",  default_value: 65,      in_flags:null,                  optional:false}),
-            min_enforced_level:     new Field({field_name:"min_enforced_level",     default_value: 0,       in_flags:null,                  optional:false}),
-            max_enforced_level:     new Field({field_name:"max_enforced_level",     default_value: 65,      in_flags:null,                  optional:false}),
-            reset_msg:              new Field({field_name:"reset_msg",              default_value: null,    in_flags:null,                  optional:false}),
-            wilderness_flag:        new Field({field_name:"wilderness_flag",        default_value: 0,       in_flags:null,                  optional:false}),
-            reset_duration:         new Field({field_name:"reset_duration",         default_value: 0,       in_flags:null,                  optional:false}),
-            economy_min:            new Field({field_name:"economy_min",            default_value: 5000,    in_flags:null,                  optional:false}),
-            economy_max:            new Field({field_name:"economy_max",            default_value: 5000,    in_flags:null,                  optional:false}),
-            weather_humidity:       new Field({field_name:"weather_humidity",       default_value: 5,       in_flags:null,                  optional:false}),
-            weather_temperature:    new Field({field_name:"weather_temperature",    default_value: 5,       in_flags:null,                  optional:false}),
-            mining_material:        new Field({field_name:"mining_material",        default_value: null,    in_flags:flags.ITEM_MATERIALS,  optional:true}),
-            logging_material:       new Field({field_name:"logging_material",       default_value: null,    in_flags:flags.ITEM_MATERIALS,  optional:true}),
-            rooms:                  new Field({field_name:"rooms",                  default_value: [],      in_flags:null,                  optional:true}),
-            room_resets:            new Field({field_name:"room_resets",            default_value: [],      in_flags:null,                  optional:true}),
-            door_resets:            new Field({field_name:"door_resets",            default_value: [],      in_flags:null,                  optional:true}),
-            items:                  new Field({field_name:"items",                  default_value: [],      in_flags:null,                  optional:true}),
-            item_resets:            new Field({field_name:"item_resets",            default_value: [],      in_flags:null,                  optional:true}),
-            mobs:                   new Field({field_name:"mobs",                   default_value: [],      in_flags:null,                  optional:true}),
-            mob_resets:             new Field({field_name:"mob_resets",             default_value: [],      in_flags:null,                  optional:true}),
-            mob_specials:           new Field({field_name:"mob_specials",           default_value: [],      in_flags:null,                  optional:true}),
-            shops:                  new Field({field_name:"shops",                  default_value: [],      in_flags:null,                  optional:true}),
-            repairs:                new Field({field_name:"repairs",                default_value: [],      in_flags:null,                  optional:true}),
-            quest_log:              new Field({field_name:"quest_log",              default_value: [],      in_flags:null,                  optional:true}),
+            name:                   new Field({field_name:"name",                   default_value: null,                                in_flags:null,                  optional:false}),
+            category:               new Field({field_name:"category",               default_value: flags.AREA_CATEGORIES.INCOMPLETE,    in_flags:flags.AREA_CATEGORIES, optional:false}),
+            authors:                new Field({field_name:"authors",                default_value: [],                                  in_flags:null,                  optional:false}),
+            justice_system:         new Field({field_name:"justice_system",         default_value: null,                                in_flags:null,                  optional:true}),
+            min_recommended_level:  new Field({field_name:"min_recommended_level",  default_value: 1,                                   in_flags:null,                  optional:false}),
+            max_recommended_level:  new Field({field_name:"max_recommended_level",  default_value: 65,                                  in_flags:null,                  optional:false}),
+            min_enforced_level:     new Field({field_name:"min_enforced_level",     default_value: 0,                                   in_flags:null,                  optional:false}),
+            max_enforced_level:     new Field({field_name:"max_enforced_level",     default_value: 65,                                  in_flags:null,                  optional:false}),
+            reset_msg:              new Field({field_name:"reset_msg",              default_value: null,                                in_flags:null,                  optional:false}),
+            wilderness_flag:        new Field({field_name:"wilderness_flag",        default_value: 0,                                   in_flags:null,                  optional:false}),
+            reset_duration:         new Field({field_name:"reset_duration",         default_value: 0,                                   in_flags:null,                  optional:false}),
+            economy_min:            new Field({field_name:"economy_min",            default_value: 5000,                                in_flags:null,                  optional:false}),
+            economy_max:            new Field({field_name:"economy_max",            default_value: 5000,                                in_flags:null,                  optional:false}),
+            weather_humidity:       new Field({field_name:"weather_humidity",       default_value: 5,                                   in_flags:null,                  optional:false}),
+            weather_temperature:    new Field({field_name:"weather_temperature",    default_value: 5,                                   in_flags:null,                  optional:false}),
+            mining_material:        new Field({field_name:"mining_material",        default_value: null,                                in_flags:flags.ITEM_MATERIALS,  optional:true}),
+            logging_material:       new Field({field_name:"logging_material",       default_value: null,                                in_flags:flags.ITEM_MATERIALS,  optional:true}),
+            rooms:                  new Field({field_name:"rooms",                  default_value: [],                                  in_flags:null,                  optional:true}),
+            room_resets:            new Field({field_name:"room_resets",            default_value: [],                                  in_flags:null,                  optional:true}),
+            door_resets:            new Field({field_name:"door_resets",            default_value: [],                                  in_flags:null,                  optional:true}),
+            items:                  new Field({field_name:"items",                  default_value: [],                                  in_flags:null,                  optional:true}),
+            item_resets:            new Field({field_name:"item_resets",            default_value: [],                                  in_flags:null,                  optional:true}),
+            mobs:                   new Field({field_name:"mobs",                   default_value: [],                                  in_flags:null,                  optional:true}),
+            mob_resets:             new Field({field_name:"mob_resets",             default_value: [],                                  in_flags:null,                  optional:true}),
+            mob_specials:           new Field({field_name:"mob_specials",           default_value: [],                                  in_flags:null,                  optional:true}),
+            shops:                  new Field({field_name:"shops",                  default_value: [],                                  in_flags:null,                  optional:true}),
+            repairs:                new Field({field_name:"repairs",                default_value: [],                                  in_flags:null,                  optional:true}),
+            quest_log:              new Field({field_name:"quest_log",              default_value: [],                                  in_flags:null,                  optional:true}),
         }, fields))
     }
     get _error_prefix() {
@@ -276,25 +276,18 @@ S
 class Exit extends Model {
     constructor(fields) {
         super(Object.assign({
-            direction:          new Field({field_name:"direction",          default_value: null,                            in_flags:null,                  optional:false}),
-            comment:            new Field({field_name:"comment",            default_value: "",                              in_flags:null,                  optional:false}),
-            somewhere_door_keyword:       new Field({field_name:"door_keyword",       default_value: "",                              in_flags:null,                  optional:false}),
+            direction:              new Field({field_name:"direction",              default_value: null,                            in_flags:null,                  optional:false}),
+            comment:                new Field({field_name:"comment",                default_value: "",                              in_flags:null,                  optional:false}),
+            somewhere_door_keyword: new Field({field_name:"somewhere_door_keyword", default_value: "",                              in_flags:null,                  optional:true}),
             // Flags                    
-            door_flags:         new Field({field_name:"door_flags",         default_value: [],                              in_flags:flags.EXIT_DOOR_FLAGS, optional:false}),
-            door_key:           new Field({field_name:"door_key",           default_value: -1,                              in_flags:null,                  optional:false}),
-            target_vnum:        new Field({field_name:"target_vnum",        default_value: null,                            in_flags:null,                  optional:false}),
-            exit_size:          new Field({field_name:"exit_size",          default_value: flags.EXIT_SIZES.EXIT_SIZE_ANY,  in_flags:flags.EXIT_SIZES,      optional:false}),
+            door_flags:             new Field({field_name:"door_flags",             default_value: [],                              in_flags:flags.EXIT_DOOR_FLAGS, optional:true}),
+            door_key:               new Field({field_name:"door_key",               default_value: -1,                              in_flags:null,                  optional:false}),
+            target_vnum:            new Field({field_name:"target_vnum",            default_value: null,                            in_flags:null,                  optional:false}),
+            exit_size:              new Field({field_name:"exit_size",              default_value: flags.EXIT_SIZES.EXIT_SIZE_ANY,  in_flags:flags.EXIT_SIZES,      optional:false}),
         }, fields))
     }
     get _error_prefix() {
         return `[Exit:${this.target_vnum}]`
-    }
-    validate() {
-        let errors = super.validate();
-        if (this.door_keyword != "" && this.door_flags.indexOf(flags.EXIT_DOOR_FLAGS.EX_ISDOOR) == -1) {
-            errors.push(`${this._error_prefix}.door_flags Door keywords defined, but EX_ISDOOR flag not set`);
-        }
-        return errors
     }
     
     toString() {
@@ -362,8 +355,8 @@ class Item extends Model {
             action_description: new Field({field_name:"action_description", default_value: "",      in_flags:null,                  optional:false}), // Not used
             item_type:          new Field({field_name:"item_type",          default_value: null,    in_flags:flags.ITEM_TYPES,      optional:false}),
             attributes:         new Field({field_name:"attributes",         default_value: [],      in_flags:flags.ITEM_ATTRIBUTES, optional:true}),
-            wear_flags:         new Field({field_name:"wear_flags",         default_value: [],      in_flags:flags.WEAR_LOCATIONS,  optional:false}),
-            extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,                  optional:false}),
+            wear_flags:         new Field({field_name:"wear_flags",         default_value: [],      in_flags:flags.WEAR_LOCATIONS,  optional:true}),
+            extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,                  optional:true}),
             quality:            new Field({field_name:"quality",            default_value: null,    in_flags:flags.ITEM_QUALITY,    optional:false}),
             material:           new Field({field_name:"material",           default_value: null,    in_flags:flags.ITEM_MATERIALS,  optional:false}),
             condition:          new Field({field_name:"condition",          default_value: null,    in_flags:flags.ITEM_CONDITION,  optional:false}),
@@ -419,23 +412,23 @@ ${this.programs.length ? "|" : ""}`;
 class SimpleMob extends Model {
     constructor(fields) {
         super(Object.assign({
-            vnum:                   new Field({field_name:"vnum",                   default_value:null,                         in_flags:null,                  optional:false}),
-            sdesc:                  new Field({field_name:"sdesc",                  default_value:null,                         in_flags:null,                  optional:false}),
-            ldesc:                  new Field({field_name:"ldesc",                  default_value:null,                         in_flags:null,                  optional:false}),
-            fulldesc:               new Field({field_name:"fulldesc",               default_value:null,                         in_flags:null,                  optional:false}),
-            keywords:               new Field({field_name:"keywords",               default_value:null,                         in_flags:null,                  optional:false}),
-            level:                  new Field({field_name:"level",                  default_value:null,                         in_flags:null,                  optional:false}),
-            mob_class:              new Field({field_name:"mob_class",              default_value:null,                         in_flags:flags.MOB_CLASSES,     optional:false}),
-            race:                   new Field({field_name:"race",                   default_value:null,                         in_flags:flags.MOB_RACES,       optional:false}),
-            sex:                    new Field({field_name:"sex",                    default_value:null,                         in_flags:flags.MOB_SEXES,       optional:false}),
-            position:               new Field({field_name:"position",               default_value:null,                         in_flags:flags.MOB_POSITIONS,   optional:false}),
-            deity:                  new Field({field_name:"deity",                  default_value:flags.MOB_DEITIES.DEITY_NONE, in_flags:flags.MOB_DEITIES,     optional:true}),
-            act_flags:              new Field({field_name:"act_flags",              default_value:[],                           in_flags:flags.MOB_ACT_FLAGS,   optional:false}),
-            understood_languages:   new Field({field_name:"understood_languages",   default_value:[],                           in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
-            spoken_languages:       new Field({field_name:"spoken_languages",       default_value:[],                           in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
-            can_train:              new Field({field_name:"can_train",              default_value:[],                           in_flags:null,                  optional:true}),
-            equipment_resets:       new Field({field_name:"equipment_resets",       default_value:[],                           in_flags:null,                  optional:true}),
-            programs:               new Field({field_name:"programs",               default_value:[],                           in_flags:null,                  optional:true}),
+            vnum:                   new Field({field_name:"vnum",                   default_value:null,                                 in_flags:null,                  optional:false}),
+            sdesc:                  new Field({field_name:"sdesc",                  default_value:null,                                 in_flags:null,                  optional:false}),
+            ldesc:                  new Field({field_name:"ldesc",                  default_value:null,                                 in_flags:null,                  optional:false}),
+            fulldesc:               new Field({field_name:"fulldesc",               default_value:null,                                 in_flags:null,                  optional:false}),
+            keywords:               new Field({field_name:"keywords",               default_value:null,                                 in_flags:null,                  optional:false}),
+            level:                  new Field({field_name:"level",                  default_value:null,                                 in_flags:null,                  optional:false}),
+            mob_class:              new Field({field_name:"mob_class",              default_value:null,                                 in_flags:flags.MOB_CLASSES,     optional:false}),
+            race:                   new Field({field_name:"race",                   default_value:null,                                 in_flags:flags.MOB_RACES,       optional:false}),
+            sex:                    new Field({field_name:"sex",                    default_value:null,                                 in_flags:flags.MOB_SEXES,       optional:false}),
+            position:               new Field({field_name:"position",               default_value:null,                                 in_flags:flags.MOB_POSITIONS,   optional:false}),
+            deity:                  new Field({field_name:"deity",                  default_value:flags.MOB_DEITIES.DEITY_NONE,         in_flags:flags.MOB_DEITIES,     optional:true}),
+            act_flags:              new Field({field_name:"act_flags",              default_value:[],                                   in_flags:flags.MOB_ACT_FLAGS,   optional:true}),
+            understood_languages:   new Field({field_name:"understood_languages",   default_value:[flags.LANGUAGE_FLAGS.LANG_COMMON],   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
+            spoken_languages:       new Field({field_name:"spoken_languages",       default_value:[flags.LANGUAGE_FLAGS.LANG_COMMON],   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
+            can_train:              new Field({field_name:"can_train",              default_value:[],                                   in_flags:null,                  optional:true}),
+            equipment_resets:       new Field({field_name:"equipment_resets",       default_value:[],                                   in_flags:null,                  optional:true}),
+            programs:               new Field({field_name:"programs",               default_value:[],                                   in_flags:null,                  optional:true}),
         }, fields))
     }
     get _error_prefix() {
@@ -468,7 +461,7 @@ ${this.programs.length ? "|" : ""}`
 class UniqueMob extends SimpleMob {
     constructor(fields) {
         super(Object.assign({
-            affect_flags:           new Field({field_name:"affect_flags",           default_value:[flags.MOB_AFFECTS.AFF_NONE], in_flags:flags.MOB_AFFECTS,     optional:false}),
+            affect_flags:           new Field({field_name:"affect_flags",           default_value:[flags.MOB_AFFECTS.AFF_NONE], in_flags:flags.MOB_AFFECTS,     optional:true}),
             virtual_armor_type:     new Field({field_name:"virtual_armor_type",     default_value:null,                         in_flags:flags.ITEM_ARMOR_TYPES,optional:false}),
             virtual_armor_material: new Field({field_name:"virtual_armor_material", default_value:null,                         in_flags:flags.ITEM_MATERIALS,  optional:false}),
             alignment:              new Field({field_name:"alignment",              default_value:null,                         in_flags:flags.MOB_ALIGNMENTS,  optional:false}),
@@ -511,13 +504,13 @@ ${this.fulldesc}
 ~
 U ${this.level} ${this.mob_class.code} ${this.race.code} ${this.sex.code} ${this.position.code} ${this.deity.code}
 ${this.act_flags.map((flag)=>(flag.code)).join("|")}
-${this.affect_flags.map((flag)=>(flag.code)).join("|")}
+${this.affect_flags.map((flag)=>(flag.code)).join("|")||"0"}
 ${this.virtual_armor_type.code} ${this.virtual_armor_material.code}
 ${this.alignment.code}
 ${this.str} ${this.int} ${this.wis} ${this.dex} ${this.con} ${this.cha} ${this.lck}
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
-${this.ris_resistant.map((ris)=>(ris.code)).join("|")} ${this.ris_immune.map((ris)=>(ris.code)).join("|")} ${this.ris_susceptible.map((ris)=>(ris.code)).join("|")}
+${this.ris_resistant.map((ris)=>(ris.code)).join("|") || "RIS_NONE"} ${this.ris_immune.map((ris)=>(ris.code)).join("|") || "RIS_NONE"} ${this.ris_susceptible.map((ris)=>(ris.code)).join("|") || "RIS_NONE"}
 ${this.can_train.map((train)=>(train.toString())).join("\n")}
 ${this.programs.map((program) => (program.toString())).join("\n")}
 ${this.programs.length ? "|" : ""}`
@@ -533,7 +526,7 @@ class TrainSkill extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainSkill:${this.skill}]`;
+        return `[TrainSkill:${this.skill.code}]`;
     }
     
     toString() {
@@ -541,7 +534,28 @@ class TrainSkill extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `%${this.level} ${this.price_multiplier} ${this.skill}~`
+        return `%${this.level} ${this.price_multiplier} ${this.skill.code}~`
+    }
+}
+
+class TrainWeaponSkill extends Model {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              default_value: 10,      in_flags:null,              optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,       in_flags:null,              optional:false}),
+            weapon_skill:       new Field({field_name:"weapon_skill",       default_value: null,    in_flags:flags.MOB_WEAPON_SKILLS,  optional:false}),
+        }, fields))
+    }
+    get _error_prefix() {
+        return `[TrainWeaponSkill:${this.weapon_skill.code}]`;
+    }
+    
+    toString() {
+        let errors = this.validate();
+        if (errors.length) {
+            return errors.join("\n");
+        }
+        return `%${this.level} ${this.price_multiplier} ${this.weapon_skill.code}~`
     }
 }
 
@@ -554,7 +568,7 @@ class TrainSpell extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainSpell:${this.spell}]`;
+        return `[TrainSpell:${this.spell.code}]`;
     }
     
     toString() {
@@ -562,7 +576,7 @@ class TrainSpell extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `%${this.level} ${this.price_multiplier} ${this.spell}~`
+        return `%${this.level} ${this.price_multiplier} ${this.spell.code}~`
     }
 }
 
@@ -595,7 +609,7 @@ class TrainStatistic extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainStatistic:${this.statistic}]`;
+        return `[TrainStatistic:${this.statistic.code}]`;
     }
     
     toString() {
@@ -603,7 +617,7 @@ class TrainStatistic extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `%${this.level} ${this.price_multiplier} ${this.statistic}~`
+        return `%${this.level} ${this.price_multiplier} ${this.statistic.code}~`
     }
 }
 
@@ -616,7 +630,7 @@ class TrainFeat extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainFeat:${this.feat}]`;
+        return `[TrainFeat:${this.feat.code}]`;
     }
     
     toString() {
@@ -624,7 +638,7 @@ class TrainFeat extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `%${this.level} ${this.price_multiplier} ${this.feat}~`
+        return `%${this.level} ${this.price_multiplier} ${this.feat.code}~`
     }
 }
 
@@ -651,7 +665,7 @@ class Shop extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `${this.shopkeeper.vnum} ${this.will_buy_1} ${this.will_buy_2} ${this.will_buy_3} ${this.will_buy_4} ${this.will_buy_5}
+        return `${this.shopkeeper.vnum} ${this.will_buy_1.code} ${this.will_buy_2.code} ${this.will_buy_3.code} ${this.will_buy_4.code} ${this.will_buy_5.code}
 ${this.profit_buy} ${this.profit_sell} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
     }
 }
@@ -665,8 +679,8 @@ class RepairRecharge extends Model {
             repair_material:    new Field({field_name:"repair_material",    default_value:null,                             in_flags:flags.MOB_REPAIR_MATERIAL, optional:false}),
             profit_modifier:    new Field({field_name:"profit_modifier",    default_value:100,                              in_flags:null,                      optional:false}),
             repair:             new Field({field_name:"repair",             default_value:null,                             in_flags:flags.MOB_REPAIR_RECHARGE, optional:false}),
-            open_hour:          new Field({field_name:"open_hour",          default_value:null,                             in_flags:flags.MOB_FEATS,           optional:false}),
-            close_hour:         new Field({field_name:"close_hour",         default_value:null,                             in_flags:flags.MOB_FEATS,           optional:false}),
+            open_hour:          new Field({field_name:"open_hour",          default_value:null,                             in_flags:null,                      optional:false}),
+            close_hour:         new Field({field_name:"close_hour",         default_value:null,                             in_flags:null,                      optional:false}),
         }, fields))
     }
     get _error_prefix() {
@@ -678,8 +692,8 @@ class RepairRecharge extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `${this.shopkeeper.vnum} ${this.will_repair_1} ${this.will_repair_2} ${this.repair_material}
-${this.profit_modifier} ${this.repair} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
+        return `${this.shopkeeper.vnum} ${this.will_repair_1.code} ${this.will_repair_2.code} ${this.repair_material.code}
+${this.profit_modifier} ${this.repair.bits} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
     }
 }
 
@@ -716,7 +730,7 @@ class EquipmentReset extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[EquipmentReset:${this.mob.vnum} in ${this.room.vnum}]`;
+        return `[EquipmentReset:${this.item.vnum}]`;
     }
     
     toString() {
@@ -963,6 +977,7 @@ module.exports = {
     SimpleMob: SimpleMob,
     UniqueMob: UniqueMob,
     TrainSkill: TrainSkill,
+    TrainWeaponSkill: TrainWeaponSkill,
     TrainSpell: TrainSpell,
     TrainLevel: TrainLevel,
     TrainStatistic: TrainStatistic,

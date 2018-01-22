@@ -5270,6 +5270,36 @@ const ITEM_TYPES = {
             type_enum: null,
             ldesc: "unused",
         },
+    },
+    ITEM_TYPE_NONE: {
+        code: "ITEM_TYPE_NONE",
+        sdesc: "ITEM_TYPE_NONE",
+        do_not_use: false,
+        value0: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value1: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value2: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value3: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
+        value4: {
+            type: null,
+            type_enum: null,
+            ldesc: "unused",
+        },
     }
 };
 const EXIT_DIRECTIONS = {
@@ -10531,10 +10561,12 @@ const MOB_REPAIR_RECHARGE = {
     SHOP_FIX: {
         code: "SHOP_FIX",
         sdesc: "SHOP_FIX",
+        bits: 1
     },
     SHOP_RECHARGE: {
         code: "SHOP_RECHARGE",
         sdesc: "SHOP_RECHARGE",
+        bits: 2
     }
 };
 const MOB_WEAR_POSITIONS = {
