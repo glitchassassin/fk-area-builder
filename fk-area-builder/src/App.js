@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Loader from './Models/are_model';
+import { Dropbox } from 'dropbox';
 
 class App extends Component {
   render() {
-    let loader = new Loader()
+    var dbx = new Dropbox({ accessToken: 'REDACTED' });
+    dbx.filesListFolder({path: ''})
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
     return (
       <div className="App">
         <header className="App-header">
@@ -13,9 +20,7 @@ class App extends Component {
           <h1 className="App-title">Forgotten Kingdoms Area Builder</h1>
         </header>
         <p className="App-intro">
-          <pre>
-            {loader.toString()}
-          </pre>
+          Hello world!
         </p>
       </div>
     );
