@@ -235,7 +235,7 @@ class Room extends Model {
             room_flags:         new Field({field_name:"room_flags",         default_value: [],      in_flags:flags.ROOM_FLAGS,          optional:true}),
             sector:             new Field({field_name:"sector",             default_value: null,    in_flags:flags.ROOM_SECTOR_FLAGS,   optional:false}),
             teleport_delay:     new Field({field_name:"teleport_delay",     default_value: 0,       in_flags:null,                      optional:false}),
-            teleport_target:    new Field({field_name:"teleport_target",    default_value: 0,       in_flags:null,                      optional:false}),
+            teleport_target:    new Field({field_name:"teleport_target",    default_value: "",      in_flags:null,                      optional:false}),
             tunnel:             new Field({field_name:"tunnel",             default_value: 0,       in_flags:null,                      optional:false}),
             exits:              new Field({field_name:"exits",              default_value: [],      in_flags:null,                      optional:true}),
             door_resets:        new Field({field_name:"door_resets",        default_value: [],      in_flags:null,                      optional:true}),
@@ -276,7 +276,7 @@ S
 class Exit extends Model {
     constructor(fields) {
         super(Object.assign({
-            direction:              new Field({field_name:"direction",              default_value: null,                            in_flags:null,                  optional:false}),
+            direction:              new Field({field_name:"direction",              default_value: null,                            in_flags:flags.EXIT_DIRECTIONS, optional:false}),
             comment:                new Field({field_name:"comment",                default_value: "",                              in_flags:null,                  optional:false}),
             somewhere_door_keyword: new Field({field_name:"somewhere_door_keyword", default_value: "",                              in_flags:null,                  optional:true}),
             // Flags                    
@@ -305,8 +305,8 @@ ${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key} ${th
 class ExtraDescription extends Model {
     constructor(fields) {
         super(Object.assign({
-            keywords: new Field({field_name:"keywords", default_value: null,    in_flags:null,  optional:false}),
-            ldesc:    new Field({field_name:"ldesc",    default_value: null,    in_flags:null,  optional:false}),
+            keywords: new Field({field_name:"keywords", default_value: "",    in_flags:null,  optional:false}),
+            ldesc:    new Field({field_name:"ldesc",    default_value: "",    in_flags:null,  optional:false}),
         }, fields))
     }
     get _error_prefix() {
@@ -438,7 +438,7 @@ class SimpleMob extends Model {
     toString() {
         let errors = this.validate()
         if (errors.length) {
-            return this.errors.join("\n")
+            return errors.join("\n")
         }
         return `#${this.vnum}
 ${this.keywords}~
@@ -795,7 +795,7 @@ class DoorReset extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[DoorReset:${this.exit.code} from ${this.room.vnum}]`;
+        return `[DoorReset:${this.exit ? this.exit.code : "[no exit defined]"} from ${this.room.vnum}]`;
     }
     
     toString() {
