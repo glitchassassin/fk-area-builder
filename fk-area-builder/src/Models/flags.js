@@ -10889,6 +10889,232 @@ const QUEST_EVENT_CODES = {
         ldesc: "Quest not yet started."
     },
 };
+const ROOM_PROGRAM_TRIGGERS = {
+    act_prog: {
+        code: "act_prog",
+        sdesc: "act_prog",
+        ldesc: "emotes socials actions bamfs"
+    },
+    speech_prog: {
+        code: "speech_prog",
+        sdesc: "speech_prog",
+        ldesc: "says or tells from same room as mob"
+    },
+    rand_prog: {
+        code: "rand_prog",
+        sdesc: "rand_prog",
+        ldesc: "randomly triggered based on percentile"
+    },
+    fight_prog: {
+        code: "fight_prog",
+        sdesc: "fight_prog",
+        ldesc: "random within a fight percentile"
+    },
+    greet_prog: {
+        code: "greet_prog",
+        sdesc: "greet_prog",
+        ldesc: "entry that mob can see by mob/player"
+    },
+    entry_prog: {
+        code: "entry_prog",
+        sdesc: "entry_prog",
+        ldesc: "when the mob itself enters a room"
+    },
+    leave_prog: {
+        code: "leave_prog",
+        sdesc: "leave_prog",
+        ldesc: "when the PC leaves a room"
+    },
+    death_prog: {
+        code: "death_prog",
+        sdesc: "death_prog",
+        ldesc: "when the mob dies"
+    },
+    script_prog: {
+        code: "script_prog",
+        sdesc: "script_prog",
+        ldesc: "loops by line. Hour triggers start"
+    },
+    time_prog: {
+        code: "time_prog",
+        sdesc: "time_prog",
+        ldesc: "script prog runs once on hour"
+    },
+    hour_prog: {
+        code: "hour_prog",
+        sdesc: "hour_prog",
+        ldesc: "loops as Script for an hour from start"
+    }
+};
+const ITEM_PROGRAM_TRIGGERS = {
+    wear_prog: {
+        code: "wear_prog",
+        sdesc: "wear_prog",
+        ldesc: "(percentage): when a player wears the object"
+    },
+    remove_prog: {
+        code: "remove_prog",
+        sdesc: "remove_prog",
+        ldesc: "(percentage): when a player removes the object"
+    },
+    speech_prog: {
+        code: "speech_prog",
+        sdesc: "speech_prog",
+        ldesc: "(keyword/phrase): says or tells from same room as object"
+    },
+    rand_prog: {
+        code: "rand_prog",
+        sdesc: "rand_prog",
+        ldesc: "(percentage): randomly triggered based on percentile"
+    },
+    sac_prog: {
+        code: "sac_prog",
+        sdesc: "sac_prog",
+        ldesc: "(percentage): when a player sacrifices the object"
+    },
+    zap_prog: {
+        code: "zap_prog",
+        sdesc: "zap_prog",
+        ldesc: "(percentage): when the player is zapped - alignment"
+    },
+    get_prog: {
+        code: "get_prog",
+        sdesc: "get_prog",
+        ldesc: "(percentage): when a player gets the object"
+    },
+    drop_prog: {
+        code: "drop_prog",
+        sdesc: "drop_prog",
+        ldesc: "(percentage): when a player drops the object"
+    },
+    damage_prog: {
+        code: "damage_prog",
+        sdesc: "damage_prog",
+        ldesc: "(percentage): when the object is damaged"
+    },
+    repair_prog: {
+        code: "repair_prog",
+        sdesc: "repair_prog",
+        ldesc: "(percentage): when the object is repaired"
+    },
+    greet_prog: {
+        code: "greet_prog",
+        sdesc: "greet_prog",
+        ldesc: "(percentage): when a mob/player enters the room"
+    },
+    exa_prog: {
+        code: "exa_prog",
+        sdesc: "exa_prog",
+        ldesc: "(percentage): when the object is Examined or Looked"
+    },
+    push_prog: {
+        code: "push_prog",
+        sdesc: "push_prog",
+        ldesc: "(percentage): when a player pushes an object"
+    },
+    pull_prog: {
+        code: "pull_prog",
+        sdesc: "pull_prog",
+        ldesc: "(percentage): when a player pulls an object"
+    },
+    use_prog: {
+        code: "use_prog",
+        sdesc: "use_prog",
+        ldesc: "(percentage): See below for more information"
+    },
+    intercept_prog: {
+        code: "intercept_prog",
+        sdesc: "intercept_prog",
+        ldesc: "(keyword): when a player types a command"
+    }
+};
+const MOB_PROGRAM_TRIGGERS = {
+    act_prog: {
+        code: "act_prog",
+        sdesc: "act_prog",
+        ldesc: "(keyword/phrase): Works for emotes socials actions bamfs",
+    },
+    speech_prog: {
+        code: "speech_prog",
+        sdesc: "speech_prog",
+        ldesc: "(keyword/phrase): Works on says from same room as mob",
+    },
+    rand_prog: {
+        code: "rand_prog",
+        sdesc: "rand_prog",
+        ldesc: "(percentage): randomly triggered based on percentile",
+    },
+    fight_prog: {
+        code: "fight_prog",
+        sdesc: "fight_prog",
+        ldesc: "(percentage): random within a fight - percentile",
+    },
+    hitprcnt_prog: {
+        code: "hitprcnt_prog",
+        sdesc: "hitprcnt_prog",
+        ldesc: "(percentage): percent is percentage of mob's max H.P.",
+    },
+    greet_prog: {
+        code: "greet_prog",
+        sdesc: "greet_prog",
+        ldesc: "(percentage): entry that mob can see - by mob/player",
+    },
+    entry_prog: {
+        code: "entry_prog",
+        sdesc: "entry_prog",
+        ldesc: "(percentage): when the mob itself enters a room",
+    },
+    bribe_prog: {
+        code: "bribe_prog",
+        sdesc: "bribe_prog",
+        ldesc: "(amount of gold): when a player gives the mob money",
+    },
+    death_prog: {
+        code: "death_prog",
+        sdesc: "death_prog",
+        ldesc: "(percentage): when the mob dies",
+    },
+    script_prog: {
+        code: "script_prog",
+        sdesc: "script_prog",
+        ldesc: "loops by line Hour triggers start",
+    },
+    time_prog: {
+        code: "time_prog",
+        sdesc: "time_prog",
+        ldesc: "(hour and minutes): script prog - runs once on hour",
+    },
+    hour_prog: {
+        code: "hour_prog",
+        sdesc: "hour_prog",
+        ldesc: "(hour): loops as Script for an hour from start",
+    },
+    intercept_prog: {
+        code: "intercept_prog",
+        sdesc: "intercept_prog",
+        ldesc: "(keyword): when a player types a command",
+    },
+    give_prog: {
+        code: "give_prog",
+        sdesc: "give_prog",
+        ldesc: "(item vnum ivnum): when character gives mobile certain object",
+    },
+    arrival_prog: {
+        code: "arrival_prog",
+        sdesc: "arrival_prog",
+        ldesc: "(percentage): activates when mobile who is using mpwalkto arrives at destination",
+    },
+    buy_prog: {
+        code: "buy_prog",
+        sdesc: "buy_prog",
+        ldesc: "(item vnum): activates when the mobile sells that vnum",
+    },
+    injure_prog: {
+        code: "injure_prog",
+        sdesc: "injure_prog",
+        ldesc: "(percentage): activates when the mobile is injured",
+    }
+};
 
 // Export all constants
 module.exports = Object.freeze({
@@ -10951,4 +11177,7 @@ module.exports = Object.freeze({
     DOOR_RESET_DIRECTIONS: DOOR_RESET_DIRECTIONS,
     MOB_SPECIALS: MOB_SPECIALS,
     QUEST_EVENT_CODES: QUEST_EVENT_CODES,
+    ROOM_PROGRAM_TRIGGERS: ROOM_PROGRAM_TRIGGERS,
+    ITEM_PROGRAM_TRIGGERS: ITEM_PROGRAM_TRIGGERS,
+    MOB_PROGRAM_TRIGGERS: MOB_PROGRAM_TRIGGERS
 });

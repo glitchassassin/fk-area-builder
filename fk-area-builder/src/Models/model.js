@@ -10,7 +10,7 @@ class Field {
     
     validate(value) {
         let errors = [];
-        if (value == null) {
+        if (value == null || value === "") {
             if (!this.options.optional) {
                 errors.push(`.${this.name} should not be empty`)
             }
@@ -55,11 +55,16 @@ class Field {
 }
 
 class Model {
-    constructor(field_list) {
+    constructor(field_list={}) {
         this._fields = field_list
         
         for (let p in field_list) {
-            this[p] = field_list[p].value
+            try {
+                this[p] = field_list[p].value
+            } catch(e) {
+                console.log(p, e, field_list);
+                throw(e);
+            }
         }
     }
     
@@ -73,6 +78,17 @@ class Model {
             errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
         }
         return errors;
+    }
+    
+    clone() {
+        var props = Object.getOwnPropertyDescriptors(this)
+        for (var prop in props) {
+            props[prop].value = props[prop].value && props[prop].value.clone ? props[prop].value.clone() : props[prop].value
+        }
+        return Object.create(
+            Object.getPrototypeOf(this), 
+            props
+        )
     }
 }
 
