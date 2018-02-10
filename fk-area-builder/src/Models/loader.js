@@ -161,6 +161,7 @@ class Loader {
                         train = new models.TrainLevel();
                         train.level = t[1];
                         train.price_multiplier = t[2];
+                        mob.can_train_level.push(train);
                         break;
                     }
                 }
@@ -171,6 +172,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.spell = flags.MOB_SPELLS[f];
+                            mob.can_train_spell.push(train);
                             break;
                         }
                     }
@@ -182,6 +184,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_SKILLS[f];
+                            mob.can_train_skill.push(train);
                             break;
                         }
                     }
@@ -193,6 +196,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.weapon_skill = flags.MOB_WEAPON_SKILLS[f];
+                            mob.can_train_weapon_skill.push(train);
                             break;
                         }
                     }
@@ -204,6 +208,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_FEATS[f];
+                            mob.can_train_feat.push(train);
                             break;
                         }
                     }
@@ -215,13 +220,10 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_STATISTICS[f];
+                            mob.can_train_statistic.push(train);
                             break;
                         }
                     }
-                }
-                // Whew! Now, if it's real, add it to the list...
-                if (train) {
-                    mob.can_train.push(train);
                 }
             }
             
@@ -230,7 +232,7 @@ class Loader {
             let p;
             while ((p = program_regex.exec(programs)) != null) {
                 let program = new models.Program();
-                program.trigger = p[1]
+                program.trigger = get_code(p[1], flags.MOB_PROGRAM_TRIGGERS)
                 program.argument = p[2]
                 program.program = p[3]
                 mob.programs.push(program)
@@ -283,6 +285,7 @@ class Loader {
                         train = new models.TrainLevel();
                         train.level = t[1];
                         train.price_multiplier = t[2];
+                        mob.can_train_level.push(train);
                         break;
                     }
                 }
@@ -293,6 +296,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.spell = flags.MOB_SPELLS[f];
+                            mob.can_train_spell.push(train);
                             break;
                         }
                     }
@@ -304,6 +308,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_SKILLS[f];
+                            mob.can_train_skill.push(train);
                             break;
                         }
                     }
@@ -315,6 +320,7 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_FEATS[f];
+                            mob.can_train_feat.push(train);
                             break;
                         }
                     }
@@ -326,13 +332,10 @@ class Loader {
                             train.level = t[1];
                             train.price_multiplier = t[2];
                             train.skill = flags.MOB_STATISTICS[f];
+                            mob.can_train_statistics.push(train);
                             break;
                         }
                     }
-                }
-                // Whew! Now, if it's real, add it to the list...
-                if (train) {
-                    mob.can_train.push(train);
                 }
             }
             
@@ -341,7 +344,7 @@ class Loader {
             let p;
             while ((p = program_regex.exec(programs)) != null) {
                 let program = new models.Program();
-                program.trigger = p[1]
+                program.trigger = get_code(p[1], flags.MOB_PROGRAM_TRIGGERS)
                 program.argument = p[2]
                 program.program = p[3]
                 mob.programs.push(program)
@@ -406,7 +409,7 @@ class Loader {
             let prog_matches;
             while ((prog_matches = prog_regex.exec(programs)) != null) {
                 let prog = new models.Program()
-                prog.trigger = prog_matches[1];
+                prog.trigger = get_code(prog_matches[1], flags.ITEM_PROGRAM_TRIGGERS);
                 prog.argument = prog_matches[2];
                 prog.program = prog_matches[3];
                 item.programs.push(prog);
@@ -465,7 +468,7 @@ class Loader {
             let p;
             while ((p = program_regex.exec(programs)) != null) {
                 let program = new models.Program();
-                program.trigger = p[1]
+                program.trigger = get_code(p[1], flags.ROOM_PROGRAM_TRIGGERS);
                 program.argument = p[2]
                 program.program = p[3]
                 room.programs.push(program)

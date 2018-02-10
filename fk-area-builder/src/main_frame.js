@@ -11,7 +11,6 @@ class MainFrame extends React.Component {
     }
     updateAreaState(area) {
         this.setState({area});
-        console.log("Area change filed");
     }
     render() {
         let room_errors = this.state.area.rooms.length ? this.state.area.rooms.map((room)=>(room.validate().length?1:0)).reduce((a, b)=>(a+b)) : 0;

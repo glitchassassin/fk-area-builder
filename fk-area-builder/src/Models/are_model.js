@@ -380,7 +380,6 @@ class Item extends Model {
         let errors = super.validate();
         
         if (this.action_description !== "") {
-            console.log(this.action_description)
             errors.push(`${this._error_prefix}.action_description is not used and should be empty`);
         }
         return errors;
@@ -426,7 +425,12 @@ class SimpleMob extends Model {
             act_flags:              new Field({field_name:"act_flags",              default_value:[],                                   in_flags:flags.MOB_ACT_FLAGS,   optional:true}),
             understood_languages:   new Field({field_name:"understood_languages",   default_value:[flags.LANGUAGE_FLAGS.LANG_COMMON],   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
             spoken_languages:       new Field({field_name:"spoken_languages",       default_value:[flags.LANGUAGE_FLAGS.LANG_COMMON],   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
-            can_train:              new Field({field_name:"can_train",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_skill:              new Field({field_name:"can_train_skill",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_weapon_skill:              new Field({field_name:"can_train_weapon_skill",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_spell:              new Field({field_name:"can_train_spell",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_level:              new Field({field_name:"can_train_level",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_statistic:              new Field({field_name:"can_train_statistic",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_feat:              new Field({field_name:"can_train_feat",              default_value:[],                                   in_flags:null,                  optional:true}),
             equipment_resets:       new Field({field_name:"equipment_resets",       default_value:[],                                   in_flags:null,                  optional:true}),
             programs:               new Field({field_name:"programs",               default_value:[],                                   in_flags:null,                  optional:true}),
         }, fields))
@@ -450,7 +454,12 @@ S ${this.level} ${this.mob_class.code} ${this.race.code} ${this.sex.code} ${this
 ${this.act_flags.map((flag)=>(flag.code)).join("|")}
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
-${this.can_train.map((train)=>(train.toString())).join("\n")}
+${this.can_train_skill.map((train)=>(train.toString())).join("\n")}
+${this.can_train_weapon_skill.map((train)=>(train.toString())).join("\n")}
+${this.can_train_spell.map((train)=>(train.toString())).join("\n")}
+${this.can_train_level.map((train)=>(train.toString())).join("\n")}
+${this.can_train_statistic.map((train)=>(train.toString())).join("\n")}
+${this.can_train_feat.map((train)=>(train.toString())).join("\n")}
 ${this.programs.map((prog)=>(prog.toString())).join("\n")}
 ${this.programs.length ? "|" : ""}`
     }
@@ -511,7 +520,12 @@ ${this.str} ${this.int} ${this.wis} ${this.dex} ${this.con} ${this.cha} ${this.l
 ${this.understood_languages.map((lang)=>(lang.code)).join("|")}
 ${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
 ${this.ris_resistant.map((ris)=>(ris.code)).join("|") || "RIS_NONE"} ${this.ris_immune.map((ris)=>(ris.code)).join("|") || "RIS_NONE"} ${this.ris_susceptible.map((ris)=>(ris.code)).join("|") || "RIS_NONE"}
-${this.can_train.map((train)=>(train.toString())).join("\n")}
+${this.can_train_skill.map((train)=>(train.toString())).join("\n")}
+${this.can_train_weapon_skill.map((train)=>(train.toString())).join("\n")}
+${this.can_train_spell.map((train)=>(train.toString())).join("\n")}
+${this.can_train_level.map((train)=>(train.toString())).join("\n")}
+${this.can_train_statistic.map((train)=>(train.toString())).join("\n")}
+${this.can_train_feat.map((train)=>(train.toString())).join("\n")}
 ${this.programs.map((program) => (program.toString())).join("\n")}
 ${this.programs.length ? "|" : ""}`
     }
@@ -526,7 +540,7 @@ class TrainSkill extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainSkill:${this.skill.code}]`;
+        return `[TrainSkill:${this.skill?this.skill.code:undefined}]`;
     }
     
     toString() {
@@ -547,7 +561,7 @@ class TrainWeaponSkill extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainWeaponSkill:${this.weapon_skill.code}]`;
+        return `[TrainWeaponSkill:${this.weapon_skill?this.weapon_skill.code:undefined}]`;
     }
     
     toString() {
@@ -568,7 +582,7 @@ class TrainSpell extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainSpell:${this.spell.code}]`;
+        return `[TrainSpell:${this.spell?this.spell.code:undefined}]`;
     }
     
     toString() {
@@ -609,7 +623,7 @@ class TrainStatistic extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainStatistic:${this.statistic.code}]`;
+        return `[TrainStatistic:${this.statistic?this.statistic.code:undefined}]`;
     }
     
     toString() {
@@ -630,7 +644,7 @@ class TrainFeat extends Model {
         }, fields))
     }
     get _error_prefix() {
-        return `[TrainFeat:${this.feat.code}]`;
+        return `[TrainFeat:${this.feat?this.feat.code:undefined}]`;
     }
     
     toString() {
@@ -900,7 +914,6 @@ class TrapReset extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        console.log("Rendering trap reset:", this)
         return ` T ${this.reset_interval} ${this.trap_type.code} ${this.trap_type.code} ${this.trigger_1.code}|${this.trigger_2.code}`
     }
 }

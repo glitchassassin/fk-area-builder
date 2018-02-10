@@ -118,9 +118,8 @@ class RoomPanel extends React.Component {
     }
     
     generateItems(rooms) {
-        console.log(this.props.muiTheme.palette.accent1Color);
         return rooms.map((room, index) => (
-            <TableRow id={index}>
+            <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.handleEdit(index))} style={icon_button_style}>
                         <FontIcon className="material-icons">mode_edit</FontIcon>
@@ -276,12 +275,12 @@ class ExtraDescriptionsEditor extends React.Component {
     
     render() {
         return (
-            <div>
+            <React.Fragment>
                 {this.generateExtraDescriptions(this.props.area.rooms[this.props.current_room].extra_descriptions)}
                 <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
-            </div>
+            </React.Fragment>
         )
     }
 }
@@ -315,12 +314,12 @@ class ExitsEditor extends React.Component {
     
     render() {
         return (
-            <div>
+            <React.Fragment>
                 {this.generateExits(this.props.area.rooms[this.props.current_room].exits)}
                 <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
-            </div>
+            </React.Fragment>
         )
     }
 }
@@ -350,12 +349,12 @@ class ProgramsEditor extends React.Component {
     
     render() {
         return (
-            <div>
+            <React.Fragment>
                 {this.generatePrograms()}
                 <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
-            </div>
+            </React.Fragment>
         )
     }
 }
