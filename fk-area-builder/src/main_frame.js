@@ -3,6 +3,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
 import MobPanel from './tab_panels/mob_panel';
 import RoomPanel from './tab_panels/room_panel';
+import ItemPanel from './tab_panels/item_panel';
 import testLoader from './Models/loader';
 
 class MainFrame extends React.Component {
@@ -35,7 +36,7 @@ class MainFrame extends React.Component {
                     <MobPanel area={this.state.area} onChange={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label={item_label}>
-                    
+                    <ItemPanel area={this.state.area} onChange={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label={shops_label}>
                     

@@ -291,9 +291,9 @@ class MobEditor extends React.Component {
                     <Tab label="Descriptions">
                         <TextField floatingLabelText="vnum" id="vnum" value={this.props.area.mobs[this.props.current_mob].vnum} autoComplete="off" onChange={this.handleChanges.bind(this)} />
                         <TextField floatingLabelText="Short description" id="sdesc" value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Keywords" id="keywords" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Full description" id="fulldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.area.mobs[this.props.current_mob].ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Long description" id="ldesc" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Keywords" id="keywords" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].keywords} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Full description" id="fulldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.area.mobs[this.props.current_mob].fulldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
                     </Tab>
                     <Tab label="Details">
                         <TextField floatingLabelText="Level" id="level" value={this.props.area.mobs[this.props.current_mob].level} autoComplete="off" onChange={this.handleChanges.bind(this)} />

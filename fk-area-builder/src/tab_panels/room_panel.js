@@ -118,7 +118,7 @@ class RoomPanel extends React.Component {
     
     generateItems(rooms) {
         return rooms.map((room, index) => (
-            <TableRow id={index}>
+            <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.handleEdit(index))} style={icon_button_style}>
                         <FontIcon className="material-icons">mode_edit</FontIcon>

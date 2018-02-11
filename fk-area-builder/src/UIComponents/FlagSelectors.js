@@ -55,6 +55,7 @@ class FlagWithCategorySelector extends React.Component {
               floatingLabelText={this.props.label}
               value={this.state.value}
               onChange={this.handleChange.bind(this)}
+              errorText={this.props.errorText}
             >
                 {this.generateItems(this.props.flags)}
             </SelectField>
@@ -91,6 +92,7 @@ class FlagSelector extends React.Component {
               floatingLabelText={this.props.label}
               value={this.state.value}
               onChange={this.handleChange.bind(this)}
+              errorText={this.props.errorText}
             >
                 {this.generateItems(this.props.flags)}
             </SelectField>
@@ -129,6 +131,7 @@ class MultiFlagSelector extends FlagSelector {
               floatingLabelText={this.props.label}
               value={values}
               onChange={this.handleChange.bind(this)}
+              errorText={this.props.errorText}
             >
                 {this.generateItems(this.props.flags, values)}
             </SelectField>
@@ -166,6 +169,7 @@ class VnumAutoComplete extends React.Component {
                 filter={AutoComplete.noFilter} 
                 openOnFocus={true} 
                 dataSource={this.generateItems(this.props.dataSource)}
+                errorText={this.props.errorText}
             />
         )
     }

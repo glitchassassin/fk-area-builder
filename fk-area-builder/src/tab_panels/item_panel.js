@@ -22,6 +22,7 @@ import {
 }
 from 'material-ui/Table';
 import {
+    ITEM_TYPES,
     MOB_PROGRAM_TRIGGERS,
     MOB_SKILLS,
     MOB_CLASSES,
@@ -39,14 +40,18 @@ import {
     MOB_AFFECTS,
     ITEM_ARMOR_TYPES,
     ITEM_MATERIALS,
-    MOB_ALIGNMENTS
+    MOB_ALIGNMENTS,
+    ITEM_ATTRIBUTES,
+    WEAR_LOCATIONS,
+    ITEM_QUALITY,
+    ITEM_CONDITION,
+    ITEM_SIZES
 }
 from '../Models/flags';
 import {
-    SimpleMob,
-    UniqueMob,
-    Exit,
+    Item,
     ExtraDescription,
+    UniqueMob,
     Program,
     TrainSkill,
     TrainWeaponSkill,
@@ -70,10 +75,10 @@ const icon_button_style = {
     height: "auto",
 }
 
-class MobPanel extends React.Component {
+class ItemPanel extends React.Component {
     state = {
         open: false,
-        current_mob: 0,
+        current_item: 0,
         confirm_delete_open: false,
         confirm_text: "",
         confirm_title: "",
@@ -81,23 +86,23 @@ class MobPanel extends React.Component {
     }
     
     handleEdit = (index) => {
-        this.setState({current_mob: index});
+        this.setState({current_item: index});
         this.setState({open: true});
     };
     
     handleDelete = (index) => {
         this.setState({
-            current_mob: index,
-            confirm_text: `Are you sure you want to delete mob ${this.props.area.mobs[index].vnum} (${this.props.area.mobs[index].sdesc})? You cannot undo this action!`,
-            confirm_title: `Delete ${this.props.area.mobs[index].sdesc}?`,
+            current_item: index,
+            confirm_text: `Are you sure you want to delete item ${this.props.area.items[index].vnum} (${this.props.area.items[index].sdesc})? You cannot undo this action!`,
+            confirm_title: `Delete ${this.props.area.items[index].sdesc}?`,
             confirm_delete_open: true
         });
     };
     
     confirmDelete = () => {
         let area = this.props.area.clone();
-        area.mobs.splice(this.state.current_mob, 1);
-        this.setState({current_mob: 0});
+        area.items.splice(this.state.current_item, 1);
+        this.setState({current_item: 0});
         this.updateArea(area);
         this.setState({confirm_delete_open: false});
     }
@@ -107,11 +112,11 @@ class MobPanel extends React.Component {
     }
     
     handleNew = () => {
-        let new_mob = new SimpleMob();
+        let new_item = new Item();
         let area = this.props.area.clone();
-        area.mobs.push(new_mob);
+        area.items.push(new_item);
         this.updateArea(area);
-        this.setState({open: true, current_mob: area.mobs.length-1});
+        this.setState({open: true, current_item: area.items.length-1});
     };
     
     handleClose = () => {
@@ -124,20 +129,20 @@ class MobPanel extends React.Component {
     
     showErrors = (index) => {
         this.setState({
-            current_mob: index,
+            current_item: index,
             errors_open: true
         });
     }
     
     closeErrors = (index) => {
         this.setState({
-            current_mob: 0,
+            current_item: 0,
             errors_open: false
         });
     }
     
-    generateItems(mobs) {
-        return mobs.map((mob, index) => (
+    generateItems(items) {
+        return items.map((item, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.handleEdit(index))} style={icon_button_style}>
@@ -146,24 +151,21 @@ class MobPanel extends React.Component {
                     <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
-                    {mob.validate().length > 0 && (
+                    {item.validate().length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.showErrors(index))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
                     )}
                 </TableRowColumn>
                 <TableRowColumn width={100}>
-                    
-                    {mob.vnum}
+                    {item.vnum}
                 </TableRowColumn>
                 <TableRowColumn>
-                    <Paper style={{width:"1em", height:"1em", marginRight:"0.5em", textAlign:"center", display:"inline-block", color:this.props.muiTheme.palette.disabledColor}} zDepth={1} circle={true}>{mob instanceof UniqueMob ? "U": "S"}</Paper>
-                    {mob.sdesc}
+                    {item.sdesc}
                 </TableRowColumn>
-                <TableRowColumn>{mob.level}</TableRowColumn>
-                <TableRowColumn>{mob.sex ? mob.sex.code : ""}</TableRowColumn>
-                <TableRowColumn>{mob.race ? mob.race.code : ""}</TableRowColumn>
-                <TableRowColumn>{mob.mob_class ? mob.mob_class.code : ""}</TableRowColumn>
+                <TableRowColumn>{item.item_type ? item.item_type.code : ""}</TableRowColumn>
+                <TableRowColumn>{item.material ? item.material.code : ""}</TableRowColumn>
+                <TableRowColumn>{item.size ? item.size.code : ""}</TableRowColumn>
             </TableRow>
             ))
     }
@@ -198,14 +200,13 @@ class MobPanel extends React.Component {
                         <TableHeaderColumn width={100}>Edit</TableHeaderColumn>
                         <TableHeaderColumn width={100}>vnum</TableHeaderColumn>
                         <TableHeaderColumn>Short description</TableHeaderColumn>
-                        <TableHeaderColumn>Level</TableHeaderColumn>
-                        <TableHeaderColumn>Sex</TableHeaderColumn>
-                        <TableHeaderColumn>Race</TableHeaderColumn>
-                        <TableHeaderColumn>Class</TableHeaderColumn>
+                        <TableHeaderColumn>Item type</TableHeaderColumn>
+                        <TableHeaderColumn>Material</TableHeaderColumn>
+                        <TableHeaderColumn>Size</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                    {this.generateItems(this.props.area.mobs)}
+                    {this.generateItems(this.props.area.items)}
                     <TableRow>
                         <TableRowColumn width={100}>
                             <IconButton tooltip="Add" onClick={this.handleNew}>
@@ -215,11 +216,11 @@ class MobPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <MobEditor open={this.state.open} handleClose={this.handleClose} updateArea={this.updateArea.bind(this)} current_mob={this.state.current_mob} area={this.props.area} />
+            <ItemEditor open={this.state.open} handleClose={this.handleClose} updateArea={this.updateArea.bind(this)} current_item={this.state.current_item} area={this.props.area} />
             <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
-            <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${this.props.area.mobs[this.state.current_mob].vnum}`}>
+            <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for item ${this.props.area.items[this.state.current_item].vnum}`}>
                 <List>
-                    {this.props.area.mobs[this.state.current_mob].validate().map((error, index) => (
+                    {this.props.area.items[this.state.current_item].validate().map((error, index) => (
                         <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                     ))}
                 </List>
@@ -234,89 +235,102 @@ const paper_style = {
     margin: "5px"
 }
 
-class MobEditor extends React.Component {
+const item_type_ldesc_style = {
+    color: "rgba(180,180,180,1)",
+    //lineHeight: "15px",
+    //fontStyle: "italic",
+    marginLeft: "10px",
+    whiteSpace: "normal"
+}
+
+class ItemEditor extends React.Component {
     handleChanges(event, value, index) {
         let area = this.props.area.clone();
-        let mob = area.mobs[this.props.current_mob];
+        let item = area.items[this.props.current_item];
         try {
-            mob[event.target.id] = value;
+            item[event.target.id] = value;
         } catch(e) {
             throw(e);
         }
         this.props.updateArea(area);
     }
     
-    convertToSimple() {
-        let area = this.props.area.clone();
-        let old_mob = area.mobs[this.props.current_mob]
-        for (let field of ["affect_flags", "virtual_armor_type", "virtual_armor_material", "alignment", "str", "int", "wis", "dex", "con", "cha", "lck", "ris_resistant", "ris_immune", "ris_susceptible"]) {
-            delete old_mob._fields[field];
-            delete old_mob[field];
-        }
-        area.mobs[this.props.current_mob] = new SimpleMob(old_mob);
-        this.props.updateArea(area);
-    }
-    
-    convertToUnique() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob] = new UniqueMob(area.mobs[this.props.current_mob]);
-        this.props.updateArea(area);
-    }
-    
     render() {
+        let item = this.props.area.items[this.props.current_item]
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
-        var uniqueTab = (this.props.area.mobs[this.props.current_mob] instanceof UniqueMob ? (
+        let item_type_fields = (
             <React.Fragment>
-                <MultiFlagSelector id="affect_flags" label="Act Flags" flags={MOB_AFFECTS} value={this.props.area.mobs[this.props.current_mob].affect_flags} onChange={this.handleChanges.bind(this)} />
-                <FlagSelector id="virtual_armor_type" label="Virtual Armor Type" flags={ITEM_ARMOR_TYPES} value={this.props.area.mobs[this.props.current_mob].virtual_armor_type} onChange={this.handleChanges.bind(this)} />
-                <FlagSelector id="virtual_armor_material" label="Virtual Armor Material" flags={ITEM_MATERIALS} value={this.props.area.mobs[this.props.current_mob].virtual_armor_material} onChange={this.handleChanges.bind(this)} />
-                <FlagSelector id="alignment" label="Alignment" flags={MOB_ALIGNMENTS} value={this.props.area.mobs[this.props.current_mob].alignment} onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="STR" id="str" value={this.props.area.mobs[this.props.current_mob].str} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="INT" id="int" value={this.props.area.mobs[this.props.current_mob].int} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="WIS" id="wis" value={this.props.area.mobs[this.props.current_mob].wis} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="DEX" id="dex" value={this.props.area.mobs[this.props.current_mob].dex} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="CON" id="con" value={this.props.area.mobs[this.props.current_mob].con} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="CHA" id="cha" value={this.props.area.mobs[this.props.current_mob].cha} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="LCK" id="lck" value={this.props.area.mobs[this.props.current_mob].lck} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <MultiFlagSelector id="ris_resistant" label="Resistant" flags={MOB_RIS} value={this.props.area.mobs[this.props.current_mob].ris_resistant} onChange={this.handleChanges.bind(this)} />
-                <MultiFlagSelector id="ris_immune" label="Immune" flags={MOB_RIS} value={this.props.area.mobs[this.props.current_mob].ris_immune} onChange={this.handleChanges.bind(this)} />
-                <MultiFlagSelector id="ris_susceptible" label="Susceptible" flags={MOB_RIS} value={this.props.area.mobs[this.props.current_mob].ris_susceptible} onChange={this.handleChanges.bind(this)} />
-                <RaisedButton id="makeSimpleMob" label="Convert to Simple Mob?" primary={true} keyboardFocused={true} onClick={this.convertToSimple.bind(this)}/>
+                <div>
+                    {item.item_type.value0.type_enum ? (
+                        <FlagSelector id="value0" label="Value 0" flags={item.item_type.value0.type_enum} value={item.value0} onChange={this.handleChanges.bind(this)} />
+                    ) : (
+                        <TextField id="value0" floatingLabelText="Value 0" value={item.value0} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                    )}
+                    <span style={item_type_ldesc_style}>{item.item_type.value0.ldesc}</span>
+                </div>
+                <div>
+                    {item.item_type.value1.type_enum ? (
+                        <FlagSelector id="value1" label="Value 1" flags={item.item_type.value1.type_enum} value={item.value1} onChange={this.handleChanges.bind(this)} />
+                    ) : (
+                        <TextField id="value1" floatingLabelText="Value 1" value={item.value1} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                    )}
+                    <span style={item_type_ldesc_style}>{item.item_type.value1.ldesc}</span>
+                </div>
+                <div>
+                    {item.item_type.value2.type_enum ? (
+                        <FlagSelector id="value2" label="Value 2" flags={item.item_type.value2.type_enum} value={item.value2} onChange={this.handleChanges.bind(this)} />
+                    ) : (
+                        <TextField id="value2" floatingLabelText="Value 2" value={item.value2} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                    )}
+                    <span style={item_type_ldesc_style}>{item.item_type.value2.ldesc}</span>
+                </div>
+                <div>
+                    {item.item_type.value3.type_enum ? (
+                        <FlagSelector id="value3" label="Value 3" flags={item.item_type.value3.type_enum} value={item.value3} onChange={this.handleChanges.bind(this)} />
+                    ) : (
+                        <TextField id="value3" floatingLabelText="Value 3" value={item.value3} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                    )}
+                    <span style={item_type_ldesc_style}>{item.item_type.value3.ldesc}</span>
+                </div>
+                <div>
+                    {item.item_type.value4.type_enum ? (
+                        <FlagSelector id="value4" label="Value 4" flags={item.item_type.value4.type_enum} value={item.value4} onChange={this.handleChanges.bind(this)} />
+                    ) : (
+                        <TextField id="value4" floatingLabelText="Value 4" value={item.value4} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                    )}
+                    <span style={item_type_ldesc_style}>{item.item_type.value4.ldesc}</span>
+                </div>
             </React.Fragment>
-            ) : (
-            <RaisedButton id="makeUniqueMob" label="Convert to Unique Mob?" primary={true} keyboardFocused={true} onClick={this.convertToUnique.bind(this)}/>
-        ))
+        )
+        console.log(item.validate("vnum"))
         return (
-            <Dialog title={`Edit ${this.props.area.mobs[this.props.current_mob] instanceof UniqueMob ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
+            <Dialog title={`Edit Item`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.area.mobs[this.props.current_mob].vnum} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Keywords" id="keywords" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Full description" id="fulldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.area.mobs[this.props.current_mob].ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="vnum" id="vnum" errorText={item.validate("vnum")} value={item.vnum} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Short description" id="sdesc" errorText={item.validate("sdesc")} value={item.sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Long description" id="ldesc" errorText={item.validate("ldesc")} fullWidth={true} value={item.ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Keywords" id="keywords" errorText={item.validate("keywords")} fullWidth={true} value={item.keywords} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                    </Tab>
+                    <Tab label="Item Type">
+                        <FlagSelector id="item_type" label="Item Type" errorText={item.validate("item_type")} flags={ITEM_TYPES} value={item.item_type} onChange={this.handleChanges.bind(this)} />
+                        {item_type_fields}
                     </Tab>
                     <Tab label="Details">
-                        <TextField floatingLabelText="Level" id="level" value={this.props.area.mobs[this.props.current_mob].level} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="mob_class" label="Class" flags={MOB_CLASSES} value={this.props.area.mobs[this.props.current_mob].mob_class} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="race" label="Race" flags={MOB_RACES} value={this.props.area.mobs[this.props.current_mob].race} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="sex" label="Sex" flags={MOB_SEXES} value={this.props.area.mobs[this.props.current_mob].sex} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="position" label="Position" flags={MOB_POSITIONS} value={this.props.area.mobs[this.props.current_mob].position} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="deity" label="Deity" flags={MOB_DEITIES} value={this.props.area.mobs[this.props.current_mob].deity} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="act_flags" label="Act Flags" flags={MOB_ACT_FLAGS} value={this.props.area.mobs[this.props.current_mob].act_flags} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="understood_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.area.mobs[this.props.current_mob].understood_languages} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="spoken_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.area.mobs[this.props.current_mob].spoken_languages} onChange={this.handleChanges.bind(this)} />
+                        <MultiFlagSelector id="attributes" errorText={item.validate("attributes")} label="Attributes" flags={ITEM_ATTRIBUTES} value={this.props.area.items[this.props.current_item].attributes} onChange={this.handleChanges.bind(this)} />
+                        <MultiFlagSelector id="wear_flags" errorText={item.validate("wear_flags")} label="Wear Locations" flags={WEAR_LOCATIONS} value={this.props.area.items[this.props.current_item].wear_flags} onChange={this.handleChanges.bind(this)} />
+                        <FlagSelector id="quality" errorText={item.validate("quality")} label="Quality" flags={ITEM_QUALITY} value={item.quality} onChange={this.handleChanges.bind(this)} />
+                        <FlagSelector id="material" errorText={item.validate("material")} label="Materials" flags={ITEM_MATERIALS} value={item.material} onChange={this.handleChanges.bind(this)} />
+                        <FlagSelector id="condition" errorText={item.validate("condition")} label="Condition" flags={ITEM_CONDITION} value={item.condition} onChange={this.handleChanges.bind(this)} />
+                        <FlagSelector id="size" errorText={item.validate("size")} label="Sizes" flags={ITEM_SIZES} value={item.size} onChange={this.handleChanges.bind(this)} />
                     </Tab>
-                    <Tab label="Unique">
-                        {uniqueTab}
-                    </Tab>
-                    <Tab label="Training">
-                        <CanTrainEditor area={this.props.area} current_mob={this.props.current_mob} updateArea={this.props.updateArea} />
+                    <Tab label="Extra Descs">
+                        <ExtraDescriptionsEditor area={this.props.area} current_item={this.props.current_item} updateArea={this.props.updateArea} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor area={this.props.area} current_mob={this.props.current_mob} updateArea={this.props.updateArea} />
+                        <ProgramsEditor area={this.props.area} current_item={this.props.current_item} updateArea={this.props.updateArea} />
                     </Tab>
                 </Tabs>
             </Dialog>  
@@ -324,9 +338,43 @@ class MobEditor extends React.Component {
     }
 }
 
+class ExtraDescriptionsEditor extends React.Component {
+    generateExtraDescriptions(ed) {
+        return this.props.area.items[this.props.current_item].extra_descriptions.map((ed, index) => (
+            <Paper style={paper_style} zDepth={1} key={index}>
+                <TextField floatingLabelText="Keywords (space separated)" id={"keywords_"+index} fullWidth={true} value={ed.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="Long description" id={"ldesc_"+index} multiLine={true} rows={5} fullWidth={true} value={ed.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+            </Paper>
+        ));
+    }
+    
+    handleChange(event, value, index) {
+        let area = this.props.area.clone();
+        area.items[this.props.current_item].extra_descriptions[parseInt(event.target.id.split("_")[1])][event.target.id.split("_")[0]] = value;
+        this.props.updateArea(area);
+    }
+    
+    handleNew() {
+        let area = this.props.area.clone();
+        area.items[this.props.current_item].extra_descriptions.push(new ExtraDescription())
+        this.props.updateArea(area);
+    }
+    
+    render() {
+        return (
+            <div>
+                {this.generateExtraDescriptions(this.props.area.items[this.props.current_item].extra_descriptions)}
+                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
+            </div>
+        )
+    }
+}
+
 class ProgramsEditor extends React.Component {
     generatePrograms() {
-        return this.props.area.mobs[this.props.current_mob].programs.map((program, index) => (
+        return this.props.area.items[this.props.current_item].programs.map((program, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <FlagSelector id={"trigger "+index} label="Trigger" flags={MOB_PROGRAM_TRIGGERS} value={program.trigger} onChange={this.handleChange.bind(this)} />
                 <TextField floatingLabelText="Variable" id={"argument "+index} value={program.argument} autoComplete="off" onChange={this.handleChange.bind(this)} />
@@ -337,13 +385,13 @@ class ProgramsEditor extends React.Component {
     
     handleChange(event, value, index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].programs[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
+        area.items[this.props.current_item].programs[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
         this.props.updateArea(area);
     }
     
     handleNew() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].programs.push(new Program())
+        area.items[this.props.current_item].programs.push(new Program())
         this.props.updateArea(area);
     }
     
@@ -361,7 +409,7 @@ class ProgramsEditor extends React.Component {
 
 class CanTrainEditor extends React.Component {
     generateSkills() {
-        return this.props.area.mobs[this.props.current_mob].can_train_skill.map((skill, index) => (
+        return this.props.area.items[this.props.current_item].can_train_skill.map((skill, index) => (
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
@@ -380,17 +428,17 @@ class CanTrainEditor extends React.Component {
     }
     handleNewSkill() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_skill.push(new TrainSkill())
+        area.items[this.props.current_item].can_train_skill.push(new TrainSkill())
         this.props.updateArea(area);
     }
     removeSkill(index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_skill.splice(index, 1)
+        area.items[this.props.current_item].can_train_skill.splice(index, 1)
         this.props.updateArea(area);
     }
     
     generateWeaponSkills() {
-        return this.props.area.mobs[this.props.current_mob].can_train_weapon_skill.map((skill, index) => (
+        return this.props.area.items[this.props.current_item].can_train_weapon_skill.map((skill, index) => (
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
@@ -409,17 +457,17 @@ class CanTrainEditor extends React.Component {
     }
     handleNewWeaponSkill() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_weapon_skill.push(new TrainWeaponSkill())
+        area.items[this.props.current_item].can_train_weapon_skill.push(new TrainWeaponSkill())
         this.props.updateArea(area);
     }
     removeWeaponSkill(index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_weapon_skill.slice(index, 1)
+        area.items[this.props.current_item].can_train_weapon_skill.slice(index, 1)
         this.props.updateArea(area);
     }
     
     generateSpells() {
-        return this.props.area.mobs[this.props.current_mob].can_train_spell.map((skill, index) => (
+        return this.props.area.items[this.props.current_item].can_train_spell.map((skill, index) => (
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
@@ -438,17 +486,17 @@ class CanTrainEditor extends React.Component {
     }
     handleNewSpell() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_spell.push(new TrainSpell())
+        area.items[this.props.current_item].can_train_spell.push(new TrainSpell())
         this.props.updateArea(area);
     }
     removeSpell(index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_spell.slice(index, 1)
+        area.items[this.props.current_item].can_train_spell.slice(index, 1)
         this.props.updateArea(area);
     }
     
     generateLevels() {
-        return this.props.area.mobs[this.props.current_mob].can_train_level.map((skill, index) => (
+        return this.props.area.items[this.props.current_item].can_train_level.map((skill, index) => (
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
@@ -464,17 +512,17 @@ class CanTrainEditor extends React.Component {
     }
     handleNewLevel() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_level.push(new TrainLevel())
+        area.items[this.props.current_item].can_train_level.push(new TrainLevel())
         this.props.updateArea(area);
     }
     removeLevel(index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_level.slice(index, 1)
+        area.items[this.props.current_item].can_train_level.slice(index, 1)
         this.props.updateArea(area);
     }
     
     generateStatistics() {
-        return this.props.area.mobs[this.props.current_mob].can_train_statistic.map((skill, index) => (
+        return this.props.area.items[this.props.current_item].can_train_statistic.map((skill, index) => (
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
@@ -493,17 +541,17 @@ class CanTrainEditor extends React.Component {
     }
     handleNewStatistic() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_statistic.push(new TrainStatistic())
+        area.items[this.props.current_item].can_train_statistic.push(new TrainStatistic())
         this.props.updateArea(area);
     }
     removeStatistic(index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_statistic.slice(index, 1)
+        area.items[this.props.current_item].can_train_statistic.slice(index, 1)
         this.props.updateArea(area);
     }
     
     generateFeats() {
-        return this.props.area.mobs[this.props.current_mob].can_train_feat.map((skill, index) => (
+        return this.props.area.items[this.props.current_item].can_train_feat.map((skill, index) => (
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
@@ -522,18 +570,18 @@ class CanTrainEditor extends React.Component {
     }
     handleNewFeat() {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_feat.push(new TrainFeat())
+        area.items[this.props.current_item].can_train_feat.push(new TrainFeat())
         this.props.updateArea(area);
     }
     removeFeat(index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_feat.slice(index, 1)
+        area.items[this.props.current_item].can_train_feat.slice(index, 1)
         this.props.updateArea(area);
     }
     
     handleChange(event, value, index) {
         let area = this.props.area.clone();
-        area.mobs[this.props.current_mob][event.target.id.split(" ")[0]][parseInt(event.target.id.split(" ")[2])][event.target.id.split(" ")[1]] = value;
+        area.items[this.props.current_item][event.target.id.split(" ")[0]][parseInt(event.target.id.split(" ")[2])][event.target.id.split(" ")[1]] = value;
         this.props.updateArea(area);
     }
     
@@ -665,4 +713,4 @@ class CanTrainEditor extends React.Component {
     }
 }
 
-export default muiThemeable()(MobPanel);
+export default muiThemeable()(ItemPanel);

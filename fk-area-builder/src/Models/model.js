@@ -57,14 +57,10 @@ class Field {
 class Model {
     constructor(field_list={}, values={}) {
         this._fields = field_list
-        console.trace()
-        console.log("Model Values", values);
         for (let p in field_list) {
             try {
-                console.log(p, values[p])
                 this[p] = values[p] !== undefined ? values[p] : field_list[p].value
             } catch(e) {
-                console.log(p, e, field_list);
                 throw(e);
             }
         }
@@ -74,7 +70,10 @@ class Model {
         return "[Model]"
     }
     
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = [];
         for (let prop in this._fields) {
             errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));

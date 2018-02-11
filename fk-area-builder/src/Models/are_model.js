@@ -53,7 +53,10 @@ class Area extends Model {
     get _error_prefix() {
         return `[Area:${this.name}]`;
     }
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = super.validate()
         if (this.authors.join(" ").length >= 36) {
             errors.push(`${this._error_prefix}.authors List too long (max 36 characters)`);
@@ -189,7 +192,10 @@ class JusticeSystem extends Model {
         return "[JusticeSystem]"
     }
     
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = super.validate()
         
         // Check crimes
@@ -246,7 +252,10 @@ class Room extends Model {
     get _error_prefix() {
         return `[Room:(${this.vnum}) ${this.sdesc}]`;
     }
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = super.validate();
         if (this.defunct != 0) {
             errors.push(`${this._error_prefix}.defunct must be 0`);
@@ -348,35 +357,38 @@ class ItemApply extends Model {
 class Item extends Model {
     constructor(fields) {
         super(Object.assign({
-            vnum:               new Field({field_name:"vnum",               default_value: undefined,    in_flags:null,                  optional:false}),
-            sdesc:              new Field({field_name:"sdesc",              default_value: undefined,    in_flags:null,                  optional:false}),
-            ldesc:              new Field({field_name:"ldesc",              default_value: undefined,    in_flags:null,                  optional:false}),
-            keywords:           new Field({field_name:"keywords",           default_value: undefined,    in_flags:null,                  optional:false}),
-            action_description: new Field({field_name:"action_description", default_value: "",      in_flags:null,                  optional:true}), // Not used
-            item_type:          new Field({field_name:"item_type",          default_value: undefined,    in_flags:flags.ITEM_TYPES,      optional:false}),
-            attributes:         new Field({field_name:"attributes",         default_value: [],      in_flags:flags.ITEM_ATTRIBUTES, optional:true}),
-            wear_flags:         new Field({field_name:"wear_flags",         default_value: [],      in_flags:flags.WEAR_LOCATIONS,  optional:true}),
-            extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],      in_flags:null,                  optional:true}),
-            quality:            new Field({field_name:"quality",            default_value: undefined,    in_flags:flags.ITEM_QUALITY,    optional:false}),
-            material:           new Field({field_name:"material",           default_value: undefined,    in_flags:flags.ITEM_MATERIALS,  optional:false}),
-            condition:          new Field({field_name:"condition",          default_value: undefined,    in_flags:flags.ITEM_CONDITION,  optional:false}),
-            size:               new Field({field_name:"size",               default_value: undefined,    in_flags:flags.ITEM_SIZES,      optional:false}),
-            value0:             new Field({field_name:"value0",             default_value: 0,       in_flags:null,                  optional:true}),
-            value1:             new Field({field_name:"value1",             default_value: 0,       in_flags:null,                  optional:true}),
-            value2:             new Field({field_name:"value2",             default_value: 0,       in_flags:null,                  optional:true}),
-            value3:             new Field({field_name:"value3",             default_value: 0,       in_flags:null,                  optional:true}),
-            value4:             new Field({field_name:"value4",             default_value: 0,       in_flags:null,                  optional:true}),
-            value5:             new Field({field_name:"value5",             default_value: 0,       in_flags:null,                  optional:true}),
-            special_applies:    new Field({field_name:"special_applies",    default_value: [],      in_flags:null,                  optional:true}),
-            programs:           new Field({field_name:"programs",           default_value: [],      in_flags:null,                  optional:true}),
-            identify_message:   new Field({field_name:"identify_message",   default_value: undefined,    in_flags:flags.MOB_AFFECTS,     optional:true}),
+            vnum:               new Field({field_name:"vnum",               default_value: undefined,   in_flags:null,                  optional:false}),
+            sdesc:              new Field({field_name:"sdesc",              default_value: undefined,   in_flags:null,                  optional:false}),
+            ldesc:              new Field({field_name:"ldesc",              default_value: undefined,   in_flags:null,                  optional:false}),
+            keywords:           new Field({field_name:"keywords",           default_value: undefined,   in_flags:null,                  optional:false}),
+            action_description: new Field({field_name:"action_description", default_value: "",          in_flags:null,                  optional:true}), // Not used
+            item_type:          new Field({field_name:"item_type",          default_value: undefined,   in_flags:flags.ITEM_TYPES,      optional:false}),
+            attributes:         new Field({field_name:"attributes",         default_value: [],          in_flags:flags.ITEM_ATTRIBUTES, optional:true}),
+            wear_flags:         new Field({field_name:"wear_flags",         default_value: [],          in_flags:flags.WEAR_LOCATIONS,  optional:true}),
+            extra_descriptions: new Field({field_name:"extra_descriptions", default_value: [],          in_flags:null,                  optional:true}),
+            quality:            new Field({field_name:"quality",            default_value: undefined,   in_flags:flags.ITEM_QUALITY,    optional:false}),
+            material:           new Field({field_name:"material",           default_value: undefined,   in_flags:flags.ITEM_MATERIALS,  optional:false}),
+            condition:          new Field({field_name:"condition",          default_value: undefined,   in_flags:flags.ITEM_CONDITION,  optional:false}),
+            size:               new Field({field_name:"size",               default_value: undefined,   in_flags:flags.ITEM_SIZES,      optional:false}),
+            value0:             new Field({field_name:"value0",             default_value: 0,           in_flags:null,                  optional:true}),
+            value1:             new Field({field_name:"value1",             default_value: 0,           in_flags:null,                  optional:true}),
+            value2:             new Field({field_name:"value2",             default_value: 0,           in_flags:null,                  optional:true}),
+            value3:             new Field({field_name:"value3",             default_value: 0,           in_flags:null,                  optional:true}),
+            value4:             new Field({field_name:"value4",             default_value: 0,           in_flags:null,                  optional:true}),
+            value5:             new Field({field_name:"value5",             default_value: 0,           in_flags:null,                  optional:true}),
+            special_applies:    new Field({field_name:"special_applies",    default_value: [],          in_flags:null,                  optional:true}),
+            programs:           new Field({field_name:"programs",           default_value: [],          in_flags:null,                  optional:true}),
+            identify_message:   new Field({field_name:"identify_message",   default_value: undefined,   in_flags:flags.MOB_AFFECTS,     optional:true}),
         }, fields));
     }
     get _error_prefix() {
         return `[Item:(${this.vnum}) ${this.sdesc}]`;
     }
     
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = super.validate();
         
         if (this.action_description !== "") {
@@ -507,7 +519,10 @@ class UniqueMob extends SimpleMob {
         return `[UniqueMob:(${this.vnum}) ${this.sdesc}]`
     }
     
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = super.validate()
         for (let stat in ["str", "int", "wis", "dex", "con", "cha", "lck"]) {
             if (!(3 <= this[stat] <= 22)) {
@@ -740,7 +755,10 @@ class MobReset extends Model {
     get _error_prefix() {
         return `[MobReset:${this.mob.vnum} in ${this.room.vnum}]`;
     }
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = [];
         for (let prop in this._fields) {
             if (prop == "room" || prop == "mob") {
@@ -805,7 +823,10 @@ class ItemReset extends Model {
     get _error_prefix() {
         return `[ItemReset:${this.mob.vnum} in ${this.room_container.vnum}]`;
     }
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = [];
         for (let prop in this._fields) {
             if (prop == "item" || prop == "room_container") {
@@ -848,7 +869,10 @@ class DoorReset extends Model {
     get _error_prefix() {
         return `[DoorReset:${this.exit ? this.exit.code : "[no exit defined]"} from ${this.room.vnum}]`;
     }
-    validate() {
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
         let errors = [];
         for (let prop in this._fields) {
             if (prop == "room") {

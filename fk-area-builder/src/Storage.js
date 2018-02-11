@@ -9,7 +9,6 @@ class Storage {
         this.active_file_id = ""
         const script = document.createElement("script");
         script.src = "https://apis.google.com/js/api.js";
-        console.log(script);
         script.onload = () => {
             window.gapi.load('auth', {'callback': ()=>(this.authApiLoaded = true)});
             window.gapi.load('picker', {'callback': ()=>(this.pickerApiLoaded = true)});
