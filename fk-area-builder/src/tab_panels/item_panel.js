@@ -45,6 +45,8 @@ from '../Models/flags';
 import {
     SimpleMob,
     UniqueMob,
+    Exit,
+    ExtraDescription,
     Program,
     TrainSkill,
     TrainWeaponSkill,
@@ -57,7 +59,8 @@ from '../Models/are_model'
 import {
     FlagWithCategorySelector,
     FlagSelector,
-    MultiFlagSelector
+    MultiFlagSelector,
+    VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
 
@@ -297,7 +300,7 @@ class MobEditor extends React.Component {
                     </Tab>
                     <Tab label="Details">
                         <TextField floatingLabelText="Level" id="level" value={this.props.area.mobs[this.props.current_mob].level} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <FlagWithCategorySelector id="mob_class" label="Class" flags={MOB_CLASSES} value={this.props.area.mobs[this.props.current_mob].mob_class} onChange={this.handleChanges.bind(this)} />
+                        <FlagSelector id="mob_class" label="Class" flags={MOB_CLASSES} value={this.props.area.mobs[this.props.current_mob].mob_class} onChange={this.handleChanges.bind(this)} />
                         <FlagSelector id="race" label="Race" flags={MOB_RACES} value={this.props.area.mobs[this.props.current_mob].race} onChange={this.handleChanges.bind(this)} />
                         <FlagSelector id="sex" label="Sex" flags={MOB_SEXES} value={this.props.area.mobs[this.props.current_mob].sex} onChange={this.handleChanges.bind(this)} />
                         <FlagSelector id="position" label="Position" flags={MOB_POSITIONS} value={this.props.area.mobs[this.props.current_mob].position} onChange={this.handleChanges.bind(this)} />
@@ -316,7 +319,7 @@ class MobEditor extends React.Component {
                         <ProgramsEditor area={this.props.area} current_mob={this.props.current_mob} updateArea={this.props.updateArea} />
                     </Tab>
                 </Tabs>
-            </Dialog>
+            </Dialog>  
         )
     }
 }

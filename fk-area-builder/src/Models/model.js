@@ -55,12 +55,14 @@ class Field {
 }
 
 class Model {
-    constructor(field_list={}) {
+    constructor(field_list={}, values={}) {
         this._fields = field_list
-        
+        console.trace()
+        console.log("Model Values", values);
         for (let p in field_list) {
             try {
-                this[p] = field_list[p].value
+                console.log(p, values[p])
+                this[p] = values[p] !== undefined ? values[p] : field_list[p].value
             } catch(e) {
                 console.log(p, e, field_list);
                 throw(e);

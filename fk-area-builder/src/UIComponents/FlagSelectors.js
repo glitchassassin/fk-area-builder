@@ -15,10 +15,14 @@ const ldesc_style = {
 
 class FlagWithCategorySelector extends React.Component {
     state = {
-        value: null,
+        value: this.props.value,
     };
 
-    handleChange = (event, index, value) => this.setState({ value });
+    handleChange(event, index, value) {
+        this.setState({ value });
+        
+        this.props.onChange({target:{id:this.props.id}}, value, index);
+    }
     
     generateItems(flags) {
         let categories = {};
@@ -31,9 +35,15 @@ class FlagWithCategorySelector extends React.Component {
         }
         let to_return = []
         for (let cat in categories) {
-            to_return.push(<Subheader>{cat}</Subheader>)
+            to_return.push(<Subheader key={cat}>{cat}</Subheader>)
             for (let i = 0; i < categories[cat].length; i++) {
-                to_return.push(<MenuItem value={flags[categories[cat][i]].code} primaryText={flags[categories[cat][i]].sdesc} />)
+                if (flags[categories[cat][i]].do_not_use) {
+                    continue;
+                }
+                if (flags[categories[cat][i]].ldesc) {
+                    to_return.push(<MenuItem key={flags[categories[cat][i]].code} value={flags[categories[cat][i]]} primaryText={flags[categories[cat][i]].sdesc}><span style={ldesc_style}>{flags[categories[cat][i]].ldesc}</span></MenuItem>)
+                }
+                to_return.push(<MenuItem key={flags[categories[cat][i]].code} value={flags[categories[cat][i]]} primaryText={flags[categories[cat][i]].sdesc} />)
             }
         }
         return to_return;
@@ -44,7 +54,7 @@ class FlagWithCategorySelector extends React.Component {
             <SelectField
               floatingLabelText={this.props.label}
               value={this.state.value}
-              onChange={this.handleChange}
+              onChange={this.handleChange.bind(this)}
             >
                 {this.generateItems(this.props.flags)}
             </SelectField>

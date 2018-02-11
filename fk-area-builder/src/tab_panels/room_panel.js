@@ -38,7 +38,6 @@ import {
 }
 from '../Models/are_model'
 import {
-    FlagWithCategorySelector,
     FlagSelector,
     MultiFlagSelector,
     VnumAutoComplete
@@ -119,7 +118,7 @@ class RoomPanel extends React.Component {
     
     generateItems(rooms) {
         return rooms.map((room, index) => (
-            <TableRow key={index}>
+            <TableRow id={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.handleEdit(index))} style={icon_button_style}>
                         <FontIcon className="material-icons">mode_edit</FontIcon>
@@ -275,12 +274,12 @@ class ExtraDescriptionsEditor extends React.Component {
     
     render() {
         return (
-            <React.Fragment>
+            <div>
                 {this.generateExtraDescriptions(this.props.area.rooms[this.props.current_room].extra_descriptions)}
                 <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
-            </React.Fragment>
+            </div>
         )
     }
 }
@@ -314,12 +313,12 @@ class ExitsEditor extends React.Component {
     
     render() {
         return (
-            <React.Fragment>
+            <div>
                 {this.generateExits(this.props.area.rooms[this.props.current_room].exits)}
                 <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
-            </React.Fragment>
+            </div>
         )
     }
 }
@@ -349,12 +348,12 @@ class ProgramsEditor extends React.Component {
     
     render() {
         return (
-            <React.Fragment>
+            <div>
                 {this.generatePrograms()}
                 <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
-            </React.Fragment>
+            </div>
         )
     }
 }

@@ -409,31 +409,40 @@ ${this.programs.length ? "|" : ""}`;
 }
 
 class SimpleMob extends Model {
-    constructor(fields) {
-        super(Object.assign({
-            vnum:                   new Field({field_name:"vnum",                   default_value:undefined,                                 in_flags:null,                  optional:false}),
-            sdesc:                  new Field({field_name:"sdesc",                  default_value:undefined,                                 in_flags:null,                  optional:false}),
-            ldesc:                  new Field({field_name:"ldesc",                  default_value:undefined,                                 in_flags:null,                  optional:false}),
-            fulldesc:               new Field({field_name:"fulldesc",               default_value:undefined,                                 in_flags:null,                  optional:false}),
-            keywords:               new Field({field_name:"keywords",               default_value:undefined,                                 in_flags:null,                  optional:false}),
-            level:                  new Field({field_name:"level",                  default_value:undefined,                                 in_flags:null,                  optional:false}),
-            mob_class:              new Field({field_name:"mob_class",              default_value:undefined,                                 in_flags:flags.MOB_CLASSES,     optional:false}),
-            race:                   new Field({field_name:"race",                   default_value:undefined,                                 in_flags:flags.MOB_RACES,       optional:false}),
-            sex:                    new Field({field_name:"sex",                    default_value:undefined,                                 in_flags:flags.MOB_SEXES,       optional:false}),
-            position:               new Field({field_name:"position",               default_value:undefined,                                 in_flags:flags.MOB_POSITIONS,   optional:false}),
+    constructor(fields, values) {
+        let model_fields = {
+            vnum:                   new Field({field_name:"vnum",                   default_value:undefined,                            in_flags:null,                  optional:false}),
+            sdesc:                  new Field({field_name:"sdesc",                  default_value:undefined,                            in_flags:null,                  optional:false}),
+            ldesc:                  new Field({field_name:"ldesc",                  default_value:undefined,                            in_flags:null,                  optional:false}),
+            fulldesc:               new Field({field_name:"fulldesc",               default_value:undefined,                            in_flags:null,                  optional:false}),
+            keywords:               new Field({field_name:"keywords",               default_value:undefined,                            in_flags:null,                  optional:false}),
+            level:                  new Field({field_name:"level",                  default_value:undefined,                            in_flags:null,                  optional:false}),
+            mob_class:              new Field({field_name:"mob_class",              default_value:undefined,                            in_flags:flags.MOB_CLASSES,     optional:false}),
+            race:                   new Field({field_name:"race",                   default_value:undefined,                            in_flags:flags.MOB_RACES,       optional:false}),
+            sex:                    new Field({field_name:"sex",                    default_value:undefined,                            in_flags:flags.MOB_SEXES,       optional:false}),
+            position:               new Field({field_name:"position",               default_value:undefined,                            in_flags:flags.MOB_POSITIONS,   optional:false}),
             deity:                  new Field({field_name:"deity",                  default_value:flags.MOB_DEITIES.DEITY_NONE,         in_flags:flags.MOB_DEITIES,     optional:true}),
             act_flags:              new Field({field_name:"act_flags",              default_value:[],                                   in_flags:flags.MOB_ACT_FLAGS,   optional:true}),
             understood_languages:   new Field({field_name:"understood_languages",   default_value:[flags.LANGUAGE_FLAGS.LANG_COMMON],   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
             spoken_languages:       new Field({field_name:"spoken_languages",       default_value:[flags.LANGUAGE_FLAGS.LANG_COMMON],   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
-            can_train_skill:              new Field({field_name:"can_train_skill",              default_value:[],                                   in_flags:null,                  optional:true}),
-            can_train_weapon_skill:              new Field({field_name:"can_train_weapon_skill",              default_value:[],                                   in_flags:null,                  optional:true}),
-            can_train_spell:              new Field({field_name:"can_train_spell",              default_value:[],                                   in_flags:null,                  optional:true}),
-            can_train_level:              new Field({field_name:"can_train_level",              default_value:[],                                   in_flags:null,                  optional:true}),
-            can_train_statistic:              new Field({field_name:"can_train_statistic",              default_value:[],                                   in_flags:null,                  optional:true}),
-            can_train_feat:              new Field({field_name:"can_train_feat",              default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_skill:        new Field({field_name:"can_train_skill",        default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_weapon_skill: new Field({field_name:"can_train_weapon_skill", default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_spell:        new Field({field_name:"can_train_spell",        default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_level:        new Field({field_name:"can_train_level",        default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_statistic:    new Field({field_name:"can_train_statistic",    default_value:[],                                   in_flags:null,                  optional:true}),
+            can_train_feat:         new Field({field_name:"can_train_feat",         default_value:[],                                   in_flags:null,                  optional:true}),
             equipment_resets:       new Field({field_name:"equipment_resets",       default_value:[],                                   in_flags:null,                  optional:true}),
             programs:               new Field({field_name:"programs",               default_value:[],                                   in_flags:null,                  optional:true}),
-        }, fields))
+        }
+        
+        if (fields instanceof SimpleMob) {
+            let f = fields.clone()
+            super(Object.assign(model_fields, f._fields), f);
+        }
+        else { // "fields" is just a list of fields
+            super(Object.assign(model_fields, fields), values);
+        }
+        
     }
     get _error_prefix() {
         return `[SimpleMob:(${this.vnum}) ${this.sdesc}]`
@@ -469,11 +478,11 @@ ${this.programs.length ? "|" : ""}`
 
 class UniqueMob extends SimpleMob {
     constructor(fields) {
-        super(Object.assign({
+        var model_fields = {
             affect_flags:           new Field({field_name:"affect_flags",           default_value:[flags.MOB_AFFECTS.AFF_NONE], in_flags:flags.MOB_AFFECTS,     optional:true}),
-            virtual_armor_type:     new Field({field_name:"virtual_armor_type",     default_value:undefined,                         in_flags:flags.ITEM_ARMOR_TYPES,optional:false}),
-            virtual_armor_material: new Field({field_name:"virtual_armor_material", default_value:undefined,                         in_flags:flags.ITEM_MATERIALS,  optional:false}),
-            alignment:              new Field({field_name:"alignment",              default_value:undefined,                         in_flags:flags.MOB_ALIGNMENTS,  optional:false}),
+            virtual_armor_type:     new Field({field_name:"virtual_armor_type",     default_value:undefined,                    in_flags:flags.ITEM_ARMOR_TYPES,optional:false}),
+            virtual_armor_material: new Field({field_name:"virtual_armor_material", default_value:undefined,                    in_flags:flags.ITEM_MATERIALS,  optional:false}),
+            alignment:              new Field({field_name:"alignment",              default_value:undefined,                    in_flags:flags.MOB_ALIGNMENTS,  optional:false}),
             str:                    new Field({field_name:"str",                    default_value:13,                           in_flags:null,                  optional:false}),
             int:                    new Field({field_name:"int",                    default_value:13,                           in_flags:null,                  optional:false}),
             wis:                    new Field({field_name:"wis",                    default_value:13,                           in_flags:null,                  optional:false}),
@@ -484,7 +493,15 @@ class UniqueMob extends SimpleMob {
             ris_resistant:          new Field({field_name:"ris_resistant",          default_value:[flags.MOB_RIS.RIS_NONE],     in_flags:flags.MOB_RIS,         optional:false}),
             ris_immune:             new Field({field_name:"ris_immune",             default_value:[flags.MOB_RIS.RIS_NONE],     in_flags:flags.MOB_RIS,         optional:false}),
             ris_susceptible:        new Field({field_name:"ris_susceptible",        default_value:[flags.MOB_RIS.RIS_NONE],     in_flags:flags.MOB_RIS,         optional:false}),
-        }, fields))
+        }
+        
+        if (fields instanceof SimpleMob) { // "fields" is another Model object
+            let f = fields.clone()
+            super(Object.assign(model_fields, f._fields), f);
+        }
+        else { // "fields" is just a list of fields
+            super(Object.assign(model_fields, fields));
+        }
     }
     get _error_prefix() {
         return `[UniqueMob:(${this.vnum}) ${this.sdesc}]`
