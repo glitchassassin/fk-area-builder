@@ -95,10 +95,10 @@ class Loader {
         }
         
         let justice_system = new models.JusticeSystem();
-        justice_system.courtroom = this.get_room(matches[1]);
-        justice_system.dungeon = this.get_room(matches[2]);
-        justice_system.judge = this.get_mob(matches[3]);
-        justice_system.guard = this.get_mob(matches[4]);
+        justice_system.courtroom = matches[1];
+        justice_system.dungeon = matches[2];
+        justice_system.judge = matches[3];
+        justice_system.guard = matches[4];
         justice_system[matches[5]].punishment = get_code(matches[6], flags.JUSTICE_PUNISHMENTS);
         justice_system[matches[7]].punishment = get_code(matches[8], flags.JUSTICE_PUNISHMENTS);
         justice_system[matches[9]].punishment = get_code(matches[10], flags.JUSTICE_PUNISHMENTS);
@@ -115,7 +115,8 @@ class Loader {
         let matches;
         while ((matches = qlog_regex.exec(quests)) != null) {
             let quest = new models.QuestLog();
-            quest.area_vnum = matches[1];
+            quest.area = this.area;
+            quest.area.vnum = matches[1];
             quest.qbit_start = matches[2];
             quest.qbit_stop = matches[3];
             quest.min_qbit = matches[4];
@@ -491,9 +492,9 @@ class Loader {
             if (matches[1] == "M") {
                 let mob_reset = new models.MobReset();
                 mob_reset.defunct = matches[2];
-                mob_reset.mob = this.get_mob(matches[3]);
+                mob_reset.mob = matches[3];
                 mob_reset.mob_limit = matches[4];
-                mob_reset.room = this.get_room(matches[5]);
+                mob_reset.room = matches[5];
                 
                 if (mob_reset.mob && mob_reset.room) {
                     this.area.mob_resets.push(mob_reset);
@@ -504,7 +505,7 @@ class Loader {
             else if (matches[1] == "E") {
                 let equip_reset = new models.EquipmentReset();
                 equip_reset.defunct = matches[2];
-                equip_reset.item = this.get_item(matches[3]);
+                equip_reset.item = matches[3];
                 equip_reset.equip_limit = matches[4];
                 equip_reset.wear_loc = get_code(matches[5], flags.MOB_WEAR_POSITIONS);
                 last_mob_reset.mob.equipment_resets.push(equip_reset);
@@ -513,7 +514,7 @@ class Loader {
             else if (matches[1] == "G") {
                 let equip_reset = new models.EquipmentReset();
                 equip_reset.defunct = matches[2];
-                equip_reset.item = this.get_item(matches[3]);
+                equip_reset.item = matches[3];
                 equip_reset.equip_limit = matches[4];
                 last_mob_reset.mob.equipment_resets.push(equip_reset);
                 last_reset = equip_reset;
@@ -539,41 +540,41 @@ class Loader {
             else if (matches[1] == "P") {
                 let item_reset = new models.ItemReset();
                 item_reset.hidden = (matches[2] == 1); // Boolean
-                item_reset.item = this.get_item(matches[3]);
+                item_reset.item = matches[3];
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = this.get_item(matches[5]);
+                item_reset.room_container = matches[5];
                 this.area.equipment_resets.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "H") {
                 let item_reset = new models.ItemReset();
                 item_reset.hidden = true;
-                item_reset.item = this.get_item(matches[3]);
+                item_reset.item = matches[3];
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = this.get_room(matches[5]);
+                item_reset.room_container = matches[5];
                 this.area.equipment_resets.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "U") {
                 let item_reset = new models.ItemReset();
                 item_reset.buried = true;
-                item_reset.item = this.get_item(matches[3]);
+                item_reset.item = matches[3];
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = this.get_room(matches[5]);
+                item_reset.room_container = matches[5];
                 this.area.equipment_resets.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "O") {
                 let item_reset = new models.ItemReset();
-                item_reset.item = this.get_item(matches[3]);
+                item_reset.item = matches[3];
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = this.get_room(matches[5]);
+                item_reset.room_container = matches[5];
                 this.area.equipment_resets.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "D") {
                 let door_reset = new models.DoorReset();
-                door_reset.room = this.get_room(matches[3]);
+                door_reset.room = matches[3];
                 door_reset.exit = get_code(matches[4], flags.DOOR_RESET_DIRECTIONS);
                 door_reset.exit_state = get_code(matches[5], flags.DOOR_RESET_FLAGS);
                 this.area.door_resets.push(door_reset);
@@ -581,7 +582,7 @@ class Loader {
             }
             else if (matches[1] == "R") {
                 let door_reset = new models.RandomDoorReset();
-                door_reset.room = this.get_room(matches[3]);
+                door_reset.room = matches[3];
                 door_reset.last_door = matches[4];
                 this.area.door_resets.push(door_reset);
                 last_reset = door_reset;

@@ -22,7 +22,8 @@ class Area extends Model {
         super(Object.assign({
             name:                   new Field({field_name:"name",                   default_value: undefined,                                in_flags:null,                  optional:false}),
             category:               new Field({field_name:"category",               default_value: flags.AREA_CATEGORIES.INCOMPLETE,    in_flags:flags.AREA_CATEGORIES, optional:false}),
-            authors:                new Field({field_name:"authors",                default_value: [],                                  in_flags:null,                  optional:false}),
+            authors:                new Field({field_name:"authors",                default_value: undefined,                           in_flags:null,                  optional:false}),
+            vnum:                   new Field({field_name:"vnum",                   default_value: "QQ00",                              in_flags:null,                  optional:false}),
             justice_system:         new Field({field_name:"justice_system",         default_value: undefined,                                in_flags:null,                  optional:true}),
             min_recommended_level:  new Field({field_name:"min_recommended_level",  default_value: 1,                                   in_flags:null,                  optional:false}),
             max_recommended_level:  new Field({field_name:"max_recommended_level",  default_value: 65,                                  in_flags:null,                  optional:false}),
@@ -58,7 +59,7 @@ class Area extends Model {
             return this._fields[field].validate(this[field]).join("");
         }
         let errors = super.validate()
-        if (this.authors.join(" ").length >= 36) {
+        if (this.authors.length >= 36) {
             errors.push(`${this._error_prefix}.authors List too long (max 36 characters)`);
         }
         for (let i = 0; i < this.authors.length; i++) {
@@ -111,7 +112,7 @@ class Area extends Model {
         }
         
         return `#AREA ${this.category.color_code}${this.name}~
-#AUTHOR ${this.authors.join(" ")}~
+#AUTHOR ${this.authors}~
 ${this.justice_system != null ? this.justice_system.toString() : ""}
 #RANGES
 ${this.min_recommended_level} ${this.max_recommended_level} ${this.min_enforced_level} ${this.max_enforced_level}
@@ -200,8 +201,8 @@ class JusticeSystem extends Model {
         
         // Check crimes
         let crimes = ["CRIME_HIGH_MURDER","CRIME_LOW_MURDER","CRIME_ASSAULT","CRIME_MUGGING"];
-        for (let c in crimes) {
-            let crime = this[crimes[c]]
+        for (let c of crimes) {
+            let crime = this[c];
             if (crime.punishment == null) {
                 errors.push(`${this._error_prefix}.${crime.code} has no punishment defined`);
             }
@@ -219,10 +220,10 @@ class JusticeSystem extends Model {
             return "Invalid JusticeSystem: \n" + errors.join("\n")
         }
         return `#JUSTICE
-CourtRoom ${this.courtroom ? this.courtroom.vnum : "0"}
-Dungeon ${this.dungeon ? this.dungeon.vnum : "0"}
-Judge ${this.judge ? this.judge.vnum : "0"}
-Guard ${this.guard ? this.guard.vnum : "0"}
+CourtRoom ${this.courtroom}
+Dungeon ${this.dungeon}
+Judge ${this.judge}
+Guard ${this.guard}
 Crime CRIME_HIGH_MURDER ${this.CRIME_HIGH_MURDER.punishment.code}
 Crime CRIME_LOW_MURDER ${this.CRIME_LOW_MURDER.punishment.code}
 Crime CRIME_ASSAULT ${this.CRIME_ASSAULT.punishment.code}
@@ -290,8 +291,8 @@ class Exit extends Model {
             somewhere_door_keyword: new Field({field_name:"somewhere_door_keyword", default_value: "",                              in_flags:null,                  optional:true}),
             // Flags                    
             door_flags:             new Field({field_name:"door_flags",             default_value: [],                              in_flags:flags.EXIT_DOOR_FLAGS, optional:true}),
-            door_key:               new Field({field_name:"door_key",               default_value: -1,                              in_flags:null,                  optional:false}),
-            target_vnum:            new Field({field_name:"target_vnum",            default_value: undefined,                            in_flags:null,                  optional:false}),
+            door_key:               new Field({field_name:"door_key",               default_value: undefined,                       in_flags:null,                  optional:false}),
+            target_vnum:            new Field({field_name:"target_vnum",            default_value: undefined,                       in_flags:null,                  optional:false}),
             exit_size:              new Field({field_name:"exit_size",              default_value: flags.EXIT_SIZES.EXIT_SIZE_ANY,  in_flags:flags.EXIT_SIZES,      optional:false}),
         }, fields))
     }
@@ -307,7 +308,7 @@ class Exit extends Model {
         return `${this.direction.code}
 ${this.comment}~
 ${this.somewhere_door_keyword}~
-${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key} ${this.target_vnum} ${this.exit_size.code}`;
+${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key ? this.door_key.vnum : "-1"} ${this.target_vnum ? this.target_vnum.vnum : "0"} ${this.exit_size.code}`;
     }
 }
 
@@ -350,7 +351,7 @@ class ItemApply extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `A ${this.apply_flag} ${this.parameter}`;
+        return `A ${this.apply_flag.code} ${this.parameter}`;
     }
 }
 
@@ -412,8 +413,8 @@ ${this.attributes.map((attribute)=>(attribute.code)).join("|")||0}
 ${this.wear_flags.map((flag)=>(flag.code)).join("|")||0}
 ${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.code}
 ${this.value0} ${this.value1} ${this.value2} ${this.value3} ${this.value4} ${this.value5}
-${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.special_applies.map((spec) => (spec.toString())).join("\n")}
+${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
 ${this.identify_message != null ? `I\n${this.identify_message}\n~` : "" }
 ${this.programs.map((program) => (program.toString())).join("\n")}
 ${this.programs.length ? "|" : ""}`;
@@ -691,7 +692,7 @@ class TrainFeat extends Model {
 class Shop extends Model {
     constructor(fields) {
         super(Object.assign({
-            shopkeeper:     new Field({field_name:"shopkeeper",     default_value:undefined,                             in_flags:null,              optional:false}),
+            shopkeeper:     new Field({field_name:"shopkeeper",     default_value:undefined,                        in_flags:null,              optional:false}),
             will_buy_1:     new Field({field_name:"will_buy_1",     default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,  optional:false}),
             will_buy_2:     new Field({field_name:"will_buy_2",     default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,  optional:true}),
             will_buy_3:     new Field({field_name:"will_buy_3",     default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,  optional:true}),
@@ -774,7 +775,7 @@ class MobReset extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room.vnum} ; ${this.mob.sdesc} in ${this.room.sdesc}${this.mob.equipment_resets.length ? "\n"+this.mob.equipment_resets.map((equip)=>(equip.toString())).join("\n") : ""}`
+        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room.vnum} ; ${this.mob.sdesc} in ${this.room.sdesc}${this.mob.equipment_resets && this.mob.equipment_resets.length ? "\n"+this.mob.equipment_resets.map((equip)=>(equip.toString())).join("\n") : ""}`
     }
 }
 
@@ -1005,17 +1006,30 @@ class MobSpecial extends Model {
 class QuestLog extends Model {
     constructor(fields) {
         super(Object.assign({
-            area_vnum:  new Field({field_name:"area_vnum",  default_value: "QQ00",  in_flags:null,                      optional:false}),
-            qbit_start: new Field({field_name:"qbit_start", default_value: undefined,    in_flags:null,                      optional:false}),
-            qbit_stop:  new Field({field_name:"qbit_stop",  default_value: undefined,    in_flags:null,                      optional:false}),
-            min_qbit:   new Field({field_name:"min_qbit",   default_value: undefined,    in_flags:null,                      optional:false}),
-            max_qbit:   new Field({field_name:"max_qbit",   default_value: undefined,    in_flags:null,                      optional:false}),
-            event_code: new Field({field_name:"event_code", default_value: undefined,    in_flags:flags.QUEST_EVENT_CODES,   optional:false}),
-            qlog_text:  new Field({field_name:"qlog_text",  default_value: undefined,    in_flags:null,                      optional:false}),
+            area:       new Field({field_name:"area",       default_value: undefined,   in_flags:null,                      optional:false}),
+            qbit_start: new Field({field_name:"qbit_start", default_value: undefined,   in_flags:null,                      optional:false}),
+            qbit_stop:  new Field({field_name:"qbit_stop",  default_value: undefined,   in_flags:null,                      optional:false}),
+            min_qbit:   new Field({field_name:"min_qbit",   default_value: undefined,   in_flags:null,                      optional:false}),
+            max_qbit:   new Field({field_name:"max_qbit",   default_value: undefined,   in_flags:null,                      optional:false}),
+            event_code: new Field({field_name:"event_code", default_value: undefined,   in_flags:flags.QUEST_EVENT_CODES,   optional:false}),
+            qlog_text:  new Field({field_name:"qlog_text",  default_value: undefined,   in_flags:null,                      optional:false}),
         }, fields))
     }
     get _error_prefix() {
         return `[QuestLog:${this.qlog_text}]`;
+    }
+    validate(field) {
+        if (field !== undefined) {
+            return this._fields[field].validate(this[field]).join("");
+        }
+        let errors = [];
+        for (let prop in this._fields) {
+            if (prop == "area") {
+                continue; // Don't validate the area again
+            }
+            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
+        }
+        return errors;
     }
     
     toString() {
@@ -1023,7 +1037,7 @@ class QuestLog extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `${this.area_vnum} ${this.qbit_start} ${this.qbit_stop} ${this.min_qbit} ${this.max_qbit} ${this.event_code.color_code}${this.qlog_text}`
+        return `${this.area.vnum} ${this.qbit_start} ${this.qbit_stop} ${this.min_qbit} ${this.max_qbit} ${this.event_code.color_code}${this.qlog_text}`
     }
 }
 

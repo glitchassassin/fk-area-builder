@@ -1,9 +1,12 @@
 import React from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
+import GeneralPanel from './tab_panels/general_panel';
 import MobPanel from './tab_panels/mob_panel';
 import RoomPanel from './tab_panels/room_panel';
 import ItemPanel from './tab_panels/item_panel';
+import ResetsPanel from './tab_panels/resets_panel';
+import QuestsPanel from './tab_panels/quests_panel';
 import testLoader from './Models/loader';
 
 class MainFrame extends React.Component {
@@ -27,25 +30,25 @@ class MainFrame extends React.Component {
         <div>
             <Tabs>
                 <Tab label="General">
-                    
+                    <GeneralPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label={room_label}>
-                    <RoomPanel area={this.state.area} onChange={this.updateAreaState.bind(this)} />
+                    <RoomPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label={mob_label}>
-                    <MobPanel area={this.state.area} onChange={this.updateAreaState.bind(this)} />
+                    <MobPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label={item_label}>
-                    <ItemPanel area={this.state.area} onChange={this.updateAreaState.bind(this)} />
+                    <ItemPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label={shops_label}>
                     
                 </Tab>
                 <Tab label="Resets">
-                    
+                    <ResetsPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label="Quests">
-                    
+                    <QuestsPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label="Area Code">
                     <pre>

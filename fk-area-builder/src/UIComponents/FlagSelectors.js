@@ -156,7 +156,17 @@ class VnumAutoComplete extends React.Component {
         ));
     }
     updateInput(searchText, dataSource, params) {
-        this.props.onChange({target:{id:this.props.id}}, searchText);
+        let matches = dataSource.filter((item)=>(item.vnum==searchText));
+        if (matches.length) {
+            this.props.onChange({target:{id:this.props.id}}, matches[0]);
+        }
+        else {
+            this.props.onChange({target:{id:this.props.id}}, {
+                vnum: searchText,
+                sdesc: searchText
+            });
+        }
+        
     }
     render() {
         return (

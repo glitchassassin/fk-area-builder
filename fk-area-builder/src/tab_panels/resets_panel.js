@@ -1,8 +1,123 @@
+import React from 'react';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import { red900 } from 'material-ui/styles/colors';
+import {List, ListItem} from 'material-ui/List';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Dialog from 'material-ui/Dialog';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import Subheader from 'material-ui/Subheader';
+import muiThemeable from 'material-ui/styles/muiThemeable';
+
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn,
+}
+from 'material-ui/Table';
+import {
+    EXIT_DIRECTIONS,
+    EXIT_DOOR_FLAGS,
+    EXIT_SIZES,
+    ROOM_FLAGS,
+    ROOM_SECTOR_FLAGS,
+    TRAP_TYPES,
+    TRAP_TRIGGERS,
+    ROOM_PROGRAM_TRIGGERS,
+    DOOR_RESET_DIRECTIONS,
+    DOOR_RESET_FLAGS
+}
+from '../Models/flags';
+import {
+    DoorReset,
+    TrapReset
+}
+from '../Models/are_model'
+import {
+    FlagSelector,
+    MultiFlagSelector,
+    VnumAutoComplete
+}
+from '../UIComponents/FlagSelectors'
+
+const paper_style = {
+    padding: "5px",
+    margin: "5px auto",
+    maxWidth: "900px"
+}
+
+class ResetsPanel extends React.Component {
+    render() {
+        return (
+            <Paper style={paper_style}>
+                <Tabs>
+                    <Tab label="Room Resets">
+                        <DoorResetsEditor area={this.props.area} updateArea={this.props.updateArea.bind(this)} />
+                    </Tab>
+                    <Tab label="Door Resets">
+                        <DoorResetsEditor area={this.props.area} updateArea={this.props.updateArea.bind(this)} />
+                    </Tab>
+                    <Tab label="Mob Resets">
+                        <DoorResetsEditor area={this.props.area} updateArea={this.props.updateArea.bind(this)} />
+                    </Tab>
+                    <Tab label="Item Resets">
+                        <DoorResetsEditor area={this.props.area} updateArea={this.props.updateArea.bind(this)} />
+                    </Tab>
+                </Tabs>
+            </Paper>
+        )
+    }
+}
 
 class DoorResetsEditor extends React.Component {
     generateDoorResets() {
-        console.log(this.props.area.rooms[this.props.current_room].door_resets)
-        return this.props.area.rooms[this.props.current_room].door_resets.map((reset, index) => (
+        return this.props.area.door_resets.map((reset, index) => (
+            <Paper style={paper_style} zDepth={1} key={index}>
+                <VnumAutoComplete floatingLabelText="Room" id={"room "+index} value={reset.room} onChange={this.handleChange.bind(this)} dataSource={this.props.area.rooms} />
+                <FlagSelector id={"exit "+index} label="Exit" flags={DOOR_RESET_DIRECTIONS} value={reset.exit} onChange={this.handleChange.bind(this)} />
+                <FlagSelector id={"exit_state "+index} label="Exit State" flags={DOOR_RESET_FLAGS} value={reset.exit_state} onChange={this.handleChange.bind(this)} />
+                <TrapResetEditor id={"trap_reset "+index} item={reset} onChange={this.handleChange.bind(this)} />
+            </Paper>
+        ));
+    }
+    
+    handleChange(event, value, index) {
+        let area = this.props.area.clone();
+        if (event.target.id.split(" ")[0] == "room") {
+            
+        }
+        area.rooms.door_resets[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
+        this.props.updateArea(area);
+    }
+    
+    handleNew() {
+        let new_dr = new DoorReset();
+        new_dr.room = this.props.room;
+        let area = this.props.area.clone();
+        area.rooms.door_resets.push([new_dr]);
+        this.props.updateArea(area);
+    }
+    
+    render() {
+        return (
+            <div>
+                {this.generateDoorResets()}
+                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
+            </div>
+        )
+    }
+}
+
+class RoomResetsEditor extends React.Component {
+    generateRoomResets() {
+        return this.props.area.room_resets.map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <FlagSelector id={"exit "+index} label="Exit" flags={DOOR_RESET_DIRECTIONS} value={reset.exit} onChange={this.handleChange.bind(this)} />
                 <FlagSelector id={"exit_state "+index} label="Exit State" flags={DOOR_RESET_FLAGS} value={reset.exit_state} onChange={this.handleChange.bind(this)} />
@@ -12,9 +127,8 @@ class DoorResetsEditor extends React.Component {
     }
     
     handleChange(event, value, index) {
-        console.log("Door Resets changes:", event.target.id, value, index);
         let area = this.props.area.clone();
-        area.rooms[this.props.current_room].door_resets[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
+        area.rooms.door_resets[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
         this.props.updateArea(area);
     }
     
@@ -22,7 +136,7 @@ class DoorResetsEditor extends React.Component {
         let new_dr = new DoorReset();
         new_dr.room = this.props.room;
         let area = this.props.area.clone();
-        area.rooms[this.props.current_room].door_resets.push([new_dr]);
+        area.rooms.door_resets.push([new_dr]);
         this.props.updateArea(area);
     }
     
@@ -77,3 +191,5 @@ class TrapResetEditor extends React.Component {
         }
     }
 }
+
+export default ResetsPanel;

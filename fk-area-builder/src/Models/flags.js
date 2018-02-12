@@ -10848,43 +10848,43 @@ const MOB_SPECIALS = {
 const QUEST_EVENT_CODES = {
     SPECIAL_EVENT: {
         code: "SPECIAL_EVENT",
-        sdesc: "SPECIAL_EVENT",
+        sdesc: "SPECIAL_EVENT {F0}",
         color_code: "{F0}", 
         ldesc: "Special Event or Misc."
     },
     IN_PROGRESS: {
         code: "IN_PROGRESS",
-        sdesc: "IN_PROGRESS",
+        sdesc: "IN_PROGRESS {E0}",
         color_code: "{E0}", 
         ldesc: "Quest in progress."
     },
     COMPLETED: {
         code: "COMPLETED",
-        sdesc: "COMPLETED",
+        sdesc: "COMPLETED {A0}",
         color_code: "{A0}", 
         ldesc: "Completed quest."
     },
     FAILED: {
         code: "FAILED",
-        sdesc: "FAILED",
+        sdesc: "FAILED {90}",
         color_code: "{90}", 
         ldesc: "Failed quest."
     },
     KNOWLEDGE: {
         code: "KNOWLEDGE",
-        sdesc: "KNOWLEDGE",
+        sdesc: "KNOWLEDGE {20}",
         color_code: "{20}", 
         ldesc: "Knowledge Geography etc."
     },
     TRADE: {
         code: "TRADE",
-        sdesc: "TRADE",
+        sdesc: "TRADE {30}",
         color_code: "{30}", 
         ldesc: "Trade learned."
     },
     NOT_STARTED: {
         code: "NOT_STARTED",
-        sdesc: "NOT_STARTED",
+        sdesc: "NOT_STARTED {B0}",
         color_code: "{B0}", 
         ldesc: "Quest not yet started."
     },
