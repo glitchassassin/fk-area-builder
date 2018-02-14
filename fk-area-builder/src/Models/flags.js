@@ -11022,6 +11022,11 @@ const ITEM_PROGRAM_TRIGGERS = {
         code: "intercept_prog",
         sdesc: "intercept_prog",
         ldesc: "(keyword): when a player types a command"
+    },
+    give_prog: {
+        code: "give_prog",
+        sdesc: "give_prog",
+        ldesc: "(percentage): when a player gives the object"
     }
 };
 const MOB_PROGRAM_TRIGGERS = {

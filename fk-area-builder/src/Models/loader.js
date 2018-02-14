@@ -18,7 +18,7 @@ function get_color_code(code, flag_list) {
     }
 }
 
-function get_codes(codes, flag_list) {
+function get_codes(codes, flag_list, default_value=null) {
     let to_return = []
     for (let c in codes) {
         for (let f in flag_list) {
@@ -26,6 +26,9 @@ function get_codes(codes, flag_list) {
                 to_return.push(flag_list[f])
             }
         }
+    }
+    if (to_return.length == 0 && default_value !== null) {
+        return [default_value];
     }
     return to_return;
 }
@@ -271,9 +274,9 @@ class Loader {
             mob.lck = matches[24];
             mob.understood_languages = get_codes(matches[25].split("|"), flags.LANGUAGE_FLAGS);
             mob.spoken_languages = get_codes(matches[26].split("|"), flags.LANGUAGE_FLAGS);
-            mob.ris_resistant = get_codes(matches[27].split("|"), flags.MOB_RIS) || flags.MOB_RIS.RIS_NONE;
-            mob.ris_immune = get_codes(matches[28].split("|"), flags.MOB_RIS) || flags.MOB_RIS.RIS_NONE;
-            mob.ris_susceptible = get_codes(matches[29].split("|"), flags.MOB_RIS) || flags.MOB_RIS.RIS_NONE;
+            mob.ris_resistant = get_codes(matches[27].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE);
+            mob.ris_immune = get_codes(matches[28].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE);
+            mob.ris_susceptible = get_codes(matches[29].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE);
             
             let can_train = matches[30];
             let can_train_regex = /^%([^ ]+) ([^ ]+)( .+)?~$/gm;

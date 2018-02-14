@@ -206,7 +206,7 @@ class RoomPanel extends React.Component {
                 <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${this.props.area.rooms[this.state.current_room].vnum}`}>
                     <List>
                         {this.props.area.rooms[this.state.current_room].validate().map((error, index) => (
-                            <ListItem id={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                            <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
                 </Dialog>
@@ -313,6 +313,7 @@ class RoomEditor extends ModelComponent {
                         <ProgramsEditor 
                             id="programs" 
                             model={this.props.model.programs} 
+                            triggers={ROOM_PROGRAM_TRIGGERS}
                             onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Resets">

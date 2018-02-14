@@ -26,7 +26,7 @@ from 'material-ui/Table';
 import {
     ITEM_TYPES,
     ITEM_APPLIES,
-    MOB_PROGRAM_TRIGGERS,
+    ITEM_PROGRAM_TRIGGERS,
     MOB_SKILLS,
     MOB_CLASSES,
     MOB_RACES,
@@ -463,6 +463,7 @@ class ItemEditor extends ModelComponent {
                         <ProgramsEditor 
                             id="programs" 
                             model={this.props.model.programs} 
+                            triggers={ITEM_PROGRAM_TRIGGERS}
                             onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Resets">

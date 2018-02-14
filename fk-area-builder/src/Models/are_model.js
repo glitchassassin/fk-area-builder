@@ -306,26 +306,13 @@ class Exit extends Model {
             somewhere_door_keyword: new Field({field_name:"somewhere_door_keyword", default_value: "",                              in_flags:null,                  optional:true}),
             // Flags                    
             door_flags:             new Field({field_name:"door_flags",             default_value: [],                              in_flags:flags.EXIT_DOOR_FLAGS, optional:true}),
-            door_key:               new Field({field_name:"door_key",               default_value: null,                       in_flags:null,                  optional:false}),
-            target_vnum:            new Field({field_name:"target_vnum",            default_value: null,                       in_flags:null,                  optional:false}),
+            door_key:               new Field({field_name:"door_key",               default_value: null,                       in_flags:null,                  optional:false, ignore_validation:true}),
+            target_vnum:            new Field({field_name:"target_vnum",            default_value: null,                       in_flags:null,                  optional:false, ignore_validation:true}),
             exit_size:              new Field({field_name:"exit_size",              default_value: flags.EXIT_SIZES.EXIT_SIZE_ANY,  in_flags:flags.EXIT_SIZES,      optional:false}),
         }, fields))
     }
     get _error_prefix() {
         return `[Exit:${this.target_vnum}]`
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "target_vnum" || prop == "door_key") {
-                continue; // Don't validate the room here, to avoid an infinite loop
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {
@@ -723,7 +710,7 @@ class TrainFeat extends Model {
 class Shop extends Model {
     constructor(fields) {
         super(Object.assign({
-            shopkeeper:     new Field({field_name:"shopkeeper",     default_value: null,                        in_flags:null,              optional:false}),
+            shopkeeper:     new Field({field_name:"shopkeeper",     default_value: null,                        in_flags:null,              optional:false, ignore_validation:true}),
             will_buy_1:     new Field({field_name:"will_buy_1",     default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,  optional:false}),
             will_buy_2:     new Field({field_name:"will_buy_2",     default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,  optional:true}),
             will_buy_3:     new Field({field_name:"will_buy_3",     default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,  optional:true}),
@@ -736,19 +723,6 @@ class Shop extends Model {
         }, fields))        }
     get _error_prefix() {
         return `[Shop:${this.shopkeeper.vnum}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "shopkeeper") {
-                continue; // Don't validate the room here, to avoid an infinite loop
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {
@@ -764,7 +738,7 @@ ${this.profit_buy} ${this.profit_sell} ${this.open_hour} ${this.close_hour} ; ${
 class RepairRecharge extends Model {
     constructor(fields) {
         super(Object.assign({
-            shopkeeper:         new Field({field_name:"shopkeeper",         default_value: null,                        in_flags:null,                      optional:false}),
+            shopkeeper:         new Field({field_name:"shopkeeper",         default_value: null,                        in_flags:null,                      optional:false, ignore_validation:true}),
             will_repair_1:      new Field({field_name:"will_repair_1",      default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,          optional:false}),
             will_repair_2:      new Field({field_name:"will_repair_2",      default_value:flags.ITEM_TYPES.ITEM_TYPE_NONE,  in_flags:flags.ITEM_TYPES,          optional:true}),
             repair_material:    new Field({field_name:"repair_material",    default_value: null,                        in_flags:flags.MOB_REPAIR_MATERIAL, optional:false}),
@@ -776,19 +750,6 @@ class RepairRecharge extends Model {
     }
     get _error_prefix() {
         return `[RepairRecharge:${this.shopkeeper.vnum}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "shopkeeper") {
-                continue; // Don't validate the room here, to avoid an infinite loop
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {
@@ -805,28 +766,15 @@ class MobReset extends Model {
     constructor(fields) {
         super(Object.assign({
             defunct:    new Field({field_name:"defunct",    default_value: 0,       in_flags:null,  optional:false}),
-            mob:        new Field({field_name:"mob",        default_value: null,    in_flags:null,  optional:false}),
+            mob:        new Field({field_name:"mob",        default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
             mob_limit:  new Field({field_name:"mob_limit",  default_value: 1,       in_flags:null,  optional:false}),
-            room:       new Field({field_name:"room",       default_value: null,    in_flags:null,  optional:false}),
+            room:       new Field({field_name:"room",       default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
             equipment:  new Field({field_name:"equipment",  default_value: [],          in_flags:null,  optional:true}),
             
         }, fields))
     }
     get _error_prefix() {
         return `[MobReset:${this.mob.vnum} in ${this.room.vnum}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "room" || prop == "mob") {
-                continue; // Don't validate the room here, to avoid an infinite loop
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {
@@ -842,7 +790,7 @@ class EquipmentReset extends Model {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,                  optional:false}),
-            item:           new Field({field_name:"item",           default_value: null,       in_flags:null,                  optional:false}),
+            item:           new Field({field_name:"item",           default_value: null,       in_flags:null,                  optional:false, ignore_validation:true}),
             equip_limit:    new Field({field_name:"equip_limit",    default_value: 1,       in_flags:null,                  optional:false}),
             wear_loc:       new Field({field_name:"wear_loc",       default_value: null,    in_flags:flags.MOB_WEAR_POSITIONS, optional:true}),
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,                  optional:true}),
@@ -872,9 +820,9 @@ class ItemReset extends Model {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,  optional:false}),
-            item:           new Field({field_name:"item",           default_value: null,    in_flags:null,  optional:false}),
+            item:           new Field({field_name:"item",           default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
             item_limit:     new Field({field_name:"item_limit",     default_value: "1",       in_flags:null,  optional:false}),
-            room_container: new Field({field_name:"room_container", default_value: null,    in_flags:null,  optional:false}),
+            room_container: new Field({field_name:"room_container", default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
             hidden:         new Field({field_name:"hidden",         default_value: false,   in_flags:null,  optional:false}),
             buried:         new Field({field_name:"buried",         default_value: false,   in_flags:null,  optional:false}),
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,  optional:true}),
@@ -883,19 +831,6 @@ class ItemReset extends Model {
     }
     get _error_prefix() {
         return `[ItemReset:${this.item.vnum} in ${this.room_container ? this.room_container.vnum : "undefined"}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "item" || prop == "room_container") {
-                continue; // Don't validate the referenced objects here, to avoid an infinite loop
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {
@@ -921,7 +856,7 @@ class DoorReset extends Model {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,              optional:false}),
-            room:           new Field({field_name:"room",           default_value: null,    in_flags:null,              optional:false}),
+            room:           new Field({field_name:"room",           default_value: null,    in_flags:null,              optional:false, ignore_validation:true}),
             exit:           new Field({field_name:"exit",           default_value: null,    in_flags:flags.DOOR_RESET_DIRECTIONS,              optional:false}),
             exit_state:     new Field({field_name:"exit_state",     default_value: null,    in_flags:flags.DOOR_RESET_FLAGS, optional:false}),
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,              optional:true}),
@@ -929,19 +864,6 @@ class DoorReset extends Model {
     }
     get _error_prefix() {
         return `[DoorReset:${this.exit ? this.exit.code : "[no exit defined]"} from ${this.room.vnum}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "room") {
-                continue; // Don't validate the room here, to avoid an infinite loop
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {
@@ -1066,7 +988,7 @@ class MobSpecial extends Model {
 class QuestLog extends Model {
     constructor(fields) {
         super(Object.assign({
-            area:       new Field({field_name:"area",       default_value: null,   in_flags:null,                      optional:false}),
+            area:       new Field({field_name:"area",       default_value: null,   in_flags:null,                      optional:false, ignore_validation:true}),
             qbit_start: new Field({field_name:"qbit_start", default_value: "",   in_flags:null,                      optional:false}),
             qbit_stop:  new Field({field_name:"qbit_stop",  default_value: "",   in_flags:null,                      optional:false}),
             min_qbit:   new Field({field_name:"min_qbit",   default_value: "",   in_flags:null,                      optional:false}),
@@ -1077,19 +999,6 @@ class QuestLog extends Model {
     }
     get _error_prefix() {
         return `[QuestLog:${this.qlog_text}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = [];
-        for (let prop in this._fields) {
-            if (prop == "area") {
-                continue; // Don't validate the area again
-            }
-            errors = errors.concat(this._fields[prop].validate(this[prop]).map((err)=>(`${this._error_prefix}${err}`)));
-        }
-        return errors;
     }
     
     toString() {

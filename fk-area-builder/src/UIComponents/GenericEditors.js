@@ -144,7 +144,7 @@ class ProgramsEditor extends ModelArrayComponent {
                     label="Trigger" 
                     id="trigger" 
                     errorText={program.validate("trigger")} 
-                    flags={MOB_PROGRAM_TRIGGERS} 
+                    flags={this.props.triggers} 
                     value={program.trigger} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <TextField 

@@ -348,7 +348,11 @@ class MobEditor extends ModelComponent {
                         <CanTrainFeatEditor id="can_train_feat" model={this.props.model.can_train_feat} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
+                        <ProgramsEditor 
+                            id="programs" 
+                            model={this.props.model.programs} 
+                            triggers={MOB_PROGRAM_TRIGGERS}
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Shops">
                         <ShopsEditor id="shop" model={this.props.model.shop} mob={this.props.model} onChange={this.handleChange.bind(this)} />

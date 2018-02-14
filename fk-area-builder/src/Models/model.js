@@ -4,12 +4,16 @@ class Field {
         this.value = options.default_value;
         this.options = {
             in_flags: options.in_flags,
-            optional: options.optional
+            optional: options.optional,
+            ignore_validation: options.ignore_validation
         };
     }
     
     validate(value) {
         let errors = [];
+        if (this.options.ignore_validation) {
+            return errors;
+        }
         if (value == null || value === "") {
             if (!this.options.optional) {
                 errors.push(`.${this.name} should not be empty`)

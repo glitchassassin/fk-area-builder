@@ -20,7 +20,7 @@ class Storage {
 
     AuthorizeAndPick(callback) {
       if (!this.oauthToken) {
-        this.Authorize();
+        this.Authorize(this.createPicker);
       }
       else {
         this.createPicker();
@@ -30,20 +30,20 @@ class Storage {
       }
     }
     
-    Authorize() {
+    Authorize(callback) {
       window.gapi.auth.authorize(
         {
           'client_id': this.clientId,
           'scope': this.scope,
           'immediate': false
         },
-        (authResult) => (this.handleAuthResult(authResult)));
+        (authResult) => (this.handleAuthResult(authResult, callback)));
     }
 
-    handleAuthResult(authResult) {
+    handleAuthResult(authResult, callback) {
       if (authResult && !authResult.error) {
         this.oauthToken = authResult.access_token;
-        this.createPicker();
+        callback();
       }
     }
 
@@ -78,11 +78,14 @@ class Storage {
     
     downloadFile(file_id, callback) {
       var that = this;
+      if (!this.oauthToken) {
+        this.Authorize(()=>(this.downloadFile(file_id, callback)));
+        return;
+      }
       if (file_id) {
-        var accessToken = window.gapi.auth.getToken().access_token;
         var xhr = new XMLHttpRequest();
         xhr.open('GET', "https://www.googleapis.com/drive/v3/files/" + file_id + "?alt=media");
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
         console.log(file_id);
         xhr.onload = function() {
           console.log(file_id);
@@ -99,11 +102,14 @@ class Storage {
     }
     
     updateCurrentFile(contents, callback) {
+      if (!this.oauthToken) {
+        this.Authorize(()=>(this.updateCurrentFile(contents, callback)));
+        return;
+      }
       if (this.active_file_id) {
-        var accessToken = window.gapi.auth.getToken().access_token;
         var xhr = new XMLHttpRequest();
         xhr.open('PATCH', `https://www.googleapis.com/upload/drive/v3/files/${this.active_file_id}?uploadType=media`);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
         //xhr.setRequestHeader('Content-Type', 'multipart/related; boundary=foo_bar_baz');
         //xhr.setRequestHeader('Content-Type', 'multipart/related; boundary=foo_bar_baz');
         xhr.setRequestHeader('Content-Length', contents.length);
@@ -121,12 +127,14 @@ class Storage {
     }
     
     uploadNewFile(filename, contents, callback) {
-      if (this.active_file_id) {
-        var accessToken = window.gapi.auth.getToken().access_token;
-        var metadata = {
-          name: filename
-        }
-        var body = `--foo_bar_baz
+      if (!this.oauthToken) {
+        this.Authorize(()=>(this.uploadNewFile(filename, contents, callback)));
+        return;
+      }
+      var metadata = {
+        name: filename
+      }
+      var body = `--foo_bar_baz
 Content-Type: application/json; charset=UTF-8
 
 ${JSON.stringify(metadata)}
@@ -136,23 +144,20 @@ Content-Type: text/plain
 
 ${contents}
 --foo_bar_baz--`;
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', `https://www.googleapis.com/upload/drive/v3/files/?uploadType=multipart`);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        xhr.setRequestHeader('Content-Type', 'multipart/related; boundary=foo_bar_baz');
-        //xhr.setRequestHeader('Content-Type', 'multipart/related; boundary=foo_bar_baz');
-        xhr.setRequestHeader('Content-Length', body.length);
-        
-        xhr.onload = function() {
-          callback(xhr.responseText);
-        };
-        xhr.onerror = function() {
-          callback(null);
-        };
-        xhr.send(body);
-      } else {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://www.googleapis.com/upload/drive/v3/files/?uploadType=multipart`);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
+      xhr.setRequestHeader('Content-Type', 'multipart/related; boundary=foo_bar_baz');
+      //xhr.setRequestHeader('Content-Type', 'multipart/related; boundary=foo_bar_baz');
+      xhr.setRequestHeader('Content-Length', body.length);
+      
+      xhr.onload = function() {
+        callback(xhr.responseText);
+      };
+      xhr.onerror = function() {
         callback(null);
-      }
+      };
+      xhr.send(body);
     }
 }
 
