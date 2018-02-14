@@ -202,7 +202,18 @@ class JusticeSystem extends Model {
     }
     
     validate(field) {
-        if (field !== undefined) {
+        if (field !== undefined) { // Field-specific validation
+            if (field.indexOf("CRIME_") == 0) {
+                let crime = this[field.split(" ")[0]];
+                let errors=[];
+                if (crime.punishment == null) {
+                    errors.push(`${crime.code} has no punishment defined`);
+                }
+                else if (crime.punishment.do_not_use) {
+                    errors.push(`${crime.code} has punishment "${crime.punishment.code}" which should not be used`);
+                }
+                return errors.join("")
+            }
             return this._fields[field].validate(this[field]).join("");
         }
         let errors = super.validate()
