@@ -10694,10 +10694,6 @@ const DOOR_RESET_DIRECTIONS = {
     },
 }
 const RESET_BIT_CODES = {
-    BIT_RESET_ROOM: {
-        code: "BIT_RESET_ROOM",
-        sdesc: "BIT_RESET_ROOM"
-    },
     BIT_RESET_TOGGLE: {
         code: "BIT_RESET_TOGGLE",
         sdesc: "BIT_RESET_TOGGLE"

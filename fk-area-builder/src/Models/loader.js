@@ -488,35 +488,34 @@ class Loader {
         
         let last_reset;
         let last_mob_reset;
+        let last_item_reset;
         while ((matches = reset_regex.exec(resets)) != null) {
             if (matches[1] == "M") {
                 let mob_reset = new models.MobReset();
+                let mob = this.get_mob(matches[3]);
                 mob_reset.defunct = matches[2];
-                mob_reset.mob = matches[3];
+                mob_reset.mob = mob;
                 mob_reset.mob_limit = matches[4];
-                mob_reset.room = matches[5];
-                
-                if (mob_reset.mob && mob_reset.room) {
-                    this.area.mob_resets.push(mob_reset);
-                    last_reset = mob_reset;
-                    last_mob_reset = last_reset;
-                }
+                mob_reset.room = this.get_room(matches[5]);
+                mob.mob_resets.push(mob_reset);
+                last_reset = mob_reset;
+                last_mob_reset = last_reset;
             }
             else if (matches[1] == "E") {
                 let equip_reset = new models.EquipmentReset();
                 equip_reset.defunct = matches[2];
-                equip_reset.item = matches[3];
+                equip_reset.item = this.get_item(matches[3]);
                 equip_reset.equip_limit = matches[4];
                 equip_reset.wear_loc = get_code(matches[5], flags.MOB_WEAR_POSITIONS);
-                last_mob_reset.mob.equipment_resets.push(equip_reset);
+                last_mob_reset.equipment.push(equip_reset);
                 last_reset = equip_reset;
             }
             else if (matches[1] == "G") {
                 let equip_reset = new models.EquipmentReset();
                 equip_reset.defunct = matches[2];
-                equip_reset.item = matches[3];
+                equip_reset.item = this.get_item(matches[3]);
                 equip_reset.equip_limit = matches[4];
-                last_mob_reset.mob.equipment_resets.push(equip_reset);
+                last_mob_reset.equipment.push(equip_reset);
                 last_reset = equip_reset;
             }
             else if (matches[1] == "T") {
@@ -540,51 +539,52 @@ class Loader {
             else if (matches[1] == "P") {
                 let item_reset = new models.ItemReset();
                 item_reset.hidden = (matches[2] == 1); // Boolean
-                item_reset.item = matches[3];
+                item_reset.item = this.get_item(matches[3]);
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = matches[5];
-                this.area.equipment_resets.push(item_reset);
+                item_reset.room_container = this.get_item(matches[5]);
+                last_item_reset.contents.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "H") {
                 let item_reset = new models.ItemReset();
                 item_reset.hidden = true;
-                item_reset.item = matches[3];
+                item_reset.item = this.get_item(matches[3]);
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = matches[5];
-                this.area.equipment_resets.push(item_reset);
+                item_reset.room_container = this.get_room(matches[5]);
+                item_reset.item.resets.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "U") {
                 let item_reset = new models.ItemReset();
                 item_reset.buried = true;
-                item_reset.item = matches[3];
+                item_reset.item = this.get_item(matches[3]);
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = matches[5];
-                this.area.equipment_resets.push(item_reset);
+                item_reset.room_container = this.get_room(matches[5]);
+                item_reset.item.resets.push(item_reset);
                 last_reset = item_reset;
             }
             else if (matches[1] == "O") {
                 let item_reset = new models.ItemReset();
-                item_reset.item = matches[3];
+                item_reset.item = this.get_item(matches[3]);
                 item_reset.item_limit = matches[4];
-                item_reset.room_container = matches[5];
-                this.area.equipment_resets.push(item_reset);
+                item_reset.room_container = this.get_room(matches[5]);
+                item_reset.item.resets.push(item_reset);
                 last_reset = item_reset;
+                last_item_reset = last_reset;
             }
             else if (matches[1] == "D") {
                 let door_reset = new models.DoorReset();
-                door_reset.room = matches[3];
+                door_reset.room = this.get_room(matches[3]);
                 door_reset.exit = get_code(matches[4], flags.DOOR_RESET_DIRECTIONS);
                 door_reset.exit_state = get_code(matches[5], flags.DOOR_RESET_FLAGS);
-                this.area.door_resets.push(door_reset);
+                door_reset.room.door_resets.push(door_reset);
                 last_reset = door_reset;
             }
             else if (matches[1] == "R") {
                 let door_reset = new models.RandomDoorReset();
-                door_reset.room = matches[3];
+                door_reset.room = this.get_room(matches[3]);
                 door_reset.last_door = matches[4];
-                this.area.door_resets.push(door_reset);
+                door_reset.room.door_resets.push(door_reset);
                 last_reset = door_reset;
             }
         }
@@ -622,7 +622,7 @@ class Loader {
                 mob.vnum = matches[1];
                 mob.sdesc = "[MISSING]";
             }
-            shop.shopkeeper = this.get_mob(matches[1]);
+            shop.shopkeeper = mob;
             shop.will_buy_1 = get_code(matches[2], flags.ITEM_TYPES);
             shop.will_buy_2 = get_code(matches[3], flags.ITEM_TYPES);
             shop.will_buy_3 = get_code(matches[4], flags.ITEM_TYPES);
@@ -632,7 +632,7 @@ class Loader {
             shop.profit_sell = matches[8];
             shop.open_hour = matches[9];
             shop.close_hour = matches[10];
-            this.area.shops.push(shop);
+            mob.shop = shop;
         }
     }
     
@@ -646,7 +646,8 @@ class Loader {
         
         while ((matches = repairs_regex.exec(repairs)) != null) {
             let repair = new models.RepairRecharge();
-            repair.shopkeeper = this.get_mob(matches[1]);
+            let mob = this.get_mob(matches[1]);
+            repair.shopkeeper = mob;
             repair.will_repair_1 = get_code(matches[2], flags.ITEM_TYPES);
             repair.will_repair_2 = get_code(matches[3], flags.ITEM_TYPES);
             repair.repair_material = get_code(matches[4], flags.MOB_REPAIR_MATERIAL);
@@ -654,7 +655,7 @@ class Loader {
             repair.repair = get_code(matches[6], flags.MOB_REPAIR_RECHARGE);
             repair.open_hour = matches[7];
             repair.close_hour = matches[8];
-            this.area.repairs.push(repair);
+            mob.repairs = repair;
         }
     }
     

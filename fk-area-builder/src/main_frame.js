@@ -5,7 +5,6 @@ import GeneralPanel from './tab_panels/general_panel';
 import MobPanel from './tab_panels/mob_panel';
 import RoomPanel from './tab_panels/room_panel';
 import ItemPanel from './tab_panels/item_panel';
-import ResetsPanel from './tab_panels/resets_panel';
 import QuestsPanel from './tab_panels/quests_panel';
 import testLoader from './Models/loader';
 
@@ -23,9 +22,6 @@ class MainFrame extends React.Component {
         let mob_label = mob_errors > 0 ? (<Badge badgeContent={mob_errors} secondary={true}>"Mobs"</Badge>) : "Mobs";
         let item_errors = this.state.area.items.length ? this.state.area.items.map((item)=>(item.validate().length?1:0)).reduce((a, b)=>(a+b)) : 0;
         let item_label = item_errors > 0 ? (<Badge badgeContent={item_errors} secondary={true}>"Items"</Badge>) : "Items";
-        let shops_errors = this.state.area.shops.length ? this.state.area.shops.map((shop)=>(shop.validate().length?1:0)).reduce((a, b)=>(a+b)) : 0;
-        shops_errors += this.state.area.shops.length ? this.state.area.repairs.map((repair)=>(repair.validate().length?1:0)).reduce((a, b)=>(a+b)) : 0;
-        let shops_label = shops_errors > 0 ? (<Badge badgeContent={shops_errors} secondary={true}>"Shops"</Badge>) : "Shops";
         return (
         <div>
             <Tabs>
@@ -40,12 +36,6 @@ class MainFrame extends React.Component {
                 </Tab>
                 <Tab label={item_label}>
                     <ItemPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
-                </Tab>
-                <Tab label={shops_label}>
-                    
-                </Tab>
-                <Tab label="Resets">
-                    <ResetsPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />
                 </Tab>
                 <Tab label="Quests">
                     <QuestsPanel area={this.state.area} updateArea={this.updateAreaState.bind(this)} />

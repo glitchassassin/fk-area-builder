@@ -6,8 +6,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { red900 } from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import {Card, CardText} from 'material-ui/Card';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
+import Toggle from 'material-ui/Toggle';
 import TextField from 'material-ui/TextField';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import Subheader from 'material-ui/Subheader';
@@ -39,7 +41,11 @@ import {
     MOB_AFFECTS,
     ITEM_ARMOR_TYPES,
     ITEM_MATERIALS,
-    MOB_ALIGNMENTS
+    MOB_ALIGNMENTS,
+    ITEM_TYPES,
+    MOB_REPAIR_MATERIAL,
+    MOB_REPAIR_RECHARGE,
+    MOB_WEAR_POSITIONS
 }
 from '../Models/flags';
 import {
@@ -51,15 +57,22 @@ import {
     TrainSpell,
     TrainLevel,
     TrainStatistic,
-    TrainFeat
+    TrainFeat,
+    Shop,
+    RepairRecharge,
+    MobReset,
+    EquipmentReset
 }
 from '../Models/are_model'
 import {
     FlagWithCategorySelector,
     FlagSelector,
-    MultiFlagSelector
+    MultiFlagSelector,
+    VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
+import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
+import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const icon_button_style = {
     padding: "5px",
@@ -81,6 +94,12 @@ class MobPanel extends React.Component {
         this.setState({current_mob: index});
         this.setState({open: true});
     };
+    handleChange(event, value) {
+        console.log("MobPanel", this.state.current_mob, value);
+        let area = this.props.area.clone()
+        area.mobs[this.state.current_mob] = value;
+        this.updateArea(area);
+    }
     
     handleDelete = (index) => {
         this.setState({
@@ -116,7 +135,7 @@ class MobPanel extends React.Component {
     };
     
     updateArea(area) {
-        this.props.onChange(area);
+        this.props.updateArea(area);
     }
     
     showErrors = (index) => {
@@ -212,7 +231,7 @@ class MobPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <MobEditor open={this.state.open} handleClose={this.handleClose} updateArea={this.updateArea.bind(this)} current_mob={this.state.current_mob} area={this.props.area} />
+            <MobEditor open={this.state.open} handleClose={this.handleClose} model={this.props.area.mobs[this.state.current_mob]} rooms={this.props.area.rooms} onChange={this.handleChange.bind(this)} />
             <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
             <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${this.props.area.mobs[this.state.current_mob].vnum}`}>
                 <List>
@@ -231,89 +250,165 @@ const paper_style = {
     margin: "5px"
 }
 
-class MobEditor extends React.Component {
-    handleChanges(event, value, index) {
-        let area = this.props.area.clone();
-        let mob = area.mobs[this.props.current_mob];
-        try {
-            mob[event.target.id] = value;
-        } catch(e) {
-            throw(e);
+class MobEditor extends ModelComponent {
+    modelClass = SimpleMob;
+    handleShopToggle() {
+        let model = this.props.model.clone();
+        if (model.shop === null) {
+            model.shop = new Shop();
+            model.shop.shopkeeper = model;
         }
-        this.props.updateArea(area);
+        else {
+            model.shop = null;
+        }
+        this.props.onChange({target:this.props}, model);
+    }
+    
+    handleRepairsToggle() {
+        let model = this.props.model.clone();
+        if (model.repairs === null) {
+            model.repairs = new RepairRecharge();
+            model.repairs.shopkeeper = model;
+        }
+        else {
+            model.repairs = null;
+        }
+        this.props.onChange({target:this.props}, model);
     }
     
     convertToSimple() {
-        let area = this.props.area.clone();
-        let old_mob = area.mobs[this.props.current_mob]
+        let old_mob = this.props.model.clone()
         for (let field of ["affect_flags", "virtual_armor_type", "virtual_armor_material", "alignment", "str", "int", "wis", "dex", "con", "cha", "lck", "ris_resistant", "ris_immune", "ris_susceptible"]) {
             delete old_mob._fields[field];
             delete old_mob[field];
         }
-        area.mobs[this.props.current_mob] = new SimpleMob(old_mob);
-        this.props.updateArea(area);
+        let model = new SimpleMob(old_mob);
+        this.props.onChange({target:this.props}, model);
     }
     
     convertToUnique() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob] = new UniqueMob(area.mobs[this.props.current_mob]);
-        this.props.updateArea(area);
+        let model = new UniqueMob(this.props.model.clone());
+        this.props.onChange({target:this.props}, model);
     }
     
     render() {
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
-        var uniqueTab = (this.props.area.mobs[this.props.current_mob] instanceof UniqueMob ? (
+        var uniqueTab = (this.props.model instanceof UniqueMob ? (
             <React.Fragment>
-                <MultiFlagSelector id="affect_flags" label="Act Flags" flags={MOB_AFFECTS} value={this.props.area.mobs[this.props.current_mob].affect_flags} onChange={this.handleChanges.bind(this)} />
-                <FlagSelector id="virtual_armor_type" label="Virtual Armor Type" flags={ITEM_ARMOR_TYPES} value={this.props.area.mobs[this.props.current_mob].virtual_armor_type} onChange={this.handleChanges.bind(this)} />
-                <FlagSelector id="virtual_armor_material" label="Virtual Armor Material" flags={ITEM_MATERIALS} value={this.props.area.mobs[this.props.current_mob].virtual_armor_material} onChange={this.handleChanges.bind(this)} />
-                <FlagSelector id="alignment" label="Alignment" flags={MOB_ALIGNMENTS} value={this.props.area.mobs[this.props.current_mob].alignment} onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="STR" id="str" value={this.props.area.mobs[this.props.current_mob].str} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="INT" id="int" value={this.props.area.mobs[this.props.current_mob].int} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="WIS" id="wis" value={this.props.area.mobs[this.props.current_mob].wis} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="DEX" id="dex" value={this.props.area.mobs[this.props.current_mob].dex} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="CON" id="con" value={this.props.area.mobs[this.props.current_mob].con} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="CHA" id="cha" value={this.props.area.mobs[this.props.current_mob].cha} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <TextField floatingLabelText="LCK" id="lck" value={this.props.area.mobs[this.props.current_mob].lck} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                <MultiFlagSelector id="ris_resistant" label="Resistant" flags={MOB_RIS} value={this.props.area.mobs[this.props.current_mob].ris_resistant} onChange={this.handleChanges.bind(this)} />
-                <MultiFlagSelector id="ris_immune" label="Immune" flags={MOB_RIS} value={this.props.area.mobs[this.props.current_mob].ris_immune} onChange={this.handleChanges.bind(this)} />
-                <MultiFlagSelector id="ris_susceptible" label="Susceptible" flags={MOB_RIS} value={this.props.area.mobs[this.props.current_mob].ris_susceptible} onChange={this.handleChanges.bind(this)} />
+                <MultiFlagSelector id="affect_flags" label="Act Flags" flags={MOB_AFFECTS} value={this.props.model.affect_flags} onChange={this.handleChange.bind(this)} />
+                <FlagSelector id="virtual_armor_type" label="Virtual Armor Type" flags={ITEM_ARMOR_TYPES} value={this.props.model.virtual_armor_type} onChange={this.handleChange.bind(this)} />
+                <FlagSelector id="virtual_armor_material" label="Virtual Armor Material" flags={ITEM_MATERIALS} value={this.props.model.virtual_armor_material} onChange={this.handleChange.bind(this)} />
+                <FlagSelector id="alignment" label="Alignment" flags={MOB_ALIGNMENTS} value={this.props.model.alignment} onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="STR" id="str" value={this.props.model.str} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="INT" id="int" value={this.props.model.int} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="WIS" id="wis" value={this.props.model.wis} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="DEX" id="dex" value={this.props.model.dex} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="CON" id="con" value={this.props.model.con} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="CHA" id="cha" value={this.props.model.cha} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <TextField floatingLabelText="LCK" id="lck" value={this.props.model.lck} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <MultiFlagSelector id="ris_resistant" label="Resistant" flags={MOB_RIS} value={this.props.model.ris_resistant} onChange={this.handleChange.bind(this)} />
+                <MultiFlagSelector id="ris_immune" label="Immune" flags={MOB_RIS} value={this.props.model.ris_immune} onChange={this.handleChange.bind(this)} />
+                <MultiFlagSelector id="ris_susceptible" label="Susceptible" flags={MOB_RIS} value={this.props.model.ris_susceptible} onChange={this.handleChange.bind(this)} />
                 <RaisedButton id="makeSimpleMob" label="Convert to Simple Mob?" primary={true} keyboardFocused={true} onClick={this.convertToSimple.bind(this)}/>
             </React.Fragment>
             ) : (
             <RaisedButton id="makeUniqueMob" label="Convert to Unique Mob?" primary={true} keyboardFocused={true} onClick={this.convertToUnique.bind(this)}/>
         ))
         return (
-            <Dialog title={`Edit ${this.props.area.mobs[this.props.current_mob] instanceof UniqueMob ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
+            <Dialog title={`Edit ${this.props.model instanceof UniqueMob ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.area.mobs[this.props.current_mob].vnum} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" value={this.props.area.mobs[this.props.current_mob].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Keywords" id="keywords" fullWidth={true} value={this.props.area.mobs[this.props.current_mob].keywords} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Full description" id="fulldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.area.mobs[this.props.current_mob].fulldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.model.vnum} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Short description" id="sdesc" value={this.props.model.sdesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Long description" id="ldesc" fullWidth={true} value={this.props.model.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Keywords" id="keywords" fullWidth={true} value={this.props.model.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Full description" id="fulldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.model.fulldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Details">
-                        <TextField floatingLabelText="Level" id="level" value={this.props.area.mobs[this.props.current_mob].level} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <FlagWithCategorySelector id="mob_class" label="Class" flags={MOB_CLASSES} value={this.props.area.mobs[this.props.current_mob].mob_class} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="race" label="Race" flags={MOB_RACES} value={this.props.area.mobs[this.props.current_mob].race} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="sex" label="Sex" flags={MOB_SEXES} value={this.props.area.mobs[this.props.current_mob].sex} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="position" label="Position" flags={MOB_POSITIONS} value={this.props.area.mobs[this.props.current_mob].position} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="deity" label="Deity" flags={MOB_DEITIES} value={this.props.area.mobs[this.props.current_mob].deity} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="act_flags" label="Act Flags" flags={MOB_ACT_FLAGS} value={this.props.area.mobs[this.props.current_mob].act_flags} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="understood_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.area.mobs[this.props.current_mob].understood_languages} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="spoken_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.area.mobs[this.props.current_mob].spoken_languages} onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="Level" id="level" value={this.props.model.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <FlagWithCategorySelector id="mob_class" label="Class" flags={MOB_CLASSES} value={this.props.model.mob_class} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="race" label="Race" flags={MOB_RACES} value={this.props.model.race} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="sex" label="Sex" flags={MOB_SEXES} value={this.props.model.sex} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="position" label="Position" flags={MOB_POSITIONS} value={this.props.model.position} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="deity" label="Deity" flags={MOB_DEITIES} value={this.props.model.deity} onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector id="act_flags" label="Act Flags" flags={MOB_ACT_FLAGS} value={this.props.model.act_flags} onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector id="understood_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.model.understood_languages} onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector id="spoken_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.model.spoken_languages} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Unique">
                         {uniqueTab}
                     </Tab>
                     <Tab label="Training">
-                        <CanTrainEditor area={this.props.area} current_mob={this.props.current_mob} updateArea={this.props.updateArea} />
+                        <Subheader>Skills</Subheader>
+                        <CanTrainSkillEditor id="can_train_skill" model={this.props.model.can_train_skill} onChange={this.handleChange.bind(this)} />
+                        <Subheader>Weapon Skills</Subheader>
+                        <CanTrainWeaponSkillEditor id="can_train_weapon_skill" model={this.props.model.can_train_weapon_skill} onChange={this.handleChange.bind(this)} />
+                        <Subheader>Spells</Subheader>
+                        <CanTrainSpellEditor id="can_train_spell" model={this.props.model.can_train_spell} onChange={this.handleChange.bind(this)} />
+                        <Subheader>Levels</Subheader>
+                        <CanTrainLevelEditor id="can_train_level" model={this.props.model.can_train_level} onChange={this.handleChange.bind(this)} />
+                        <Subheader>Statistics</Subheader>
+                        <CanTrainStatisticEditor id="can_train_statistic" model={this.props.model.can_train_statistic} onChange={this.handleChange.bind(this)} />
+                        <Subheader>Feats</Subheader>
+                        <CanTrainFeatEditor id="can_train_feat" model={this.props.model.can_train_feat} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor area={this.props.area} current_mob={this.props.current_mob} updateArea={this.props.updateArea} />
+                        <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
+                    </Tab>
+                    <Tab label="Shops">
+                        <Card   expanded={this.props.model.shop!==null}
+                                title="Shopkeeper">
+                            <CardText>
+                                <Toggle toggled={this.props.model.shop!==null}
+                                    onToggle={this.handleShopToggle.bind(this)}
+                                    labelPosition="right"
+                                    label="Shopkeeper"
+                                />
+                            </CardText>
+                            <CardText expandable={true}>
+                                {this.props.model.shop && (
+                                    <React.Fragment>
+                                    <FlagSelector id="shop will_buy_1" label="Will Buy 1" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_1} onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="shop will_buy_2" label="Will Buy 2" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_2} onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="shop will_buy_3" label="Will Buy 3" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_3} onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="shop will_buy_4" label="Will Buy 4" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_4} onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="shop will_buy_5" label="Will Buy 5" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_5} onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Profit (Buy)" id="shop profit_buy" value={this.props.model.shop.profit_buy} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Profit (Sell)" id="shop profit_sell" value={this.props.model.shop.profit_sell} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Open Hour" id="shop open_hour" value={this.props.model.shop.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Close Hour" id="shop close_hour" value={this.props.model.shop.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    </React.Fragment>
+                                )}
+                            </CardText>
+                        </Card>
+                        <Card   expanded={this.props.model.repairs!==null}
+                                title="Repairer">
+                            <CardText>
+                                <Toggle toggled={this.props.model.repairs!==null}
+                                    onToggle={this.handleRepairsToggle.bind(this)}
+                                    labelPosition="right"
+                                    label="Repairs"
+                                />
+                            </CardText>
+                            <CardText expandable={true}>
+                                {this.props.model.repairs && (
+                                    <React.Fragment>
+                                    <FlagSelector id="repairs will_repair_1" label="Will Repair 1" flags={ITEM_TYPES} value={this.props.model.repairs.will_repair_1} onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="repairs will_repair_2" label="Will Repair 2" flags={ITEM_TYPES} value={this.props.model.repairs.will_repair_2} onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="repairs repair_material" label="Repair Material" flags={MOB_REPAIR_MATERIAL} value={this.props.model.repairs.repair_material} onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Profit Modifier" id="repairs profit_modifier" value={this.props.model.repairs.profit_modifier} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    <FlagSelector id="repairs repair" label="Repair/Recharge" flags={MOB_REPAIR_RECHARGE} value={this.props.model.repairs.repair} onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Open Hour" id="repairs open_hour" value={this.props.model.repairs.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    <TextField floatingLabelText="Close Hour" id="repairs close_hour" value={this.props.model.repairs.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                    </React.Fragment>
+                                )}
+                            </CardText>
+                        </Card>
+                    </Tab>
+                    <Tab label="Resets">
+                        <MobResetsEditor model={this.props.model.mob_resets} mob={this.props.model} rooms={this.props.rooms} onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>
@@ -321,344 +416,213 @@ class MobEditor extends React.Component {
     }
 }
 
-class ProgramsEditor extends React.Component {
-    generatePrograms() {
-        return this.props.area.mobs[this.props.current_mob].programs.map((program, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <FlagSelector id={"trigger "+index} label="Trigger" flags={MOB_PROGRAM_TRIGGERS} value={program.trigger} onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Variable" id={"argument "+index} value={program.argument} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Program" id={"program "+index} multiLine={true} rows={5} fullWidth={true} value={program.program} autoComplete="off" onChange={this.handleChange.bind(this)} />
+class MobResetsEditor extends ModelArrayComponent {
+    modelClass = MobReset;
+    generate() {
+        return this.props.model.map((resets, index) => (
+            <Paper key={index}>
+                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <TextField floatingLabelText="Limit" id="mob_limit" value={resets.mob_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete floatingLabelText="Starting Room" id="target_vnum" value={resets.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
+                <EquipmentResetsEditor id="equipment" model={this.props.model[index].equipment} mob_reset={this.props.model} onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
     
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].programs[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
-        this.props.updateArea(area);
-    }
-    
     handleNew() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].programs.push(new Program())
-        this.props.updateArea(area);
+        let mob_reset = new MobReset()
+        let model = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
+        mob_reset.mob = this.props.mob;
+        model.push(mob_reset);
+        this.props.onChange({target:this.props}, model);
+    }
+}
+
+class EquipmentResetsEditor extends ModelArrayComponent {
+    modelClass = EquipmentReset;
+    generate() {
+        return this.props.model.map((resets, index) => (
+            <Paper key={index}>
+                <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <VnumAutoComplete floatingLabelText="Item" id="item" value={resets.item} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.area.items} />
+                <TextField floatingLabelText="Equip Limit" id="equip_limit" value={resets.equip_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector id="wear_loc" label="Wear Location" flags={MOB_WEAR_POSITIONS} value={resets.wear_loc} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor id="trap_reset" item={resets} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+            </Paper>
+        ));
     }
     
     render() {
         return (
             <React.Fragment>
-                {this.generatePrograms()}
-                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
-                </IconButton>
+                <Paper style={paper_style}>
+                    <Subheader>Equipment</Subheader>
+                    {super.render()}
+                </Paper>
             </React.Fragment>
         )
     }
 }
 
-class CanTrainEditor extends React.Component {
-    generateSkills() {
-        return this.props.area.mobs[this.props.current_mob].can_train_skill.map((skill, index) => (
-            <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
-                    </IconButton>
-                    <TextField id={"can_train_skill level "+index} value={skill.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField id={"can_train_skill price_multiplier "+index} value={skill.price_multiplier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <FlagSelector id={"can_train_skill skill "+index} label="Skill" flags={MOB_SKILLS} value={skill.skill} onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-            </TableRow>
-        ));
-    }
-    handleNewSkill() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_skill.push(new TrainSkill())
-        this.props.updateArea(area);
-    }
-    removeSkill(index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_skill.splice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    generateWeaponSkills() {
-        return this.props.area.mobs[this.props.current_mob].can_train_weapon_skill.map((skill, index) => (
-            <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
-                    </IconButton>
-                    <TextField id={"can_train_weapon_skill level "+index} value={skill.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField id={"can_train_weapon_skill price_multiplier "+index} value={skill.price_multiplier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <FlagSelector id={"can_train_weapon_skill weapon_skill "+index} label="Weapon Skill" flags={MOB_WEAPON_SKILLS} value={skill.weapon_skill} onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-            </TableRow>
-        ));
-    }
-    handleNewWeaponSkill() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_weapon_skill.push(new TrainWeaponSkill())
-        this.props.updateArea(area);
-    }
-    removeWeaponSkill(index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_weapon_skill.slice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    generateSpells() {
-        return this.props.area.mobs[this.props.current_mob].can_train_spell.map((skill, index) => (
-            <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
-                    </IconButton>
-                    <TextField id={"can_train_spell level "+index} value={skill.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField id={"can_train_spell price_multiplier "+index} value={skill.price_multiplier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <FlagSelector id={"can_train_spell spell "+index} label="Spell" flags={MOB_SPELLS} value={skill.spell} onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-            </TableRow>
-        ));
-    }
-    handleNewSpell() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_spell.push(new TrainSpell())
-        this.props.updateArea(area);
-    }
-    removeSpell(index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_spell.slice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    generateLevels() {
-        return this.props.area.mobs[this.props.current_mob].can_train_level.map((skill, index) => (
-            <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
-                    </IconButton>
-                    <TextField id={"can_train_level level "+index} value={skill.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField id={"can_train_level price_multiplier "+index} value={skill.price_multiplier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-            </TableRow>
-        ));
-    }
-    handleNewLevel() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_level.push(new TrainLevel())
-        this.props.updateArea(area);
-    }
-    removeLevel(index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_level.slice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    generateStatistics() {
-        return this.props.area.mobs[this.props.current_mob].can_train_statistic.map((skill, index) => (
-            <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
-                    </IconButton>
-                    <TextField id={"can_train_statistic level "+index} value={skill.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField id={"can_train_statistic price_multiplier "+index} value={skill.price_multiplier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <FlagSelector id={"can_train_statistic statistic "+index} label="Statistic" flags={MOB_STATISTICS} value={skill.statistic} onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-            </TableRow>
-        ));
-    }
-    handleNewStatistic() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_statistic.push(new TrainStatistic())
-        this.props.updateArea(area);
-    }
-    removeStatistic(index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_statistic.slice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    generateFeats() {
-        return this.props.area.mobs[this.props.current_mob].can_train_feat.map((skill, index) => (
-            <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
-                    </IconButton>
-                    <TextField id={"can_train_feat level "+index} value={skill.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField id={"can_train_feat price_multiplier "+index} value={skill.price_multiplier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-                <TableRowColumn>
-                    <FlagSelector id={"can_train_feat feat "+index} label="Feat" flags={MOB_FEATS} value={skill.feat} onChange={this.handleChange.bind(this)} />
-                </TableRowColumn>
-            </TableRow>
-        ));
-    }
-    handleNewFeat() {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_feat.push(new TrainFeat())
-        this.props.updateArea(area);
-    }
-    removeFeat(index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob].can_train_feat.slice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.mobs[this.props.current_mob][event.target.id.split(" ")[0]][parseInt(event.target.id.split(" ")[2])][event.target.id.split(" ")[1]] = value;
-        this.props.updateArea(area);
-    }
-    
+
+
+class CanTrainRenderer extends ModelArrayComponent {
     render() {
         return (
             <React.Fragment>
-                <Subheader>Skills</Subheader>
                 <Table>
                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                         <TableRow>
-                            <TableHeaderColumn>Max Level</TableHeaderColumn>
-                            <TableHeaderColumn>Price Multiplier</TableHeaderColumn>
-                            <TableHeaderColumn>Skill</TableHeaderColumn>
+                            {this.headers.map((h)=>(<TableHeaderColumn key={h}>{h}</TableHeaderColumn>))}
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
-                        {this.generateSkills()}
+                        {this.generate()}
                         <TableRow>
                             <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewSkill.bind(this)}>
+                                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                                     <FontIcon className="material-icons">add_box</FontIcon>
                                 </IconButton>
                             </TableRowColumn>
                         </TableRow>
                     </TableBody>
                 </Table>
-                <Subheader>Weapon Skills</Subheader>
-                <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                        <TableRow>
-                            <TableHeaderColumn>Max Level</TableHeaderColumn>
-                            <TableHeaderColumn>Price Multiplier</TableHeaderColumn>
-                            <TableHeaderColumn>Weapon Skill</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {this.generateWeaponSkills()}
-                        <TableRow>
-                            <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewWeaponSkill.bind(this)}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
-                                </IconButton>
-                            </TableRowColumn>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <Subheader>Spells</Subheader>
-                <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                        <TableRow>
-                            <TableHeaderColumn>Max Level</TableHeaderColumn>
-                            <TableHeaderColumn>Price Multiplier</TableHeaderColumn>
-                            <TableHeaderColumn>Spell</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {this.generateSpells()}
-                        <TableRow>
-                            <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewSpell.bind(this)}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
-                                </IconButton>
-                            </TableRowColumn>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <Subheader>Levels</Subheader>
-                <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                        <TableRow>
-                            <TableHeaderColumn>Max Level</TableHeaderColumn>
-                            <TableHeaderColumn>Price Multiplier</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {this.generateLevels()}
-                        <TableRow>
-                            <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewLevel.bind(this)}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
-                                </IconButton>
-                            </TableRowColumn>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <Subheader>Statistics</Subheader>
-                <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                        <TableRow>
-                            <TableHeaderColumn>Max Level</TableHeaderColumn>
-                            <TableHeaderColumn>Price Multiplier</TableHeaderColumn>
-                            <TableHeaderColumn>Statistic</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {this.generateStatistics()}
-                        <TableRow>
-                            <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewStatistic.bind(this)}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
-                                </IconButton>
-                            </TableRowColumn>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <Subheader>Feats</Subheader>
-                <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                        <TableRow>
-                            <TableHeaderColumn>Max Level</TableHeaderColumn>
-                            <TableHeaderColumn>Price Multiplier</TableHeaderColumn>
-                            <TableHeaderColumn>Feat</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {this.generateFeats()}
-                        <TableRow>
-                            <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewFeat.bind(this)}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
-                                </IconButton>
-                            </TableRowColumn>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                
             </React.Fragment>
-        )
+        );
+    }
+}
+
+class CanTrainSkillEditor extends CanTrainRenderer {
+    modelClass=TrainSkill;
+    headers=["Max Level", "Price Multiplier", "Skill"]
+    generate() {
+        return this.props.model.map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <FlagSelector id="skill" label="Skill" flags={MOB_SKILLS} value={skill.skill} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+class CanTrainWeaponSkillEditor extends CanTrainRenderer {
+    modelClass=TrainWeaponSkill;
+    headers=["Max Level", "Price Multiplier", "Weapon Skill"]
+    generate() {
+        return this.props.model.map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.remove(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <FlagSelector id="weapon_skill" label="Weapon Skill" flags={MOB_WEAPON_SKILLS} value={skill.weapon_skill} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+class CanTrainSpellEditor extends CanTrainRenderer {
+    modelClass=TrainSpell;
+    headers=["Max Level", "Price Multiplier", "Spell"]
+    generate() {
+        return this.props.model.map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <FlagSelector id="spell" label="Spell" flags={MOB_SPELLS} value={skill.spell} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+class CanTrainLevelEditor extends CanTrainRenderer {
+    modelClass=TrainLevel;
+    headers=["Max Level", "Price Multiplier"]
+    generate() {
+        return this.props.model.map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+class CanTrainStatisticEditor extends CanTrainRenderer {
+    modelClass=TrainStatistic;
+    headers=["Max Level", "Price Multiplier", "Statistic"]
+    generate() {
+        return this.props.model.map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <FlagSelector id="statistic" label="Statistic" flags={MOB_STATISTICS} value={skill.statistic} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+class CanTrainFeatEditor extends CanTrainRenderer {
+    modelClass=TrainFeat;
+    headers=["Max Level", "Price Multiplier", "Feat"]
+    generate() {
+        return this.props.model.map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+                <TableRowColumn>
+                    <FlagSelector id="feat" label="Feat" flags={MOB_FEATS} value={skill.feat} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </TableRowColumn>
+            </TableRow>
+        ));
     }
 }
 

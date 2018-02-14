@@ -81,15 +81,54 @@ class Model {
         return errors;
     }
     
-    clone() {
+    clone(hash=new WeakMap()) {
+        if (hash.has(this)) return hash.get(this);
         var props = Object.getOwnPropertyDescriptors(this)
+        let result = Object.create(Object.getPrototypeOf(this))
+        hash.set(this, result);
+        let result_props = {}
         for (var prop in props) {
-            props[prop].value = props[prop].value && props[prop].value.clone ? props[prop].value.clone() : props[prop].value
+            result_props[prop] = props[prop].value instanceof Model ? props[prop].value.clone(hash) : props[prop].value;
         }
-        return Object.create(
-            Object.getPrototypeOf(this), 
-            props
-        )
+        return Object.assign(result, result_props);
+    }
+    
+    equals(other_model) {
+        if (other_model instanceof Model) {
+            // Check if all fields are equal
+            if (this === other_model) {
+                // Same object - of course it's equal!
+                return true;
+            }
+            for (let field in this._fields) {
+                // If field is a Model, use its equals method for comparison
+                if (this[field] instanceof Model && !this[field].equals(other_model[field])) {
+                    return false;
+                }
+                // If field is an Array, check length, then each item for equality
+                if (this[field] instanceof Array) {
+                    if (this[field].length != other_model[field].length) {
+                        return false;
+                    }
+                    for (let i = 0; i < this[field].length; i++) {
+                        if (this[field][i] instanceof Model && !this[field][i].equals(other_model[field][i])) {
+                            return false;
+                        }
+                        if (other_model[field][i] != this[field][i]) {
+                            return false;
+                        }
+                    }
+                }
+                // Otherwise, just check equality.
+                if (other_model[field] != this[field]) {
+                    return false;
+                }
+            }
+            // All fields check out; must be equal!
+            return true;
+        }
+        // Other object is not a Model, so not equal.
+        return false;
     }
 }
 

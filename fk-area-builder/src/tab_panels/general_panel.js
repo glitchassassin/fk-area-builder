@@ -49,7 +49,7 @@ class GeneralPanel extends React.Component {
     handleChange(event, value, index) {
         let area = this.props.area.clone();
         area[event.target.id] = value;
-        this.props.onChange(area);
+        this.props.updateArea(area);
     }
     
     render() {

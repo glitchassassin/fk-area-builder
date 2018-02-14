@@ -45,20 +45,10 @@ import {
 from '../Models/flags';
 import {
     QuestLog,
-    UniqueMob,
-    Program,
-    TrainSkill,
-    TrainWeaponSkill,
-    TrainSpell,
-    TrainLevel,
-    TrainStatistic,
-    TrainFeat
 }
 from '../Models/are_model'
 import {
-    FlagWithCategorySelector,
     FlagSelector,
-    MultiFlagSelector
 }
 from '../UIComponents/FlagSelectors'
 
@@ -69,6 +59,20 @@ const icon_button_style = {
 }
 
 class QuestsPanel extends React.Component {
+    shouldComponentUpdate(newProps) {
+        // If the array length changed, then update.
+        if (this.props.area.quest_log.length != newProps.area.quest_log.length) {
+            return true;
+        }
+        // Otherwise, update if one of the quest_logs in the array has changed.
+        for (let i = 0; i < this.props.area.quest_log.length; i++) {
+            if (!this.props.area.quest_log[i].equals(newProps.area.quest_log[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     handleChange(event, value, index) {
         let area = this.props.area.clone();
         area.quest_log[index][event.target.id] = value;
@@ -134,7 +138,7 @@ class QuestsPanel extends React.Component {
                         <TableHeaderColumn width={50}></TableHeaderColumn>
                         <TableHeaderColumn width={50}>Area Vnum</TableHeaderColumn>
                         <TableHeaderColumn width={50}>Qbit Start</TableHeaderColumn>
-                        <TableHeaderColumn width={50}>Qbit Stop</TableHeaderColumn>
+                        <TableHeaderColumn width={50}>Qbit Count</TableHeaderColumn>
                         <TableHeaderColumn width={50}>Min Qbit</TableHeaderColumn>
                         <TableHeaderColumn width={50}>Max Qbit</TableHeaderColumn>
                         <TableHeaderColumn width={130}>Event Type</TableHeaderColumn>

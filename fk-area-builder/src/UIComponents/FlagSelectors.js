@@ -75,7 +75,7 @@ class FlagSelector extends React.Component {
     }
     
     generateItems(flags) {
-        return Object.keys(flags).map(function(key) {
+        return [<MenuItem key={""} value={null} primaryText="" />].concat(Object.keys(flags).map(function(key) {
             if (flags[key].do_not_use) {
                 return "";
             }
@@ -83,7 +83,7 @@ class FlagSelector extends React.Component {
                 return (<MenuItem key={flags[key].code} value={flags[key]} primaryText={flags[key].sdesc}><span style={ldesc_style}>{flags[key].ldesc}</span></MenuItem>)
             }
             return (<MenuItem key={flags[key].code} value={flags[key]} primaryText={flags[key].sdesc} />)
-        })
+        }))
     }
     
     render() {
@@ -149,14 +149,14 @@ class VnumAutoComplete extends React.Component {
                 text: vnum_item.vnum,
                 value: (<MenuItem 
                     key={vnum_item.vnum}
-                    value={vnum_item.vnum}
+                    value={vnum_item}
                     primaryText={`${vnum_item.vnum}: ${vnum_item.sdesc}`} 
                 />)
             }
         ));
     }
     updateInput(searchText, dataSource, params) {
-        let matches = dataSource.filter((item)=>(item.vnum==searchText));
+        let matches = this.props.dataSource.filter((item)=>(item.vnum==searchText));
         if (matches.length) {
             this.props.onChange({target:{id:this.props.id}}, matches[0]);
         }
@@ -173,7 +173,7 @@ class VnumAutoComplete extends React.Component {
             <AutoComplete 
                 floatingLabelText={this.props.floatingLabelText} 
                 id={this.props.id} 
-                searchText={this.props.value} 
+                searchText={this.props.value?this.props.value.vnum:""} 
                 autoComplete="off" 
                 onUpdateInput={this.updateInput.bind(this)} 
                 filter={AutoComplete.noFilter} 

@@ -8,6 +8,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import Subheader from 'material-ui/Subheader';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
 import {
@@ -27,14 +28,19 @@ import {
     ROOM_SECTOR_FLAGS,
     TRAP_TYPES,
     TRAP_TRIGGERS,
-    ROOM_PROGRAM_TRIGGERS
+    ROOM_PROGRAM_TRIGGERS,
+    DOOR_RESET_DIRECTIONS,
+    DOOR_RESET_FLAGS,
+    RESET_BIT_CODES
 }
 from '../Models/flags';
 import {
     Room,
     Exit,
     ExtraDescription,
-    Program
+    Program,
+    DoorReset,
+    RoomReset
 }
 from '../Models/are_model'
 import {
@@ -43,6 +49,8 @@ import {
     VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
+import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
+import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const icon_button_style = {
     padding: "5px",
@@ -93,13 +101,19 @@ class RoomPanel extends React.Component {
         this.updateArea(area);
         this.setState({open: true, current_room: area.rooms.length-1});
     };
+    handleChange(event, value) {
+        console.log("RoomPanel", this.state.current_room, value);
+        let area = this.props.area.clone()
+        area.rooms[parseInt(this.state.current_room)] = value;
+        this.updateArea(area);
+    }
     
     handleClose = () => {
         this.setState({open: false});
     };
     
     updateArea(area) {
-        this.props.onChange(area);
+        this.props.updateArea(area);
     }
     
     showErrors = (index) => {
@@ -185,7 +199,7 @@ class RoomPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <RoomEditor open={this.state.open} handleClose={this.handleClose} updateArea={this.updateArea.bind(this)} current_room={this.state.current_room} area={this.props.area} />
+            <RoomEditor open={this.state.open} handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.rooms[this.state.current_room]} items={this.props.area.items} rooms={this.props.area.rooms} />
             <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
             <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for room ${this.props.area.rooms[this.state.current_room].vnum}`}>
                 <List>
@@ -204,18 +218,8 @@ const paper_style = {
     margin: "5px"
 }
 
-class RoomEditor extends React.Component {
-    handleChanges(event, value, index) {
-        let area = this.props.area.clone();
-        let room = area.rooms[this.props.current_room];
-        try {
-            room[event.target.id] = value;
-        } catch(e) {
-            throw(e);
-        }
-        this.props.updateArea(area);
-    }
-    
+class RoomEditor extends ModelComponent {
+    modelClass = Room;
     render() {
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
@@ -224,25 +228,31 @@ class RoomEditor extends React.Component {
             <Dialog title="Edit Room" modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.area.rooms[this.props.current_room].vnum} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" fullWidth={true} value={this.props.area.rooms[this.props.current_room].sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.area.rooms[this.props.current_room].ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.model.vnum} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Short description" id="sdesc" fullWidth={true} value={this.props.model.sdesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Long description" id="ldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.model.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Details">
-                        <MultiFlagSelector id="room_flags" label="Room Flags" flags={ROOM_FLAGS} value={this.props.area.rooms[this.props.current_room].room_flags} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="sector" label="Sector" flags={ROOM_SECTOR_FLAGS} value={this.props.area.rooms[this.props.current_room].sector} onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Teleport Delay" id="teleport_delay" value={this.props.area.rooms[this.props.current_room].teleport_delay} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <VnumAutoComplete floatingLabelText="Teleport Target" id="teleport_target" value={this.props.area.rooms[this.props.current_room].teleport_target} onChange={this.handleChanges.bind(this)} dataSource={this.props.area.rooms} />
-                        <TextField floatingLabelText="Room Capacity [Tunnel]" id="tunnel" value={this.props.area.rooms[this.props.current_room].tunnel} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <MultiFlagSelector id="room_flags" label="Room Flags" flags={ROOM_FLAGS} value={this.props.model.room_flags} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="sector" label="Sector" flags={ROOM_SECTOR_FLAGS} value={this.props.model.sector} onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Teleport Delay" id="teleport_delay" value={this.props.model.teleport_delay} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <VnumAutoComplete floatingLabelText="Teleport Target" id="teleport_target" value={this.props.model.teleport_target} onChange={this.handleChange.bind(this)} dataSource={this.props.rooms} />
+                        <TextField floatingLabelText="Room Capacity [Tunnel]" id="tunnel" value={this.props.model.tunnel} autoComplete="off" onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Extra Descs">
-                        <ExtraDescriptionsEditor area={this.props.area} current_room={this.props.current_room} updateArea={this.props.updateArea} />
+                        <ExtraDescriptionsEditor id="extra_descriptions" model={this.props.model.extra_descriptions} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Exits">
-                        <ExitsEditor area={this.props.area} current_room={this.props.current_room} updateArea={this.props.updateArea} />
+                        <ExitsEditor id="exits" model={this.props.model.exits} rooms={this.props.rooms} items={this.props.items} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor area={this.props.area} current_room={this.props.current_room} updateArea={this.props.updateArea} />
+                        <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
+                    </Tab>
+                    <Tab label="Resets">
+                        <Subheader>Room Resets</Subheader>
+                        <RoomResetsEditor id="room_resets" model={this.props.model.room_resets} room={this.props.model} onChange={this.handleChange.bind(this)} />
+                        <Subheader>Door Resets</Subheader>
+                        <DoorResetsEditor id="door_resets" model={this.props.model.door_resets} room={this.props.model} onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>  
@@ -250,111 +260,68 @@ class RoomEditor extends React.Component {
     }
 }
 
-class ExtraDescriptionsEditor extends React.Component {
-    generateExtraDescriptions(ed) {
-        return this.props.area.rooms[this.props.current_room].extra_descriptions.map((ed, index) => (
+class ExitsEditor extends ModelArrayComponent {
+    modelClass = Exit;
+    generate() {
+        return this.props.model.map((exit, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <TextField floatingLabelText="Keywords (space separated)" id={"keywords_"+index} fullWidth={true} value={ed.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Long description" id={"ldesc_"+index} multiLine={true} rows={5} fullWidth={true} value={ed.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <FlagSelector id="direction" label="Direction" flags={EXIT_DIRECTIONS} value={exit.direction} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField floatingLabelText="Comment" id={"comment_"+index} fullWidth={true} value={exit.comment} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField floatingLabelText={exit.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} id="somewhere_door_keyword" fullWidth={true} value={exit.somewhere_door_keyword} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <MultiFlagSelector id="door_flags" label="Door Flags" flags={EXIT_DOOR_FLAGS} value={exit.door_flags} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete floatingLabelText="Door Key" id="door_key" value={exit.door_key} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.items} />
+                <VnumAutoComplete floatingLabelText="Exit Target" id="target_vnum" value={exit.target_vnum} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
+                <FlagSelector id="exit_size" label="Exit Size" flags={EXIT_SIZES} value={exit.exit_size} onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
-    }
-    
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.rooms[this.props.current_room].extra_descriptions[parseInt(event.target.id.split("_")[1])][event.target.id.split("_")[0]] = value;
-        this.props.updateArea(area);
-    }
-    
-    handleNew() {
-        let area = this.props.area.clone();
-        area.rooms[this.props.current_room].extra_descriptions.push(new ExtraDescription())
-        this.props.updateArea(area);
-    }
-    
-    render() {
-        return (
-            <div>
-                {this.generateExtraDescriptions(this.props.area.rooms[this.props.current_room].extra_descriptions)}
-                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
-                </IconButton>
-            </div>
-        )
     }
 }
 
-class ExitsEditor extends React.Component {
-    generateExits(exits) {
-        return this.props.area.rooms[this.props.current_room].exits.map((exit, index) => (
+class DoorResetsEditor extends ModelArrayComponent {
+    modelClass = DoorReset;
+    generate() {
+        return this.props.model.map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <FlagSelector id={"direction "+index} label="Direction" flags={EXIT_DIRECTIONS} value={exit.direction} onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Comment" id={"comment_"+index} fullWidth={true} value={exit.comment} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText={exit.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} id={"somewhere_door_keyword "+index} fullWidth={true} value={exit.somewhere_door_keyword} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <MultiFlagSelector id={"door_flags "+index} label="Door Flags" flags={EXIT_DOOR_FLAGS} value={exit.door_flags} onChange={this.handleChange.bind(this)} />
-                <VnumAutoComplete floatingLabelText="Door Key" id={"door_key "+index} value={exit.door_key} onChange={this.handleChange.bind(this)} dataSource={this.props.area.items} />
-                <VnumAutoComplete floatingLabelText="Exit Target" id={"target_vnum "+index} value={exit.target_vnum} onChange={this.handleChange.bind(this)} dataSource={this.props.area.rooms} />
-                <FlagSelector id={"exit_size "+index} label="Exit Size" flags={EXIT_SIZES} value={exit.exit_size} onChange={this.handleChange.bind(this)} />
+                {/*<VnumAutoComplete floatingLabelText="Room" id="room" value={reset.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />*/}
+                <FlagSelector id="exit" label="Exit" flags={DOOR_RESET_DIRECTIONS} value={reset.exit} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector id="exit_state" label="Exit State" flags={DOOR_RESET_FLAGS} value={reset.exit_state} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor id="trap_reset" item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
     
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.rooms[this.props.current_room].exits[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
-        this.props.updateArea(area);
-    }
-    
     handleNew() {
-        let area = this.props.area.clone();
-        area.rooms[this.props.current_room].exits.push(new Exit())
-        this.props.updateArea(area);
-    }
-    
-    render() {
-        return (
-            <div>
-                {this.generateExits(this.props.area.rooms[this.props.current_room].exits)}
-                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
-                </IconButton>
-            </div>
-        )
+        let new_dr = new DoorReset();
+        let door_resets = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
+        new_dr.room = this.props.room;
+        door_resets.push(new_dr);
+        this.props.onChange({target:this.props}, door_resets);
     }
 }
 
-class ProgramsEditor extends React.Component {
-    generatePrograms() {
-        return this.props.area.rooms[this.props.current_room].programs.map((program, index) => (
+class RoomResetsEditor extends ModelArrayComponent {
+    modelClass = RoomReset;
+    generate() {
+        return this.props.model.map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <FlagSelector id={"trigger "+index} label="Trigger" flags={ROOM_PROGRAM_TRIGGERS} value={program.trigger} onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Variable" id={"argument "+index} value={program.argument} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Program" id={"program "+index} multiLine={true} rows={5} fullWidth={true} value={program.program} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <FlagSelector id="bit_type" label="Reset Bit" flags={RESET_BIT_CODES} value={reset.bit_type} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector id="flag" label="Room Flag" flags={ROOM_FLAGS} value={reset.flag} onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
     
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.rooms[this.props.current_room].programs[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
-        this.props.updateArea(area);
-    }
-    
     handleNew() {
-        let area = this.props.area.clone();
-        area.rooms[this.props.current_room].programs.push(new Program())
-        this.props.updateArea(area);
-    }
-    
-    render() {
-        return (
-            <div>
-                {this.generatePrograms()}
-                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
-                </IconButton>
-            </div>
-        )
+        let new_dr = new RoomReset();
+        let room_resets = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
+        new_dr.room = this.props.room;
+        room_resets.push(new_dr);
+        this.props.onChange({target:this.props}, room_resets);
     }
 }
 

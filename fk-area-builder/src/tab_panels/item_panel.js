@@ -3,6 +3,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import { red900 } from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -11,6 +12,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import Subheader from 'material-ui/Subheader';
+import Checkbox from 'material-ui/Checkbox';
 
 import {
     Table,
@@ -53,14 +55,8 @@ import {
     Item,
     ItemApply,
     ExtraDescription,
-    UniqueMob,
     Program,
-    TrainSkill,
-    TrainWeaponSkill,
-    TrainSpell,
-    TrainLevel,
-    TrainStatistic,
-    TrainFeat
+    ItemReset
 }
 from '../Models/are_model'
 import {
@@ -70,6 +66,8 @@ import {
     VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
+import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
+import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const icon_button_style = {
     padding: "5px",
@@ -100,6 +98,12 @@ class ItemPanel extends React.Component {
             confirm_delete_open: true
         });
     };
+    handleChange(event, value) {
+        console.log("ItemPanel", this.state.current_item, value);
+        let area = this.props.area.clone()
+        area.items[parseInt(this.state.current_item)] = value;
+        this.updateArea(area);
+    }
     
     confirmDelete = () => {
         let area = this.props.area.clone();
@@ -126,7 +130,7 @@ class ItemPanel extends React.Component {
     };
     
     updateArea(area) {
-        this.props.onChange(area);
+        this.props.updateArea(area);
     }
     
     showErrors = (index) => {
@@ -218,7 +222,7 @@ class ItemPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <ItemEditor open={this.state.open} handleClose={this.handleClose} updateArea={this.updateArea.bind(this)} current_item={this.state.current_item} area={this.props.area} />
+            <ItemEditor open={this.state.open} id="items" handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.items[this.state.current_item]} rooms={this.props.area.rooms} index={this.state.current_item} />
             <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
             <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for item ${this.props.area.items[this.state.current_item].vnum}`}>
                 <List>
@@ -245,96 +249,82 @@ const item_type_ldesc_style = {
     whiteSpace: "normal"
 }
 
-class ItemEditor extends React.Component {
-    handleChanges(event, value, index) {
-        let area = this.props.area.clone();
-        let item = area.items[this.props.current_item];
-        try {
-            item[event.target.id] = value;
-        } catch(e) {
-            throw(e);
-        }
-        this.props.updateArea(area);
-    }
+class ItemEditor extends ModelComponent {
     
     render() {
-        let item = this.props.area.items[this.props.current_item]
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
-        let item_type_fields = (
-            <React.Fragment>
-                <div>
-                    {item.item_type.value0.type_enum ? (
-                        <FlagSelector id="value0" label="Value 0" flags={item.item_type.value0.type_enum} value={item.value0} onChange={this.handleChanges.bind(this)} />
-                    ) : (
-                        <TextField id="value0" floatingLabelText="Value 0" value={item.value0} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                    )}
-                    <span style={item_type_ldesc_style}>{item.item_type.value0.ldesc}</span>
-                </div>
-                <div>
-                    {item.item_type.value1.type_enum ? (
-                        <FlagSelector id="value1" label="Value 1" flags={item.item_type.value1.type_enum} value={item.value1} onChange={this.handleChanges.bind(this)} />
-                    ) : (
-                        <TextField id="value1" floatingLabelText="Value 1" value={item.value1} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                    )}
-                    <span style={item_type_ldesc_style}>{item.item_type.value1.ldesc}</span>
-                </div>
-                <div>
-                    {item.item_type.value2.type_enum ? (
-                        <FlagSelector id="value2" label="Value 2" flags={item.item_type.value2.type_enum} value={item.value2} onChange={this.handleChanges.bind(this)} />
-                    ) : (
-                        <TextField id="value2" floatingLabelText="Value 2" value={item.value2} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                    )}
-                    <span style={item_type_ldesc_style}>{item.item_type.value2.ldesc}</span>
-                </div>
-                <div>
-                    {item.item_type.value3.type_enum ? (
-                        <FlagSelector id="value3" label="Value 3" flags={item.item_type.value3.type_enum} value={item.value3} onChange={this.handleChanges.bind(this)} />
-                    ) : (
-                        <TextField id="value3" floatingLabelText="Value 3" value={item.value3} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                    )}
-                    <span style={item_type_ldesc_style}>{item.item_type.value3.ldesc}</span>
-                </div>
-                <div>
-                    {item.item_type.value4.type_enum ? (
-                        <FlagSelector id="value4" label="Value 4" flags={item.item_type.value4.type_enum} value={item.value4} onChange={this.handleChanges.bind(this)} />
-                    ) : (
-                        <TextField id="value4" floatingLabelText="Value 4" value={item.value4} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                    )}
-                    <span style={item_type_ldesc_style}>{item.item_type.value4.ldesc}</span>
-                </div>
-            </React.Fragment>
-        )
-        console.log(item.validate("vnum"))
         return (
             <Dialog title={`Edit Item`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" errorText={item.validate("vnum")} value={item.vnum} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" errorText={item.validate("sdesc")} value={item.sdesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" errorText={item.validate("ldesc")} fullWidth={true} value={item.ldesc} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Keywords" id="keywords" errorText={item.validate("keywords")} fullWidth={true} value={item.keywords} autoComplete="off" onChange={this.handleChanges.bind(this)} />
+                        <TextField floatingLabelText="vnum" id="vnum" errorText={this.props.model.validate("vnum")} value={this.props.model.vnum} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Short description" id="sdesc" errorText={this.props.model.validate("sdesc")} value={this.props.model.sdesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Long description" id="ldesc" errorText={this.props.model.validate("ldesc")} fullWidth={true} value={this.props.model.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Keywords" id="keywords" errorText={this.props.model.validate("keywords")} fullWidth={true} value={this.props.model.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Item Type">
-                        <FlagSelector id="item_type" label="Item Type" errorText={item.validate("item_type")} flags={ITEM_TYPES} value={item.item_type} onChange={this.handleChanges.bind(this)} />
-                        {item_type_fields}
+                        <FlagSelector id="item_type" label="Item Type" errorText={this.props.model.validate("item_type")} flags={ITEM_TYPES} value={this.props.model.item_type} onChange={this.handleChange.bind(this)} />
+                        <div>
+                            {this.props.model.item_type.value0.type_enum ? (
+                                <FlagSelector id="value0" label="Value 0" flags={this.props.model.item_type.value0.type_enum} value={this.props.model.value0} onChange={this.handleChange.bind(this)} />
+                            ) : (
+                                <TextField id="value0" floatingLabelText="Value 0" value={this.props.model.value0} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                            )}
+                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value0.ldesc}</span>
+                        </div>
+                        <div>
+                            {this.props.model.item_type.value1.type_enum ? (
+                                <FlagSelector id="value1" label="Value 1" flags={this.props.model.item_type.value1.type_enum} value={this.props.model.value1} onChange={this.handleChange.bind(this)} />
+                            ) : (
+                                <TextField id="value1" floatingLabelText="Value 1" value={this.props.model.value1} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                            )}
+                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value1.ldesc}</span>
+                        </div>
+                        <div>
+                            {this.props.model.item_type.value2.type_enum ? (
+                                <FlagSelector id="value2" label="Value 2" flags={this.props.model.item_type.value2.type_enum} value={this.props.model.value2} onChange={this.handleChange.bind(this)} />
+                            ) : (
+                                <TextField id="value2" floatingLabelText="Value 2" value={this.props.model.value2} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                            )}
+                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value2.ldesc}</span>
+                        </div>
+                        <div>
+                            {this.props.model.item_type.value3.type_enum ? (
+                                <FlagSelector id="value3" label="Value 3" flags={this.props.model.item_type.value3.type_enum} value={this.props.model.value3} onChange={this.handleChange.bind(this)} />
+                            ) : (
+                                <TextField id="value3" floatingLabelText="Value 3" value={this.props.model.value3} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                            )}
+                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value3.ldesc}</span>
+                        </div>
+                        <div>
+                            {this.props.model.item_type.value4.type_enum ? (
+                                <FlagSelector id="value4" label="Value 4" flags={this.props.model.item_type.value4.type_enum} value={this.props.model.value4} onChange={this.handleChange.bind(this)} />
+                            ) : (
+                                <TextField id="value4" floatingLabelText="Value 4" value={this.props.model.value4} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                            )}
+                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value4.ldesc}</span>
+                        </div>
                     </Tab>
                     <Tab label="Details">
-                        <MultiFlagSelector id="attributes" errorText={item.validate("attributes")} label="Attributes" flags={ITEM_ATTRIBUTES} value={this.props.area.items[this.props.current_item].attributes} onChange={this.handleChanges.bind(this)} />
-                        <MultiFlagSelector id="wear_flags" errorText={item.validate("wear_flags")} label="Wear Locations" flags={WEAR_LOCATIONS} value={this.props.area.items[this.props.current_item].wear_flags} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="quality" errorText={item.validate("quality")} label="Quality" flags={ITEM_QUALITY} value={item.quality} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="material" errorText={item.validate("material")} label="Materials" flags={ITEM_MATERIALS} value={item.material} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="condition" errorText={item.validate("condition")} label="Condition" flags={ITEM_CONDITION} value={item.condition} onChange={this.handleChanges.bind(this)} />
-                        <FlagSelector id="size" errorText={item.validate("size")} label="Sizes" flags={ITEM_SIZES} value={item.size} onChange={this.handleChanges.bind(this)} />
-                        <TextField floatingLabelText="Identify text" id="identify_message" errorText={item.validate("identify_message")} fullWidth={true} value={item.identify_message} autoComplete="off" onChange={this.handleChanges.bind(this)} />
-                        <ApplyEditor area={this.props.area} current_item={this.props.current_item} updateArea={this.props.updateArea} />
+                        <MultiFlagSelector id="attributes" errorText={this.props.model.validate("attributes")} label="Attributes" flags={ITEM_ATTRIBUTES} value={this.props.model.attributes} onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector id="wear_flags" errorText={this.props.model.validate("wear_flags")} label="Wear Locations" flags={WEAR_LOCATIONS} value={this.props.model.wear_flags} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="quality" errorText={this.props.model.validate("quality")} label="Quality" flags={ITEM_QUALITY} value={this.props.model.quality} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="material" errorText={this.props.model.validate("material")} label="Materials" flags={ITEM_MATERIALS} value={this.props.model.material} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="condition" errorText={this.props.model.validate("condition")} label="Condition" flags={ITEM_CONDITION} value={this.props.model.condition} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="size" errorText={this.props.model.validate("size")} label="Sizes" flags={ITEM_SIZES} value={this.props.model.size} onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Identify text" id="identify_message" errorText={this.props.model.validate("identify_message")} fullWidth={true} value={this.props.model.identify_message} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <ApplyEditor id="special_applies" model={this.props.model.special_applies} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Extra Descs">
-                        <ExtraDescriptionsEditor area={this.props.area} current_item={this.props.current_item} updateArea={this.props.updateArea} />
+                        <ExtraDescriptionsEditor id="extra_descriptions" model={this.props.model.extra_descriptions} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor area={this.props.area} current_item={this.props.current_item} updateArea={this.props.updateArea} />
+                        <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
+                    </Tab>
+                    <Tab label="Resets">
+                        <ItemResetsEditor id="item_resets" model={this.props.model.item_resets} item={this.props.model} rooms={this.props.rooms} onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>  
@@ -342,111 +332,28 @@ class ItemEditor extends React.Component {
     }
 }
 
-class ExtraDescriptionsEditor extends React.Component {
-    generateExtraDescriptions(ed) {
-        return this.props.area.items[this.props.current_item].extra_descriptions.map((ed, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <TextField floatingLabelText="Keywords (space separated)" id={"keywords_"+index} fullWidth={true} value={ed.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Long description" id={"ldesc_"+index} multiLine={true} rows={5} fullWidth={true} value={ed.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
-            </Paper>
-        ));
-    }
+class ApplyEditor extends ModelArrayComponent {
+    modelClass = ItemApply;
     
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].extra_descriptions[parseInt(event.target.id.split("_")[1])][event.target.id.split("_")[0]] = value;
-        this.props.updateArea(area);
-    }
-    
-    handleNew() {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].extra_descriptions.push(new ExtraDescription())
-        this.props.updateArea(area);
-    }
-    
-    render() {
-        return (
-            <div>
-                {this.generateExtraDescriptions(this.props.area.items[this.props.current_item].extra_descriptions)}
-                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
-                </IconButton>
-            </div>
-        )
-    }
-}
-
-class ProgramsEditor extends React.Component {
-    generatePrograms() {
-        return this.props.area.items[this.props.current_item].programs.map((program, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <FlagSelector id={"trigger "+index} label="Trigger" flags={MOB_PROGRAM_TRIGGERS} value={program.trigger} onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Variable" id={"argument "+index} value={program.argument} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="Program" id={"program "+index} multiLine={true} rows={5} fullWidth={true} value={program.program} autoComplete="off" onChange={this.handleChange.bind(this)} />
-            </Paper>
-        ));
-    }
-    
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].programs[parseInt(event.target.id.split(" ")[1])][event.target.id.split(" ")[0]] = value;
-        this.props.updateArea(area);
-    }
-    
-    handleNew() {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].programs.push(new Program())
-        this.props.updateArea(area);
-    }
-    
-    render() {
-        return (
-            <React.Fragment>
-                {this.generatePrograms()}
-                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
-                </IconButton>
-            </React.Fragment>
-        )
-    }
-}
-
-class ApplyEditor extends React.Component {
-    generateApplies() {
-        return this.props.area.items[this.props.current_item].special_applies.map((apply, index) => (
+    generate() {
+        return this.props.model.map((apply, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={50}>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeApply(index))}>
+                    <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id={"apply_flag "+index} errorText={apply.validate("apply_flag")} label="Apply Flag" flags={ITEM_APPLIES} value={apply.apply_flag} onChange={this.handleChange.bind(this)} />
+                    <FlagSelector id="apply_flag" errorText={apply.validate("apply_flag")} label="Apply Flag" flags={ITEM_APPLIES} value={apply.apply_flag} onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id={"parameter "+index} errorText={apply.validate("parameter")} value={apply.parameter} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <TextField id="parameter" errorText={apply.validate("parameter")} value={apply.parameter} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
                     
                 </TableRowColumn>
             </TableRow>
         ));
-    }
-    handleNewApply() {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].special_applies.push(new ItemApply())
-        this.props.updateArea(area);
-    }
-    removeApply(index) {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].special_applies.splice(index, 1)
-        this.props.updateArea(area);
-    }
-    
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.items[this.props.current_item].special_applies[event.target.id.split(" ")[1]][event.target.id.split(" ")[0]] = value;
-        this.props.updateArea(area);
     }
     
     render() {
@@ -462,16 +369,75 @@ class ApplyEditor extends React.Component {
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
-                        {this.generateApplies()}
+                        {this.generate()}
                         <TableRow>
                             <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNewApply.bind(this)}>
+                                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
                                     <FontIcon className="material-icons">add_box</FontIcon>
                                 </IconButton>
                             </TableRowColumn>
                         </TableRow>
                     </TableBody>
                 </Table>
+            </React.Fragment>
+        )
+    }
+}
+
+class ItemResetsEditor extends ModelArrayComponent {
+    modelClass = ItemReset;
+    generate() {
+        return this.props.model.map((reset, index) => (
+            <Paper style={paper_style} zDepth={1} key={index}>
+                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <VnumAutoComplete floatingLabelText="Room" id="room_container" value={reset.room_container} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
+                <TextField floatingLabelText="Item Limit" id="item_limit" value={reset.item_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <Checkbox label="Hidden" id="hidden" checked={reset.hidden} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                <Checkbox label="Buried" id="buried" checked={reset.buried} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor id="trap_reset" item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <ItemResetsContentsEditor id="contents" model={this.props.model.contents} item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+            </Paper>
+        ));
+    }
+    
+    handleNew() {
+        let new_dr = new ItemReset();
+        let item_resets = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
+        new_dr.item = this.props.item;
+        item_resets.push(new_dr);
+        this.props.onChange({target:this.props}, item_resets);
+    }
+}
+
+class ItemResetsContentsEditor extends ModelArrayComponent {
+    generate() {
+        return this.props.item.contents.map((reset, index) => (
+            <Paper style={paper_style} zDepth={1} key={index}>
+                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <VnumAutoComplete floatingLabelText="Item" id={"item "+index} value={reset.item} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.area.items} />
+                <TextField floatingLabelText="Item Limit" id={"item_limit "+index} value={reset.item_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <Checkbox label="Hidden" id={"hidden "+index} checked={reset.hidden} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+            </Paper>
+        ));
+    }
+    
+    handleNew() {
+        let new_dr = new ItemReset();
+        let contents = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
+        new_dr.room_container = this.props.item.item;
+        contents.push(new_dr);
+        this.props.onChange({target:this.props}, contents);
+    }
+    
+    render() {
+        return (
+            <React.Fragment>
+                <Subheader>Contents</Subheader>
+                {super.render()}
             </React.Fragment>
         )
     }
