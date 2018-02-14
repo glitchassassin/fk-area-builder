@@ -259,72 +259,215 @@ class ItemEditor extends ModelComponent {
             <Dialog title={`Edit Item`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" errorText={this.props.model.validate("vnum")} value={this.props.model.vnum} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" errorText={this.props.model.validate("sdesc")} value={this.props.model.sdesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" errorText={this.props.model.validate("ldesc")} fullWidth={true} value={this.props.model.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Keywords" id="keywords" errorText={this.props.model.validate("keywords")} fullWidth={true} value={this.props.model.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="vnum" 
+                            id="vnum" 
+                            errorText={this.props.model.validate("vnum")} 
+                            value={this.props.model.vnum} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Short description" 
+                            id="sdesc" 
+                            errorText={this.props.model.validate("sdesc")} 
+                            value={this.props.model.sdesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Long description" 
+                            id="ldesc" 
+                            errorText={this.props.model.validate("ldesc")} 
+                            fullWidth={true} 
+                            value={this.props.model.ldesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Keywords" 
+                            id="keywords" 
+                            errorText={this.props.model.validate("keywords")} 
+                            fullWidth={true} 
+                            value={this.props.model.keywords} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Item Type">
-                        <FlagSelector id="item_type" label="Item Type" errorText={this.props.model.validate("item_type")} flags={ITEM_TYPES} value={this.props.model.item_type} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="item_type" 
+                            label="Item Type" 
+                            errorText={this.props.model.validate("item_type")} 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.item_type} 
+                            onChange={this.handleChange.bind(this)} />
                         <div>
                             {this.props.model.item_type.value0.type_enum ? (
-                                <FlagSelector id="value0" label="Value 0" flags={this.props.model.item_type.value0.type_enum} value={this.props.model.value0} onChange={this.handleChange.bind(this)} />
+                                <FlagSelector 
+                                    id="value0" 
+                                    label="Value 0" 
+                                    flags={this.props.model.item_type.value0.type_enum} 
+                                    value={this.props.model.value0} 
+                                    onChange={this.handleChange.bind(this)} />
                             ) : (
-                                <TextField id="value0" floatingLabelText="Value 0" value={this.props.model.value0} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                <TextField 
+                                    id="value0" 
+                                    floatingLabelText="Value 0" 
+                                    value={this.props.model.value0} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange.bind(this)} />
                             )}
-                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value0.ldesc}</span>
+                            <span 
+                                style={item_type_ldesc_style}>{this.props.model.item_type.value0.ldesc}</span>
                         </div>
                         <div>
                             {this.props.model.item_type.value1.type_enum ? (
-                                <FlagSelector id="value1" label="Value 1" flags={this.props.model.item_type.value1.type_enum} value={this.props.model.value1} onChange={this.handleChange.bind(this)} />
+                                <FlagSelector 
+                                    id="value1" 
+                                    label="Value 1" 
+                                    flags={this.props.model.item_type.value1.type_enum} 
+                                    value={this.props.model.value1} 
+                                    onChange={this.handleChange.bind(this)} />
                             ) : (
-                                <TextField id="value1" floatingLabelText="Value 1" value={this.props.model.value1} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                <TextField 
+                                    id="value1" 
+                                    floatingLabelText="Value 1" 
+                                    value={this.props.model.value1} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange.bind(this)} />
                             )}
-                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value1.ldesc}</span>
+                            <span 
+                                style={item_type_ldesc_style}>{this.props.model.item_type.value1.ldesc}</span>
                         </div>
                         <div>
                             {this.props.model.item_type.value2.type_enum ? (
-                                <FlagSelector id="value2" label="Value 2" flags={this.props.model.item_type.value2.type_enum} value={this.props.model.value2} onChange={this.handleChange.bind(this)} />
+                                <FlagSelector 
+                                    id="value2" 
+                                    label="Value 2" 
+                                    flags={this.props.model.item_type.value2.type_enum} 
+                                    value={this.props.model.value2} 
+                                    onChange={this.handleChange.bind(this)} />
                             ) : (
-                                <TextField id="value2" floatingLabelText="Value 2" value={this.props.model.value2} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                <TextField 
+                                    id="value2" 
+                                    floatingLabelText="Value 2" 
+                                    value={this.props.model.value2} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange.bind(this)} />
                             )}
-                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value2.ldesc}</span>
+                            <span 
+                                style={item_type_ldesc_style}>{this.props.model.item_type.value2.ldesc}</span>
                         </div>
                         <div>
                             {this.props.model.item_type.value3.type_enum ? (
-                                <FlagSelector id="value3" label="Value 3" flags={this.props.model.item_type.value3.type_enum} value={this.props.model.value3} onChange={this.handleChange.bind(this)} />
+                                <FlagSelector 
+                                    id="value3" 
+                                    label="Value 3" 
+                                    flags={this.props.model.item_type.value3.type_enum} 
+                                    value={this.props.model.value3} 
+                                    onChange={this.handleChange.bind(this)} />
                             ) : (
-                                <TextField id="value3" floatingLabelText="Value 3" value={this.props.model.value3} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                <TextField 
+                                    id="value3" 
+                                    floatingLabelText="Value 3" 
+                                    value={this.props.model.value3} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange.bind(this)} />
                             )}
-                            <span style={item_type_ldesc_style}>{this.props.model.item_type.value3.ldesc}</span>
+                            <span 
+                                style={item_type_ldesc_style}>{this.props.model.item_type.value3.ldesc}</span>
                         </div>
                         <div>
                             {this.props.model.item_type.value4.type_enum ? (
-                                <FlagSelector id="value4" label="Value 4" flags={this.props.model.item_type.value4.type_enum} value={this.props.model.value4} onChange={this.handleChange.bind(this)} />
+                                <FlagSelector 
+                                    id="value4" 
+                                    label="Value 4" 
+                                    flags={this.props.model.item_type.value4.type_enum} 
+                                    value={this.props.model.value4} 
+                                    onChange={this.handleChange.bind(this)} />
                             ) : (
-                                <TextField id="value4" floatingLabelText="Value 4" value={this.props.model.value4} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                                <TextField 
+                                    id="value4" 
+                                    floatingLabelText="Value 4" 
+                                    value={this.props.model.value4} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange.bind(this)} />
                             )}
                             <span style={item_type_ldesc_style}>{this.props.model.item_type.value4.ldesc}</span>
                         </div>
                     </Tab>
                     <Tab label="Details">
-                        <MultiFlagSelector id="attributes" errorText={this.props.model.validate("attributes")} label="Attributes" flags={ITEM_ATTRIBUTES} value={this.props.model.attributes} onChange={this.handleChange.bind(this)} />
-                        <MultiFlagSelector id="wear_flags" errorText={this.props.model.validate("wear_flags")} label="Wear Locations" flags={WEAR_LOCATIONS} value={this.props.model.wear_flags} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="quality" errorText={this.props.model.validate("quality")} label="Quality" flags={ITEM_QUALITY} value={this.props.model.quality} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="material" errorText={this.props.model.validate("material")} label="Materials" flags={ITEM_MATERIALS} value={this.props.model.material} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="condition" errorText={this.props.model.validate("condition")} label="Condition" flags={ITEM_CONDITION} value={this.props.model.condition} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="size" errorText={this.props.model.validate("size")} label="Sizes" flags={ITEM_SIZES} value={this.props.model.size} onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Identify text" id="identify_message" errorText={this.props.model.validate("identify_message")} fullWidth={true} value={this.props.model.identify_message} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <ApplyEditor id="special_applies" model={this.props.model.special_applies} onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector 
+                            id="attributes" 
+                            errorText={this.props.model.validate("attributes")} 
+                            label="Attributes" 
+                            flags={ITEM_ATTRIBUTES} 
+                            value={this.props.model.attributes} 
+                            onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector 
+                            id="wear_flags" 
+                            errorText={this.props.model.validate("wear_flags")} 
+                            label="Wear Locations" 
+                            flags={WEAR_LOCATIONS} 
+                            value={this.props.model.wear_flags} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="quality" 
+                            errorText={this.props.model.validate("quality")} 
+                            label="Quality" 
+                            flags={ITEM_QUALITY} 
+                            value={this.props.model.quality} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="material" 
+                            errorText={this.props.model.validate("material")} 
+                            label="Materials" 
+                            flags={ITEM_MATERIALS} 
+                            value={this.props.model.material} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="condition" 
+                            errorText={this.props.model.validate("condition")} 
+                            label="Condition" 
+                            flags={ITEM_CONDITION} 
+                            value={this.props.model.condition} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="size" 
+                            errorText={this.props.model.validate("size")} 
+                            label="Sizes" 
+                            flags={ITEM_SIZES} 
+                            value={this.props.model.size} 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Identify text" 
+                            id="identify_message" 
+                            errorText={this.props.model.validate("identify_message")} 
+                            fullWidth={true} 
+                            value={this.props.model.identify_message} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <ApplyEditor 
+                            id="special_applies" 
+                            model={this.props.model.special_applies} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Extra Descs">
-                        <ExtraDescriptionsEditor id="extra_descriptions" model={this.props.model.extra_descriptions} onChange={this.handleChange.bind(this)} />
+                        <ExtraDescriptionsEditor 
+                            id="extra_descriptions" 
+                            model={this.props.model.extra_descriptions} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
+                        <ProgramsEditor 
+                            id="programs" 
+                            model={this.props.model.programs} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Resets">
-                        <ItemResetsEditor id="item_resets" model={this.props.model.item_resets} item={this.props.model} rooms={this.props.rooms} onChange={this.handleChange.bind(this)} />
+                        <ItemResetsEditor 
+                            id="item_resets" 
+                            model={this.props.model.item_resets} 
+                            item={this.props.model} 
+                            rooms={this.props.rooms} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>  
@@ -344,10 +487,21 @@ class ApplyEditor extends ModelArrayComponent {
                     </IconButton>
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id="apply_flag" errorText={apply.validate("apply_flag")} label="Apply Flag" flags={ITEM_APPLIES} value={apply.apply_flag} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <FlagSelector 
+                        id="apply_flag" 
+                        errorText={apply.validate("apply_flag")} 
+                        label="Apply Flag" 
+                        flags={ITEM_APPLIES} 
+                        value={apply.apply_flag} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="parameter" errorText={apply.validate("parameter")} value={apply.parameter} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="parameter" 
+                        errorText={apply.validate("parameter")} 
+                        value={apply.parameter} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
                     
@@ -392,12 +546,38 @@ class ItemResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <VnumAutoComplete floatingLabelText="Room" id="room_container" value={reset.room_container} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
-                <TextField floatingLabelText="Item Limit" id="item_limit" value={reset.item_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <Checkbox label="Hidden" id="hidden" checked={reset.hidden} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
-                <Checkbox label="Buried" id="buried" checked={reset.buried} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
-                <TrapResetEditor id="trap_reset" model={reset.trap_reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <ItemResetsContentsEditor id="contents" model={this.props.model.contents} item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete 
+                    floatingLabelText="Room" 
+                    id="room_container" 
+                    errorText={reset.validate("room_container")} 
+                    value={reset.room_container} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
+                <TextField 
+                    floatingLabelText="Item Limit" 
+                    id="item_limit" 
+                    errorText={reset.validate("item_limit")} 
+                    value={reset.item_limit} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <Checkbox 
+                    label="Hidden" 
+                    id="hidden" 
+                    checked={reset.hidden} 
+                    onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                <Checkbox 
+                    label="Buried" 
+                    id="buried" 
+                    checked={reset.buried} 
+                    onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor 
+                    id="trap_reset" 
+                    model={reset.trap_reset} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <ItemResetsContentsEditor 
+                    id="contents" 
+                    model={reset.contents} 
+                    item={reset} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
@@ -413,14 +593,28 @@ class ItemResetsEditor extends ModelArrayComponent {
 
 class ItemResetsContentsEditor extends ModelArrayComponent {
     generate() {
-        return this.props.item.contents.map((reset, index) => (
+        return this.props.model.map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <VnumAutoComplete floatingLabelText="Item" id={"item "+index} value={reset.item} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.area.items} />
-                <TextField floatingLabelText="Item Limit" id={"item_limit "+index} value={reset.item_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <Checkbox label="Hidden" id={"hidden "+index} checked={reset.hidden} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete 
+                    floatingLabelText="Item" 
+                    id="item"
+                    value={reset.item} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
+                    dataSource={this.props.area.items} />
+                <TextField 
+                    floatingLabelText="Item Limit" 
+                    id="item_limit"
+                    value={reset.item_limit} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <Checkbox 
+                    label="Hidden" 
+                    id="hidden"
+                    checked={reset.hidden} 
+                    onCheck={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }

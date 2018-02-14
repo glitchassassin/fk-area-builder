@@ -108,22 +108,53 @@ class QuestsPanel extends React.Component {
                     {qlog.area.vnum}
                 </TableRowColumn>
                 <TableRowColumn width={50}>
-                    <TextField id="qbit_start" value={qlog.qbit_start} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        id="qbit_start" 
+                        errorText={qlog.validate("qbit_start")} 
+                        value={qlog.qbit_start} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn width={50}>
-                    <TextField id="qbit_stop" value={qlog.qbit_stop} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        id="qbit_stop" 
+                        errorText={qlog.validate("qbit_stop")} 
+                        value={qlog.qbit_stop} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn width={50}>
-                    <TextField id="min_qbit" value={qlog.min_qbit} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        id="min_qbit" 
+                        errorText={qlog.validate("min_qbit")} 
+                        value={qlog.min_qbit} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn width={50}>
-                    <TextField id="max_qbit" value={qlog.max_qbit} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        id="max_qbit" 
+                        errorText={qlog.validate("max_qbit")} 
+                        value={qlog.max_qbit} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn width={130}>
-                    <FlagSelector id="event_code" flags={QUEST_EVENT_CODES} value={qlog.event_code} onChange={this.handleChange.bind(this)} />
+                    <FlagSelector 
+                        id="event_code" 
+                        errorText={qlog.validate("event_code")} 
+                        flags={QUEST_EVENT_CODES} 
+                        value={qlog.event_code} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="qlog_text" fullWidth={true} value={qlog.qlog_text} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        id="qlog_text" 
+                        errorText={qlog.validate("qlog_text")} 
+                        fullWidth={true} 
+                        value={qlog.qlog_text} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
             ))

@@ -88,7 +88,23 @@ class Model {
         hash.set(this, result);
         let result_props = {}
         for (var prop in props) {
-            result_props[prop] = props[prop].value instanceof Model ? props[prop].value.clone(hash) : props[prop].value;
+            if (props[prop].value instanceof Model) {
+                result_props[prop] = props[prop].value.clone(hash);
+            }
+            else if (props[prop].value instanceof Array) {
+                result_props[prop] = [];
+                for (let i of props[prop].value) {
+                    if (i instanceof Model) {
+                        result_props[prop].push(i.clone(hash));
+                    }
+                    else {
+                        result_props[prop].push(i);
+                    }
+                }
+            }
+            else {
+                result_props[prop] = props[prop].value;
+            }
         }
         return Object.assign(result, result_props);
     }

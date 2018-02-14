@@ -228,31 +228,102 @@ class RoomEditor extends ModelComponent {
             <Dialog title="Edit Room" modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.model.vnum} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" fullWidth={true} value={this.props.model.sdesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.model.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="vnum" 
+                            id="vnum" 
+                            errorText={this.props.model.validate("vnum")} 
+                            value={this.props.model.vnum} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Short description" 
+                            id="sdesc" 
+                            errorText={this.props.model.validate("sdesc")} 
+                            fullWidth={true} 
+                            value={this.props.model.sdesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Long description" 
+                            id="ldesc" 
+                            errorText={this.props.model.validate("ldesc")} 
+                            multiLine={true} 
+                            rows={5} 
+                            fullWidth={true} 
+                            value={this.props.model.ldesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Details">
-                        <MultiFlagSelector id="room_flags" label="Room Flags" flags={ROOM_FLAGS} value={this.props.model.room_flags} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="sector" label="Sector" flags={ROOM_SECTOR_FLAGS} value={this.props.model.sector} onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Teleport Delay" id="teleport_delay" value={this.props.model.teleport_delay} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <VnumAutoComplete floatingLabelText="Teleport Target" id="teleport_target" value={this.props.model.teleport_target} onChange={this.handleChange.bind(this)} dataSource={this.props.rooms} />
-                        <TextField floatingLabelText="Room Capacity [Tunnel]" id="tunnel" value={this.props.model.tunnel} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector 
+                            id="room_flags" 
+                            errorText={this.props.model.validate("room_flags")} 
+                            label="Room Flags" 
+                            flags={ROOM_FLAGS} 
+                            value={this.props.model.room_flags} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="sector" 
+                            errorText={this.props.model.validate("sector")} 
+                            label="Sector" 
+                            flags={ROOM_SECTOR_FLAGS} 
+                            value={this.props.model.sector} 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Teleport Delay" 
+                            id="teleport_delay" 
+                            errorText={this.props.model.validate("teleport_delay")} 
+                            value={this.props.model.teleport_delay} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <VnumAutoComplete 
+                            floatingLabelText="Teleport Target" 
+                            id="teleport_target" 
+                            errorText={this.props.model.validate("teleport_target")} 
+                            value={this.props.model.teleport_target} 
+                            onChange={this.handleChange.bind(this)} 
+                            dataSource={this.props.rooms} />
+                        <TextField 
+                            floatingLabelText="Room Capacity [Tunnel]" 
+                            id="tunnel" 
+                            errorText={this.props.model.validate("tunnel")} 
+                            value={this.props.model.tunnel} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Extra Descs">
-                        <ExtraDescriptionsEditor id="extra_descriptions" model={this.props.model.extra_descriptions} onChange={this.handleChange.bind(this)} />
+                        <ExtraDescriptionsEditor 
+                            id="extra_descriptions" 
+                            model={this.props.model.extra_descriptions} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Exits">
-                        <ExitsEditor id="exits" model={this.props.model.exits} rooms={this.props.rooms} items={this.props.items} onChange={this.handleChange.bind(this)} />
+                        <ExitsEditor 
+                            id="exits" 
+                            model={this.props.model.exits} 
+                            rooms={this.props.rooms} 
+                            items={this.props.items} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Programs">
-                        <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
+                        <ProgramsEditor 
+                            id="programs" 
+                            model={this.props.model.programs} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Resets">
                         <Subheader>Room Resets</Subheader>
-                        <RoomResetsEditor id="room_resets" model={this.props.model.room_resets} room={this.props.model} onChange={this.handleChange.bind(this)} />
+                        <RoomResetsEditor 
+                            id="room_resets" 
+                            model={this.props.model.room_resets} 
+                            room={this.props.model} 
+                            onChange={this.handleChange.bind(this)} />
                         <Subheader>Door Resets</Subheader>
-                        <DoorResetsEditor id="door_resets" model={this.props.model.door_resets} room={this.props.model} onChange={this.handleChange.bind(this)} />
+                        <DoorResetsEditor 
+                            id="door_resets" 
+                            model={this.props.model.door_resets} 
+                            room={this.props.model} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>  
@@ -268,13 +339,57 @@ class ExitsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <FlagSelector id="direction" label="Direction" flags={EXIT_DIRECTIONS} value={exit.direction} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TextField floatingLabelText="Comment" id={"comment_"+index} fullWidth={true} value={exit.comment} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TextField floatingLabelText={exit.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} id="somewhere_door_keyword" fullWidth={true} value={exit.somewhere_door_keyword} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <MultiFlagSelector id="door_flags" label="Door Flags" flags={EXIT_DOOR_FLAGS} value={exit.door_flags} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <VnumAutoComplete floatingLabelText="Door Key" id="door_key" value={exit.door_key} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.items} />
-                <VnumAutoComplete floatingLabelText="Exit Target" id="target_vnum" value={exit.target_vnum} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
-                <FlagSelector id="exit_size" label="Exit Size" flags={EXIT_SIZES} value={exit.exit_size} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    id="direction" 
+                    errorText={exit.validate("direction")} 
+                    label="Direction" 
+                    flags={EXIT_DIRECTIONS} 
+                    value={exit.direction} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Comment" 
+                    id="comment"
+                    errorText={exit.validate("comment")} 
+                    fullWidth={true} 
+                    value={exit.comment} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText={exit.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} 
+                    id="somewhere_door_keyword" 
+                    errorText={exit.validate("somewhere_door_keyword")} 
+                    fullWidth={true} 
+                    value={exit.somewhere_door_keyword} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <MultiFlagSelector 
+                    id="door_flags" 
+                    errorText={exit.validate("door_flags")} 
+                    label="Door Flags" 
+                    flags={EXIT_DOOR_FLAGS} 
+                    value={exit.door_flags} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete 
+                    floatingLabelText="Door Key" 
+                    id="door_key" 
+                    errorText={exit.validate("door_key")} 
+                    value={exit.door_key} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
+                    dataSource={this.props.items} />
+                <VnumAutoComplete 
+                    floatingLabelText="Exit Target" 
+                    id="target_vnum" 
+                    errorText={exit.validate("target_vnum")} 
+                    value={exit.target_vnum} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
+                    dataSource={this.props.rooms} />
+                <FlagSelector 
+                    id="exit_size" 
+                    errorText={exit.validate("exit_size")} 
+                    label="Exit Size" 
+                    flags={EXIT_SIZES} 
+                    value={exit.exit_size} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
@@ -286,9 +401,24 @@ class DoorResetsEditor extends ModelArrayComponent {
         return this.props.model.map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 {/*<VnumAutoComplete floatingLabelText="Room" id="room" value={reset.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />*/}
-                <FlagSelector id="exit" label="Exit" flags={DOOR_RESET_DIRECTIONS} value={reset.exit} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <FlagSelector id="exit_state" label="Exit State" flags={DOOR_RESET_FLAGS} value={reset.exit_state} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TrapResetEditor id="trap_reset" model={reset.trap_reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    id="exit" 
+                    errorText={reset.validate("exit")} 
+                    label="Exit" 
+                    flags={DOOR_RESET_DIRECTIONS} 
+                    value={reset.exit} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    id="exit_state" 
+                    errorText={reset.validate("exit_state")} 
+                    label="Exit State" 
+                    flags={DOOR_RESET_FLAGS} 
+                    value={reset.exit_state} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor 
+                    id="trap_reset" 
+                    model={reset.trap_reset} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
@@ -310,8 +440,20 @@ class RoomResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <FlagSelector id="bit_type" label="Reset Bit" flags={RESET_BIT_CODES} value={reset.bit_type} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <FlagSelector id="flag" label="Room Flag" flags={ROOM_FLAGS} value={reset.flag} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    id="bit_type" 
+                    errorText={reset.validate("bit_type")} 
+                    label="Reset Bit" 
+                    flags={RESET_BIT_CODES} 
+                    value={reset.bit_type} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    id="flag" 
+                    errorText={reset.validate("flag")} 
+                    label="Room Flag" 
+                    flags={ROOM_FLAGS} 
+                    value={reset.flag} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }

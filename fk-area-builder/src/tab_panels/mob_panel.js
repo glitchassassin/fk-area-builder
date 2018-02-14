@@ -231,7 +231,7 @@ class MobPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <MobEditor open={this.state.open} handleClose={this.handleClose} model={this.props.area.mobs[this.state.current_mob]} rooms={this.props.area.rooms} onChange={this.handleChange.bind(this)} />
+            <MobEditor open={this.state.open} handleClose={this.handleClose} model={this.props.area.mobs[this.state.current_mob]} rooms={this.props.area.rooms} items={this.props.area.items} onChange={this.handleChange.bind(this)} />
             <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
             <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${this.props.area.mobs[this.state.current_mob].vnum}`}>
                 <List>
@@ -351,7 +351,7 @@ class MobEditor extends ModelComponent {
                         <RepairsEditor id="repairs" model={this.props.model.repairs} mob={this.props.model} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Resets">
-                        <MobResetsEditor model={this.props.model.mob_resets} mob={this.props.model} rooms={this.props.rooms} onChange={this.handleChange.bind(this)} />
+                        <MobResetsEditor id="mob_resets" model={this.props.model.mob_resets} mob={this.props.model} rooms={this.props.rooms} items={this.props.items} onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>
@@ -373,10 +373,10 @@ class ShopsEditor extends ModelComponent {
     }
     render() {
         return (
-            <Card   expanded={this.props.model!==null}
-                    title="Shopkeeper">
+            <Card expanded={this.props.model!==null} title="Shopkeeper">
                 <CardText>
-                    <Toggle toggled={this.props.model!==null}
+                    <Toggle 
+                        toggled={this.props.model!==null}
                         onToggle={this.handleShopToggle.bind(this)}
                         labelPosition="right"
                         label="Shopkeeper"
@@ -385,15 +385,69 @@ class ShopsEditor extends ModelComponent {
                 <CardText expandable={true}>
                     {this.props.model && (
                         <React.Fragment>
-                        <FlagSelector id="will_buy_1" label="Will Buy 1" flags={ITEM_TYPES} value={this.props.model.will_buy_1} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="will_buy_2" label="Will Buy 2" flags={ITEM_TYPES} value={this.props.model.will_buy_2} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="will_buy_3" label="Will Buy 3" flags={ITEM_TYPES} value={this.props.model.will_buy_3} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="will_buy_4" label="Will Buy 4" flags={ITEM_TYPES} value={this.props.model.will_buy_4} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="will_buy_5" label="Will Buy 5" flags={ITEM_TYPES} value={this.props.model.will_buy_5} onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Profit (Buy)" id="profit_buy" value={this.props.model.profit_buy} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Profit (Sell)" id="profit_sell" value={this.props.model.profit_sell} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Open Hour" id="open_hour" value={this.props.model.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Close Hour" id="close_hour" value={this.props.model.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_buy_1" 
+                            errorText={this.props.model.validate("will_buy_1")} 
+                            label="Will Buy 1" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_buy_1} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_buy_2" 
+                            errorText={this.props.model.validate("will_buy_2")} 
+                            label="Will Buy 2" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_buy_2} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_buy_3" 
+                            errorText={this.props.model.validate("will_buy_3")} 
+                            label="Will Buy 3" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_buy_3} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_buy_4" 
+                            errorText={this.props.model.validate("will_buy_4")} 
+                            label="Will Buy 4" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_buy_4} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_buy_5" 
+                            errorText={this.props.model.validate("will_buy_5")} 
+                            label="Will Buy 5" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_buy_5} 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Profit (Buy)" 
+                            id="profit_buy" 
+                            errorText={this.props.model.validate("profit_buy")} 
+                            value={this.props.model.profit_buy} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Profit (Sell)" 
+                            id="profit_sell" 
+                            errorText={this.props.model.validate("profit_sell")} 
+                            value={this.props.model.profit_sell} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Open Hour" 
+                            id="open_hour" 
+                            errorText={this.props.model.validate("open_hour")} 
+                            value={this.props.model.open_hour} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Close Hour" 
+                            id="close_hour" 
+                            errorText={this.props.model.validate("close_hour")} 
+                            value={this.props.model.close_hour} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
                         </React.Fragment>
                     )}
                 </CardText>
@@ -416,25 +470,66 @@ class RepairsEditor extends ModelComponent {
     }
     render() {
         return (
-            <Card   expanded={this.props.model!==null}
-                    title="Repairer">
+            <Card expanded={this.props.model!==null} title="Repairer">
                 <CardText>
-                    <Toggle toggled={this.props.model!==null}
+                    <Toggle 
+                        toggled={this.props.model!==null}
                         onToggle={this.handleRepairsToggle.bind(this)}
                         labelPosition="right"
-                        label="Repairs"
-                    />
+                        label="Repairs" />
                 </CardText>
                 <CardText expandable={true}>
                     {this.props.model && (
                         <React.Fragment>
-                        <FlagSelector id="will_repair_1" label="Will Repair 1" flags={ITEM_TYPES} value={this.props.model.will_repair_1} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="will_repair_2" label="Will Repair 2" flags={ITEM_TYPES} value={this.props.model.will_repair_2} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="repair_material" label="Repair Material" flags={MOB_REPAIR_MATERIAL} value={this.props.model.repair_material} onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Profit Modifier" id="profit_modifier" value={this.props.model.profit_modifier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="repair" label="Repair/Recharge" flags={MOB_REPAIR_RECHARGE} value={this.props.model.repair} onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Open Hour" id="open_hour" value={this.props.model.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Close Hour" id="close_hour" value={this.props.model.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_repair_1" 
+                            errorText={this.props.model.validate("will_repair_1")}
+                            label="Will Repair 1" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_repair_1} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="will_repair_2" 
+                            errorText={this.props.model.validate("will_repair_2")}
+                            label="Will Repair 2" 
+                            flags={ITEM_TYPES} 
+                            value={this.props.model.will_repair_2} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="repair_material" 
+                            errorText={this.props.model.validate("repair_material")}
+                            label="Repair Material" 
+                            flags={MOB_REPAIR_MATERIAL} 
+                            value={this.props.model.repair_material} 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Profit Modifier" 
+                            id="profit_modifier" 
+                            errorText={this.props.model.validate("profit_modifier")}
+                            value={this.props.model.profit_modifier} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="repair" 
+                            errorText={this.props.model.validate("repair")}
+                            label="Repair/Recharge" 
+                            flags={MOB_REPAIR_RECHARGE} 
+                            value={this.props.model.repair} 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Open Hour" 
+                            id="open_hour" 
+                            errorText={this.props.model.validate("open_hour")}
+                            value={this.props.model.open_hour} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Close Hour" 
+                            id="close_hour" 
+                            errorText={this.props.model.validate("close_hour")}
+                            value={this.props.model.close_hour} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
                         </React.Fragment>
                     )}
                 </CardText>
@@ -451,9 +546,27 @@ class MobResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <TextField floatingLabelText="Limit" id="mob_limit" value={resets.mob_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <VnumAutoComplete floatingLabelText="Starting Room" id="target_vnum" value={resets.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
-                <EquipmentResetsEditor id="equipment" model={this.props.model[index].equipment} mob_reset={this.props.model} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Limit" 
+                    id="mob_limit" 
+                    errorText={resets.validate("mob_limit")}
+                    value={resets.mob_limit} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete 
+                    floatingLabelText="Starting Room"
+                    id="room"  
+                    errorText={resets.validate("room")}
+                    value={resets.room}  
+                    onChange={(e,v)=>(this.handleChange(e,v,index))}
+                    dataSource={this.props.rooms} />
+                <EquipmentResetsEditor 
+                    id="equipment" 
+                    errorText={resets.validate("equipment")}
+                    model={resets.equipment} 
+                    mob_reset={this.props.model} 
+                    items={this.props.items} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
@@ -475,10 +588,31 @@ class EquipmentResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <VnumAutoComplete floatingLabelText="Item" id="item" value={resets.item} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.area.items} />
-                <TextField floatingLabelText="Equip Limit" id="equip_limit" value={resets.equip_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <FlagSelector id="wear_loc" label="Wear Location" flags={MOB_WEAR_POSITIONS} value={resets.wear_loc} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TrapResetEditor id="trap_reset" item={resets} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <VnumAutoComplete 
+                    floatingLabelText="Item" 
+                    id="item" 
+                    errorText={resets.validate("item")}
+                    value={resets.item} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
+                    dataSource={this.props.items} />
+                <TextField 
+                    floatingLabelText="Equip Limit" 
+                    id="equip_limit" 
+                    errorText={resets.validate("equip_limit")}
+                    value={resets.equip_limit} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    id="wear_loc" 
+                    errorText={resets.validate("wear_loc")}
+                    label="Wear Location" 
+                    flags={MOB_WEAR_POSITIONS} 
+                    value={resets.wear_loc} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor 
+                    id="trap_reset" 
+                    model={resets.trap_reset} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
@@ -494,8 +628,6 @@ class EquipmentResetsEditor extends ModelArrayComponent {
         )
     }
 }
-
-
 
 class CanTrainRenderer extends ModelArrayComponent {
     render() {
@@ -533,13 +665,29 @@ class CanTrainSkillEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
-                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="level" 
+                        errorText={skill.validate("level")}
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="price_multiplier" 
+                        errorText={skill.validate("price_multiplier")}
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id="skill" label="Skill" flags={MOB_SKILLS} value={skill.skill} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <FlagSelector 
+                        id="skill" 
+                        errorText={skill.validate("skill")}
+                        label="Skill" 
+                        flags={MOB_SKILLS} 
+                        value={skill.skill} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
         ));
@@ -555,13 +703,29 @@ class CanTrainWeaponSkillEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.remove(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
-                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="level" 
+                        errorText={skill.validate("level")}
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="price_multiplier" 
+                        errorText={skill.validate("price_multiplier")}
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id="weapon_skill" label="Weapon Skill" flags={MOB_WEAPON_SKILLS} value={skill.weapon_skill} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <FlagSelector 
+                        id="weapon_skill" 
+                        errorText={skill.validate("weapon_skill")}
+                        label="Weapon Skill" 
+                        flags={MOB_WEAPON_SKILLS} 
+                        value={skill.weapon_skill} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
         ));
@@ -577,13 +741,29 @@ class CanTrainSpellEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
-                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="level" 
+                        errorText={skill.validate("level")}
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="price_multiplier" 
+                        errorText={skill.validate("price_multiplier")}
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id="spell" label="Spell" flags={MOB_SPELLS} value={skill.spell} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <FlagSelector 
+                        id="spell" 
+                        errorText={skill.validate("spell")}
+                        label="Spell" 
+                        flags={MOB_SPELLS} 
+                        value={skill.spell} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
         ));
@@ -599,10 +779,20 @@ class CanTrainLevelEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
-                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="level" 
+                        errorText={skill.validate("level")}
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="price_multiplier" 
+                        errorText={skill.validate("price_multiplier")}
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
         ));
@@ -618,13 +808,29 @@ class CanTrainStatisticEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
-                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="level" 
+                        errorText={skill.validate("level")}
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="price_multiplier" 
+                        errorText={skill.validate("price_multiplier")}
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id="statistic" label="Statistic" flags={MOB_STATISTICS} value={skill.statistic} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <FlagSelector 
+                        id="statistic" 
+                        errorText={skill.validate("statistic")}
+                        label="Statistic" 
+                        flags={MOB_STATISTICS} 
+                        value={skill.statistic} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
         ));
@@ -640,13 +846,29 @@ class CanTrainFeatEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
-                    <TextField id="level" value={skill.level} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="level" 
+                        errorText={skill.validate("level")}
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <TextField id="price_multiplier" value={skill.price_multiplier} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <TextField 
+                        id="price_multiplier" 
+                        errorText={skill.validate("price_multiplier")}
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
                 <TableRowColumn>
-                    <FlagSelector id="feat" label="Feat" flags={MOB_FEATS} value={skill.feat} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    <FlagSelector 
+                        id="feat" 
+                        errorText={skill.validate("feat")}
+                        label="Feat" 
+                        flags={MOB_FEATS} 
+                        value={skill.feat} 
+                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 </TableRowColumn>
             </TableRow>
         ));

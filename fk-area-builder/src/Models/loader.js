@@ -448,8 +448,8 @@ class Loader {
                 exit.comment = exit_matches[2];
                 exit.somewhere_door_keyword = exit_matches[3];
                 exit.door_flags = get_codes(exit_matches[4].split("|"), flags.EXIT_DOOR_FLAGS);
-                exit.door_key = exit_matches[5];
-                exit.target_vnum = exit_matches[6];
+                exit.door_key = this.get_item(exit_matches[5]);
+                exit.target_vnum = this.get_room(exit_matches[6]);
                 exit.exit_size = get_code(exit_matches[7], flags.EXIT_SIZES) || flags.EXIT_SIZES.EXIT_SIZE_ANY;
                 room.exits.push(exit);
             }

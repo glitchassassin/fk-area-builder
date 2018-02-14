@@ -14,7 +14,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Forgotten Kingdoms Area Builder</h1>
-          <div class="footer"><a href="https://github.com/glitchassassin/fk-ascii-editor">Hosted on GitHub</a></div>
+          <div className="footer"><a href="https://github.com/glitchassassin/fk-ascii-editor">Hosted on GitHub</a></div>
         </header>
         <div className="App-intro">
           <MuiThemeProvider>

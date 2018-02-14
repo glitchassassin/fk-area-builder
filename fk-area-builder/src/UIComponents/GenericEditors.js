@@ -45,12 +45,45 @@ class TrapResetEditor extends ModelComponent {
             return (
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
                     <Subheader>Trap Reset</Subheader>
-                    <TextField floatingLabelText="Reset interval" id="reset_interval" value={this.props.model.reset_interval} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                    <FlagSelector label="Trap type" id="trap_type" flags={TRAP_TYPES} value={this.props.model.trap_type} onChange={this.handleChange.bind(this)} />
-                    <TextField floatingLabelText="Trap charges" id="trap_charges" value={this.props.model.trap_charges} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                    <FlagSelector label="Trap trigger 1" id="trigger_1" flags={TRAP_TRIGGERS} value={this.props.model.trigger_1} onChange={this.handleChange.bind(this)} />
-                    <FlagSelector label="Trap trigger 2" id="trigger_2" flags={TRAP_TRIGGERS} value={this.props.model.trigger_2} onChange={this.handleChange.bind(this)} />
-                    <RaisedButton label="Remove Trap Reset" onClick={this.remove.bind(this)} icon={<FontIcon className="material-icons">remove_circle</FontIcon>}/>
+                    <TextField 
+                        floatingLabelText="Reset interval" 
+                        id="reset_interval" 
+                        errorText={this.props.model.validate("reset_interval")} 
+                        value={this.props.model.reset_interval} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <FlagSelector 
+                        label="Trap type" 
+                        id="trap_type" 
+                        errorText={this.props.model.validate("trap_type")} 
+                        flags={TRAP_TYPES} 
+                        value={this.props.model.trap_type} 
+                        onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        floatingLabelText="Trap charges" 
+                        id="trap_charges" 
+                        errorText={this.props.model.validate("trap_charges")} 
+                        value={this.props.model.trap_charges} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <FlagSelector 
+                        label="Trap trigger 1" 
+                        id="trigger_1" 
+                        errorText={this.props.model.validate("trigger_1")} 
+                        flags={TRAP_TRIGGERS} 
+                        value={this.props.model.trigger_1} 
+                        onChange={this.handleChange.bind(this)} />
+                    <FlagSelector 
+                        label="Trap trigger 2" 
+                        id="trigger_2" 
+                        errorText={this.props.model.validate("trigger_2")} 
+                        flags={TRAP_TRIGGERS} 
+                        value={this.props.model.trigger_2} 
+                        onChange={this.handleChange.bind(this)} />
+                    <RaisedButton 
+                        label="Remove Trap Reset" 
+                        onClick={this.remove.bind(this)} 
+                        icon={<FontIcon className="material-icons">remove_circle</FontIcon>}/>
                 </Paper>
             );
         }
@@ -73,8 +106,26 @@ class ExtraDescriptionsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <TextField floatingLabelText="Keywords (space separated)" id="keywords" index={index} fullWidth={true} value={ed.keywords} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TextField floatingLabelText="Long description" id="ldesc" index={index} multiLine={true} rows={5} fullWidth={true} value={ed.ldesc} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Keywords (space separated)" 
+                    id="keywords" 
+                    errorText={ed.validate("keywords")} 
+                    index={index} 
+                    fullWidth={true} 
+                    value={ed.keywords} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Long description" 
+                    id="ldesc" 
+                    errorText={ed.validate("ldesc")} 
+                    index={index} 
+                    multiLine={true} 
+                    rows={5} 
+                    fullWidth={true} 
+                    value={ed.ldesc} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
@@ -89,9 +140,30 @@ class ProgramsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
-                <FlagSelector label="Trigger" id="trigger" flags={MOB_PROGRAM_TRIGGERS} value={program.trigger} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TextField floatingLabelText="Variable" id="argument" value={program.argument} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TextField floatingLabelText="Program" id="program" multiLine={true} rows={5} fullWidth={true} value={program.program} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <FlagSelector 
+                    label="Trigger" 
+                    id="trigger" 
+                    errorText={program.validate("trigger")} 
+                    flags={MOB_PROGRAM_TRIGGERS} 
+                    value={program.trigger} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Variable" 
+                    id="argument" 
+                    errorText={program.validate("argument")} 
+                    value={program.argument} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Program" 
+                    id="program" 
+                    errorText={program.validate("program")} 
+                    multiLine={true} 
+                    rows={5} 
+                    fullWidth={true} 
+                    value={program.program} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
