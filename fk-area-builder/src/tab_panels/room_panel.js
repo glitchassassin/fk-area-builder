@@ -288,7 +288,7 @@ class DoorResetsEditor extends ModelArrayComponent {
                 {/*<VnumAutoComplete floatingLabelText="Room" id="room" value={reset.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />*/}
                 <FlagSelector id="exit" label="Exit" flags={DOOR_RESET_DIRECTIONS} value={reset.exit} onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <FlagSelector id="exit_state" label="Exit State" flags={DOOR_RESET_FLAGS} value={reset.exit_state} onChange={(e,v)=>(this.handleChange(e,v,index))} />
-                <TrapResetEditor id="trap_reset" item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor id="trap_reset" model={reset.trap_reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }

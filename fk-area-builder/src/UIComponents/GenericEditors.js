@@ -31,13 +31,7 @@ const paper_style = {
     maxWidth: "900px"
 }
 
-class TrapResetEditor extends React.Component {
-    handleChange(event, value, index) {
-        let trap_reset = this.props.item.trap_reset.clone()
-        trap_reset[event.target.id] = value;
-        this.props.onChange({target:{id:this.props.id}}, trap_reset);
-    }
-    
+class TrapResetEditor extends ModelComponent {
     handleNew() {
         this.props.onChange({target:{id:this.props.id}}, new TrapReset());
     }
@@ -47,15 +41,15 @@ class TrapResetEditor extends React.Component {
     }
     
     render() {
-        if (this.props.item.trap_reset) {
+        if (this.props.model !== null) {
             return (
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
                     <Subheader>Trap Reset</Subheader>
-                    <TextField floatingLabelText="Reset interval" id="reset_interval" value={this.props.item.trap_reset.reset_interval} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                    <FlagSelector label="Trap type" id="trap_type" flags={TRAP_TYPES} value={this.props.item.trap_reset.trap_type} onChange={this.handleChange.bind(this)} />
-                    <TextField floatingLabelText="Trap charges" id="trap_charges" value={this.props.item.trap_reset.trap_charges} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                    <FlagSelector label="Trap trigger 1" id="trigger_1" flags={TRAP_TRIGGERS} value={this.props.item.trap_reset.trigger_1} onChange={this.handleChange.bind(this)} />
-                    <FlagSelector label="Trap trigger 2" id="trigger_2" flags={TRAP_TRIGGERS} value={this.props.item.trap_reset.trigger_2} onChange={this.handleChange.bind(this)} />
+                    <TextField floatingLabelText="Reset interval" id="reset_interval" value={this.props.model.reset_interval} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <FlagSelector label="Trap type" id="trap_type" flags={TRAP_TYPES} value={this.props.model.trap_type} onChange={this.handleChange.bind(this)} />
+                    <TextField floatingLabelText="Trap charges" id="trap_charges" value={this.props.model.trap_charges} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                    <FlagSelector label="Trap trigger 1" id="trigger_1" flags={TRAP_TRIGGERS} value={this.props.model.trigger_1} onChange={this.handleChange.bind(this)} />
+                    <FlagSelector label="Trap trigger 2" id="trigger_2" flags={TRAP_TRIGGERS} value={this.props.model.trigger_2} onChange={this.handleChange.bind(this)} />
                     <RaisedButton label="Remove Trap Reset" onClick={this.remove.bind(this)} icon={<FontIcon className="material-icons">remove_circle</FontIcon>}/>
                 </Paper>
             );

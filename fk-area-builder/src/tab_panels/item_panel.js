@@ -396,7 +396,7 @@ class ItemResetsEditor extends ModelArrayComponent {
                 <TextField floatingLabelText="Item Limit" id="item_limit" value={reset.item_limit} autoComplete="off" onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <Checkbox label="Hidden" id="hidden" checked={reset.hidden} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
                 <Checkbox label="Buried" id="buried" checked={reset.buried} onCheck={(e,v)=>(this.handleChange(e,v,index))} />
-                <TrapResetEditor id="trap_reset" item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TrapResetEditor id="trap_reset" model={reset.trap_reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <ItemResetsContentsEditor id="contents" model={this.props.model.contents} item={reset} onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));

@@ -252,17 +252,6 @@ const paper_style = {
 
 class MobEditor extends ModelComponent {
     modelClass = SimpleMob;
-    handleShopToggle() {
-        let model = this.props.model.clone();
-        if (model.shop === null) {
-            model.shop = new Shop();
-            model.shop.shopkeeper = model;
-        }
-        else {
-            model.shop = null;
-        }
-        this.props.onChange({target:this.props}, model);
-    }
     
     handleRepairsToggle() {
         let model = this.props.model.clone();
@@ -358,60 +347,98 @@ class MobEditor extends ModelComponent {
                         <ProgramsEditor id="programs" model={this.props.model.programs} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Shops">
-                        <Card   expanded={this.props.model.shop!==null}
-                                title="Shopkeeper">
-                            <CardText>
-                                <Toggle toggled={this.props.model.shop!==null}
-                                    onToggle={this.handleShopToggle.bind(this)}
-                                    labelPosition="right"
-                                    label="Shopkeeper"
-                                />
-                            </CardText>
-                            <CardText expandable={true}>
-                                {this.props.model.shop && (
-                                    <React.Fragment>
-                                    <FlagSelector id="shop will_buy_1" label="Will Buy 1" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_1} onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="shop will_buy_2" label="Will Buy 2" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_2} onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="shop will_buy_3" label="Will Buy 3" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_3} onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="shop will_buy_4" label="Will Buy 4" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_4} onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="shop will_buy_5" label="Will Buy 5" flags={ITEM_TYPES} value={this.props.model.shop.will_buy_5} onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Profit (Buy)" id="shop profit_buy" value={this.props.model.shop.profit_buy} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Profit (Sell)" id="shop profit_sell" value={this.props.model.shop.profit_sell} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Open Hour" id="shop open_hour" value={this.props.model.shop.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Close Hour" id="shop close_hour" value={this.props.model.shop.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    </React.Fragment>
-                                )}
-                            </CardText>
-                        </Card>
-                        <Card   expanded={this.props.model.repairs!==null}
-                                title="Repairer">
-                            <CardText>
-                                <Toggle toggled={this.props.model.repairs!==null}
-                                    onToggle={this.handleRepairsToggle.bind(this)}
-                                    labelPosition="right"
-                                    label="Repairs"
-                                />
-                            </CardText>
-                            <CardText expandable={true}>
-                                {this.props.model.repairs && (
-                                    <React.Fragment>
-                                    <FlagSelector id="repairs will_repair_1" label="Will Repair 1" flags={ITEM_TYPES} value={this.props.model.repairs.will_repair_1} onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="repairs will_repair_2" label="Will Repair 2" flags={ITEM_TYPES} value={this.props.model.repairs.will_repair_2} onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="repairs repair_material" label="Repair Material" flags={MOB_REPAIR_MATERIAL} value={this.props.model.repairs.repair_material} onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Profit Modifier" id="repairs profit_modifier" value={this.props.model.repairs.profit_modifier} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    <FlagSelector id="repairs repair" label="Repair/Recharge" flags={MOB_REPAIR_RECHARGE} value={this.props.model.repairs.repair} onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Open Hour" id="repairs open_hour" value={this.props.model.repairs.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    <TextField floatingLabelText="Close Hour" id="repairs close_hour" value={this.props.model.repairs.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                                    </React.Fragment>
-                                )}
-                            </CardText>
-                        </Card>
+                        <ShopsEditor id="shop" model={this.props.model.shop} mob={this.props.model} onChange={this.handleChange.bind(this)} />
+                        <RepairsEditor id="repairs" model={this.props.model.repairs} mob={this.props.model} onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Resets">
                         <MobResetsEditor model={this.props.model.mob_resets} mob={this.props.model} rooms={this.props.rooms} onChange={this.handleChange.bind(this)} />
                     </Tab>
                 </Tabs>
             </Dialog>
+        )
+    }
+}
+
+class ShopsEditor extends ModelComponent {
+    handleShopToggle() {
+        var model;
+        if (this.props.model === null) {
+            model = new Shop();
+            model.shopkeeper = this.props.mob;
+        }
+        else {
+            model = null;
+        }
+        this.props.onChange({target:this.props}, model);
+    }
+    render() {
+        return (
+            <Card   expanded={this.props.model!==null}
+                    title="Shopkeeper">
+                <CardText>
+                    <Toggle toggled={this.props.model!==null}
+                        onToggle={this.handleShopToggle.bind(this)}
+                        labelPosition="right"
+                        label="Shopkeeper"
+                    />
+                </CardText>
+                <CardText expandable={true}>
+                    {this.props.model && (
+                        <React.Fragment>
+                        <FlagSelector id="will_buy_1" label="Will Buy 1" flags={ITEM_TYPES} value={this.props.model.will_buy_1} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="will_buy_2" label="Will Buy 2" flags={ITEM_TYPES} value={this.props.model.will_buy_2} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="will_buy_3" label="Will Buy 3" flags={ITEM_TYPES} value={this.props.model.will_buy_3} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="will_buy_4" label="Will Buy 4" flags={ITEM_TYPES} value={this.props.model.will_buy_4} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="will_buy_5" label="Will Buy 5" flags={ITEM_TYPES} value={this.props.model.will_buy_5} onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Profit (Buy)" id="profit_buy" value={this.props.model.profit_buy} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Profit (Sell)" id="profit_sell" value={this.props.model.profit_sell} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Open Hour" id="open_hour" value={this.props.model.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Close Hour" id="close_hour" value={this.props.model.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        </React.Fragment>
+                    )}
+                </CardText>
+            </Card>
+        )
+    }
+}
+
+class RepairsEditor extends ModelComponent {
+    handleRepairsToggle() {
+        var model;
+        if (this.props.model === null) {
+            model = new RepairRecharge();
+            model.shopkeeper = this.props.mob;
+        }
+        else {
+            model = null;
+        }
+        this.props.onChange({target:this.props}, model);
+    }
+    render() {
+        return (
+            <Card   expanded={this.props.model!==null}
+                    title="Repairer">
+                <CardText>
+                    <Toggle toggled={this.props.model!==null}
+                        onToggle={this.handleRepairsToggle.bind(this)}
+                        labelPosition="right"
+                        label="Repairs"
+                    />
+                </CardText>
+                <CardText expandable={true}>
+                    {this.props.model && (
+                        <React.Fragment>
+                        <FlagSelector id="will_repair_1" label="Will Repair 1" flags={ITEM_TYPES} value={this.props.model.will_repair_1} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="will_repair_2" label="Will Repair 2" flags={ITEM_TYPES} value={this.props.model.will_repair_2} onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="repair_material" label="Repair Material" flags={MOB_REPAIR_MATERIAL} value={this.props.model.repair_material} onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Profit Modifier" id="profit_modifier" value={this.props.model.profit_modifier} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <FlagSelector id="repair" label="Repair/Recharge" flags={MOB_REPAIR_RECHARGE} value={this.props.model.repair} onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Open Hour" id="open_hour" value={this.props.model.open_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField floatingLabelText="Close Hour" id="close_hour" value={this.props.model.close_hour} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        </React.Fragment>
+                    )}
+                </CardText>
+            </Card>
         )
     }
 }
