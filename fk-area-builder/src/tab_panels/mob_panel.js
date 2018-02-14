@@ -231,15 +231,19 @@ class MobPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <MobEditor open={this.state.open} handleClose={this.handleClose} model={this.props.area.mobs[this.state.current_mob]} rooms={this.props.area.rooms} items={this.props.area.items} onChange={this.handleChange.bind(this)} />
-            <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
-            <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${this.props.area.mobs[this.state.current_mob].vnum}`}>
-                <List>
-                    {this.props.area.mobs[this.state.current_mob].validate().map((error, index) => (
-                        <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
-                    ))}
-                </List>
-            </Dialog>
+            {this.props.area.mobs[this.state.current_mob] !== undefined &&
+            <React.Fragment>
+                <MobEditor open={this.state.open} handleClose={this.handleClose} model={this.props.area.mobs[this.state.current_mob]} rooms={this.props.area.rooms} items={this.props.area.items} onChange={this.handleChange.bind(this)} />
+                <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
+                <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${this.props.area.mobs[this.state.current_mob].vnum}`}>
+                    <List>
+                        {this.props.area.mobs[this.state.current_mob].validate().map((error, index) => (
+                            <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                        ))}
+                    </List>
+                </Dialog>
+            </React.Fragment>
+            }
         </div>
         )
     }

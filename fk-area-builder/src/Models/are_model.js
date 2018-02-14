@@ -62,11 +62,6 @@ class Area extends Model {
         if (this.authors.length >= 36) {
             errors.push(`${this._error_prefix}.authors List too long (max 36 characters)`);
         }
-        for (let i = 0; i < this.authors.length; i++) {
-            if (this.authors[i].indexOf(" ") != -1) {
-                errors.push(`${this._error_prefix}.authors Spaces are not permitted in author names ("${this.authors[i]}")`);
-            }
-        }
         // Level range
         if (!(0 < this.min_recommended_level <= 65)) {
             errors.push(`${this._error_prefix}.min_recommended_level must be between 0 and 65`);

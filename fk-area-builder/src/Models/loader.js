@@ -1204,4 +1204,4 @@ S
 `);
 }
 
-export default testLoader;
+export default Loader;

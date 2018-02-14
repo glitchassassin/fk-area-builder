@@ -199,15 +199,19 @@ class RoomPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <RoomEditor open={this.state.open} handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.rooms[this.state.current_room]} items={this.props.area.items} rooms={this.props.area.rooms} />
-            <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
-            <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for room ${this.props.area.rooms[this.state.current_room].vnum}`}>
-                <List>
-                    {this.props.area.rooms[this.state.current_room].validate().map((error, index) => (
-                        <ListItem id={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
-                    ))}
-                </List>
-            </Dialog>
+            { this.props.area.rooms[this.state.current_room] !== undefined && // Don't bother creating these while we have no rooms.
+            <React.Fragment>
+                <RoomEditor open={this.state.open} handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.rooms[this.state.current_room]} items={this.props.area.items} rooms={this.props.area.rooms} />
+                <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
+                <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${this.props.area.rooms[this.state.current_room].vnum}`}>
+                    <List>
+                        {this.props.area.rooms[this.state.current_room].validate().map((error, index) => (
+                            <ListItem id={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                        ))}
+                    </List>
+                </Dialog>
+            </React.Fragment>
+            }
         </div>
         )
     }

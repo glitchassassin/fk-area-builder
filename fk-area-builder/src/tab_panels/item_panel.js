@@ -222,15 +222,19 @@ class ItemPanel extends React.Component {
                     </TableRow>
                 </TableBody>
             </Table>
-            <ItemEditor open={this.state.open} id="items" handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.items[this.state.current_item]} rooms={this.props.area.rooms} index={this.state.current_item} />
-            <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
-            <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for item ${this.props.area.items[this.state.current_item].vnum}`}>
-                <List>
-                    {this.props.area.items[this.state.current_item].validate().map((error, index) => (
-                        <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
-                    ))}
-                </List>
-            </Dialog>
+            {this.props.area.items[this.state.current_item] !== undefined && 
+            <React.Fragment>
+                <ItemEditor open={this.state.open} id="items" handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.items[this.state.current_item]} rooms={this.props.area.rooms} index={this.state.current_item} />
+                <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
+                <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for item ${this.props.area.items[this.state.current_item].vnum}`}>
+                    <List>
+                        {this.props.area.items[this.state.current_item].validate().map((error, index) => (
+                            <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                        ))}
+                    </List>
+                </Dialog>
+            </React.Fragment>
+            }
         </div>
         )
     }

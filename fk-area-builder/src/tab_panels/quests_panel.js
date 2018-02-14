@@ -88,6 +88,7 @@ class QuestsPanel extends React.Component {
     handleNew = () => {
         let new_qlog = new QuestLog();
         let area = this.props.area.clone();
+        new_qlog.area = area;
         area.quest_log.push(new_qlog);
         this.updateArea(area);
     };
