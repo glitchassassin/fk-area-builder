@@ -18,6 +18,11 @@ class Storage {
         
         this.downloaded_callback = (results) => (console.log(results))
     }
+    
+    reset() {
+      this.active_file_id = "";
+      this.change_token = null;
+    }
 
     AuthorizeAndPick(callback) {
       if (!this.oauthToken) {

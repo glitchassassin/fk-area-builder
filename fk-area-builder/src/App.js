@@ -27,10 +27,11 @@ class App extends Component {
       this.setState({area});
   }
   render() {
+    let title = "Forgotten Kingdoms Area Builder" + (this.state.area.name ? " | " + this.state.area.name : "");
     return (
       <MuiThemeProvider>
         <div className="App">
-          <ThemedAppHeader title="Forgotten Kingdoms Area Builder" area={this.state.area} updateAreaState={this.updateAreaState.bind(this)} openErrors={this.openErrors}/>
+          <ThemedAppHeader title={title} area={this.state.area} updateAreaState={this.updateAreaState.bind(this)} openErrors={this.openErrors}/>
           <div className="App-intro">
               <MainFrame area={this.state.area} updateAreaState={this.updateAreaState.bind(this)} />
           </div>
@@ -58,6 +59,7 @@ class AppHeader extends Component {
       this.props.updateAreaState(new Loader(contents).area);
     }
   }
+  clearArea = ()=>(this.props.updateAreaState(new Area()))
   
   setStatus = (icon) => (this.setState({status: icon}));
   openMenu = (event) => (this.setState({menuOpen: true, menuAnchor: event.currentTarget}))
@@ -75,6 +77,7 @@ class AppHeader extends Component {
           setStatus={this.setStatus}
           onFileLoad={this.onDriveLoad} 
           closeMenu={this.closeMenu}
+          onNew={this.clearArea}
           anchor={this.state.menuAnchor} />
       </AppBar>
     );

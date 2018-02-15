@@ -24,7 +24,8 @@ class GoogleDriveMenu extends React.Component {
     
     newArea() {
         this.props.closeMenu();
-        this.state.storage.didFileChange(console.log)
+        this.props.onNew();
+        this.state.storage.reset();
     }
     saveDrive() {
         this.props.closeMenu();
@@ -97,7 +98,13 @@ class GoogleDriveMenu extends React.Component {
         this.props.setStatus(<IconButton tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
     }
     finishLoad(contents) {
-        this.props.onFileLoad(contents);
+        try {
+            this.props.onFileLoad(contents);
+        } catch (e) {
+            this.displayError("Unable to parse area file.");
+            console.trace();
+            console.log(e);
+        }
         this.props.setStatus(<IconButton tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
     }
     

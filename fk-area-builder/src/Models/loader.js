@@ -39,18 +39,19 @@ class Loader {
         // Validates the file, then loads the contents into a new model
         this.area = new models.Area();
         
-        this.parseAreaHeader(are_string);
-        this.parseQuests(are_string);
-        this.parseMobiles(are_string);
-        this.parseItems(are_string);
-        this.parseRooms(are_string);
-        this.parseResets(are_string);
-        this.parseSpecials(are_string);
-        this.parseShops(are_string);
-        this.parseRepairs(are_string);
+        let fixed_area = are_string.replace(/\r/g, "") // Eliminate stupid characters
+        this.parseAreaHeader(fixed_area);
+        this.parseQuests(fixed_area);
+        this.parseMobiles(fixed_area);
+        this.parseItems(fixed_area);
+        this.parseRooms(fixed_area);
+        this.parseResets(fixed_area);
+        this.parseSpecials(fixed_area);
+        this.parseShops(fixed_area);
+        this.parseRepairs(fixed_area);
         
         // JusticeSystem has to wait until mobs & rooms are loaded to establish links
-        this.parseJusticeSystem(are_string);
+        this.parseJusticeSystem(fixed_area);
     }
     
     parseAreaHeader(area_text) {
@@ -63,7 +64,7 @@ class Loader {
         let authors = /^#AUTHOR (.*)~$/gm.exec(area_text)
         this.area.authors = authors[1];
         
-        let ranges = /^#RANGES\n([^\s]*) ([^\s]*) ([^\s]*) ([^\s]*)[^]*?\$$/gm.exec(area_text)
+        let ranges = /^#RANGES\r?\n([^\s]*) ([^\s]*) ([^\s]*) ([^\s]*)[^]*?\$$/gm.exec(area_text)
         this.area.min_recommended_level = ranges[1];
         this.area.max_recommended_level = ranges[2];
         this.area.min_enforced_level = ranges[3];
@@ -110,13 +111,13 @@ class Loader {
     }
     
     parseQuests(area_text) {
-        let quests = area_text.match(/^#QUESTS[^]*?-1/gm)[0]
+        let quests = area_text.match(/^#QUESTS[^]*?(-1|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)/gm)
         if (!quests) {
             return
         }
         let qlog_regex = /^([^\s]{4}) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ({..})?(.*?)$/gm
         let matches;
-        while ((matches = qlog_regex.exec(quests)) != null) {
+        while ((matches = qlog_regex.exec(quests[0])) != null) {
             let quest = new models.QuestLog();
             quest.area = this.area;
             quest.area.vnum = matches[1];
@@ -131,13 +132,13 @@ class Loader {
     }
     
     parseMobiles(area_text) {
-        let mobiles = area_text.match(/^#MOBILES[^]*?#0/gm)[0]
+        let mobiles = area_text.match(/^#MOBILES[^]*?(#0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)/gm)
         if (!mobiles) {
             return
         }
         let simple_mobile_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n(S) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\n(.*)$\n([^%].*)$\n([^%].*)$\n((?:%.*~\n)*)?(>[^]*?\|)?/gm
         let matches;
-        while ((matches = simple_mobile_regex.exec(mobiles)) != null) {
+        while ((matches = simple_mobile_regex.exec(mobiles[0])) != null) {
             let mob = new models.SimpleMob();
             mob.vnum = matches[1];
             mob.keywords = matches[2];
@@ -283,7 +284,6 @@ class Loader {
             let t;
             while ((t = can_train_regex.exec(can_train)) != null) {
                 let train;
-                console.log(can_train);
                 if (!train) {
                     if (!t[3]) {
                         train = new models.TrainLevel();
@@ -358,13 +358,13 @@ class Loader {
     }
     
     parseItems(area_text) {
-        let items = area_text.match(/^#OBJECTS[^]*?#0/gm)[0]
+        let items = area_text.match(/^#OBJECTS[^]*?(#0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)/gm)
         if (!items) {
             return
         }
         let item_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n(.*)\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)(\n(?:E[^]*?^~\n)+)?((?:\nA .*)+)?(?:I\s([^]*?)~$)?(>[^]*?\|)?/gm
         let matches;
-        while ((matches = item_regex.exec(items)) != null) {
+        while ((matches = item_regex.exec(items[0])) != null) {
             let item = new models.Item();
             
             item.vnum = matches[1];
@@ -424,13 +424,13 @@ class Loader {
     }
     
     parseRooms(area_text) {
-        let rooms = area_text.match(/^#ROOMS[^]*?#0/gm)[0]
+        let rooms = area_text.match(/^#ROOMS[^]*?(#0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)/gm)
         if (!rooms) {
             return
         }
-        let room_regex = /#(.*)$\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^]*?)?(^E$[^]*?)?(>[^]*?|)^S$/gm
+        let room_regex = /#(.*)$\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^]*?)?(^E$[^]*?)?(>[^]*?|)^(S$|(?=#))/gm
         let matches;
-        while ((matches = room_regex.exec(rooms)) != null) {
+        while ((matches = room_regex.exec(rooms[0])) != null) {
             let room = new models.Room();
             
             room.vnum = matches[1];
@@ -482,7 +482,7 @@ class Loader {
     }
     
     parseResets(area_text) {
-        let resets = area_text.match(/^#RESETS[^]*?^S$/gm)[0]
+        let resets = area_text.match(/^#RESETS[^]*?^(S|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!resets) {
             return
         }
@@ -492,7 +492,7 @@ class Loader {
         let last_reset;
         let last_mob_reset;
         let last_item_reset;
-        while ((matches = reset_regex.exec(resets)) != null) {
+        while ((matches = reset_regex.exec(resets[0])) != null) {
             if (matches[1] == "M") {
                 let mob_reset = new models.MobReset();
                 let mob = this.get_mob(matches[3]);
@@ -594,14 +594,14 @@ class Loader {
     }
     
     parseSpecials(area_text) {
-        let specials = area_text.match(/^#SPECIALS[^]*?^S$/gm)[0]
+        let specials = area_text.match(/^#SPECIALS[^]*?^(S|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!specials) {
             return
         }
         let specials_regex = /^M ([^\s]*) ([^\s]*)/gm
         let matches;
         
-        while ((matches = specials_regex.exec(specials)) != null) {
+        while ((matches = specials_regex.exec(specials[0])) != null) {
             let mob_special = new models.MobSpecial();
             mob_special.mob = this.get_mob(matches[1]);;
             mob_special.special = get_code(matches[2], flags.MOB_SPECIALS);
@@ -610,14 +610,14 @@ class Loader {
     }
     
     parseShops(area_text) {
-        let shops = area_text.match(/^#SHOPS[^]*?^0$/gm)[0]
+        let shops = area_text.match(/^#SHOPS[^]*?^(0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!shops) {
             return
         }
         let shops_regex = /^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\s^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/gm
         let matches;
         
-        while ((matches = shops_regex.exec(shops)) != null) {
+        while ((matches = shops_regex.exec(shops[0])) != null) {
             let shop = new models.Shop();
             let mob = this.get_mob(matches[1]);
             if (mob == null) {
@@ -640,14 +640,14 @@ class Loader {
     }
     
     parseRepairs(area_text) {
-        let repairs = area_text.match(/^#REPAIRS[^]*?^0$/gm)[0]
+        let repairs = area_text.match(/^#REPAIRS[^]*?^(0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!repairs) {
             return
         }
         let repairs_regex = /^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\s^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/gm
         let matches;
         
-        while ((matches = repairs_regex.exec(repairs)) != null) {
+        while ((matches = repairs_regex.exec(repairs[0])) != null) {
             let repair = new models.RepairRecharge();
             let mob = this.get_mob(matches[1]);
             repair.shopkeeper = mob;

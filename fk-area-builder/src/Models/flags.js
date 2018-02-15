@@ -5327,6 +5327,22 @@ const EXIT_DIRECTIONS = {
         code: "DDIR_DOWN",
         sdesc: "Down"
     },
+    DDIR_NORTHEAST: {
+        code: "DDIR_NORTHEAST",
+        sdesc: "Northeast"
+    },
+    DDIR_NORTHWEST: {
+        code: "DDIR_NORTHWEST",
+        sdesc: "Northwest"
+    },
+    DDIR_SOUTHEAST: {
+        code: "DDIR_SOUTHEAST",
+        sdesc: "Southeast"
+    },
+    DDIR_SOUTHWEST: {
+        code: "DDIR_SOUTHWEST",
+        sdesc: "Southwest"
+    },
     DDIR_SOMEWHERE: {
         code: "DDIR_SOMEWHERE",
         sdesc: "Somewhere"
