@@ -61,7 +61,7 @@ class Loader {
         this.area.name = area[2];
         
         let authors = /^#AUTHOR (.*)~$/gm.exec(area_text)
-        this.area.authors = authors[1].split(" ");
+        this.area.authors = authors[1];
         
         let ranges = /^#RANGES\n([^\s]*) ([^\s]*) ([^\s]*) ([^\s]*)[^]*?\$$/gm.exec(area_text)
         this.area.min_recommended_level = ranges[1];
