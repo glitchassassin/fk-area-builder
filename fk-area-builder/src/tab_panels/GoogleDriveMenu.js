@@ -34,7 +34,7 @@ class GoogleDriveMenu extends React.Component {
             this.displayError("Cannot save area with errors!")
             return;
         }
-        this.props.setStatus(<IconButton tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
+        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
         this.state.storage.didFileChange((changed)=>{
             if (changed) {
                 this.setState({confirm_open:true})
@@ -56,7 +56,7 @@ class GoogleDriveMenu extends React.Component {
             console.log("Saving new file", filename, folder);
             let contents = this.props.area.toString();
             this.state.storage.uploadNewFile(filename, folder, contents, ()=>(this.finishSave()));
-            this.props.setStatus(<IconButton tooltip="Saving"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+            this.props.setStatus(<IconButton id="loading" tooltip="Saving"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
             this.setState({saving: true});
         })
     }
@@ -65,7 +65,7 @@ class GoogleDriveMenu extends React.Component {
             this.displayError("Cannot save area with errors!")
             return;
         }
-        this.props.setStatus(<IconButton tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
+        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
         let contents = this.props.area.toString();
         if (this.state.storage.active_file_id != "") {
             this.state.storage.updateCurrentFile(contents, ()=>(this.finishSave()));
@@ -77,7 +77,7 @@ class GoogleDriveMenu extends React.Component {
             this.finishLoad(contents);
         }
         this.state.storage.isDownloading = ()=>{
-            this.props.setStatus(<IconButton tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
+            this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
         }
         this.state.storage.AuthorizeAndPick();
     }
@@ -85,7 +85,7 @@ class GoogleDriveMenu extends React.Component {
         this.state.storage.downloadFile(null,(contents) => {
             this.finishLoad(contents);
         });
-        this.props.setStatus(<IconButton tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
     }
     closeConfirm(callback) {
         this.setState({confirm_open: false})
@@ -95,7 +95,7 @@ class GoogleDriveMenu extends React.Component {
     }
     finishSave() {
         this.props.onFileLoad();
-        this.props.setStatus(<IconButton tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+        this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
     }
     finishLoad(contents) {
         try {
@@ -105,7 +105,7 @@ class GoogleDriveMenu extends React.Component {
             console.trace();
             console.log(e);
         }
-        this.props.setStatus(<IconButton tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+        this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
     }
     
     render() {

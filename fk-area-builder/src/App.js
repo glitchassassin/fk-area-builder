@@ -46,11 +46,21 @@ class AppHeader extends Component {
     loaded: false,
     menuOpen: false,
     menuAnchor: null,
-    status: <IconButton tooltip="Unsaved Changes"><Warning color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>
+    status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.area !== this.state.area) {
-      this.setState({ status: <IconButton tooltip="Unsaved Changes"><Warning color={this.props.muiTheme.palette.alternateTextColor} /></IconButton> });
+      this.setState({ status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.muiTheme.palette.alternateTextColor} /></IconButton> });
+    }
+  }
+  componentDidMount() {
+    window.onbeforeunload = (e) => {
+      console.log(this.state.status);
+      if (this.state.status.props.id != "saved") {
+        let warning = "You have unsaved changes. Discard?"; // Browser isn't actually required to show this - 
+        e.returnValue = warning;                            // may just give a generic warning
+        return warning;
+      }
     }
   }
   
