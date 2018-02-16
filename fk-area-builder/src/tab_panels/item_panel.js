@@ -396,6 +396,15 @@ class ItemEditor extends ModelComponent {
                             )}
                             <span style={item_type_ldesc_style}>{this.props.model.item_type.value4.ldesc}</span>
                         </div>
+                        <div>
+                            <TextField 
+                                id="value5" 
+                                floatingLabelText="Value 5" 
+                                value={this.props.model.value5} 
+                                autoComplete="off" 
+                                onChange={this.handleChange.bind(this)} />
+                            <span style={item_type_ldesc_style}>Object data (optional)</span>
+                        </div>
                     </Tab>
                     <Tab label="Details">
                         <MultiFlagSelector 
