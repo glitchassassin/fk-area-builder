@@ -419,6 +419,7 @@ class Item extends Model {
         if (errors.length) {
             return errors.join("\n")
         }
+        console.log(this.value3.toString(), this.value3)
         return `#${this.vnum}
 ${this.keywords}~
 ${this.sdesc}~

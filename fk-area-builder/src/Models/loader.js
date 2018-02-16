@@ -1,4 +1,3 @@
-var fs = require("fs");
 var flags = require("./flags.js");
 var models = require("./are_model.js");
 

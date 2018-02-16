@@ -92,7 +92,7 @@ class Model {
         hash.set(this, result);
         let result_props = {}
         for (var prop in props) {
-            if (props[prop].value instanceof Model) {
+            if (props[prop].value && props[prop].value.clone) {
                 result_props[prop] = props[prop].value.clone(hash);
             }
             else if (props[prop].value instanceof Array) {
