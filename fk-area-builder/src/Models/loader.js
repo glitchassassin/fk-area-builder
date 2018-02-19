@@ -427,7 +427,7 @@ class Loader {
         if (!rooms) {
             return
         }
-        let room_regex = /#(.*)$\n(.*)~\n((?:.*[^\n~]\n)*.*)~\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^]*?)?(^E$[^]*?)?(>[^]*?|)^(S$|(?=#))/gm
+        let room_regex = /#(.*)$\n(.*)~\n((?:.*[^~]\n)*.*)\n~\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^]*?)?(^E$[^]*?)?(>[^]*?|)^(S$|(?=#))/gm
         let matches;
         while ((matches = room_regex.exec(rooms[0])) != null) {
             let room = new models.Room();
