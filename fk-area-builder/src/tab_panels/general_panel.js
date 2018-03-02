@@ -1,15 +1,9 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900 } from 'material-ui/styles/colors';
-import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Subheader from 'material-ui/Subheader';
-import muiThemeable from 'material-ui/styles/muiThemeable';
 
 import {
     Table,
@@ -21,8 +15,6 @@ import {
 }
 from 'material-ui/Table';
 import {
-    DOOR_RESET_DIRECTIONS,
-    DOOR_RESET_FLAGS,
     ITEM_MATERIALS,
     AREA_CATEGORIES,
     JUSTICE_PUNISHMENTS
@@ -31,13 +23,16 @@ from '../Models/flags';
 import {
     JusticeSystem
 }
-from '../Models/are_model'
+from '../Models/area_model'
 import {
     FlagSelector,
-    MultiFlagSelector,
     VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
+import {
+    Validate
+}
+from '../UIComponents/GenericEditors'
 
 const paper_style = {
     padding: "5px",
@@ -56,13 +51,15 @@ class GeneralPanel extends React.Component {
         return (
             <Paper style={paper_style}>
                 <FlagSelector id="category" label="Category" flags={AREA_CATEGORIES} value={this.props.area.category} onChange={this.handleChange.bind(this)} />
-                <TextField 
-                    floatingLabelText="Area Name" 
-                    id="name" 
-                    errorText={this.props.area.validate("name")} 
-                    value={this.props.area.name} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
+                <Validate>
+                    <TextField 
+                        floatingLabelText="Area Name" 
+                        id="name" 
+                        errorText={this.props.area.validate("name")} 
+                        value={this.props.area.name} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                </Validate>
                 <TextField 
                     floatingLabelText="Base Vnum" 
                     id="vnum" 
@@ -183,7 +180,7 @@ class GeneralPanel extends React.Component {
 class JusticeSystemEditor extends React.Component {
     handleChange(event, value, index) {
         let area = this.props.area.clone();
-        if (event.target.id.indexOf(" ") != -1) {
+        if (event.target.id.indexOf(" ") !== -1) {
             area.justice_system[event.target.id.split(" ")[0]][event.target.id.split(" ")[1]] = value;
         }
         else {

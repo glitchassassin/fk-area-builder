@@ -2,8 +2,6 @@ import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import { red900 } from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -27,23 +25,7 @@ import {
     ITEM_TYPES,
     ITEM_APPLIES,
     ITEM_PROGRAM_TRIGGERS,
-    MOB_SKILLS,
-    MOB_CLASSES,
-    MOB_RACES,
-    MOB_SEXES,
-    MOB_POSITIONS,
-    MOB_DEITIES,
-    MOB_ACT_FLAGS,
-    MOB_LANGUAGES,
-    MOB_SPELLS,
-    MOB_WEAPON_SKILLS,
-    MOB_STATISTICS,
-    MOB_FEATS,
-    MOB_RIS,
-    MOB_AFFECTS,
-    ITEM_ARMOR_TYPES,
     ITEM_MATERIALS,
-    MOB_ALIGNMENTS,
     ITEM_ATTRIBUTES,
     WEAR_LOCATIONS,
     ITEM_QUALITY,
@@ -54,13 +36,10 @@ from '../Models/flags';
 import {
     Item,
     ItemApply,
-    ExtraDescription,
-    Program,
     ItemReset
 }
-from '../Models/are_model'
+from '../Models/area_model'
 import {
-    FlagWithCategorySelector,
     FlagSelector,
     MultiFlagSelector,
     VnumAutoComplete
@@ -101,7 +80,7 @@ class ItemPanel extends React.Component {
     handleChange(event, value) {
         console.log("ItemPanel", this.state.current_item, value);
         let area = this.props.area.clone()
-        area.items[parseInt(this.state.current_item)] = value;
+        area.items[parseInt(this.state.current_item, 10)] = value;
         this.updateArea(area);
     }
     

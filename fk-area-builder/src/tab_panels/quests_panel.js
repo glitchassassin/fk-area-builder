@@ -1,16 +1,9 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import { red900 } from 'material-ui/styles/colors';
-import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Dialog from 'material-ui/Dialog';
-import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import Subheader from 'material-ui/Subheader';
 
 import {
     Table,
@@ -22,31 +15,13 @@ import {
 }
 from 'material-ui/Table';
 import {
-    MOB_PROGRAM_TRIGGERS,
-    MOB_SKILLS,
-    MOB_CLASSES,
-    MOB_RACES,
-    MOB_SEXES,
-    MOB_POSITIONS,
-    MOB_DEITIES,
-    MOB_ACT_FLAGS,
-    MOB_LANGUAGES,
-    MOB_SPELLS,
-    MOB_WEAPON_SKILLS,
-    MOB_STATISTICS,
-    MOB_FEATS,
-    MOB_RIS,
-    MOB_AFFECTS,
-    ITEM_ARMOR_TYPES,
-    ITEM_MATERIALS,
-    MOB_ALIGNMENTS,
     QUEST_EVENT_CODES
 }
 from '../Models/flags';
 import {
     QuestLog,
 }
-from '../Models/are_model'
+from '../Models/area_model'
 import {
     FlagSelector,
 }
@@ -61,7 +36,7 @@ const icon_button_style = {
 class QuestsPanel extends React.Component {
     shouldComponentUpdate(newProps) {
         // If the array length changed, then update.
-        if (this.props.area.quest_log.length != newProps.area.quest_log.length) {
+        if (this.props.area.quest_log.length !== newProps.area.quest_log.length) {
             return true;
         }
         // Otherwise, update if one of the quest_logs in the array has changed.

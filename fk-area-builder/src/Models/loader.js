@@ -1,9 +1,9 @@
 var flags = require("./flags.js");
-var models = require("./are_model.js");
+var models = require("./area_model.js");
 
 function get_code(code, flag_list) {
     for (let f in flag_list) {
-        if (flag_list[f].code == code || flag_list[f].bits == code) {
+        if (flag_list[f].code === code || flag_list[f].bits === code) {
             return flag_list[f]
         }
     }
@@ -11,7 +11,7 @@ function get_code(code, flag_list) {
 
 function get_color_code(code, flag_list) {
     for (let f in flag_list) {
-        if (flag_list[f].color_code == code) {
+        if (flag_list[f].color_code === code) {
             return flag_list[f]
         }
     }
@@ -21,12 +21,12 @@ function get_codes(codes, flag_list, default_value=null) {
     let to_return = []
     for (let c in codes) {
         for (let f in flag_list) {
-            if (flag_list[f].code == codes[c]) {
+            if (flag_list[f].code === codes[c]) {
                 to_return.push(flag_list[f])
             }
         }
     }
-    if (to_return.length == 0 && default_value !== null) {
+    if (to_return.length === 0 && default_value !== null) {
         return [default_value];
     }
     return to_return;
@@ -171,7 +171,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_SPELLS) {
-                        if (flags.MOB_SPELLS[f].code == t[3]) {
+                        if (flags.MOB_SPELLS[f].code === t[3]) {
                             train = new models.TrainSpell();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -183,7 +183,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_SKILLS) {
-                        if (flags.MOB_SKILLS[f].code == t[3]) {
+                        if (flags.MOB_SKILLS[f].code === t[3]) {
                             train = new models.TrainSkill();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -195,7 +195,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_WEAPON_SKILLS) {
-                        if (flags.MOB_WEAPON_SKILLS[f].code == t[3]) {
+                        if (flags.MOB_WEAPON_SKILLS[f].code === t[3]) {
                             train = new models.TrainWeaponSkill();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -207,7 +207,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_FEATS) {
-                        if (flags.MOB_FEATS[f].code == t[3]) {
+                        if (flags.MOB_FEATS[f].code === t[3]) {
                             train = new models.TrainFeat();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -219,7 +219,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_STATISTICS) {
-                        if (flags.MOB_STATISTICS[f].code == t[3]) {
+                        if (flags.MOB_STATISTICS[f].code === t[3]) {
                             train = new models.TrainStatistic();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -294,7 +294,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_SPELLS) {
-                        if (flags.MOB_SPELLS[f].code == t[3]) {
+                        if (flags.MOB_SPELLS[f].code === t[3]) {
                             train = new models.TrainSpell();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -306,7 +306,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_SKILLS) {
-                        if (flags.MOB_SKILLS[f].code == t[3]) {
+                        if (flags.MOB_SKILLS[f].code === t[3]) {
                             train = new models.TrainSkill();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -318,7 +318,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_FEATS) {
-                        if (flags.MOB_FEATS[f].code == t[3]) {
+                        if (flags.MOB_FEATS[f].code === t[3]) {
                             train = new models.TrainFeat();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -330,7 +330,7 @@ class Loader {
                 }
                 if (!train) {
                     for (let f in flags.MOB_STATISTICS) {
-                        if (flags.MOB_STATISTICS[f].code == t[3]) {
+                        if (flags.MOB_STATISTICS[f].code === t[3]) {
                             train = new models.TrainStatistic();
                             train.level = t[1];
                             train.price_multiplier = t[2];
@@ -361,7 +361,7 @@ class Loader {
         if (!items) {
             return
         }
-        let item_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^~]\n)*.*)\n~\n(.*)\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)(\n(?:E[^]*?^~\n)+)?((?:\nA .*)+)?(?:I\s([^]*?)~$)?(>[^]*?\|)?/gm
+        let item_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~(.*)\n~\n(.*)\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)(\n(?:E[^]*?^~\n)+)?((?:\nA .*)+)?(?:I\s([^]*?)~$)?(>[^]*?\|)?/gm
         let matches;
         while ((matches = item_regex.exec(items[0])) != null) {
             let item = new models.Item();
@@ -492,7 +492,7 @@ class Loader {
         let last_mob_reset;
         let last_item_reset;
         while ((matches = reset_regex.exec(resets[0])) != null) {
-            if (matches[1] == "M") {
+            if (matches[1] === "M") {
                 let mob_reset = new models.MobReset();
                 let mob = this.get_mob(matches[3]);
                 mob_reset.defunct = matches[2];
@@ -503,7 +503,7 @@ class Loader {
                 last_reset = mob_reset;
                 last_mob_reset = last_reset;
             }
-            else if (matches[1] == "E") {
+            else if (matches[1] === "E") {
                 let equip_reset = new models.EquipmentReset();
                 equip_reset.defunct = matches[2];
                 equip_reset.item = this.get_item(matches[3]);
@@ -512,7 +512,7 @@ class Loader {
                 last_mob_reset.equipment.push(equip_reset);
                 last_reset = equip_reset;
             }
-            else if (matches[1] == "G") {
+            else if (matches[1] === "G") {
                 let equip_reset = new models.EquipmentReset();
                 equip_reset.defunct = matches[2];
                 equip_reset.item = this.get_item(matches[3]);
@@ -520,7 +520,7 @@ class Loader {
                 last_mob_reset.equipment.push(equip_reset);
                 last_reset = equip_reset;
             }
-            else if (matches[1] == "T") {
+            else if (matches[1] === "T") {
                 let trap_reset = new models.TrapReset();
                 trap_reset.reset_interval = matches[2];
                 trap_reset.trap_type = get_code(matches[3], flags.TRAP_TYPES);
@@ -530,7 +530,7 @@ class Loader {
                 trap_reset.trigger_2 = triggers[1] || flags.TRAP_TRIGGERS.TRIGGER_NONE;
                 last_reset.trap_reset = trap_reset;
             }
-            else if (matches[1] == "C") {
+            else if (matches[1] === "C") {
                 let coin_reset = new models.CoinReset();
                 coin_reset.defunct = matches[2];
                 coin_reset.coin_type = get_code(matches[3], flags.COIN_TYPES);
@@ -538,16 +538,16 @@ class Loader {
                 coin_reset.dice_count = matches[5];
                 last_mob_reset.mob.equipment_resets.push(coin_reset);
             }
-            else if (matches[1] == "P") {
+            else if (matches[1] === "P") {
                 let item_reset = new models.ItemReset();
-                item_reset.hidden = (matches[2] == 1); // Boolean
+                item_reset.hidden = (matches[2] === 1); // Boolean
                 item_reset.item = this.get_item(matches[3]);
                 item_reset.item_limit = matches[4];
                 item_reset.room_container = this.get_item(matches[5]);
                 last_item_reset.contents.push(item_reset);
                 last_reset = item_reset;
             }
-            else if (matches[1] == "H") {
+            else if (matches[1] === "H") {
                 let item_reset = new models.ItemReset();
                 item_reset.hidden = true;
                 item_reset.item = this.get_item(matches[3]);
@@ -556,7 +556,7 @@ class Loader {
                 item_reset.item.resets.push(item_reset);
                 last_reset = item_reset;
             }
-            else if (matches[1] == "U") {
+            else if (matches[1] === "U") {
                 let item_reset = new models.ItemReset();
                 item_reset.buried = true;
                 item_reset.item = this.get_item(matches[3]);
@@ -565,7 +565,7 @@ class Loader {
                 item_reset.item.resets.push(item_reset);
                 last_reset = item_reset;
             }
-            else if (matches[1] == "O") {
+            else if (matches[1] === "O") {
                 let item_reset = new models.ItemReset();
                 item_reset.item = this.get_item(matches[3]);
                 item_reset.item_limit = matches[4];
@@ -574,7 +574,7 @@ class Loader {
                 last_reset = item_reset;
                 last_item_reset = last_reset;
             }
-            else if (matches[1] == "D") {
+            else if (matches[1] === "D") {
                 let door_reset = new models.DoorReset();
                 door_reset.room = this.get_room(matches[3]);
                 door_reset.exit = get_code(matches[4], flags.DOOR_RESET_DIRECTIONS);
@@ -582,7 +582,7 @@ class Loader {
                 door_reset.room.door_resets.push(door_reset);
                 last_reset = door_reset;
             }
-            else if (matches[1] == "R") {
+            else if (matches[1] === "R") {
                 let door_reset = new models.RandomDoorReset();
                 door_reset.room = this.get_room(matches[3]);
                 door_reset.last_door = matches[4];
@@ -666,7 +666,7 @@ class Loader {
             return;
         }
         for (let i = 0; i < this.area.mobs.length; i++) {
-            if (this.area.mobs[i].vnum == vnum) {
+            if (this.area.mobs[i].vnum === vnum) {
                 return this.area.mobs[i]
             }
         }
@@ -690,7 +690,7 @@ class Loader {
             return;
         }
         for (let i = 0; i < this.area.items.length; i++) {
-            if (this.area.items[i].vnum == vnum) {
+            if (this.area.items[i].vnum === vnum) {
                 return this.area.items[i]
             }
         }
@@ -713,7 +713,7 @@ class Loader {
             return;
         }
         for (let i = 0; i < this.area.rooms.length; i++) {
-            if (this.area.rooms[i].vnum == vnum) {
+            if (this.area.rooms[i].vnum === vnum) {
                 return this.area.rooms[i]
             }
         }
@@ -1206,4 +1206,4 @@ S
 `);
 }
 
-export default Loader;
+export default testLoader;

@@ -6,6 +6,7 @@ import MobPanel from './tab_panels/mob_panel';
 import RoomPanel from './tab_panels/room_panel';
 import ItemPanel from './tab_panels/item_panel';
 import QuestsPanel from './tab_panels/quests_panel';
+import AreaExporter from './Models/are_export';
 
 class MainFrame extends React.Component {
     updateAreaState(area) {
@@ -38,7 +39,7 @@ class MainFrame extends React.Component {
                 </Tab>
                 <Tab label="Area Code">
                     <pre>
-                    {this.props.area.toString()}
+                    {new AreaExporter().renderArea(this.props.area)}
                     </pre>
                 </Tab>
             </Tabs>

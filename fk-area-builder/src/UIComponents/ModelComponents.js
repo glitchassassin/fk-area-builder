@@ -13,7 +13,7 @@ class ModelComponent extends React.Component {
                     return true;
                 }
             }
-            else if (this.props[p] != newProps[p]) {
+            else if (this.props[p] !== newProps[p]) {
                 return true;
             }
         }
@@ -28,8 +28,9 @@ class ModelComponent extends React.Component {
 
 class ModelArrayComponent extends React.Component {
     shouldComponentUpdate(newProps) {
+        console.log("ModelArrayComponent", this.props, newProps)
         // If the array length changed, then update.
-        if (this.props.model.length != newProps.model.length) {
+        if (this.props.model.length !== newProps.model.length) {
             return true;
         }
         // Otherwise, update if one of the models in the array has changed.
@@ -41,20 +42,22 @@ class ModelArrayComponent extends React.Component {
         return false;
     }
     handleChange(event, value, index) {
-        let model = this.props.model.map((e)=>(e.clone()));
-        let item = model[parseInt(index)]
+        let model = this.props.model.slice(0);
+        let item = model[parseInt(index, 10)].clone();
         item[event.target.id] = value;
+        model[parseInt(index, 10)] = item;
         this.props.onChange({target:this.props}, model);
     }
     handleNew() {
         // Clone array elements, and add model to the new array.
-        let model = this.props.model.map((e)=>(e.clone()));
+        let model = this.props.model.slice(0);
         model.push(new this.modelClass());
+        console.log("ModelArrayComponent HandleNew", this.props.model, model);
         this.props.onChange({target:this.props}, model);
     }
     handleDelete(index) {
         // Clone array elements, and remove the target element.
-        let model = this.props.model.map((e)=>(e.clone()));
+        let model = this.props.model.slice(0);
         model.splice(index,1);
         this.props.onChange({target:this.props}, model);
     }

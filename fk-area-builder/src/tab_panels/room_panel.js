@@ -26,8 +26,6 @@ import {
     EXIT_SIZES,
     ROOM_FLAGS,
     ROOM_SECTOR_FLAGS,
-    TRAP_TYPES,
-    TRAP_TRIGGERS,
     ROOM_PROGRAM_TRIGGERS,
     DOOR_RESET_DIRECTIONS,
     DOOR_RESET_FLAGS,
@@ -37,12 +35,10 @@ from '../Models/flags';
 import {
     Room,
     Exit,
-    ExtraDescription,
-    Program,
     DoorReset,
     RoomReset
 }
-from '../Models/are_model'
+from '../Models/area_model'
 import {
     FlagSelector,
     MultiFlagSelector,
@@ -104,7 +100,7 @@ class RoomPanel extends React.Component {
     handleChange(event, value) {
         console.log("RoomPanel", this.state.current_room, value);
         let area = this.props.area.clone()
-        area.rooms[parseInt(this.state.current_room)] = value;
+        area.rooms[parseInt(this.state.current_room, 10)] = value;
         this.updateArea(area);
     }
     
@@ -360,7 +356,7 @@ class ExitsEditor extends ModelArrayComponent {
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <TextField 
-                    floatingLabelText={exit.direction == EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} 
+                    floatingLabelText={exit.direction === EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} 
                     id="somewhere_door_keyword" 
                     errorText={exit.validate("somewhere_door_keyword")} 
                     fullWidth={true} 

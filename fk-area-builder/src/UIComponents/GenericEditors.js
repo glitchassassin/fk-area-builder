@@ -9,8 +9,7 @@ import { red900 } from 'material-ui/styles/colors';
 
 import {
     TRAP_TYPES,
-    TRAP_TRIGGERS,
-    MOB_PROGRAM_TRIGGERS
+    TRAP_TRIGGERS
 }
 from '../Models/flags';
 import {
@@ -18,7 +17,7 @@ import {
     ExtraDescription,
     Program
 }
-from '../Models/are_model'
+from '../Models/area_model'
 import {
     FlagSelector,
 }
@@ -29,6 +28,13 @@ const paper_style = {
     padding: "5px",
     margin: "5px auto",
     maxWidth: "900px"
+}
+
+class Validate extends React.Component {
+    render() {
+        console.log(this.props.children)
+        return this.props.children;
+    }
 }
 
 class TrapResetEditor extends ModelComponent {
@@ -169,4 +175,4 @@ class ProgramsEditor extends ModelArrayComponent {
     }
 }
 
-export {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor};
+export {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor, Validate};

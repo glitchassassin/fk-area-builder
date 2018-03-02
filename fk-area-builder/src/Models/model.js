@@ -16,18 +16,18 @@ class Field {
         }
         if (value == null || value === "") {
             if (!this.options.optional) {
-                errors.push(`.${this.name} should not be empty`)
+                errors.push(`${this.name} should not be empty`)
             }
         }
         else {
             if (value instanceof Array) {
-                if (!this.options.optional && value.length == 0) {
-                    errors.push(`.${this.name} should not be empty`)
+                if (!this.options.optional && value.length === 0) {
+                    errors.push(`${this.name} should not be empty`)
                 }
                 for (let i = 0; i < value.length; i++) {
                     try {
                         if (this.options.in_flags && value[i].code && !(value[i].code in this.options.in_flags)) {
-                            errors.push(`.${this.name} "${value[i].code}" is not valid`)
+                            errors.push(`${this.name} "${value[i].code}" is not valid`)
                         }
                     }
                     catch (e) {
@@ -35,7 +35,7 @@ class Field {
                         throw (e)
                     }
                     if (value[i].do_not_use) {
-                        errors.push(`.${this.name} "${value[i].code}" should not be used`)
+                        errors.push(`${this.name} "${value[i].code}" should not be used`)
                     }
                     if (value[i] instanceof Model) {
                         errors = errors.concat(value[i].validate().map((err)=>(`.${this.name}${err}`)))
@@ -47,10 +47,10 @@ class Field {
             }
             else {
                 if (this.options.in_flags && !(value.code in this.options.in_flags)) {
-                    errors.push(`.${this.name} "${value.code}" is not valid`)
+                    errors.push(`${this.name} "${value.code}" is not valid`)
                 }
                 if (value.do_not_use) {
-                    errors.push(`.${this.name} "${value.code}" should not be used`)
+                    errors.push(`${this.name} "${value.code}" should not be used`)
                 }
             }
         }
@@ -92,10 +92,12 @@ class Model {
         hash.set(this, result);
         let result_props = {}
         for (var prop in props) {
+            /* Disabling deep cloning
             if (props[prop].value && props[prop].value.clone) {
                 result_props[prop] = props[prop].value.clone(hash);
             }
-            else if (props[prop].value instanceof Array) {
+            else
+            if (props[prop].value instanceof Array) {
                 result_props[prop] = [];
                 for (let i of props[prop].value) {
                     if (i instanceof Model) {
@@ -107,8 +109,9 @@ class Model {
                 }
             }
             else {
+                */
                 result_props[prop] = props[prop].value;
-            }
+            //}
         }
         return Object.assign(result, result_props);
     }
@@ -127,20 +130,20 @@ class Model {
                 }
                 // If field is an Array, check length, then each item for equality
                 if (this[field] instanceof Array) {
-                    if (this[field].length != other_model[field].length) {
+                    if (this[field].length !== other_model[field].length) {
                         return false;
                     }
                     for (let i = 0; i < this[field].length; i++) {
                         if (this[field][i] instanceof Model && !this[field][i].equals(other_model[field][i])) {
                             return false;
                         }
-                        if (other_model[field][i] != this[field][i]) {
+                        if (other_model[field][i] !== this[field][i]) {
                             return false;
                         }
                     }
                 }
                 // Otherwise, just check equality.
-                if (other_model[field] != this[field]) {
+                if (other_model[field] !== this[field]) {
                     return false;
                 }
             }

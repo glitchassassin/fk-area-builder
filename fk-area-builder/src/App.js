@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MainFrame from './main_frame';
-import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
-import {Area} from './Models/are_model';
-import Loader from './Models/loader';
+import {Area} from './Models/area_model';
+import testLoader from './Models/loader';
+import {AreaValidator} from './Models/model_validator';
 import GoogleDriveMenu from './tab_panels/GoogleDriveMenu';
 import Warning from 'material-ui/svg-icons/alert/warning';
 import muiThemeable from 'material-ui/styles/muiThemeable';
@@ -19,7 +15,8 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 
 class App extends Component {
   state = {
-    area: new Area(),
+    area: testLoader().area,
+    validator: new AreaValidator(),
     error_open: false,
     error_text: ""
   }
@@ -31,9 +28,9 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div className="App">
-          <ThemedAppHeader title={title} area={this.state.area} updateAreaState={this.updateAreaState.bind(this)} openErrors={this.openErrors}/>
+          <ThemedAppHeader title={title} area={this.state.area} validator={this.state.validator} updateAreaState={this.updateAreaState.bind(this)} openErrors={this.openErrors}/>
           <div className="App-intro">
-              <MainFrame area={this.state.area} updateAreaState={this.updateAreaState.bind(this)} />
+              <MainFrame area={this.state.area} validator={this.state.validator} updateAreaState={this.updateAreaState.bind(this)} />
           </div>
         </div>
       </MuiThemeProvider>
@@ -56,7 +53,7 @@ class AppHeader extends Component {
   componentDidMount() {
     window.onbeforeunload = (e) => {
       console.log(this.state.status);
-      if (this.state.status.props.id != "saved") {
+      if (this.state.status.props.id !== "saved") {
         let warning = "You have unsaved changes. Discard?"; // Browser isn't actually required to show this - 
         e.returnValue = warning;                            // may just give a generic warning
         return warning;
@@ -66,7 +63,7 @@ class AppHeader extends Component {
   
   onDriveLoad = (contents) => {
     if (contents) {
-      this.props.updateAreaState(new Loader(contents).area);
+      //this.props.updateAreaState(new Loader(contents).area);
     }
   }
   clearArea = ()=>(this.props.updateAreaState(new Area()))

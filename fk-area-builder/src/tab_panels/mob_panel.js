@@ -45,13 +45,13 @@ import {
     ITEM_TYPES,
     MOB_REPAIR_MATERIAL,
     MOB_REPAIR_RECHARGE,
-    MOB_WEAR_POSITIONS
+    MOB_WEAR_POSITIONS,
+    ITEM_COIN_TYPES
 }
 from '../Models/flags';
 import {
     SimpleMob,
     UniqueMob,
-    Program,
     TrainSkill,
     TrainWeaponSkill,
     TrainSpell,
@@ -61,9 +61,10 @@ import {
     Shop,
     RepairRecharge,
     MobReset,
-    EquipmentReset
+    EquipmentReset,
+    CoinReset
 }
-from '../Models/are_model'
+from '../Models/area_model'
 import {
     FlagWithCategorySelector,
     FlagSelector,
@@ -71,7 +72,7 @@ import {
     VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
-import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
+import {TrapResetEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
 import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const icon_button_style = {
@@ -290,45 +291,200 @@ class MobEditor extends ModelComponent {
         ];
         var uniqueTab = (this.props.model instanceof UniqueMob ? (
             <React.Fragment>
-                <MultiFlagSelector id="affect_flags" label="Act Flags" flags={MOB_AFFECTS} value={this.props.model.affect_flags} onChange={this.handleChange.bind(this)} />
-                <FlagSelector id="virtual_armor_type" label="Virtual Armor Type" flags={ITEM_ARMOR_TYPES} value={this.props.model.virtual_armor_type} onChange={this.handleChange.bind(this)} />
-                <FlagSelector id="virtual_armor_material" label="Virtual Armor Material" flags={ITEM_MATERIALS} value={this.props.model.virtual_armor_material} onChange={this.handleChange.bind(this)} />
-                <FlagSelector id="alignment" label="Alignment" flags={MOB_ALIGNMENTS} value={this.props.model.alignment} onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="STR" id="str" value={this.props.model.str} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="INT" id="int" value={this.props.model.int} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="WIS" id="wis" value={this.props.model.wis} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="DEX" id="dex" value={this.props.model.dex} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="CON" id="con" value={this.props.model.con} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="CHA" id="cha" value={this.props.model.cha} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <TextField floatingLabelText="LCK" id="lck" value={this.props.model.lck} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                <MultiFlagSelector id="ris_resistant" label="Resistant" flags={MOB_RIS} value={this.props.model.ris_resistant} onChange={this.handleChange.bind(this)} />
-                <MultiFlagSelector id="ris_immune" label="Immune" flags={MOB_RIS} value={this.props.model.ris_immune} onChange={this.handleChange.bind(this)} />
-                <MultiFlagSelector id="ris_susceptible" label="Susceptible" flags={MOB_RIS} value={this.props.model.ris_susceptible} onChange={this.handleChange.bind(this)} />
-                <RaisedButton id="makeSimpleMob" label="Convert to Simple Mob?" primary={true} keyboardFocused={true} onClick={this.convertToSimple.bind(this)}/>
+                <MultiFlagSelector 
+                    id="affect_flags" 
+                    label="Act Flags" 
+                    flags={MOB_AFFECTS} 
+                    value={this.props.model.affect_flags} 
+                    onChange={this.handleChange.bind(this)} />
+                <FlagSelector 
+                    id="virtual_armor_type" 
+                    label="Virtual Armor Type" 
+                    flags={ITEM_ARMOR_TYPES} 
+                    value={this.props.model.virtual_armor_type} 
+                    onChange={this.handleChange.bind(this)} />
+                <FlagSelector 
+                    id="virtual_armor_material" 
+                    label="Virtual Armor Material" 
+                    flags={ITEM_MATERIALS} 
+                    value={this.props.model.virtual_armor_material} 
+                    onChange={this.handleChange.bind(this)} />
+                <FlagSelector 
+                    id="alignment" 
+                    label="Alignment" 
+                    flags={MOB_ALIGNMENTS} 
+                    value={this.props.model.alignment} 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="STR" 
+                    id="str" 
+                    value={this.props.model.str} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="INT" 
+                    id="int" 
+                    value={this.props.model.int} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="WIS" 
+                    id="wis" 
+                    value={this.props.model.wis} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="DEX" 
+                    id="dex" 
+                    value={this.props.model.dex} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="CON" 
+                    id="con" 
+                    value={this.props.model.con} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="CHA" 
+                    id="cha" 
+                    value={this.props.model.cha} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <TextField 
+                    floatingLabelText="LCK" 
+                    id="lck" 
+                    value={this.props.model.lck} 
+                    autoComplete="off" 
+                    onChange={this.handleChange.bind(this)} />
+                <MultiFlagSelector 
+                    id="ris_resistant" 
+                    label="Resistant" 
+                    flags={MOB_RIS} 
+                    value={this.props.model.ris_resistant} 
+                    onChange={this.handleChange.bind(this)} />
+                <MultiFlagSelector 
+                    id="ris_immune" 
+                    label="Immune" 
+                    flags={MOB_RIS} 
+                    value={this.props.model.ris_immune} 
+                    onChange={this.handleChange.bind(this)} />
+                <MultiFlagSelector 
+                    id="ris_susceptible" 
+                    label="Susceptible" 
+                    flags={MOB_RIS} 
+                    value={this.props.model.ris_susceptible} 
+                    onChange={this.handleChange.bind(this)} />
+                <RaisedButton 
+                    id="makeSimpleMob" 
+                    label="Convert to Simple Mob?" 
+                    primary={true} 
+                    keyboardFocused={true} 
+                    onClick={this.convertToSimple.bind(this)}/>
             </React.Fragment>
             ) : (
-            <RaisedButton id="makeUniqueMob" label="Convert to Unique Mob?" primary={true} keyboardFocused={true} onClick={this.convertToUnique.bind(this)}/>
+            <RaisedButton 
+                id="makeUniqueMob" 
+                label="Convert to Unique Mob?" 
+                primary={true} 
+                keyboardFocused={true} 
+                onClick={this.convertToUnique.bind(this)}/>
         ))
         return (
             <Dialog title={`Edit ${this.props.model instanceof UniqueMob ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
-                        <TextField floatingLabelText="vnum" id="vnum" value={this.props.model.vnum} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Short description" id="sdesc" value={this.props.model.sdesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Long description" id="ldesc" fullWidth={true} value={this.props.model.ldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Keywords" id="keywords" fullWidth={true} value={this.props.model.keywords} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <TextField floatingLabelText="Full description" id="fulldesc" multiLine={true} rows={5} fullWidth={true} value={this.props.model.fulldesc} autoComplete="off" onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="vnum" 
+                            id="vnum" 
+                            value={this.props.model.vnum} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Short description" 
+                            id="sdesc" 
+                            value={this.props.model.sdesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Long description" 
+                            id="ldesc" 
+                            fullWidth={true} 
+                            value={this.props.model.ldesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Keywords" 
+                            id="keywords" 
+                            fullWidth={true} 
+                            value={this.props.model.keywords} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Full description" 
+                            id="fulldesc" 
+                            multiLine={true} 
+                            rows={5} 
+                            fullWidth={true} 
+                            value={this.props.model.fulldesc} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Details">
-                        <TextField floatingLabelText="Level" id="level" value={this.props.model.level} autoComplete="off" onChange={this.handleChange.bind(this)} />
-                        <FlagWithCategorySelector id="mob_class" label="Class" flags={MOB_CLASSES} value={this.props.model.mob_class} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="race" label="Race" flags={MOB_RACES} value={this.props.model.race} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="sex" label="Sex" flags={MOB_SEXES} value={this.props.model.sex} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="position" label="Position" flags={MOB_POSITIONS} value={this.props.model.position} onChange={this.handleChange.bind(this)} />
-                        <FlagSelector id="deity" label="Deity" flags={MOB_DEITIES} value={this.props.model.deity} onChange={this.handleChange.bind(this)} />
-                        <MultiFlagSelector id="act_flags" label="Act Flags" flags={MOB_ACT_FLAGS} value={this.props.model.act_flags} onChange={this.handleChange.bind(this)} />
-                        <MultiFlagSelector id="understood_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.model.understood_languages} onChange={this.handleChange.bind(this)} />
-                        <MultiFlagSelector id="spoken_languages" label="Act Flags" flags={MOB_LANGUAGES} value={this.props.model.spoken_languages} onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Level" 
+                            id="level" 
+                            value={this.props.model.level} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagWithCategorySelector 
+                            id="mob_class" 
+                            label="Class" 
+                            flags={MOB_CLASSES} 
+                            value={this.props.model.mob_class} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="race" 
+                            label="Race" 
+                            flags={MOB_RACES} 
+                            value={this.props.model.race} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="sex" 
+                            label="Sex" 
+                            flags={MOB_SEXES} 
+                            value={this.props.model.sex} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="position" 
+                            label="Position" 
+                            flags={MOB_POSITIONS} 
+                            value={this.props.model.position} 
+                            onChange={this.handleChange.bind(this)} />
+                        <FlagSelector 
+                            id="deity" 
+                            label="Deity" 
+                            flags={MOB_DEITIES} 
+                            value={this.props.model.deity} 
+                            onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector 
+                            id="act_flags" 
+                            label="Act Flags" 
+                            flags={MOB_ACT_FLAGS} 
+                            value={this.props.model.act_flags} 
+                            onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector 
+                            id="understood_languages" 
+                            label="Act Flags" 
+                            flags={MOB_LANGUAGES} 
+                            value={this.props.model.understood_languages} 
+                            onChange={this.handleChange.bind(this)} />
+                        <MultiFlagSelector 
+                            id="spoken_languages" 
+                            label="Act Flags" 
+                            flags={MOB_LANGUAGES} 
+                            value={this.props.model.spoken_languages} 
+                            onChange={this.handleChange.bind(this)} />
                     </Tab>
                     <Tab label="Unique">
                         {uniqueTab}
@@ -575,13 +731,20 @@ class MobResetsEditor extends ModelArrayComponent {
                     mob_reset={this.props.model} 
                     items={this.props.items} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <CoinResetsEditor 
+                    id="coins" 
+                    errorText={resets.validate("coins")}
+                    model={resets.coins} 
+                    mob_reset={this.props.model} 
+                    items={this.props.items} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
             </Paper>
         ));
     }
     
     handleNew() {
         let mob_reset = new MobReset()
-        let model = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
+        let model = this.props.model.slice(0) //map((item)=>(item.clone())); // Create working copy of state object
         mob_reset.mob = this.props.mob;
         model.push(mob_reset);
         this.props.onChange({target:this.props}, model);
@@ -630,6 +793,51 @@ class EquipmentResetsEditor extends ModelArrayComponent {
             <React.Fragment>
                 <Paper style={paper_style}>
                     <Subheader>Equipment</Subheader>
+                    {super.render()}
+                </Paper>
+            </React.Fragment>
+        )
+    }
+}
+
+class CoinResetsEditor extends ModelArrayComponent {
+    modelClass = CoinReset;
+    generate() {
+        return this.props.model.map((resets, index) => (
+            <Paper key={index}>
+                <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
+                <FlagSelector 
+                    id="coin_type" 
+                    errorText={resets.validate("coin_type")}
+                    label="Coin Type" 
+                    flags={ITEM_COIN_TYPES} 
+                    value={resets.coin_type} 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Dice Count" 
+                    id="dice_count" 
+                    errorText={resets.validate("dice_count")}
+                    value={resets.dice_count} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                <TextField 
+                    floatingLabelText="Dice Sides" 
+                    id="dice_sides" 
+                    errorText={resets.validate("dice_sides")}
+                    value={resets.dice_sides} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+            </Paper>
+        ));
+    }
+    
+    render() {
+        return (
+            <React.Fragment>
+                <Paper style={paper_style}>
+                    <Subheader>Coins</Subheader>
                     {super.render()}
                 </Paper>
             </React.Fragment>

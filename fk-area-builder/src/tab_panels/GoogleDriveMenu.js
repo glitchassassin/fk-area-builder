@@ -17,25 +17,27 @@ class GoogleDriveMenu extends React.Component {
         confirm_open: false,
         confirm_text: "",
         saving: false,
-        storage: new Storage()
+        file_active: false,
     }
+    storage = new Storage()
     closeErrors = () => (this.setState({error_open:false}))
     displayError = (error_text) => (this.setState({error_text:error_text, error_open:true}))
     
     newArea() {
         this.props.closeMenu();
         this.props.onNew();
-        this.state.storage.reset();
+        this.setState({file_active:false})
+        this.storage.reset();
     }
     saveDrive() {
         this.props.closeMenu();
         
-        if (this.props.area.validate().length > 0) {
+        if (this.props.validator(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
             return;
         }
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
-        this.state.storage.didFileChange((changed)=>{
+        this.storage.didFileChange((changed)=>{
             if (changed) {
                 this.setState({confirm_open:true})
                 return;
@@ -47,42 +49,42 @@ class GoogleDriveMenu extends React.Component {
     saveAsDrive() {
         this.props.closeMenu();
         
-        if (this.props.area.validate().length > 0) {
+        if (this.props.validator(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
             return;
         }
-        this.state.storage.createFolderPicker((folder)=>{
+        this.storage.createFolderPicker((folder)=>{
             let filename = this.props.area.name + ".are"; // Should eventually prompt to select a file/location, but this works temporarily
             console.log("Saving new file", filename, folder);
             let contents = this.props.area.toString();
-            this.state.storage.uploadNewFile(filename, folder, contents, ()=>(this.finishSave()));
+            this.storage.uploadNewFile(filename, folder, contents, ()=>(this.finishSave()));
             this.props.setStatus(<IconButton id="loading" tooltip="Saving"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
             this.setState({saving: true});
         })
     }
     forceSaveDrive() {
-        if (this.props.area.validate().length > 0) {
+        if (this.props.validator(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
             return;
         }
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
         let contents = this.props.area.toString();
-        if (this.state.storage.active_file_id != "") {
-            this.state.storage.updateCurrentFile(contents, ()=>(this.finishSave()));
+        if (this.storage.active_file_id !== "") {
+            this.storage.updateCurrentFile(contents, ()=>(this.finishSave()));
         }
     }
     loadDrive() {
         this.props.closeMenu();
-        this.state.storage.downloaded_callback = (contents) => {
+        this.storage.downloaded_callback = (contents) => {
             this.finishLoad(contents);
         }
-        this.state.storage.isDownloading = ()=>{
+        this.storage.isDownloading = ()=>{
             this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
         }
-        this.state.storage.AuthorizeAndPick();
+        this.storage.AuthorizeAndPick();
     }
     reloadDrive() {
-        this.state.storage.downloadFile(null,(contents) => {
+        this.storage.downloadFile(null,(contents) => {
             this.finishLoad(contents);
         });
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
@@ -95,6 +97,7 @@ class GoogleDriveMenu extends React.Component {
     }
     finishSave() {
         this.props.onFileLoad();
+        this.setState({file_active: true});
         this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
     }
     finishLoad(contents) {
@@ -120,7 +123,7 @@ class GoogleDriveMenu extends React.Component {
                     <Menu>
                         <MenuItem onClick={(e)=>(this.newArea())} primaryText="New" />
                         <Divider/>
-                        <MenuItem onClick={(e)=>(this.saveDrive())} primaryText="Save" disabled={this.state.storage.active_file_id == ""} />
+                        <MenuItem onClick={(e)=>(this.saveDrive())} primaryText="Save" disabled={this.storage.active_file_id === ""} />
                         <MenuItem onClick={(e)=>(this.saveAsDrive())} primaryText="Save As..." />
                         <MenuItem onClick={(e)=>(this.loadDrive())} primaryText="Load" />
                     </Menu>

@@ -771,11 +771,12 @@ class MobReset extends Model {
             mob_limit:  new Field({field_name:"mob_limit",  default_value: 1,       in_flags:null,  optional:false}),
             room:       new Field({field_name:"room",       default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
             equipment:  new Field({field_name:"equipment",  default_value: [],          in_flags:null,  optional:true}),
+            coins:      new Field({field_name:"coins",      default_value: [],          in_flags:null,  optional:true}),
             
         }, fields))
     }
     get _error_prefix() {
-        return `[MobReset:${this.mob.vnum} in ${this.room.vnum}]`;
+        return `[MobReset:${this.mob.vnum} in ${this.room ? this.room.vnum : "undefined"}]`;
     }
     
     toString() {
@@ -783,7 +784,7 @@ class MobReset extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room ? this.room.vnum : "undefined"} ; ${this.mob.sdesc} in ${this.room ? this.room.sdesc : "undefined"}${this.equipment.length ? "\n"+this.equipment.map((equip)=>(equip.toString())).join("\n") : ""}`
+        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room ? this.room.vnum : "undefined"} ; ${this.mob.sdesc} in ${this.room ? this.room.sdesc : "undefined"}${this.equipment.length ? "\n"+this.equipment.map((equip)=>(equip.toString())).join("\n") : ""}${this.coins.length ? "\n"+this.coins.map((coin)=>(coin.toString())).join("\n") : ""}`
     }
 }
 
@@ -948,13 +949,13 @@ class CoinReset extends Model {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        default_value: 1,       in_flags:null,              optional:false}),
-            coin_type:      new Field({field_name:"coin_type",      default_value: null,    in_flags:flags.COIN_TYPES,  optional:false}),
+            coin_type:      new Field({field_name:"coin_type",      default_value: null,    in_flags:flags.ITEM_COIN_TYPES,  optional:false}),
             dice_count:     new Field({field_name:"dice_count",     default_value: "",    in_flags:null,              optional:false}),
             dice_sides:     new Field({field_name:"dice_sides",     default_value: "",    in_flags:null,              optional:false}),
         }, fields))
     }
     get _error_prefix() {
-        return `[CoinReset:${this.trap_type.code}]`;
+        return `[CoinReset:${this.coin_type}]`;
     }
     
     toString() {
@@ -962,7 +963,7 @@ class CoinReset extends Model {
         if (errors.length) {
             return errors.join("\n");
         }
-        return ` C ${this.defunt} ${this.coin_type.code} ${this.dice_count} ${this.dice_sides}`
+        return ` C ${this.defunct} ${this.coin_type} ${this.dice_count} ${this.dice_sides}`
     }
 }
 
