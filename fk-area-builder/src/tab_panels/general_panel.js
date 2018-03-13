@@ -25,6 +25,10 @@ import {
 }
 from '../Models/area_model'
 import {
+    AreaValidator
+}
+from '../Models/model_validator'
+import {
     FlagSelector,
     VnumAutoComplete
 }
@@ -40,6 +44,8 @@ const paper_style = {
     maxWidth: "900px"
 }
 
+const area_validator = new AreaValidator()
+
 class GeneralPanel extends React.Component {
     handleChange(event, value, index) {
         let area = this.props.area.clone();
@@ -51,124 +57,113 @@ class GeneralPanel extends React.Component {
         return (
             <Paper style={paper_style}>
                 <FlagSelector id="category" label="Category" flags={AREA_CATEGORIES} value={this.props.area.category} onChange={this.handleChange.bind(this)} />
-                <Validate>
+                <Validate validator={area_validator}>
                     <TextField 
                         floatingLabelText="Area Name" 
-                        id="name" 
-                        errorText={this.props.area.validate("name")} 
+                        id="name"
                         value={this.props.area.name} 
                         autoComplete="off" 
                         onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        floatingLabelText="Base Vnum" 
+                        id="vnum" 
+                        value={this.props.area.vnum} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        floatingLabelText="Authors" 
+                        id="authors" 
+                        fullWidth={true} 
+                        value={this.props.area.authors} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <Subheader>Levels</Subheader>
+                    <div>
+                        <Validate validator={area_validator}>
+                            <TextField 
+                                floatingLabelText="Min recommended level" 
+                                id="min_recommended_level" 
+                                value={this.props.area.min_recommended_level} 
+                                autoComplete="off" 
+                                onChange={this.handleChange.bind(this)} />
+                            <TextField 
+                                floatingLabelText="Max recommended level" 
+                                id="max_recommended_level" 
+                                value={this.props.area.max_recommended_level} 
+                                autoComplete="off" 
+                                onChange={this.handleChange.bind(this)} />
+                        </Validate>
+                    </div>
+                    <div>
+                        <Validate validator={area_validator}>
+                        <TextField 
+                            floatingLabelText="Min enforced level" 
+                            id="min_enforced_level" 
+                            value={this.props.area.min_enforced_level} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        <TextField 
+                            floatingLabelText="Max enforced level" 
+                            id="max_enforced_level" 
+                            value={this.props.area.max_enforced_level} 
+                            autoComplete="off" 
+                            onChange={this.handleChange.bind(this)} />
+                        </Validate>
+                    </div>
+                    <Subheader>Area Reset</Subheader>
+                    <TextField 
+                        floatingLabelText="Area reset echo" 
+                        fullWidth={true} 
+                        id="reset_msg" 
+                        value={this.props.area.reset_msg} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        floatingLabelText="Area reset duration" 
+                        id="reset_duration" 
+                        value={this.props.area.reset_duration} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <Subheader>Economy</Subheader>
+                    <TextField 
+                        floatingLabelText="Economy min" 
+                        id="economy_min" 
+                        value={this.props.area.economy_min} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        floatingLabelText="Economy max" 
+                        id="economy_max" 
+                        value={this.props.area.economy_max} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <Subheader>Weather</Subheader>
+                    <TextField 
+                        floatingLabelText="Humidity" 
+                        id="weather_humidity" 
+                        value={this.props.area.weather_humidity} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <TextField 
+                        floatingLabelText="Temperature" 
+                        id="weather_temperature" 
+                        value={this.props.area.weather_temperature} 
+                        autoComplete="off" 
+                        onChange={this.handleChange.bind(this)} />
+                    <Subheader>Environmental Materials</Subheader>
+                    <FlagSelector 
+                        id="mining_material" 
+                        label="Mining material" 
+                        flags={ITEM_MATERIALS} 
+                        value={this.props.area.mining_material} 
+                        onChange={this.handleChange.bind(this)} />
+                    <FlagSelector 
+                        id="logging_material" 
+                        label="Logging material" 
+                        flags={ITEM_MATERIALS} 
+                        value={this.props.area.logging_material} 
+                        onChange={this.handleChange.bind(this)} />
                 </Validate>
-                <TextField 
-                    floatingLabelText="Base Vnum" 
-                    id="vnum" 
-                    errorText={this.props.area.validate("vnum")} 
-                    value={this.props.area.vnum} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <TextField 
-                    floatingLabelText="Authors" 
-                    id="authors" 
-                    errorText={this.props.area.validate("authors")} 
-                    fullWidth={true} 
-                    value={this.props.area.authors} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <Subheader>Levels</Subheader>
-                <div>
-                    <TextField 
-                        floatingLabelText="Min recommended level" 
-                        id="min_recommended_level" 
-                        errorText={this.props.area.validate("min_recommended_level")} 
-                        value={this.props.area.min_recommended_level} 
-                        autoComplete="off" 
-                        onChange={this.handleChange.bind(this)} />
-                    <TextField 
-                        floatingLabelText="Max recommended level" 
-                        id="max_recommended_level" 
-                        errorText={this.props.area.validate("max_recommended_level")} 
-                        value={this.props.area.max_recommended_level} 
-                        autoComplete="off" 
-                        onChange={this.handleChange.bind(this)} />
-                </div>
-                <div>
-                    <TextField 
-                        floatingLabelText="Min enforced level" 
-                        id="min_enforced_level" 
-                        errorText={this.props.area.validate("min_enforced_level")} 
-                        value={this.props.area.min_enforced_level} 
-                        autoComplete="off" 
-                        onChange={this.handleChange.bind(this)} />
-                    <TextField 
-                        floatingLabelText="Max enforced level" 
-                        id="max_enforced_level" 
-                        errorText={this.props.area.validate("max_enforced_level")} 
-                        value={this.props.area.max_enforced_level} 
-                        autoComplete="off" 
-                        onChange={this.handleChange.bind(this)} />
-                </div>
-                <Subheader>Area Reset</Subheader>
-                <TextField 
-                    floatingLabelText="Area reset echo" 
-                    fullWidth={true} 
-                    id="reset_msg" 
-                    errorText={this.props.area.validate("reset_msg")} 
-                    value={this.props.area.reset_msg} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <TextField 
-                    floatingLabelText="Area reset duration" 
-                    id="reset_duration" 
-                    errorText={this.props.area.validate("reset_duration")} 
-                    value={this.props.area.reset_duration} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <Subheader>Economy</Subheader>
-                <TextField 
-                    floatingLabelText="Economy min" 
-                    id="economy_min" 
-                    errorText={this.props.area.validate("economy_min")} 
-                    value={this.props.area.economy_min} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <TextField 
-                    floatingLabelText="Economy max" 
-                    id="economy_max" 
-                    errorText={this.props.area.validate("economy_max")} 
-                    value={this.props.area.economy_max} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <Subheader>Weather</Subheader>
-                <TextField 
-                    floatingLabelText="Humidity" 
-                    id="weather_humidity" 
-                    errorText={this.props.area.validate("weather_humidity")} 
-                    value={this.props.area.weather_humidity} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <TextField 
-                    floatingLabelText="Temperature" 
-                    id="weather_temperature" 
-                    errorText={this.props.area.validate("weather_temperature")} 
-                    value={this.props.area.weather_temperature} 
-                    autoComplete="off" 
-                    onChange={this.handleChange.bind(this)} />
-                <Subheader>Environmental Materials</Subheader>
-                <FlagSelector 
-                    id="mining_material" 
-                    errorText={this.props.area.validate("mining_material")} 
-                    label="Mining material" 
-                    flags={ITEM_MATERIALS} 
-                    value={this.props.area.mining_material} 
-                    onChange={this.handleChange.bind(this)} />
-                <FlagSelector 
-                    id="logging_material" 
-                    errorText={this.props.area.validate("logging_material")} 
-                    label="Logging material" 
-                    flags={ITEM_MATERIALS} 
-                    value={this.props.area.logging_material} 
-                    onChange={this.handleChange.bind(this)} />
                 <JusticeSystemEditor 
                     area={this.props.area} 
                     updateArea={this.props.updateArea.bind(this)} />
@@ -207,36 +202,36 @@ class JusticeSystemEditor extends React.Component {
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
                     <Subheader>Justice System</Subheader>
                     <div>
+                        <Validate validator={area_validator.justice_system}>
                         <VnumAutoComplete 
                             floatingLabelText="Courtroom" 
                             id="courtroom" 
-                            errorText={this.props.area.justice_system.validate("courtroom")} 
                             value={this.props.area.justice_system.courtroom} 
                             onChange={this.handleChange.bind(this)} 
                             dataSource={this.props.area.rooms} />
                         <VnumAutoComplete 
                             floatingLabelText="Dungeon" 
                             id="dungeon" 
-                            errorText={this.props.area.justice_system.validate("dungeon")} 
                             value={this.props.area.justice_system.dungeon} 
                             onChange={this.handleChange.bind(this)} 
                             dataSource={this.props.area.rooms} />
+                        </Validate>
                     </div>
                     <div>
+                        <Validate validator={area_validator.justice_system}>
                         <VnumAutoComplete 
                             floatingLabelText="Judge" 
                             id="judge" 
-                            errorText={this.props.area.justice_system.validate("judge")} 
                             value={this.props.area.justice_system.judge} 
                             onChange={this.handleChange.bind(this)} 
                             dataSource={this.props.area.mobs} />
                         <VnumAutoComplete 
                             floatingLabelText="Guard" 
                             id="guard" 
-                            errorText={this.props.area.justice_system.validate("guard")} 
                             value={this.props.area.justice_system.guard} 
                             onChange={this.handleChange.bind(this)} 
                             dataSource={this.props.area.mobs} />
+                        </Validate>
                     </div>
                     <Table>
                         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -248,51 +243,55 @@ class JusticeSystemEditor extends React.Component {
                         </TableHeader>
                         <TableBody displayRowCheckbox={false}>
                             <TableRow>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_HIGH_MURDER.sdesc}</TableRowColumn>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_HIGH_MURDER.ldesc}</TableRowColumn>
+                                <TableRowColumn>CRIME_HIGH_MURDER</TableRowColumn>
+                                <TableRowColumn>Murdering another PC</TableRowColumn>
                                 <TableRowColumn>
+                                    <Validate validator={area_validator.justice_system}>
                                     <FlagSelector 
-                                        id="CRIME_HIGH_MURDER punishment" 
-                                        errorText={this.props.area.justice_system.validate("CRIME_HIGH_MURDER punishment")} 
+                                        id="CRIME_HIGH_MURDER"
                                         flags={JUSTICE_PUNISHMENTS} 
-                                        value={this.props.area.justice_system.CRIME_HIGH_MURDER.punishment} 
+                                        value={this.props.area.justice_system.CRIME_HIGH_MURDER} 
                                         onChange={this.handleChange.bind(this)} />
+                                    </Validate>
                                 </TableRowColumn>
                             </TableRow>
                             <TableRow>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_LOW_MURDER.sdesc}</TableRowColumn>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_LOW_MURDER.ldesc}</TableRowColumn>
+                                <TableRowColumn>CRIME_LOW_MURDER</TableRowColumn>
+                                <TableRowColumn>Killing a mob</TableRowColumn>
                                 <TableRowColumn>
+                                    <Validate validator={area_validator.justice_system}>
                                     <FlagSelector 
-                                        id="CRIME_LOW_MURDER punishment" 
-                                        errorText={this.props.area.justice_system.validate("CRIME_LOW_MURDER punishment")} 
+                                        id="CRIME_LOW_MURDER"
                                         flags={JUSTICE_PUNISHMENTS} 
-                                        value={this.props.area.justice_system.CRIME_LOW_MURDER.punishment} 
+                                        value={this.props.area.justice_system.CRIME_LOW_MURDER} 
                                         onChange={this.handleChange.bind(this)} />
+                                    </Validate>
                                 </TableRowColumn>
                             </TableRow>
                             <TableRow>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_ASSAULT.sdesc}</TableRowColumn>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_ASSAULT.ldesc}</TableRowColumn>
+                                <TableRowColumn>CRIME_ASSAULT</TableRowColumn>
+                                <TableRowColumn>Attacking (but not killing) a PC/mob</TableRowColumn>
                                 <TableRowColumn>
+                                    <Validate validator={area_validator.justice_system}>
                                     <FlagSelector 
-                                        id="CRIME_ASSAULT punishment" 
-                                        errorText={this.props.area.justice_system.validate("CRIME_ASSAULT punishment")} 
+                                        id="CRIME_ASSAULT"
                                         flags={JUSTICE_PUNISHMENTS} 
-                                        value={this.props.area.justice_system.CRIME_ASSAULT.punishment} 
+                                        value={this.props.area.justice_system.CRIME_ASSAULT} 
                                         onChange={this.handleChange.bind(this)} />
+                                    </Validate>
                                 </TableRowColumn>
                             </TableRow>
                             <TableRow>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_MUGGING.sdesc}</TableRowColumn>
-                                <TableRowColumn>{this.props.area.justice_system.CRIME_MUGGING.ldesc}</TableRowColumn>
+                                <TableRowColumn>CRIME_MUGGING</TableRowColumn>
+                                <TableRowColumn>A failed pickpocket/steal attempt</TableRowColumn>
                                 <TableRowColumn>
+                                    <Validate validator={area_validator.justice_system}>
                                     <FlagSelector 
-                                        id="CRIME_MUGGING punishment" 
-                                        errorText={this.props.area.justice_system.validate("CRIME_MUGGING punishment")} 
+                                        id="CRIME_MUGGING"
                                         flags={JUSTICE_PUNISHMENTS} 
-                                        value={this.props.area.justice_system.CRIME_MUGGING.punishment} 
+                                        value={this.props.area.justice_system.CRIME_MUGGING} 
                                         onChange={this.handleChange.bind(this)} />
+                                    </Validate>
                                 </TableRowColumn>
                             </TableRow>
                         </TableBody>

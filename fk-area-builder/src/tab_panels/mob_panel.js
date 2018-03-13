@@ -13,6 +13,7 @@ import Toggle from 'material-ui/Toggle';
 import TextField from 'material-ui/TextField';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import Subheader from 'material-ui/Subheader';
+import {equal_recursively} from '../Models/model'
 
 import {
     Table,
@@ -65,15 +66,37 @@ import {
     CoinReset
 }
 from '../Models/area_model'
+import {FlagWithCategorySelector,FlagSelector,MultiFlagSelector,VnumAutoComplete} from '../UIComponents/FlagSelectors'
+import {Validate} from '../UIComponents/GenericEditors'
 import {
-    FlagWithCategorySelector,
-    FlagSelector,
-    MultiFlagSelector,
-    VnumAutoComplete
-}
-from '../UIComponents/FlagSelectors'
+    MobValidator,
+    ShopValidator,
+    RepairRechargeValidator,
+    MobResetValidator,
+    EquipmentResetValidator,
+    CoinResetValidator,
+    TrainSkillValidator,
+    TrainWeaponSkillValidator,
+    TrainSpellValidator,
+    TrainLevelValidator,
+    TrainStatisticValidator,
+    TrainFeatValidator
+} from '../Models/model_validator'
 import {TrapResetEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
 import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
+
+const mob_validator = new MobValidator()
+const shop_validator = new ShopValidator()
+const repair_recharge_validator = new RepairRechargeValidator()
+const mob_reset_validator = new MobResetValidator()
+const equipment_reset_validator = new EquipmentResetValidator()
+const coin_reset_validator = new CoinResetValidator()
+const can_train_skill_validator = new TrainSkillValidator()
+const can_train_weapon_skill_validator = new TrainWeaponSkillValidator()
+const can_train_spell_validator = new TrainSpellValidator()
+const can_train_level_validator = new TrainLevelValidator()
+const can_train_statistic_validator = new TrainStatisticValidator()
+const can_train_feat_validator = new TrainFeatValidator()
 
 const icon_button_style = {
     padding: "5px",
@@ -89,6 +112,10 @@ class MobPanel extends React.Component {
         confirm_text: "",
         confirm_title: "",
         errors_open: false
+    }
+    shouldComponentUpdate(newProps) {
+        // Return true if model has changed, false otherwise
+        return (!equal_recursively(this.props.area.mobs, newProps.area.mobs))
     }
     
     handleEdit = (index) => {
@@ -163,7 +190,7 @@ class MobPanel extends React.Component {
                     <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
-                    {mob.validate().length > 0 && (
+                    {mob_validator.validate(mob).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.showErrors(index))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
@@ -238,7 +265,7 @@ class MobPanel extends React.Component {
                 <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
                 <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${this.props.area.mobs[this.state.current_mob].vnum}`}>
                     <List>
-                        {this.props.area.mobs[this.state.current_mob].validate().map((error, index) => (
+                        {mob_validator.validate(this.props.area.mobs[this.state.current_mob]).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -291,6 +318,7 @@ class MobEditor extends ModelComponent {
         ];
         var uniqueTab = (this.props.model instanceof UniqueMob ? (
             <React.Fragment>
+                <Validate validator={mob_validator}>
                 <MultiFlagSelector 
                     id="affect_flags" 
                     label="Act Flags" 
@@ -375,6 +403,7 @@ class MobEditor extends ModelComponent {
                     flags={MOB_RIS} 
                     value={this.props.model.ris_susceptible} 
                     onChange={this.handleChange.bind(this)} />
+                </Validate>
                 <RaisedButton 
                     id="makeSimpleMob" 
                     label="Convert to Simple Mob?" 
@@ -394,6 +423,7 @@ class MobEditor extends ModelComponent {
             <Dialog title={`Edit ${this.props.model instanceof UniqueMob ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
+                        <Validate validator={mob_validator}>
                         <TextField 
                             floatingLabelText="vnum" 
                             id="vnum" 
@@ -429,8 +459,10 @@ class MobEditor extends ModelComponent {
                             value={this.props.model.fulldesc} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
+                        </Validate>
                     </Tab>
                     <Tab label="Details">
+                        <Validate validator={mob_validator}>
                         <TextField 
                             floatingLabelText="Level" 
                             id="level" 
@@ -485,6 +517,7 @@ class MobEditor extends ModelComponent {
                             flags={MOB_LANGUAGES} 
                             value={this.props.model.spoken_languages} 
                             onChange={this.handleChange.bind(this)} />
+                        </Validate>
                     </Tab>
                     <Tab label="Unique">
                         {uniqueTab}
@@ -549,37 +582,33 @@ class ShopsEditor extends ModelComponent {
                 <CardText expandable={true}>
                     {this.props.model && (
                         <React.Fragment>
+                        <Validate validator={shop_validator}>
                         <FlagSelector 
                             id="will_buy_1" 
-                            errorText={this.props.model.validate("will_buy_1")} 
                             label="Will Buy 1" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_buy_1} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="will_buy_2" 
-                            errorText={this.props.model.validate("will_buy_2")} 
                             label="Will Buy 2" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_buy_2} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="will_buy_3" 
-                            errorText={this.props.model.validate("will_buy_3")} 
                             label="Will Buy 3" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_buy_3} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="will_buy_4" 
-                            errorText={this.props.model.validate("will_buy_4")} 
                             label="Will Buy 4" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_buy_4} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="will_buy_5" 
-                            errorText={this.props.model.validate("will_buy_5")} 
                             label="Will Buy 5" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_buy_5} 
@@ -587,31 +616,28 @@ class ShopsEditor extends ModelComponent {
                         <TextField 
                             floatingLabelText="Profit (Buy)" 
                             id="profit_buy" 
-                            errorText={this.props.model.validate("profit_buy")} 
                             value={this.props.model.profit_buy} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <TextField 
                             floatingLabelText="Profit (Sell)" 
                             id="profit_sell" 
-                            errorText={this.props.model.validate("profit_sell")} 
                             value={this.props.model.profit_sell} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <TextField 
                             floatingLabelText="Open Hour" 
                             id="open_hour" 
-                            errorText={this.props.model.validate("open_hour")} 
                             value={this.props.model.open_hour} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <TextField 
                             floatingLabelText="Close Hour" 
                             id="close_hour" 
-                            errorText={this.props.model.validate("close_hour")} 
                             value={this.props.model.close_hour} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
+                        </Validate>
                         </React.Fragment>
                     )}
                 </CardText>
@@ -645,23 +671,21 @@ class RepairsEditor extends ModelComponent {
                 <CardText expandable={true}>
                     {this.props.model && (
                         <React.Fragment>
+                        <Validate validator={repair_recharge_validator}>
                         <FlagSelector 
                             id="will_repair_1" 
-                            errorText={this.props.model.validate("will_repair_1")}
                             label="Will Repair 1" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_repair_1} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="will_repair_2" 
-                            errorText={this.props.model.validate("will_repair_2")}
                             label="Will Repair 2" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.will_repair_2} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="repair_material" 
-                            errorText={this.props.model.validate("repair_material")}
                             label="Repair Material" 
                             flags={MOB_REPAIR_MATERIAL} 
                             value={this.props.model.repair_material} 
@@ -669,13 +693,11 @@ class RepairsEditor extends ModelComponent {
                         <TextField 
                             floatingLabelText="Profit Modifier" 
                             id="profit_modifier" 
-                            errorText={this.props.model.validate("profit_modifier")}
                             value={this.props.model.profit_modifier} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="repair" 
-                            errorText={this.props.model.validate("repair")}
                             label="Repair/Recharge" 
                             flags={MOB_REPAIR_RECHARGE} 
                             value={this.props.model.repair} 
@@ -683,17 +705,16 @@ class RepairsEditor extends ModelComponent {
                         <TextField 
                             floatingLabelText="Open Hour" 
                             id="open_hour" 
-                            errorText={this.props.model.validate("open_hour")}
                             value={this.props.model.open_hour} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <TextField 
                             floatingLabelText="Close Hour" 
                             id="close_hour" 
-                            errorText={this.props.model.validate("close_hour")}
                             value={this.props.model.close_hour} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
+                        </Validate>
                         </React.Fragment>
                     )}
                 </CardText>
@@ -710,30 +731,28 @@ class MobResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={mob_reset_validator}>
                 <TextField 
                     floatingLabelText="Limit" 
                     id="mob_limit" 
-                    errorText={resets.validate("mob_limit")}
                     value={resets.mob_limit} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <VnumAutoComplete 
                     floatingLabelText="Starting Room"
                     id="room"  
-                    errorText={resets.validate("room")}
                     value={resets.room}  
                     onChange={(e,v)=>(this.handleChange(e,v,index))}
                     dataSource={this.props.rooms} />
+                </Validate>
                 <EquipmentResetsEditor 
                     id="equipment" 
-                    errorText={resets.validate("equipment")}
                     model={resets.equipment} 
                     mob_reset={this.props.model} 
                     items={this.props.items} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <CoinResetsEditor 
                     id="coins" 
-                    errorText={resets.validate("coins")}
                     model={resets.coins} 
                     mob_reset={this.props.model} 
                     items={this.props.items} 
@@ -759,27 +778,26 @@ class EquipmentResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={equipment_reset_validator}>
                 <VnumAutoComplete 
                     floatingLabelText="Item" 
                     id="item" 
-                    errorText={resets.validate("item")}
                     value={resets.item} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} 
                     dataSource={this.props.items} />
                 <TextField 
                     floatingLabelText="Equip Limit" 
                     id="equip_limit" 
-                    errorText={resets.validate("equip_limit")}
                     value={resets.equip_limit} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <FlagSelector 
                     id="wear_loc" 
-                    errorText={resets.validate("wear_loc")}
                     label="Wear Location" 
                     flags={MOB_WEAR_POSITIONS} 
                     value={resets.wear_loc} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
                 <TrapResetEditor 
                     id="trap_reset" 
                     model={resets.trap_reset} 
@@ -808,9 +826,9 @@ class CoinResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={coin_reset_validator}>
                 <FlagSelector 
                     id="coin_type" 
-                    errorText={resets.validate("coin_type")}
                     label="Coin Type" 
                     flags={ITEM_COIN_TYPES} 
                     value={resets.coin_type} 
@@ -818,17 +836,16 @@ class CoinResetsEditor extends ModelArrayComponent {
                 <TextField 
                     floatingLabelText="Dice Count" 
                     id="dice_count" 
-                    errorText={resets.validate("dice_count")}
                     value={resets.dice_count} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <TextField 
                     floatingLabelText="Dice Sides" 
                     id="dice_sides" 
-                    errorText={resets.validate("dice_sides")}
                     value={resets.dice_sides} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
             </Paper>
         ));
     }
@@ -881,29 +898,32 @@ class CanTrainSkillEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
+                    <Validate validator={can_train_skill_validator}>
                     <TextField 
                         id="level" 
-                        errorText={skill.validate("level")}
                         value={skill.level} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_skill_validator}>
                     <TextField 
                         id="price_multiplier" 
-                        errorText={skill.validate("price_multiplier")}
                         value={skill.price_multiplier} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_skill_validator}>
                     <FlagSelector 
                         id="skill" 
-                        errorText={skill.validate("skill")}
                         label="Skill" 
                         flags={MOB_SKILLS} 
                         value={skill.skill} 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
         ));
@@ -919,29 +939,32 @@ class CanTrainWeaponSkillEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.remove(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
+                    <Validate validator={can_train_weapon_skill_validator}>
                     <TextField 
                         id="level" 
-                        errorText={skill.validate("level")}
                         value={skill.level} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_weapon_skill_validator}>
                     <TextField 
                         id="price_multiplier" 
-                        errorText={skill.validate("price_multiplier")}
                         value={skill.price_multiplier} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_weapon_skill_validator}>
                     <FlagSelector 
                         id="weapon_skill" 
-                        errorText={skill.validate("weapon_skill")}
                         label="Weapon Skill" 
                         flags={MOB_WEAPON_SKILLS} 
                         value={skill.weapon_skill} 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
         ));
@@ -957,29 +980,32 @@ class CanTrainSpellEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
+                    <Validate validator={can_train_spell_validator}>
                     <TextField 
                         id="level" 
-                        errorText={skill.validate("level")}
                         value={skill.level} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_spell_validator}>
                     <TextField 
                         id="price_multiplier" 
-                        errorText={skill.validate("price_multiplier")}
                         value={skill.price_multiplier} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_spell_validator}>
                     <FlagSelector 
                         id="spell" 
-                        errorText={skill.validate("spell")}
                         label="Spell" 
                         flags={MOB_SPELLS} 
                         value={skill.spell} 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
         ));
@@ -995,20 +1021,22 @@ class CanTrainLevelEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
+                    <Validate validator={can_train_level_validator}>
                     <TextField 
                         id="level" 
-                        errorText={skill.validate("level")}
                         value={skill.level} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_level_validator}>
                     <TextField 
                         id="price_multiplier" 
-                        errorText={skill.validate("price_multiplier")}
                         value={skill.price_multiplier} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
         ));
@@ -1024,29 +1052,32 @@ class CanTrainStatisticEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.handleDelete(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
+                    <Validate validator={can_train_statistic_validator}>
                     <TextField 
                         id="level" 
-                        errorText={skill.validate("level")}
                         value={skill.level} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_statistic_validator}>
                     <TextField 
                         id="price_multiplier" 
-                        errorText={skill.validate("price_multiplier")}
                         value={skill.price_multiplier} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_statistic_validator}>
                     <FlagSelector 
                         id="statistic" 
-                        errorText={skill.validate("statistic")}
                         label="Statistic" 
                         flags={MOB_STATISTICS} 
                         value={skill.statistic} 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
         ));
@@ -1062,29 +1093,32 @@ class CanTrainFeatEditor extends CanTrainRenderer {
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
+                    <Validate validator={can_train_feat_validator}>
                     <TextField 
                         id="level" 
-                        errorText={skill.validate("level")}
                         value={skill.level} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_feat_validator}>
                     <TextField 
                         id="price_multiplier" 
-                        errorText={skill.validate("price_multiplier")}
                         value={skill.price_multiplier} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={can_train_feat_validator}>
                     <FlagSelector 
                         id="feat" 
-                        errorText={skill.validate("feat")}
                         label="Feat" 
                         flags={MOB_FEATS} 
                         value={skill.feat} 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
         ));

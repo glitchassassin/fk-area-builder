@@ -51,112 +51,6 @@ class Area extends Model {
             quest_log:              new Field({field_name:"quest_log",              default_value: [],                                  in_flags:null,                  optional:true}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[Area:${this.name}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = super.validate()
-        if (this.authors.length >= 36) {
-            errors.push(`${this._error_prefix}.authors List too long (max 36 characters)`);
-        }
-        // Level range
-        if (!(0 < this.min_recommended_level <= 65)) {
-            errors.push(`${this._error_prefix}.min_recommended_level must be between 0 and 65`);
-        }
-        if (!(0 < this.max_recommended_level <= 65)) {
-            errors.push(`${this._error_prefix}.max_recommended_level must be between 0 and 65`);
-        }
-        if (!(0 < this.min_enforced_level <= 65)) {
-            errors.push(`${this._error_prefix}.min_enforced_level must be between 0 and 65`);
-        }
-        if (!(0 < this.max_enforced_level <= 65)) {
-            errors.push(`${this._error_prefix}.max_enforced_level must be between 0 and 65`);
-        }
-        // Reset duration
-        if (this.reset_duration < -1) {
-            errors.push(`${this._error_prefix}.reset_duration Invalid reset duration`);
-        }
-        // Flags
-        if (this.wilderness_flag != 0) {
-            errors.push(`${this._error_prefix}.wilderness_flag should be 0 for most areas`);
-        }
-        // Economy
-        if (this.economy_min < 0) {
-            errors.push(`${this._error_prefix}.economy_min should be a positive number`);
-        }
-        if (this.economy_max < 0) {
-            errors.push(`${this._error_prefix}.economy_max should be a positive number`);
-        }
-        // Weather
-        if (!(1 <= this.weather_humidity <= 10)) {
-            errors.push(`${this._error_prefix}.weather_humidity must be between 1 and 10`);
-        }
-        if (!(1 <= this.weather_temperature <= 10)) {
-            errors.push(`${this._error_prefix}.weather_temperature must be between 1 and 10`);
-        }
-        return errors
-    }
-    
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return "Invalid Area\n" + errors.join("\n");
-        }
-        
-        return `#AREA ${this.category.color_code}${this.name}~
-#AUTHOR ${this.authors}~
-${this.justice_system != null ? this.justice_system.toString() : ""}
-#RANGES
-${this.min_recommended_level} ${this.max_recommended_level} ${this.min_enforced_level} ${this.max_enforced_level}
-$
-#RESETMSG ${this.reset_msg}~
-#FLAGS
-${this.wilderness_flag} ${this.reset_duration}
-#ECONOMY ${this.economy_min} ${this.economy_max}
-#WEATHER ${this.weather_humidity} ${this.weather_temperature}
-${this.mining_material != null ? "#MINING " + this.mining_material.code : ""}
-${this.logging_material != null ? "#LOGGING " + this.logging_material.code : ""}
-#QUESTS
-${this.quest_log.map((quest)=>(quest.toString())).join("\n")}
--1
-#MOBILES
-${this.mobs.sort(vnum_sort).map((mob)=>(mob.toString())).join("\n")}
-#0
-#OBJECTS
-${this.items.sort(vnum_sort).map((obj)=>(obj.toString())).join("\n")}
-#0
-#ROOMS
-${this.rooms.sort(vnum_sort).map((room)=>(room.toString())).join("\n")}
-#0
-#RESETS
-${this.mobs.filter((obj)=>(obj.mob_resets.length)).map(
-    (obj)=>(obj.mob_resets.map((reset)=>(reset.toString())).join("\n"))
-).join("\n")}
-${this.items.filter((obj)=>(obj.item_resets.length)).map(
-    (obj)=>(obj.item_resets.map((reset)=>(reset.toString())).join("\n"))
-).join("\n")}
-${this.rooms.filter((obj)=>(obj.room_resets.length)).map(
-    (obj)=>(obj.room_resets.map((reset)=>(reset.toString())).join("\n"))
-).join("\n")}
-${this.rooms.filter((obj)=>(obj.door_resets.length)).map(
-    (obj)=>(obj.door_resets.map((reset)=>(reset.toString())).join("\n"))
-).join("\n")}
-S
-#SHOPS
-${this.mobs.filter((obj)=>(obj.shop!==null)).map((obj)=>(obj.shop.toString())).join("\n")}
-0
-#REPAIRS
-${this.mobs.filter((obj)=>(obj.repairs!==null)).map((obj)=>(obj.repairs.toString())).join("\n")}
-0
-#SPECIALS
-${this.mob_specials.map((res)=>(res.toString())).join("\n")}
-S
-#$
-`.replace(/\n\n[\n]+/g, "\n\n");
-    }
 }
 
 class JusticeSystem extends Model {
@@ -166,83 +60,11 @@ class JusticeSystem extends Model {
             dungeon:    new Field({field_name:"dungeon",    default_value: null,    in_flags:null,  optional:true}),
             judge:      new Field({field_name:"judge",      default_value: null,    in_flags:null,  optional:true}),
             guard:      new Field({field_name:"guard",      default_value: null,    in_flags:null,  optional:true}),
-            CRIME_HIGH_MURDER: new Field({field_name:"CRIME_HIGH_MURDER", default_value: {
-                code: "CRIME_HIGH_MURDER",
-                sdesc: "High Murder",
-                ldesc: "Murdering another PC",
-                punishment: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED
-            }, in_flags:null, optional:false}),
-            CRIME_LOW_MURDER: new Field({field_name:"CRIME_LOW_MURDER", default_value: {
-                code: "CRIME_LOW_MURDER",
-                sdesc: "Low Murder",
-                ldesc: "Killing a mob",
-                punishment: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED
-            }, in_flags:null, optional:false}),
-            CRIME_ASSAULT: new Field({field_name:"CRIME_ASSAULT", default_value: {
-                code: "CRIME_ASSAULT",
-                sdesc: "Assault",
-                ldesc: "Attacking (but not killing) a PC/mob",
-                punishment: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED
-            }, in_flags:null, optional:false}),
-            CRIME_MUGGING: new Field({field_name:"CRIME_MUGGING", default_value: {
-                code: "CRIME_MUGGING",
-                sdesc: "Mugging",
-                ldesc: "A failed pickpocket/steal attempt",
-                punishment: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED
-            }, in_flags:null, optional:false}),
+            CRIME_HIGH_MURDER: new Field({field_name:"CRIME_HIGH_MURDER", default_value: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED, in_flags:flags.JUSTICE_PUNISHMENTS, optional:false}),
+            CRIME_LOW_MURDER: new Field({field_name:"CRIME_LOW_MURDER", default_value: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED, in_flags:flags.JUSTICE_PUNISHMENTS, optional:false}),
+            CRIME_ASSAULT: new Field({field_name:"CRIME_ASSAULT", default_value: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED, in_flags:flags.JUSTICE_PUNISHMENTS, optional:false}),
+            CRIME_MUGGING: new Field({field_name:"CRIME_MUGGING", default_value: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED, in_flags:flags.JUSTICE_PUNISHMENTS, optional:false}),
         }, fields))
-    }
-    get _error_prefix() {
-        return "[JusticeSystem]"
-    }
-    
-    validate(field) {
-        if (field !== undefined) { // Field-specific validation
-            if (field.indexOf("CRIME_") == 0) {
-                let crime = this[field.split(" ")[0]];
-                let errors=[];
-                if (crime.punishment == null) {
-                    errors.push(`${crime.code} has no punishment defined`);
-                }
-                else if (crime.punishment.do_not_use) {
-                    errors.push(`${crime.code} has punishment "${crime.punishment.code}" which should not be used`);
-                }
-                return errors.join("")
-            }
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = super.validate()
-        
-        // Check crimes
-        let crimes = ["CRIME_HIGH_MURDER","CRIME_LOW_MURDER","CRIME_ASSAULT","CRIME_MUGGING"];
-        for (let c of crimes) {
-            let crime = this[c];
-            if (crime.punishment == null) {
-                errors.push(`${this._error_prefix}.${crime.code} has no punishment defined`);
-            }
-            else if (crime.punishment.do_not_use) {
-                errors.push(`${this._error_prefix}.${crime.code} has punishment "${crime.punishment.code}" which should not be used`);
-            }
-        }
-        
-        return errors
-    }
-    
-    toString() {
-        let errors = this.validate()
-        if (errors.length) {
-            return "Invalid JusticeSystem: \n" + errors.join("\n")
-        }
-        return `#JUSTICE
-CourtRoom ${this.courtroom}
-Dungeon ${this.dungeon}
-Judge ${this.judge}
-Guard ${this.guard}
-Crime CRIME_HIGH_MURDER ${this.CRIME_HIGH_MURDER.punishment.code}
-Crime CRIME_LOW_MURDER ${this.CRIME_LOW_MURDER.punishment.code}
-Crime CRIME_ASSAULT ${this.CRIME_ASSAULT.punishment.code}
-Crime CRIME_MUGGING ${this.CRIME_MUGGING.punishment.code}
-$`
     }
 }
 
@@ -252,12 +74,12 @@ class Room extends Model {
             vnum:               new Field({field_name:"vnum",               default_value: "",    in_flags:null,                      optional:false}),
             sdesc:              new Field({field_name:"sdesc",              default_value: "",    in_flags:null,                      optional:false}),
             ldesc:              new Field({field_name:"ldesc",              default_value: "",    in_flags:null,                      optional:false}),
-            defunct:            new Field({field_name:"defunct",            default_value: 0,       in_flags:null,                      optional:false}),
+            defunct:            new Field({field_name:"defunct",            default_value: "0",       in_flags:null,                      optional:false}),
             room_flags:         new Field({field_name:"room_flags",         default_value: [],      in_flags:flags.ROOM_FLAGS,          optional:true}),
             sector:             new Field({field_name:"sector",             default_value: null,    in_flags:flags.ROOM_SECTOR_FLAGS,   optional:false}),
-            teleport_delay:     new Field({field_name:"teleport_delay",     default_value: 0,       in_flags:null,                      optional:true}),
-            teleport_target:    new Field({field_name:"teleport_target",    default_value: 0,       in_flags:null,                      optional:true}),
-            tunnel:             new Field({field_name:"tunnel",             default_value: 0,       in_flags:null,                      optional:true}),
+            teleport_delay:     new Field({field_name:"teleport_delay",     default_value: "0",       in_flags:null,                      optional:true}),
+            teleport_target:    new Field({field_name:"teleport_target",    default_value: "0",       in_flags:null,                      optional:true}),
+            tunnel:             new Field({field_name:"tunnel",             default_value: "0",       in_flags:null,                      optional:true}),
             exits:              new Field({field_name:"exits",              default_value: [],      in_flags:null,                      optional:true}),
             door_resets:        new Field({field_name:"door_resets",        default_value: [],      in_flags:null,                      optional:true}),
             room_resets:        new Field({field_name:"room_resets",        default_value: [],      in_flags:null,                      optional:true}),
@@ -265,37 +87,7 @@ class Room extends Model {
             programs:           new Field({field_name:"programs",           default_value: [],      in_flags:null,                      optional:true}),
         }, fields));
     }
-    get _error_prefix() {
-        return `[Room:(${this.vnum}) ${this.sdesc}]`;
-    }
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = super.validate();
-        if (this.defunct != 0) {
-            errors.push(`${this._error_prefix}.defunct must be 0`);
-        }
-        return errors;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `#${this.vnum}
-${this.sdesc}~
-${this.ldesc}
-~
-${this.defunct} ${this.room_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.sector.code} ${this.teleport_delay||"0"} ${this.teleport_target||"0"} ${this.tunnel||"0"}
-${this.exits.map((exit) => (exit.toString())).join("\n")}
-${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
-${this.programs.map((program) => (program.toString())).join("\n")}
-${this.programs.length ? "|" : ""}
-S
-`;
-    }
 }
 
 class Exit extends Model {
@@ -311,20 +103,7 @@ class Exit extends Model {
             exit_size:              new Field({field_name:"exit_size",              default_value: flags.EXIT_SIZES.EXIT_SIZE_ANY,  in_flags:flags.EXIT_SIZES,      optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[Exit:${this.target_vnum}]`
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `${this.direction.code}
-${this.comment}~
-${this.somewhere_door_keyword}~
-${this.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${this.door_key ? this.door_key.vnum : "-1"} ${this.target_vnum ? this.target_vnum.vnum : "0"} ${this.exit_size.code}`;
-    }
 }
 
 class ExtraDescription extends Model {
@@ -334,20 +113,7 @@ class ExtraDescription extends Model {
             ldesc:    new Field({field_name:"ldesc",    default_value: "",    in_flags:null,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[ExtraDescription:${this.keywords}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `E
-${this.keywords}~
-${this.ldesc}
-~`;
-    }
 }
 
 class ItemApply extends Model {
@@ -357,17 +123,7 @@ class ItemApply extends Model {
             parameter:  new Field({field_name:"parameter",  default_value: "",    in_flags:null,                  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[ExtraDescription:${this.apply_flag}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `A ${this.apply_flag.code} ${this.parameter}`;
-    }
 }
 
 class Item extends Model {
@@ -398,44 +154,8 @@ class Item extends Model {
             identify_message:   new Field({field_name:"identify_message",   default_value: "",   in_flags:null,     optional:true}),
         }, fields));
     }
-    get _error_prefix() {
-        return `[Item:(${this.vnum}) ${this.sdesc}]`;
-    }
     
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = super.validate();
-        
-        if (this.action_description !== "") {
-            errors.push(`${this._error_prefix}.action_description is not used and should be empty`);
-        }
-        return errors;
-    }
     
-    toString() {
-        let errors = this.validate()
-        if (errors.length) {
-            return errors.join("\n")
-        }
-        console.log(this.value3.toString(), this.value3)
-        return `#${this.vnum}
-${this.keywords}~
-${this.sdesc}~
-${this.ldesc}~
-${this.action_description}~
-${this.item_type.code}
-${this.attributes.map((attribute)=>(attribute.code)).join("|")||0}
-${this.wear_flags.map((flag)=>(flag.code)).join("|")||0}
-${this.quality.code} ${this.material.code} ${this.condition.code} ${this.size.code}
-${this.value0} ${this.value1} ${this.value2} ${this.value3} ${this.value4} ${this.value5}
-${this.special_applies.map((spec) => (spec.toString())).join("\n")}
-${this.extra_descriptions.map((desc) => (desc.toString())).join("\n")}
-${this.identify_message != null ? `I\n${this.identify_message}\n~` : "" }
-${this.programs.map((program) => (program.toString())).join("\n")}
-${this.programs.length ? "|" : ""}`;
-    }
 }
 
 class SimpleMob extends Model {
@@ -476,34 +196,7 @@ class SimpleMob extends Model {
         }
         
     }
-    get _error_prefix() {
-        return `[SimpleMob:(${this.vnum}) ${this.sdesc}]`
-    }
     
-    toString() {
-        let errors = this.validate()
-        if (errors.length) {
-            return errors.join("\n")
-        }
-        return `#${this.vnum}
-${this.keywords}~
-${this.sdesc}~
-${this.ldesc}~
-${this.fulldesc}
-~
-S ${this.level} ${this.mob_class.code} ${this.race.code} ${this.sex.code} ${this.position.code} ${this.deity.code}
-${this.act_flags.map((flag)=>(flag.code)).join("|")}
-${this.understood_languages.map((lang)=>(lang.code)).join("|")}
-${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
-${this.can_train_skill.map((train)=>(train.toString())).join("\n")}
-${this.can_train_weapon_skill.map((train)=>(train.toString())).join("\n")}
-${this.can_train_spell.map((train)=>(train.toString())).join("\n")}
-${this.can_train_level.map((train)=>(train.toString())).join("\n")}
-${this.can_train_statistic.map((train)=>(train.toString())).join("\n")}
-${this.can_train_feat.map((train)=>(train.toString())).join("\n")}
-${this.programs.map((prog)=>(prog.toString())).join("\n")}
-${this.programs.length ? "|" : ""}`
-    }
     
     
 }
@@ -535,52 +228,8 @@ class UniqueMob extends SimpleMob {
             super(Object.assign(model_fields, fields));
         }
     }
-    get _error_prefix() {
-        return `[UniqueMob:(${this.vnum}) ${this.sdesc}]`
-    }
     
-    validate(field) {
-        if (field !== undefined) {
-            return this._fields[field].validate(this[field]).join("");
-        }
-        let errors = super.validate()
-        for (let stat in ["str", "int", "wis", "dex", "con", "cha", "lck"]) {
-            if (!(3 <= this[stat] <= 22)) {
-                errors.push(`${this._error_prefix}.${stat} should be between 3 and 22`);
-            }
-        }
-        return errors;
-    }
     
-    toString() {
-        let errors = this.validate()
-        if (errors.length) {
-            return this.errors.join("\n")
-        }
-        return `#${this.vnum}
-${this.keywords}~
-${this.sdesc}~
-${this.ldesc}~
-${this.fulldesc}
-~
-U ${this.level} ${this.mob_class.code} ${this.race.code} ${this.sex.code} ${this.position.code} ${this.deity.code}
-${this.act_flags.map((flag)=>(flag.code)).join("|")}
-${this.affect_flags.map((flag)=>(flag.code)).join("|")||"0"}
-${this.virtual_armor_type.code} ${this.virtual_armor_material.code}
-${this.alignment.code}
-${this.str} ${this.int} ${this.wis} ${this.dex} ${this.con} ${this.cha} ${this.lck}
-${this.understood_languages.map((lang)=>(lang.code)).join("|")}
-${this.spoken_languages.map((lang)=>(lang.code)).join("|")}
-${this.ris_resistant.map((ris)=>(ris.code)).join("|") || "RIS_NONE"} ${this.ris_immune.map((ris)=>(ris.code)).join("|") || "RIS_NONE"} ${this.ris_susceptible.map((ris)=>(ris.code)).join("|") || "RIS_NONE"}
-${this.can_train_skill.map((train)=>(train.toString())).join("\n")}
-${this.can_train_weapon_skill.map((train)=>(train.toString())).join("\n")}
-${this.can_train_spell.map((train)=>(train.toString())).join("\n")}
-${this.can_train_level.map((train)=>(train.toString())).join("\n")}
-${this.can_train_statistic.map((train)=>(train.toString())).join("\n")}
-${this.can_train_feat.map((train)=>(train.toString())).join("\n")}
-${this.programs.map((program) => (program.toString())).join("\n")}
-${this.programs.length ? "|" : ""}`
-    }
 }
 
 class TrainSkill extends Model {
@@ -591,17 +240,7 @@ class TrainSkill extends Model {
             skill:              new Field({field_name:"skill",              default_value: null,    in_flags:flags.MOB_SKILLS,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrainSkill:${this.skill?this.skill.code:undefined}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `%${this.level} ${this.price_multiplier} ${this.skill.code}~`
-    }
 }
 
 class TrainWeaponSkill extends Model {
@@ -612,17 +251,7 @@ class TrainWeaponSkill extends Model {
             weapon_skill:       new Field({field_name:"weapon_skill",       default_value: null,    in_flags:flags.MOB_WEAPON_SKILLS,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrainWeaponSkill:${this.weapon_skill?this.weapon_skill.code:undefined}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `%${this.level} ${this.price_multiplier} ${this.weapon_skill.code}~`
-    }
 }
 
 class TrainSpell extends Model {
@@ -633,17 +262,7 @@ class TrainSpell extends Model {
             spell:              new Field({field_name:"spell",              default_value: null,    in_flags:flags.MOB_SPELLS,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrainSpell:${this.spell?this.spell.code:undefined}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `%${this.level} ${this.price_multiplier} ${this.spell.code}~`
-    }
 }
 
 class TrainLevel extends Model {
@@ -653,17 +272,7 @@ class TrainLevel extends Model {
             price_multiplier:   new Field({field_name:"price_multiplier",   default_value: 1,   in_flags:null,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrainLevel]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `%${this.level} ${this.price_multiplier} level~`
-    }
 }
 
 class TrainStatistic extends Model {
@@ -674,17 +283,7 @@ class TrainStatistic extends Model {
             statistic:          new Field({field_name:"statistic",          default_value: null,    in_flags:flags.MOB_STATISTICS,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrainStatistic:${this.statistic?this.statistic.code:undefined}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `%${this.level} ${this.price_multiplier} ${this.statistic.code}~`
-    }
 }
 
 class TrainFeat extends Model {
@@ -695,17 +294,7 @@ class TrainFeat extends Model {
             feat:               new Field({field_name:"feat",               default_value: null,    in_flags:flags.MOB_FEATS,   optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrainFeat:${this.feat?this.feat.code:undefined}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `%${this.level} ${this.price_multiplier} ${this.feat.code}~`
-    }
 }
 
 class Shop extends Model {
@@ -722,18 +311,7 @@ class Shop extends Model {
             open_hour:      new Field({field_name:"open_hour",      default_value:7,                                in_flags:null,              optional:false}),
             close_hour:     new Field({field_name:"close_hour",     default_value:19,                               in_flags:null,              optional:false}),
         }, fields))        }
-    get _error_prefix() {
-        return `[Shop:${this.shopkeeper.vnum}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `${this.shopkeeper.vnum} ${this.will_buy_1.code} ${this.will_buy_2.code} ${this.will_buy_3.code} ${this.will_buy_4.code} ${this.will_buy_5.code}
-${this.profit_buy} ${this.profit_sell} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
-    }
 }
 
 class RepairRecharge extends Model {
@@ -749,18 +327,7 @@ class RepairRecharge extends Model {
             close_hour:         new Field({field_name:"close_hour",         default_value:19,                               in_flags:null,                      optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[RepairRecharge:${this.shopkeeper.vnum}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `${this.shopkeeper.vnum} ${this.will_repair_1.code} ${this.will_repair_2.code} ${this.repair_material.code}
-${this.profit_modifier} ${this.repair.bits} ${this.open_hour} ${this.close_hour} ; ${this.shopkeeper.sdesc}`;
-    }
 }
 
 class MobReset extends Model {
@@ -775,17 +342,7 @@ class MobReset extends Model {
             
         }, fields))
     }
-    get _error_prefix() {
-        return `[MobReset:${this.mob.vnum} in ${this.room ? this.room.vnum : "undefined"}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `M ${this.defunct} ${this.mob.vnum} ${this.mob_limit} ${this.room ? this.room.vnum : "undefined"} ; ${this.mob.sdesc} in ${this.room ? this.room.sdesc : "undefined"}${this.equipment.length ? "\n"+this.equipment.map((equip)=>(equip.toString())).join("\n") : ""}${this.coins.length ? "\n"+this.coins.map((coin)=>(coin.toString())).join("\n") : ""}`
-    }
 }
 
 class EquipmentReset extends Model {
@@ -798,24 +355,7 @@ class EquipmentReset extends Model {
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,                  optional:true}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[EquipmentReset:${this.item ? this.item.vnum : "undefined"}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        if (this.wear_loc) {
-            // Equipped
-            return ` E ${this.defunct} ${this.item.vnum} ${this.equip_limit} ${this.wear_loc.code} ; Equip ${this.item.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-        }
-        else {
-            // Held
-            return ` G ${this.defunct} ${this.item.vnum} ${this.equip_limit} ; Hold ${this.item.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-        }
-    }
 }
 
 class ItemReset extends Model {
@@ -823,35 +363,15 @@ class ItemReset extends Model {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        default_value: 0,       in_flags:null,  optional:false}),
             item:           new Field({field_name:"item",           default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
-            item_limit:     new Field({field_name:"item_limit",     default_value: "1",       in_flags:null,  optional:false}),
+            item_limit:     new Field({field_name:"item_limit",     default_value: "1",     in_flags:null,  optional:false}),
             room_container: new Field({field_name:"room_container", default_value: null,    in_flags:null,  optional:false, ignore_validation:true}),
             hidden:         new Field({field_name:"hidden",         default_value: false,   in_flags:null,  optional:false}),
             buried:         new Field({field_name:"buried",         default_value: false,   in_flags:null,  optional:false}),
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,  optional:true}),
-            contents:       new Field({field_name:"contents",       default_value: [],          in_flags:null,  optional:true}),
+            contents:       new Field({field_name:"contents",       default_value: [],      in_flags:null,  optional:true}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[ItemReset:${this.item.vnum} in ${this.room_container ? this.room_container.vnum : "undefined"}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        if (this.room_container instanceof Item) {
-            // Container (hidden is handled differently)
-            return ` P ${this.hidden ? 1 : 0} ${this.item.vnum} ${this.item_limit} ${this.room_container ? this.room_container.vnum : "undefined"} ; ${this.item.sdesc} in container ${this.room_container ? this.room_container.sdesc : "undefined"}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-        }
-        else if (this.hidden) {
-            return `H ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container ? this.room_container.vnum : "undefined"} ; ${this.item.sdesc} hidden in ${this.room_container ? this.room_container.sdesc : "undefined"}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-        }
-        else if (this.buried) {
-            return `U ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container ? this.room_container.vnum : "undefined"} ; ${this.item.sdesc} buried in ${this.room_container ? this.room_container.sdesc : "undefined"}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-        }
-        return `O ${this.defunct} ${this.item.vnum} ${this.item_limit} ${this.room_container ? this.room_container.vnum : "undefined"} ; ${this.item.sdesc} in room ${this.room_container ? this.room_container.sdesc : "undefined"}${this.contents.length ? "\n"+this.contents.map((c)=>(c.toString())).join("\n") : ""}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-    }
 }
 
 class DoorReset extends Model {
@@ -864,17 +384,7 @@ class DoorReset extends Model {
             trap_reset:     new Field({field_name:"trap_reset",     default_value: null,    in_flags:null,              optional:true}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[DoorReset:${this.exit ? this.exit.code : "[no exit defined]"} from ${this.room.vnum}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `D ${this.defunct} ${this.room.vnum} ${this.exit.code} ${this.exit_state.code} ; ${this.room.sdesc}${this.trap_reset ? "\n"+this.trap_reset.toString() : ""}`
-    }
 }
 
 class RandomDoorReset extends Model {
@@ -885,17 +395,7 @@ class RandomDoorReset extends Model {
             last_door:      new Field({field_name:"last_door",  default_value: "",    in_flags:null,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[RandomDoorReset:0-${this.last_door} from ${this.room.vnum}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `R ${this.defunct} ${this.room.vnum} ${this.last_door} ; ${this.room.sdesc} rearrange exits 0-${this.last_door} randomly`
-    }
 }
 
 class RoomReset extends Model {
@@ -907,17 +407,7 @@ class RoomReset extends Model {
             flag:           new Field({field_name:"flag",           default_value: null,    in_flags:flags.ROOM_FLAGS,      optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[RoomReset:${this.room.vnum}: BIT_RESET_ROOM|${this.bit_type ? this.bit_type.code : "undefined"} ${this.flag ? this.flag.code : "undefined"}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `B ${this.defunct} ${this.room.vnum} ${flags.ROOM_FLAGS.BIT_RESET_ROOM}|${this.bit_type} ${this.flag.code} ; ${this.room.sdesc}`
-    }
 }
 
 // TrapResets can be attached to DoorRests, ItemResets, or EquipmentResets
@@ -931,17 +421,7 @@ class TrapReset extends Model {
             trigger_2:      new Field({field_name:"trigger_2",      default_value:flags.TRAP_TRIGGERS.TRIGGER_NONE, in_flags:flags.TRAP_TRIGGERS,   optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[TrapReset:${this.trap_type ? this.trap_type.code : "undefined"}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return ` T ${this.reset_interval} ${this.trap_type.code} ${this.trap_charges} ${this.trigger_1.code}|${this.trigger_2.code}`
-    }
 }
 
 // CoinResets go in mob's equipment_resets list
@@ -954,17 +434,7 @@ class CoinReset extends Model {
             dice_sides:     new Field({field_name:"dice_sides",     default_value: "",    in_flags:null,              optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[CoinReset:${this.coin_type}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return ` C ${this.defunct} ${this.coin_type} ${this.dice_count} ${this.dice_sides}`
-    }
 }
 
 class MobSpecial extends Model {
@@ -974,23 +444,12 @@ class MobSpecial extends Model {
             special:    new Field({field_name:"special",    default_value: null,    in_flags:flags.MOB_SPECIALS,    optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[MobSpecial:${this.mob.vnum} ${this.special.code}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `M ${this.mob.vnum} ${this.special.code}`
-    }
 }
 
 class QuestLog extends Model {
     constructor(fields) {
         super(Object.assign({
-            area:       new Field({field_name:"area",       default_value: null,   in_flags:null,                      optional:false, ignore_validation:true}),
             qbit_start: new Field({field_name:"qbit_start", default_value: "",   in_flags:null,                      optional:false}),
             qbit_stop:  new Field({field_name:"qbit_stop",  default_value: "",   in_flags:null,                      optional:false}),
             min_qbit:   new Field({field_name:"min_qbit",   default_value: "",   in_flags:null,                      optional:false}),
@@ -999,17 +458,7 @@ class QuestLog extends Model {
             qlog_text:  new Field({field_name:"qlog_text",  default_value: "",   in_flags:null,                      optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[QuestLog:${this.qlog_text}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `${this.area.vnum} ${this.qbit_start} ${this.qbit_stop} ${this.min_qbit} ${this.max_qbit} ${this.event_code.color_code}${this.qlog_text}`
-    }
 }
 
 class Program extends Model {
@@ -1020,19 +469,7 @@ class Program extends Model {
             program:    new Field({field_name:"program",    default_value: "",    in_flags:null,  optional:false}),
         }, fields))
     }
-    get _error_prefix() {
-        return `[Program:${this.trigger?this.trigger.code:"UNDEFINED"}]`;
-    }
     
-    toString() {
-        let errors = this.validate();
-        if (errors.length) {
-            return errors.join("\n");
-        }
-        return `>${this.trigger.code} ${this.argument}~
-${this.program}
-~`
-    }
 }
 //export default Loader;
 

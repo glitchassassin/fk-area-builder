@@ -10,6 +10,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Subheader from 'material-ui/Subheader';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import {equal_recursively} from '../Models/model'
 
 import {
     Table,
@@ -45,8 +46,15 @@ import {
     VnumAutoComplete
 }
 from '../UIComponents/FlagSelectors'
+import {Validate} from '../UIComponents/GenericEditors'
+import {RoomValidator, ExitValidator, DoorResetValidator, RoomResetValidator} from '../Models/model_validator'
 import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
 import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
+
+const room_validator = new RoomValidator();
+const exit_validator = new ExitValidator();
+const door_reset_validator = new DoorResetValidator();
+const room_reset_validator = new RoomResetValidator();
 
 const icon_button_style = {
     padding: "5px",
@@ -62,6 +70,11 @@ class RoomPanel extends React.Component {
         confirm_text: "",
         confirm_title: "",
         errors_open: false
+    }
+    shouldComponentUpdate(newProps, newState) {
+        // Return true if model or state has changed, false otherwise
+        console.log(this.props.area.rooms[this.state.current_room], newProps.area.rooms[this.state.current_room])
+        return (!equal_recursively(this.props.area.rooms, newProps.area.rooms) || !equal_recursively(this.state, newState))
     }
     
     handleEdit = (index) => {
@@ -100,8 +113,8 @@ class RoomPanel extends React.Component {
     handleChange(event, value) {
         console.log("RoomPanel", this.state.current_room, value);
         let area = this.props.area.clone()
-        area.rooms[parseInt(this.state.current_room, 10)] = value;
-        this.updateArea(area);
+        this.props.area.rooms[parseInt(this.state.current_room, 10)] = value;
+        this.updateArea(this.props.area);
     }
     
     handleClose = () => {
@@ -136,7 +149,7 @@ class RoomPanel extends React.Component {
                     <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
-                    {room.validate().length > 0 && (
+                    {room_validator.validate(room).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.showErrors(index))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
@@ -201,7 +214,7 @@ class RoomPanel extends React.Component {
                 <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
                 <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${this.props.area.rooms[this.state.current_room].vnum}`}>
                     <List>
-                        {this.props.area.rooms[this.state.current_room].validate().map((error, index) => (
+                        {room_validator.validate(this.props.area.rooms[this.state.current_room]).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -228,17 +241,16 @@ class RoomEditor extends ModelComponent {
             <Dialog title="Edit Room" modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
+                        <Validate validator={room_validator}>
                         <TextField 
                             floatingLabelText="vnum" 
                             id="vnum" 
-                            errorText={this.props.model.validate("vnum")} 
                             value={this.props.model.vnum} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <TextField 
                             floatingLabelText="Short description" 
                             id="sdesc" 
-                            errorText={this.props.model.validate("sdesc")} 
                             fullWidth={true} 
                             value={this.props.model.sdesc} 
                             autoComplete="off" 
@@ -246,25 +258,24 @@ class RoomEditor extends ModelComponent {
                         <TextField 
                             floatingLabelText="Long description" 
                             id="ldesc" 
-                            errorText={this.props.model.validate("ldesc")} 
                             multiLine={true} 
                             rows={5} 
                             fullWidth={true} 
                             value={this.props.model.ldesc} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
+                        </Validate>
                     </Tab>
                     <Tab label="Details">
+                        <Validate validator={room_validator}>
                         <MultiFlagSelector 
                             id="room_flags" 
-                            errorText={this.props.model.validate("room_flags")} 
                             label="Room Flags" 
                             flags={ROOM_FLAGS} 
                             value={this.props.model.room_flags} 
                             onChange={this.handleChange.bind(this)} />
                         <FlagSelector 
                             id="sector" 
-                            errorText={this.props.model.validate("sector")} 
                             label="Sector" 
                             flags={ROOM_SECTOR_FLAGS} 
                             value={this.props.model.sector} 
@@ -272,24 +283,22 @@ class RoomEditor extends ModelComponent {
                         <TextField 
                             floatingLabelText="Teleport Delay" 
                             id="teleport_delay" 
-                            errorText={this.props.model.validate("teleport_delay")} 
                             value={this.props.model.teleport_delay} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
                         <VnumAutoComplete 
                             floatingLabelText="Teleport Target" 
                             id="teleport_target" 
-                            errorText={this.props.model.validate("teleport_target")} 
                             value={this.props.model.teleport_target} 
                             onChange={this.handleChange.bind(this)} 
                             dataSource={this.props.rooms} />
                         <TextField 
                             floatingLabelText="Room Capacity [Tunnel]" 
                             id="tunnel" 
-                            errorText={this.props.model.validate("tunnel")} 
                             value={this.props.model.tunnel} 
                             autoComplete="off" 
                             onChange={this.handleChange.bind(this)} />
+                        </Validate>
                     </Tab>
                     <Tab label="Extra Descs">
                         <ExtraDescriptionsEditor 
@@ -340,9 +349,9 @@ class ExitsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={exit_validator}>
                 <FlagSelector 
                     id="direction" 
-                    errorText={exit.validate("direction")} 
                     label="Direction" 
                     flags={EXIT_DIRECTIONS} 
                     value={exit.direction} 
@@ -350,7 +359,6 @@ class ExitsEditor extends ModelArrayComponent {
                 <TextField 
                     floatingLabelText="Comment" 
                     id="comment"
-                    errorText={exit.validate("comment")} 
                     fullWidth={true} 
                     value={exit.comment} 
                     autoComplete="off" 
@@ -358,14 +366,12 @@ class ExitsEditor extends ModelArrayComponent {
                 <TextField 
                     floatingLabelText={exit.direction === EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} 
                     id="somewhere_door_keyword" 
-                    errorText={exit.validate("somewhere_door_keyword")} 
                     fullWidth={true} 
                     value={exit.somewhere_door_keyword} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <MultiFlagSelector 
                     id="door_flags" 
-                    errorText={exit.validate("door_flags")} 
                     label="Door Flags" 
                     flags={EXIT_DOOR_FLAGS} 
                     value={exit.door_flags} 
@@ -373,24 +379,22 @@ class ExitsEditor extends ModelArrayComponent {
                 <VnumAutoComplete 
                     floatingLabelText="Door Key" 
                     id="door_key" 
-                    errorText={exit.validate("door_key")} 
                     value={exit.door_key} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} 
                     dataSource={this.props.items} />
                 <VnumAutoComplete 
                     floatingLabelText="Exit Target" 
                     id="target_vnum" 
-                    errorText={exit.validate("target_vnum")} 
                     value={exit.target_vnum} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} 
                     dataSource={this.props.rooms} />
                 <FlagSelector 
                     id="exit_size" 
-                    errorText={exit.validate("exit_size")} 
                     label="Exit Size" 
                     flags={EXIT_SIZES} 
                     value={exit.exit_size} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
             </Paper>
         ));
     }
@@ -402,20 +406,20 @@ class DoorResetsEditor extends ModelArrayComponent {
         return this.props.model.map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 {/*<VnumAutoComplete floatingLabelText="Room" id="room" value={reset.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />*/}
+                <Validate validator={door_reset_validator}>
                 <FlagSelector 
                     id="exit" 
-                    errorText={reset.validate("exit")} 
                     label="Exit" 
                     flags={DOOR_RESET_DIRECTIONS} 
                     value={reset.exit} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <FlagSelector 
                     id="exit_state" 
-                    errorText={reset.validate("exit_state")} 
                     label="Exit State" 
                     flags={DOOR_RESET_FLAGS} 
                     value={reset.exit_state} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
                 <TrapResetEditor 
                     id="trap_reset" 
                     model={reset.trap_reset} 
@@ -441,20 +445,20 @@ class RoomResetsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={room_reset_validator}>
                 <FlagSelector 
                     id="bit_type" 
-                    errorText={reset.validate("bit_type")} 
                     label="Reset Bit" 
                     flags={RESET_BIT_CODES} 
                     value={reset.bit_type} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <FlagSelector 
                     id="flag" 
-                    errorText={reset.validate("flag")} 
                     label="Room Flag" 
                     flags={ROOM_FLAGS} 
                     value={reset.flag} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
             </Paper>
         ));
     }

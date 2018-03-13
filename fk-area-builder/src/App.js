@@ -13,10 +13,11 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 
 //console.log(Storage);
 
+var area_validator = new AreaValidator()
+
 class App extends Component {
   state = {
     area: testLoader().area,
-    validator: new AreaValidator(),
     error_open: false,
     error_text: ""
   }
@@ -28,9 +29,9 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div className="App">
-          <ThemedAppHeader title={title} area={this.state.area} validator={this.state.validator} updateAreaState={this.updateAreaState.bind(this)} openErrors={this.openErrors}/>
+          <ThemedAppHeader title={title} area={this.state.area} validator={area_validator} updateAreaState={this.updateAreaState.bind(this)} openErrors={this.openErrors}/>
           <div className="App-intro">
-              <MainFrame area={this.state.area} validator={this.state.validator} updateAreaState={this.updateAreaState.bind(this)} />
+              <MainFrame area={this.state.area} validator={area_validator} updateAreaState={this.updateAreaState.bind(this)} />
           </div>
         </div>
       </MuiThemeProvider>
@@ -79,6 +80,7 @@ class AppHeader extends Component {
         onLeftIconButtonClick={this.openMenu} 
         iconElementRight={<span>{this.state.status}</span>}>
         <GoogleDriveMenu 
+          validator={area_validator}
           open={this.state.menuOpen}
           area={this.props.area}
           setStatus={this.setStatus}

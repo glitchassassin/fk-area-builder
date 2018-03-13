@@ -1,5 +1,6 @@
 import React from 'react';
 import Storage from '../Models/Storage';
+import AreaExporter from '../Models/are_export';
 import Popover from 'material-ui/Popover';
 import {Menu, MenuItem} from 'material-ui/Menu';
 import Dialog from 'material-ui/Dialog';
@@ -9,6 +10,8 @@ import Check from 'material-ui/svg-icons/navigation/check';
 import CircularProgress from 'material-ui/CircularProgress';
 import Divider from 'material-ui/Divider';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+
+var area_exporter = new AreaExporter();
 
 class GoogleDriveMenu extends React.Component {
     state = {
@@ -32,8 +35,9 @@ class GoogleDriveMenu extends React.Component {
     saveDrive() {
         this.props.closeMenu();
         
-        if (this.props.validator(this.props.area).length > 0) {
+        if (this.props.validator.validate(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
+            console.log(this.props.validator.validate(this.props.area))
             return;
         }
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
@@ -49,26 +53,28 @@ class GoogleDriveMenu extends React.Component {
     saveAsDrive() {
         this.props.closeMenu();
         
-        if (this.props.validator(this.props.area).length > 0) {
+        if (this.props.validator.validate(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
+            console.log(this.props.validator.validate(this.props.area))
             return;
         }
         this.storage.createFolderPicker((folder)=>{
             let filename = this.props.area.name + ".are"; // Should eventually prompt to select a file/location, but this works temporarily
             console.log("Saving new file", filename, folder);
-            let contents = this.props.area.toString();
+            let contents = area_exporter.renderArea(this.props.area);
             this.storage.uploadNewFile(filename, folder, contents, ()=>(this.finishSave()));
             this.props.setStatus(<IconButton id="loading" tooltip="Saving"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
             this.setState({saving: true});
         })
     }
     forceSaveDrive() {
-        if (this.props.validator(this.props.area).length > 0) {
+        if (this.props.validator.validate(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
+            console.log(this.props.validator.validate(this.props.area))
             return;
         }
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
-        let contents = this.props.area.toString();
+        let contents = area_exporter.renderArea(this.props.area);
         if (this.storage.active_file_id !== "") {
             this.storage.updateCurrentFile(contents, ()=>(this.finishSave()));
         }

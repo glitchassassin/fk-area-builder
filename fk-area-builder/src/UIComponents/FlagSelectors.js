@@ -3,6 +3,7 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import Subheader from 'material-ui/Subheader';
 import AutoComplete from 'material-ui/AutoComplete';
+import {equal_recursively} from '../Models/model';
 
 const ldesc_style = {
     color: "rgba(180,180,180,1)",
@@ -22,6 +23,10 @@ class FlagWithCategorySelector extends React.Component {
         this.setState({ value });
         
         this.props.onChange({target:{id:this.props.id}}, value, index);
+    }
+    
+    shouldComponentUpdate(newProps) {
+        return !equal_recursively(this.props.value, newProps.value)
     }
     
     generateItems(flags) {
@@ -74,6 +79,10 @@ class FlagSelector extends React.Component {
         this.props.onChange({target:{id:this.props.id}}, value, index);
     }
     
+    shouldComponentUpdate(newProps) {
+        return !equal_recursively(this.props.value, newProps.value)
+    }
+    
     generateItems(flags) {
         return [<MenuItem key={""} value={null} primaryText="" />].concat(Object.keys(flags).map(function(key) {
             if (flags[key].do_not_use) {
@@ -111,6 +120,10 @@ class MultiFlagSelector extends FlagSelector {
         this.props.onChange({target:{id:this.props.id}}, value, index);
     }
     
+    shouldComponentUpdate(newProps) {
+        return !equal_recursively(this.props.value, newProps.value)
+    }
+    
     generateItems(flags, values) {
         return Object.keys(flags).map(function(key) {
             if (flags[key].do_not_use) {
@@ -143,6 +156,11 @@ class VnumAutoComplete extends React.Component {
     state = {
         value: this.props.value
     }
+    
+    shouldComponentUpdate(newProps) {
+        return !equal_recursively(this.props.value, newProps.value)
+    }
+    
     generateItems(vnum_list) {
         return vnum_list.map((vnum_item) => (
             {

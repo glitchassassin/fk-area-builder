@@ -22,7 +22,12 @@ import {
     FlagSelector,
 }
 from '../UIComponents/FlagSelectors'
+import {TrapResetValidator, ExtraDescriptionValidator, ProgramValidator} from '../Models/model_validator'
 import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
+
+const trap_reset_validator = new TrapResetValidator();
+const extra_description_validator = new ExtraDescriptionValidator();
+const program_validator = new ProgramValidator();
 
 const paper_style = {
     padding: "5px",
@@ -32,8 +37,24 @@ const paper_style = {
 
 class Validate extends React.Component {
     render() {
-        console.log(this.props.children)
-        return this.props.children;
+        var children = React.Children.map(this.props.children, (item, i) => {
+            if (item.props.id) {
+                try {
+                    return React.cloneElement(item, {
+                        errorText: this.props.validator[item.props.id].validate(item.props.value).join(""),
+                    });
+                } catch(e) {
+                    console.log(this.props.validator);
+                    console.log(item.props);
+                    throw(e);
+                }
+            }
+            else {
+                return item;
+            }
+        });
+        
+        return (children)
     }
 }
 
@@ -51,41 +72,38 @@ class TrapResetEditor extends ModelComponent {
             return (
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
                     <Subheader>Trap Reset</Subheader>
+                    <Validate validator={trap_reset_validator}>
                     <TextField 
                         floatingLabelText="Reset interval" 
                         id="reset_interval" 
-                        errorText={this.props.model.validate("reset_interval")} 
                         value={this.props.model.reset_interval} 
                         autoComplete="off" 
                         onChange={this.handleChange.bind(this)} />
                     <FlagSelector 
                         label="Trap type" 
                         id="trap_type" 
-                        errorText={this.props.model.validate("trap_type")} 
                         flags={TRAP_TYPES} 
                         value={this.props.model.trap_type} 
                         onChange={this.handleChange.bind(this)} />
                     <TextField 
                         floatingLabelText="Trap charges" 
                         id="trap_charges" 
-                        errorText={this.props.model.validate("trap_charges")} 
                         value={this.props.model.trap_charges} 
                         autoComplete="off" 
                         onChange={this.handleChange.bind(this)} />
                     <FlagSelector 
                         label="Trap trigger 1" 
                         id="trigger_1" 
-                        errorText={this.props.model.validate("trigger_1")} 
                         flags={TRAP_TRIGGERS} 
                         value={this.props.model.trigger_1} 
                         onChange={this.handleChange.bind(this)} />
                     <FlagSelector 
                         label="Trap trigger 2" 
                         id="trigger_2" 
-                        errorText={this.props.model.validate("trigger_2")} 
                         flags={TRAP_TRIGGERS} 
                         value={this.props.model.trigger_2} 
                         onChange={this.handleChange.bind(this)} />
+                    </Validate>
                     <RaisedButton 
                         label="Remove Trap Reset" 
                         onClick={this.remove.bind(this)} 
@@ -112,10 +130,10 @@ class ExtraDescriptionsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={extra_description_validator}>
                 <TextField 
                     floatingLabelText="Keywords (space separated)" 
                     id="keywords" 
-                    errorText={ed.validate("keywords")} 
                     index={index} 
                     fullWidth={true} 
                     value={ed.keywords} 
@@ -124,7 +142,6 @@ class ExtraDescriptionsEditor extends ModelArrayComponent {
                 <TextField 
                     floatingLabelText="Long description" 
                     id="ldesc" 
-                    errorText={ed.validate("ldesc")} 
                     index={index} 
                     multiLine={true} 
                     rows={5} 
@@ -132,6 +149,7 @@ class ExtraDescriptionsEditor extends ModelArrayComponent {
                     value={ed.ldesc} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
             </Paper>
         ));
     }
@@ -146,30 +164,29 @@ class ProgramsEditor extends ModelArrayComponent {
                 <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
+                <Validate validator={program_validator}>
                 <FlagSelector 
                     label="Trigger" 
                     id="trigger" 
-                    errorText={program.validate("trigger")} 
                     flags={this.props.triggers} 
                     value={program.trigger} 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <TextField 
                     floatingLabelText="Variable" 
                     id="argument" 
-                    errorText={program.validate("argument")} 
                     value={program.argument} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
                 <TextField 
                     floatingLabelText="Program" 
                     id="program" 
-                    errorText={program.validate("program")} 
                     multiLine={true} 
                     rows={5} 
                     fullWidth={true} 
                     value={program.program} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                </Validate>
             </Paper>
         ));
     }

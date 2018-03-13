@@ -6,6 +6,7 @@ class Field {
     constructor(options) {
         this.name = options.field_name;
         this.value = options.default_value;
+        this.extra_validator = options.extra_validator;
         this.options = {
             in_flags: options.in_flags,
             optional: options.optional,
@@ -18,6 +19,7 @@ class Field {
         if (this.options.ignore_validation) {
             return errors;
         }
+        
         if (value == null || value === "") {
             if (!this.options.optional) {
                 errors.push(`${this.name} should not be empty`)
@@ -52,6 +54,13 @@ class Field {
                 }
             }
         }
+        if (this.extra_validator && {}.toString.call(this.extra_validator) === '[object Function]') {
+            let extra_errors = this.extra_validator(value)
+            if (extra_errors) {
+                errors = errors.concat(extra_errors);
+            }
+        }
+        
         return errors;
     }
 }
@@ -68,8 +77,13 @@ class ModelValidator {
     validate(model) {
         let errors = [];
         for (let prop in this) {
-            if (this[prop] instanceof Field || this[prop] instanceof ModelValidator) {
-                errors = errors.concat(this[prop].validate(model[prop]).map((err)=>(`${this._error_prefix(model)} ${err}`)));
+            if (this[prop] instanceof Field || (this[prop] instanceof ModelValidator && model[prop])) {
+                try {
+                    errors = errors.concat(this[prop].validate(model[prop]).map((err)=>(`${this._error_prefix(model)} ${err}`)));
+                } catch (e) {
+                    console.log(prop)
+                    throw(e);
+                }
             }
         }
         return errors;
@@ -86,7 +100,12 @@ class ModelArrayValidator {
     }
     
     validate(models) {
-        return [].concat.apply([], models.map(model=>this.model_validator(model)));
+        if (models.constructor === Array) {
+            return [].concat.apply([], models.map(model=>this.model_validator.validate(model)));
+        }
+        else {
+            return this.model_validator.validate(models); // May be a single instance of the group
+        }
     }
 }
 
@@ -95,20 +114,64 @@ class AreaValidator extends ModelValidator {
         super(Object.assign({
             name:                   new Field({field_name:"name",                   in_flags:null,                  optional:false}),
             category:               new Field({field_name:"category",               in_flags:flags.AREA_CATEGORIES, optional:false}),
-            authors:                new Field({field_name:"authors",                in_flags:null,                  optional:false}),
+            authors:                new Field({field_name:"authors",                in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (value.length >= 36) {
+                    return [`Authors list too long (max 36 characters)`];
+                }
+            }}),
             vnum:                   new Field({field_name:"vnum",                   in_flags:null,                  optional:false}),
             justice_system:         new JusticeSystemValidator(),
-            min_recommended_level:  new Field({field_name:"min_recommended_level",  in_flags:null,                  optional:false}),
-            max_recommended_level:  new Field({field_name:"max_recommended_level",  in_flags:null,                  optional:false}),
-            min_enforced_level:     new Field({field_name:"min_enforced_level",     in_flags:null,                  optional:false}),
-            max_enforced_level:     new Field({field_name:"max_enforced_level",     in_flags:null,                  optional:false}),
+            min_recommended_level:  new Field({field_name:"min_recommended_level",  in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(0 <= value && value <= 65)) {
+                    return[`min_recommended_level must be between 0 and 65`];
+                }
+            }}),
+            max_recommended_level:  new Field({field_name:"max_recommended_level",  in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(0 <= value && value <= 65)) {
+                    return[`max_recommended_level must be between 0 and 65`];
+                }
+            }}),
+            min_enforced_level:     new Field({field_name:"min_enforced_level",     in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(0 <= value && value <= 65)) {
+                    return[`min_enforced_level must be between 0 and 65`];
+                }
+            }}),
+            max_enforced_level:     new Field({field_name:"max_enforced_level",     in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(0 <= value && value <= 65)) {
+                    return[`max_enforced_level must be between 0 and 65`];
+                }
+            }}),
             reset_msg:              new Field({field_name:"reset_msg",              in_flags:null,                  optional:false}),
-            wilderness_flag:        new Field({field_name:"wilderness_flag",        in_flags:null,                  optional:false}),
-            reset_duration:         new Field({field_name:"reset_duration",         in_flags:null,                  optional:false}),
-            economy_min:            new Field({field_name:"economy_min",            in_flags:null,                  optional:false}),
-            economy_max:            new Field({field_name:"economy_max",            in_flags:null,                  optional:false}),
-            weather_humidity:       new Field({field_name:"weather_humidity",       in_flags:null,                  optional:false}),
-            weather_temperature:    new Field({field_name:"weather_temperature",    in_flags:null,                  optional:false}),
+            wilderness_flag:        new Field({field_name:"wilderness_flag",        in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (value !== "0") {
+                    return [`wilderness_flag should be 0 for most areas`];
+                }
+            }}),
+            reset_duration:         new Field({field_name:"reset_duration",         in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (value < -1) {
+                    return [`Invalid reset duration`];
+                }
+            }}),
+            economy_min:            new Field({field_name:"economy_min",            in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (value < 0) {
+                    return [`economy_min should be a positive number`];
+                }
+            }}),
+            economy_max:            new Field({field_name:"economy_max",            in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (value < 0) {
+                    return [`economy_max should be a positive number`];
+                }
+            }}),
+            weather_humidity:       new Field({field_name:"weather_humidity",       in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(1 <= value && value <= 10)) {
+                    return [`weather_humidity must be between 1 and 10`];
+                }
+            }}),
+            weather_temperature:    new Field({field_name:"weather_temperature",    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(1 <= value && value <= 10)) {
+                    return [`weather_temperature must be between 1 and 10`];
+                }
+            }}),
             mining_material:        new Field({field_name:"mining_material",        in_flags:flags.ITEM_MATERIALS,  optional:true}),
             logging_material:       new Field({field_name:"logging_material",       in_flags:flags.ITEM_MATERIALS,  optional:true}),
             rooms:                  new ModelArrayValidator(new RoomValidator()),
@@ -120,48 +183,6 @@ class AreaValidator extends ModelValidator {
     }
     _error_prefix(model) {
         return `[Area:${model.name}]`;
-    }
-    validate(model) {
-        let errors = super.validate(model)
-        if (model.authors.length >= 36) {
-            errors.push(`${this._error_prefix(model)}.authors List too long (max 36 characters)`);
-        }
-        // Level range
-        if (!(0 <= model.min_recommended_level <= 65)) {
-            errors.push(`${this._error_prefix(model)}.min_recommended_level must be between 0 and 65`);
-        }
-        if (!(0 <= model.max_recommended_level <= 65)) {
-            errors.push(`${this._error_prefix(model)}.max_recommended_level must be between 0 and 65`);
-        }
-        if (!(0 <= model.min_enforced_level <= 65)) {
-            errors.push(`${this._error_prefix(model)}.min_enforced_level must be between 0 and 65`);
-        }
-        if (!(0 <= model.max_enforced_level <= 65)) {
-            errors.push(`${this._error_prefix(model)}.max_enforced_level must be between 0 and 65`);
-        }
-        // Reset duration
-        if (model.reset_duration < -1) {
-            errors.push(`${this._error_prefix(model)}.reset_duration Invalid reset duration`);
-        }
-        // Flags
-        if (model.wilderness_flag !== 0) {
-            errors.push(`${this._error_prefix(model)}.wilderness_flag should be 0 for most areas`);
-        }
-        // Economy
-        if (model.economy_min < 0) {
-            errors.push(`${this._error_prefix(model)}.economy_min should be a positive number`);
-        }
-        if (model.economy_max < 0) {
-            errors.push(`${this._error_prefix(model)}.economy_max should be a positive number`);
-        }
-        // Weather
-        if (!(1 <= model.weather_humidity <= 10)) {
-            errors.push(`${this._error_prefix(model)}.weather_humidity must be between 1 and 10`);
-        }
-        if (!(1 <= model.weather_temperature <= 10)) {
-            errors.push(`${this._error_prefix(model)}.weather_temperature must be between 1 and 10`);
-        }
-        return errors
     }
 }
 
@@ -189,7 +210,11 @@ class RoomValidator extends ModelValidator {
             vnum:               new Field({field_name:"vnum",               in_flags:null,                      optional:false}),
             sdesc:              new Field({field_name:"sdesc",              in_flags:null,                      optional:false}),
             ldesc:              new Field({field_name:"ldesc",              in_flags:null,                      optional:false}),
-            defunct:            new Field({field_name:"defunct",            in_flags:null,                      optional:false}),
+            defunct:            new Field({field_name:"defunct",            in_flags:null,                      optional:false,     extra_validator: (value) => {
+                if (value !== "0") {
+                    return[`defunct must be 0`];
+                }
+            }}),
             room_flags:         new Field({field_name:"room_flags",         in_flags:flags.ROOM_FLAGS,          optional:true}),
             sector:             new Field({field_name:"sector",             in_flags:flags.ROOM_SECTOR_FLAGS,   optional:false}),
             teleport_delay:     new Field({field_name:"teleport_delay",     in_flags:null,                      optional:true}),
@@ -204,13 +229,6 @@ class RoomValidator extends ModelValidator {
     }
     _error_prefix(model) {
         return `[Room:(${model.vnum}) ${model.sdesc}]`;
-    }
-    validate(model) {
-        let errors = super.validate(model);
-        if (model.defunct !== 0) {
-            errors.push(`${this._error_prefix(model)}.defunct must be 0`);
-        }
-        return errors;
     }
 }
 
@@ -263,7 +281,11 @@ class ItemValidator extends ModelValidator {
             sdesc:              new Field({field_name:"sdesc",              in_flags:null,                  optional:false}),
             ldesc:              new Field({field_name:"ldesc",              in_flags:null,                  optional:false}),
             keywords:           new Field({field_name:"keywords",           in_flags:null,                  optional:false}),
-            action_description: new Field({field_name:"action_description", in_flags:null,                  optional:true}), // Not used
+            action_description: new Field({field_name:"action_description", in_flags:null,                  optional:true,     extra_validator: (value) => {
+                if (value != "") {
+                    return[`action_description is not used and should be empty`];
+                }
+            }}), // Not used
             item_type:          new Field({field_name:"item_type",          in_flags:flags.ITEM_TYPES,      optional:false}),
             attributes:         new Field({field_name:"attributes",         in_flags:flags.ITEM_ATTRIBUTES, optional:true}),
             wear_flags:         new Field({field_name:"wear_flags",         in_flags:flags.WEAR_LOCATIONS,  optional:true}),
@@ -286,25 +308,6 @@ class ItemValidator extends ModelValidator {
     }
     _error_prefix(model) {
         return `[Item:(${model.vnum}) ${model.sdesc}]`;
-    }
-    
-    validate(model) {
-        let errors = super.validate(model);
-        if (model.action_description !== "") {
-            errors.push(`${this._error_prefix(model)}.action_description is not used and should be empty`);
-        }
-        return errors;
-    }
-}
-
-class MobValidator extends ModelValidator {
-    validate(model) {
-        if (model.unique) {
-            return (new UniqueMobValidator()).validate(model)
-        }
-        else {
-            return (new SimpleMobValidator()).validate(model)
-        }
     }
 }
 
@@ -350,13 +353,41 @@ class UniqueMobValidator extends SimpleMobValidator {
             virtual_armor_type:     new Field({field_name:"virtual_armor_type",     in_flags:flags.ITEM_ARMOR_TYPES,optional:false}),
             virtual_armor_material: new Field({field_name:"virtual_armor_material", in_flags:flags.ITEM_MATERIALS,  optional:false}),
             alignment:              new Field({field_name:"alignment",              in_flags:flags.MOB_ALIGNMENTS,  optional:false}),
-            str:                    new Field({field_name:"str",                    in_flags:null,                  optional:false}),
-            int:                    new Field({field_name:"int",                    in_flags:null,                  optional:false}),
-            wis:                    new Field({field_name:"wis",                    in_flags:null,                  optional:false}),
-            dex:                    new Field({field_name:"dex",                    in_flags:null,                  optional:false}),
-            con:                    new Field({field_name:"con",                    in_flags:null,                  optional:false}),
-            cha:                    new Field({field_name:"cha",                    in_flags:null,                  optional:false}),
-            lck:                    new Field({field_name:"lck",                    in_flags:null,                  optional:false}),
+            str:                    new Field({field_name:"str",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`str should be between 3 and 22`];
+                }
+            }}),
+            int:                    new Field({field_name:"int",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`int should be between 3 and 22`];
+                }
+            }}),
+            wis:                    new Field({field_name:"wis",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`wis should be between 3 and 22`];
+                }
+            }}),
+            dex:                    new Field({field_name:"dex",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`dex should be between 3 and 22`];
+                }
+            }}),
+            con:                    new Field({field_name:"con",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`con should be between 3 and 22`];
+                }
+            }}),
+            cha:                    new Field({field_name:"cha",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`cha should be between 3 and 22`];
+                }
+            }}),
+            lck:                    new Field({field_name:"lck",                    in_flags:null,                  optional:false,     extra_validator: (value) => {
+                if (!(3 <= value && value <= 22)) {
+                    return[`lck should be between 3 and 22`];
+                }
+            }}),
             ris_resistant:          new Field({field_name:"ris_resistant",          in_flags:flags.MOB_RIS,         optional:false}),
             ris_immune:             new Field({field_name:"ris_immune",             in_flags:flags.MOB_RIS,         optional:false}),
             ris_susceptible:        new Field({field_name:"ris_susceptible",        in_flags:flags.MOB_RIS,         optional:false}),
@@ -365,15 +396,16 @@ class UniqueMobValidator extends SimpleMobValidator {
     _error_prefix(model) {
         return `[UniqueMob:(${model.vnum}) ${model.sdesc}]`
     }
-    
+}
+
+class MobValidator extends UniqueMobValidator {
     validate(model) {
-        let errors = super.validate(model)
-        for (let stat of ["str", "int", "wis", "dex", "con", "cha", "lck"]) {
-            if (!(3 <= model[stat] <= 22)) {
-                errors.push(`${this._error_prefix(model)}.${stat} should be between 3 and 22`);
-            }
+        if (model.unique) {
+            return super.validate(model)
         }
-        return errors;
+        else {
+            return (new SimpleMobValidator()).validate(model)
+        }
     }
 }
 
@@ -665,6 +697,7 @@ module.exports = {
     ExtraDescriptionValidator: ExtraDescriptionValidator,
     ItemApplyValidator: ItemApplyValidator,
     ItemValidator: ItemValidator,
+    MobValidator: MobValidator,
     SimpleMobValidator: SimpleMobValidator,
     UniqueMobValidator: UniqueMobValidator,
     TrainSkillValidator: TrainSkillValidator,

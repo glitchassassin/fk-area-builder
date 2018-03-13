@@ -10587,12 +10587,12 @@ const MOB_REPAIR_RECHARGE = {
     SHOP_FIX: new Flag({
         code: "SHOP_FIX",
         sdesc: "SHOP_FIX",
-        bits: 1
+        bits: "1"
     }),
     SHOP_RECHARGE: new Flag({
         code: "SHOP_RECHARGE",
         sdesc: "SHOP_RECHARGE",
-        bits: 2
+        bits: "2"
     })
 };
 const MOB_WEAR_POSITIONS = {

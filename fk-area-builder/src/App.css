@@ -26,13 +26,3 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
-.footer {
-	text-align: right;
-	size: 6pt;
-	font-style: italic;
-	width: 100%;
-}
-.footer a {
-	color: #808080;
-}

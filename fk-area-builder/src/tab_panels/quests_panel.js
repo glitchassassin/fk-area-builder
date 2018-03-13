@@ -26,6 +26,16 @@ import {
     FlagSelector,
 }
 from '../UIComponents/FlagSelectors'
+import {
+    Validate
+}
+from '../UIComponents/GenericEditors'
+import {
+    AreaValidator,
+    QuestLogValidator
+}
+from '../Models/model_validator'
+import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const icon_button_style = {
     padding: "5px",
@@ -33,46 +43,10 @@ const icon_button_style = {
     height: "auto",
 }
 
-class QuestsPanel extends React.Component {
-    shouldComponentUpdate(newProps) {
-        // If the array length changed, then update.
-        if (this.props.area.quest_log.length !== newProps.area.quest_log.length) {
-            return true;
-        }
-        // Otherwise, update if one of the quest_logs in the array has changed.
-        for (let i = 0; i < this.props.area.quest_log.length; i++) {
-            if (!this.props.area.quest_log[i].equals(newProps.area.quest_log[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    handleChange(event, value, index) {
-        let area = this.props.area.clone();
-        area.quest_log[index][event.target.id] = value;
-        this.props.updateArea(area);
-    }
-    
-    handleDelete = (index) => {
-        let area = this.props.area.clone();
-        area.quest_log.splice(index, 1);
-        this.updateArea(area);
-    }
-    
-    handleNew = () => {
-        let new_qlog = new QuestLog();
-        let area = this.props.area.clone();
-        new_qlog.area = area;
-        area.quest_log.push(new_qlog);
-        this.updateArea(area);
-    };
-    
-    updateArea(area) {
-        this.props.updateArea(area);
-    }
-    
-    generateItems(qlogs) {
+const quest_log_validator = new QuestLogValidator();
+
+class QuestsPanel extends ModelArrayComponent {
+    generateItems(qlogs, area) {
         return qlogs.map((qlog, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={50}>
@@ -81,56 +55,62 @@ class QuestsPanel extends React.Component {
                     </IconButton>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
-                    {qlog.area.vnum}
+                    {area.vnum}
                 </TableRowColumn>
                 <TableRowColumn width={50}>
+                    <Validate validator={quest_log_validator}>
                     <TextField 
                         id="qbit_start" 
-                        errorText={qlog.validate("qbit_start")} 
                         value={qlog.qbit_start} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
+                    <Validate validator={quest_log_validator}>
                     <TextField 
                         id="qbit_stop" 
-                        errorText={qlog.validate("qbit_stop")} 
                         value={qlog.qbit_stop} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
+                    <Validate validator={quest_log_validator}>
                     <TextField 
                         id="min_qbit" 
-                        errorText={qlog.validate("min_qbit")} 
                         value={qlog.min_qbit} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
+                    <Validate validator={quest_log_validator}>
                     <TextField 
                         id="max_qbit" 
-                        errorText={qlog.validate("max_qbit")} 
                         value={qlog.max_qbit} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={130}>
+                    <Validate validator={quest_log_validator}>
                     <FlagSelector 
                         id="event_code" 
-                        errorText={qlog.validate("event_code")} 
                         flags={QUEST_EVENT_CODES} 
                         value={qlog.event_code} 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
+                    <Validate validator={quest_log_validator}>
                     <TextField 
                         id="qlog_text" 
-                        errorText={qlog.validate("qlog_text")} 
                         fullWidth={true} 
                         value={qlog.qlog_text} 
                         autoComplete="off" 
                         onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    </Validate>
                 </TableRowColumn>
             </TableRow>
             ))
@@ -153,7 +133,7 @@ class QuestsPanel extends React.Component {
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                    {this.generateItems(this.props.area.quest_log)}
+                    {this.generateItems(this.props.model, this.props.area)}
                     <TableRow>
                         <TableRowColumn width={100}>
                             <IconButton tooltip="Add" onClick={this.handleNew}>
