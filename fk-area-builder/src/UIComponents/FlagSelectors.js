@@ -15,13 +15,7 @@ const ldesc_style = {
 }
 
 class FlagWithCategorySelector extends React.Component {
-    state = {
-        value: this.props.value,
-    };
-
     handleChange(event, index, value) {
-        this.setState({ value });
-        
         this.props.onChange({target:{id:this.props.id}}, value, index);
     }
     
@@ -58,7 +52,7 @@ class FlagWithCategorySelector extends React.Component {
         return (
             <SelectField
               floatingLabelText={this.props.label}
-              value={this.state.value}
+              value={this.props.value}
               onChange={this.handleChange.bind(this)}
               errorText={this.props.errorText}
             >
@@ -69,13 +63,7 @@ class FlagWithCategorySelector extends React.Component {
 }
 
 class FlagSelector extends React.Component {
-    state = {
-        value: this.props.value,
-    };
-
     handleChange(event, index, value) {
-        this.setState({ value });
-        
         this.props.onChange({target:{id:this.props.id}}, value, index);
     }
     
@@ -99,7 +87,7 @@ class FlagSelector extends React.Component {
         return (
             <SelectField
               floatingLabelText={this.props.label}
-              value={this.state.value}
+              value={this.props.value}
               onChange={this.handleChange.bind(this)}
               errorText={this.props.errorText}
             >
@@ -110,13 +98,7 @@ class FlagSelector extends React.Component {
 }
 
 class MultiFlagSelector extends FlagSelector {
-    state = {
-        values: this.props.value,
-    };
-
     handleChange(event, index, value) {
-        this.setState({ values: value });
-        
         this.props.onChange({target:{id:this.props.id}}, value, index);
     }
     
@@ -137,26 +119,21 @@ class MultiFlagSelector extends FlagSelector {
     }
     
     render() {
-        const {values} = this.state;
         return (
             <SelectField
               multiple={true}
               floatingLabelText={this.props.label}
-              value={values}
+              value={this.props.value}
               onChange={this.handleChange.bind(this)}
               errorText={this.props.errorText}
             >
-                {this.generateItems(this.props.flags, values)}
+                {this.generateItems(this.props.flags, this.props.value)}
             </SelectField>
         );
     }
 }
 
 class VnumAutoComplete extends React.Component {
-    state = {
-        value: this.props.value
-    }
-    
     shouldComponentUpdate(newProps) {
         return !equal_recursively(this.props.value, newProps.value)
     }
@@ -167,7 +144,7 @@ class VnumAutoComplete extends React.Component {
                 text: vnum_item.vnum,
                 value: (<MenuItem 
                     key={vnum_item.vnum}
-                    value={vnum_item}
+                    value={vnum_item.vnum}
                     primaryText={`${vnum_item.vnum}: ${vnum_item.sdesc}`} 
                 />)
             }
@@ -176,13 +153,10 @@ class VnumAutoComplete extends React.Component {
     updateInput(searchText, dataSource, params) {
         let matches = this.props.dataSource.filter((item)=>(item.vnum===searchText));
         if (matches.length) {
-            this.props.onChange({target:{id:this.props.id}}, matches[0]);
+            this.props.onChange({target:{id:this.props.id}}, matches[0].vnum);
         }
         else {
-            this.props.onChange({target:{id:this.props.id}}, {
-                vnum: searchText,
-                sdesc: searchText
-            });
+            this.props.onChange({target:{id:this.props.id}}, searchText);
         }
         
     }
@@ -191,7 +165,7 @@ class VnumAutoComplete extends React.Component {
             <AutoComplete 
                 floatingLabelText={this.props.floatingLabelText} 
                 id={this.props.id} 
-                searchText={this.props.value?this.props.value.vnum:""} 
+                searchText={this.props.value||""} 
                 autoComplete="off" 
                 onUpdateInput={this.updateInput.bind(this)} 
                 filter={AutoComplete.noFilter} 

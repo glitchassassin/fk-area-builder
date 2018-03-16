@@ -1,7 +1,26 @@
 var flags = require("./flags.js");
 var uuid = require('uuid/v4');
 
-class Area {
+class UiState extends Object {
+    constructor(fields) {
+        super(Object.assign({
+            room_editor_open:           false,
+            room_errors_open:           false,
+            room_confirm_delete_open:   false,
+            room_current_room:          null,
+            mob_editor_open:            false,
+            mob_errors_open:            false,
+            mob_confirm_delete_open:    false,
+            mob_current_mob:            null,
+            item_editor_open:           false,
+            item_errors_open:           false,
+            item_confirm_delete_open:   false,
+            item_current_item:          null,
+        }, fields))
+    }
+}
+
+class Area extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:                   uuid(),
@@ -27,13 +46,13 @@ class Area {
     }
 }
 
-class JusticeSystem {
+class JusticeSystem extends Object {
     constructor(fields) {
         super(Object.assign({
-            courtroom:  null,
-            dungeon:    null,
-            judge:      null,
-            guard:      null,
+            courtroom:  "",
+            dungeon:    "",
+            judge:      "",
+            guard:      "",
             CRIME_HIGH_MURDER: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED,
             CRIME_LOW_MURDER: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED,
             CRIME_ASSAULT: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED,
@@ -42,7 +61,7 @@ class JusticeSystem {
     }
 }
 
-class Room {
+class Room extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -60,7 +79,7 @@ class Room {
     
 }
 
-class Exit {
+class Exit extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:                   uuid(),
@@ -78,7 +97,7 @@ class Exit {
     
 }
 
-class ExtraDescription {
+class ExtraDescription extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:       uuid(),
@@ -90,7 +109,7 @@ class ExtraDescription {
     
 }
 
-class ItemApply {
+class ItemApply extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:       uuid(),
@@ -102,7 +121,7 @@ class ItemApply {
     
 }
 
-class Item {
+class Item extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -131,7 +150,7 @@ class Item {
     
 }
 
-class SimpleMob {
+class SimpleMob extends Object {
     constructor(fields, values) {
         super(Object.assign({
             uuid:                   uuid(),
@@ -181,7 +200,7 @@ class UniqueMob extends SimpleMob {
     
 }
 
-class TrainSkill {
+class TrainSkill extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -194,7 +213,7 @@ class TrainSkill {
     
 }
 
-class TrainWeaponSkill {
+class TrainWeaponSkill extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -207,7 +226,7 @@ class TrainWeaponSkill {
     
 }
 
-class TrainSpell {
+class TrainSpell extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -220,7 +239,7 @@ class TrainSpell {
     
 }
 
-class TrainLevel {
+class TrainLevel extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -232,7 +251,7 @@ class TrainLevel {
     
 }
 
-class TrainStatistic {
+class TrainStatistic extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -245,7 +264,7 @@ class TrainStatistic {
     
 }
 
-class TrainFeat {
+class TrainFeat extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
@@ -258,11 +277,11 @@ class TrainFeat {
     
 }
 
-class Shop {
+class Shop extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
-            shopkeeper:     null,   // Mob UUID pointer
+            shopkeeper:     null,   // Mob VNUM pointer
             will_buy_1:     flags.ITEM_TYPES.ITEM_TYPE_NONE,
             will_buy_2:     flags.ITEM_TYPES.ITEM_TYPE_NONE,
             will_buy_3:     flags.ITEM_TYPES.ITEM_TYPE_NONE,
@@ -276,11 +295,11 @@ class Shop {
     
 }
 
-class RepairRecharge {
+class RepairRecharge extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:               uuid(),
-            shopkeeper:         null,   // Mob UUID pointer
+            shopkeeper:         null,   // Mob VNUM pointer
             will_repair_1:      flags.ITEM_TYPES.ITEM_TYPE_NONE,
             will_repair_2:      flags.ITEM_TYPES.ITEM_TYPE_NONE,
             repair_material:    null,
@@ -293,12 +312,12 @@ class RepairRecharge {
     
 }
 
-class MobReset {
+class MobReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:       uuid(),
             defunct:    0,
-            mob:        null,   // Mob UUID pointer
+            mob:        null,   // Mob VNUM pointer
             mob_limit:  1,
             room:       null,
             equipment:  [],
@@ -309,13 +328,13 @@ class MobReset {
     
 }
 
-class EquipmentReset {
+class EquipmentReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
             defunct:        "0",
             mob_reset:      null,   // Mob Reset UUID pointer
-            item:           null,   // Item UUID pointer
+            item:           null,   // Item VNUM pointer
             equip_limit:    "1",
             wear_loc:       null,
             trap_reset:     null,
@@ -324,14 +343,15 @@ class EquipmentReset {
     
 }
 
-class ItemReset {
+class ItemReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
             defunct:        "0",
-            item:           null,   // Item UUID pointer
+            item:           null,   // Item VNUM pointer
             item_limit:     "1",
-            room_container: null,
+            room_container: null,   // Item/Room VNUM pointer
+            item_pointer:   null,   // Item Reset pointer (if container)
             hidden:         false,
             buried:         false,
             trap_reset:     null,
@@ -341,12 +361,12 @@ class ItemReset {
     
 }
 
-class DoorReset {
+class DoorReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
             defunct:        "0",
-            room:           null, // Room UUID pointer
+            room:           null, // Room VNUM pointer
             exit:           null,
             exit_state:     null,
             trap_reset:     null,
@@ -355,24 +375,24 @@ class DoorReset {
     
 }
 
-class RandomDoorReset {
+class RandomDoorReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
             defunct:        0,
-            room:           null, // Room UUID pointer
+            room:           null, // Room VNUM pointer
             last_door:      "",
         }, fields))
     }
     
 }
 
-class RoomReset {
+class RoomReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
             defunct:        0,
-            room:           null, // Room UUID pointer
+            room:           null, // Room VNUM pointer
             bit_type:       null,
             flag:           null,
         }, fields))
@@ -381,7 +401,7 @@ class RoomReset {
 }
 
 // TrapResets can be attached to DoorRests, ItemResets, or EquipmentResets
-class TrapReset {
+class TrapReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
@@ -397,11 +417,11 @@ class TrapReset {
 }
 
 // CoinResets go in mob's equipment_resets list
-class CoinReset {
+class CoinReset extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:           uuid(),
-            mob:            null, // Mob UUID pointer
+            mob_reset:      null, // Mob Reset UUID pointer
             defunct:        1,
             coin_type:      null,
             dice_count:     "",
@@ -411,18 +431,18 @@ class CoinReset {
     
 }
 
-class MobSpecial {
+class MobSpecial extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:       uuid(),
-            mob:        null, // Mob UUID pointer
+            mob:        null, // Mob VNUM pointer
             special:    null,
         }, fields))
     }
     
 }
 
-class QuestLog {
+class QuestLog extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:       uuid(),
@@ -437,7 +457,7 @@ class QuestLog {
     
 }
 
-class Program {
+class Program extends Object {
     constructor(fields) {
         super(Object.assign({
             uuid:       uuid(),
@@ -452,32 +472,33 @@ class Program {
 //export default Loader;
 
 module.exports = {
-    Area: Area,
-    JusticeSystem: JusticeSystem,
-    Room: Room,
-    Exit: Exit,
-    ExtraDescription: ExtraDescription,
-    ItemApply: ItemApply,
-    Item: Item,
-    SimpleMob: SimpleMob,
-    UniqueMob: UniqueMob,
-    TrainSkill: TrainSkill,
-    TrainWeaponSkill: TrainWeaponSkill,
-    TrainSpell: TrainSpell,
-    TrainLevel: TrainLevel,
-    TrainStatistic: TrainStatistic,
-    TrainFeat: TrainFeat,
-    Shop: Shop,
-    RepairRecharge: RepairRecharge,
-    MobReset: MobReset,
-    EquipmentReset: EquipmentReset,
-    ItemReset: ItemReset,
-    DoorReset: DoorReset,
-    RandomDoorReset: RandomDoorReset,
-    RoomReset: RoomReset,
-    TrapReset: TrapReset,
-    CoinReset: CoinReset,
-    MobSpecial: MobSpecial,
-    QuestLog: QuestLog,
-    Program: Program,
+    Area,
+    JusticeSystem,
+    Room,
+    Exit,
+    ExtraDescription,
+    ItemApply,
+    Item,
+    SimpleMob,
+    UniqueMob,
+    TrainSkill,
+    TrainWeaponSkill,
+    TrainSpell,
+    TrainLevel,
+    TrainStatistic,
+    TrainFeat,
+    Shop,
+    RepairRecharge,
+    MobReset,
+    EquipmentReset,
+    ItemReset,
+    DoorReset,
+    RandomDoorReset,
+    RoomReset,
+    TrapReset,
+    CoinReset,
+    MobSpecial,
+    QuestLog,
+    Program,
+    UiState,
 }

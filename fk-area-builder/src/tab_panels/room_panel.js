@@ -11,6 +11,8 @@ import TextField from 'material-ui/TextField';
 import Subheader from 'material-ui/Subheader';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import {equal_recursively} from '../Models/model'
+import { connect } from 'react-redux';
+import { RoomActions, UiStateActions, ExitActions, DoorResetActions, RoomResetActions } from '../Models/actionTypes';
 
 import {
     Table,
@@ -50,6 +52,7 @@ import {Validate} from '../UIComponents/GenericEditors'
 import {RoomValidator, ExitValidator, DoorResetValidator, RoomResetValidator} from '../Models/model_validator'
 import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
 import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
+const uuid = require('uuid/v4');
 
 const room_validator = new RoomValidator();
 const exit_validator = new ExitValidator();
@@ -63,94 +66,26 @@ const icon_button_style = {
 }
 
 class RoomPanel extends React.Component {
-    state = {
-        open: false,
-        current_room: 0,
-        confirm_delete_open: false,
-        confirm_text: "",
-        confirm_title: "",
-        errors_open: false
-    }
-    shouldComponentUpdate(newProps, newState) {
-        // Return true if model or state has changed, false otherwise
-        console.log(this.props.area.rooms[this.state.current_room], newProps.area.rooms[this.state.current_room])
-        return (!equal_recursively(this.props.area.rooms, newProps.area.rooms) || !equal_recursively(this.state, newState))
-    }
-    
-    handleEdit = (index) => {
-        this.setState({current_room: index});
-        this.setState({open: true});
-    };
-    
-    handleDelete = (index) => {
-        this.setState({
-            current_room: index,
-            confirm_text: `Are you sure you want to delete room ${this.props.area.rooms[index].vnum} (${this.props.area.rooms[index].sdesc})? You cannot undo this action!`,
-            confirm_title: `Delete ${this.props.area.rooms[index].sdesc}?`,
-            confirm_delete_open: true
-        });
-    };
-    
-    confirmDelete = () => {
-        let area = this.props.area.clone();
-        area.rooms.splice(this.state.current_room, 1);
-        this.setState({current_room: 0});
-        this.updateArea(area);
-        this.setState({confirm_delete_open: false});
-    }
-    
-    cancelDelete = () => {
-        this.setState({confirm_delete_open: false});
-    }
-    
-    handleNew = () => {
-        let new_room = new Room();
-        let area = this.props.area.clone();
-        area.rooms.push(new_room);
-        this.updateArea(area);
-        this.setState({open: true, current_room: area.rooms.length-1});
-    };
-    handleChange(event, value) {
-        console.log("RoomPanel", this.state.current_room, value);
-        let area = this.props.area.clone()
-        this.props.area.rooms[parseInt(this.state.current_room, 10)] = value;
-        this.updateArea(this.props.area);
-    }
-    
-    handleClose = () => {
-        this.setState({open: false});
-    };
-    
-    updateArea(area) {
-        this.props.updateArea(area);
-    }
-    
-    showErrors = (index) => {
-        this.setState({
-            current_room: index,
-            errors_open: true
-        });
-    }
-    
-    closeErrors = (index) => {
-        this.setState({
-            current_room: 0,
-            errors_open: false
-        });
+    get_room_by_uuid = (uuid) => {
+        let matches = this.props.rooms.filter((room)=>(room.uuid===uuid))
+        if (matches.length) {
+            return matches[0]
+        }
+        //throw "No room matching UUID: " + uuid;
     }
     
     generateItems(rooms) {
         return rooms.map((room, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={100}>
-                    <IconButton tooltip="Edit" onClick={() => (this.handleEdit(index))} style={icon_button_style}>
+                    <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(room.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons">mode_edit</FontIcon>
                     </IconButton>
-                    <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))} style={icon_button_style}>
+                    <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(room.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
                     {room_validator.validate(room).length > 0 && (
-                    <IconButton tooltip="Show Errors" onClick={()=>(this.showErrors(index))} style={icon_button_style}>
+                    <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(room.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
                     )}
@@ -169,12 +104,13 @@ class RoomPanel extends React.Component {
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.cancelDelete}
+                onClick={this.props.cancelDelete}
             />,
             <FlatButton
                 label="Delete"
+                id={this.props.ui_state.room_current_room} // So confirmDelete can pull the correct uuid
                 primary={true}
-                onClick={this.confirmDelete}
+                onClick={this.props.confirmDelete}
             />,
             ]
         const errorsActions = [
@@ -185,6 +121,7 @@ class RoomPanel extends React.Component {
                 onClick={this.closeErrors}
             />
             ]
+        let room = this.get_room_by_uuid(this.props.ui_state.room_current_room)
         return (
             <div>
             <Table>
@@ -198,23 +135,23 @@ class RoomPanel extends React.Component {
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                    {this.generateItems(this.props.area.rooms)}
+                    {this.generateItems(this.props.rooms)}
                     <TableRow>
                         <TableRowColumn width={100}>
-                            <IconButton tooltip="Add" onClick={this.handleNew}>
+                            <IconButton tooltip="Add" onClick={this.props.newRoom}>
                                 <FontIcon className="material-icons">add_box</FontIcon>
                             </IconButton>
                         </TableRowColumn>
                     </TableRow>
                 </TableBody>
             </Table>
-            { this.props.area.rooms[this.state.current_room] !== undefined && // Don't bother creating these while we have no rooms.
+            { room !== undefined && // Don't bother creating these while we have no rooms.
             <React.Fragment>
-                <RoomEditor open={this.state.open} handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.rooms[this.state.current_room]} items={this.props.area.items} rooms={this.props.area.rooms} />
-                <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
-                <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${this.props.area.rooms[this.state.current_room].vnum}`}>
+                <RoomEditor open={this.props.ui_state.room_editor_open} />
+                <Dialog open={this.props.ui_state.room_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${room.sdesc}?`}>{`Are you sure you want to delete room ${room.vnum} (${room.sdesc})? You cannot undo this action!`}</Dialog>
+                <Dialog open={this.props.ui_state.room_errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${room.vnum}`}>
                     <List>
-                        {room_validator.validate(this.props.area.rooms[this.state.current_room]).map((error, index) => (
+                        {room_validator.validate(room).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -225,6 +162,35 @@ class RoomPanel extends React.Component {
         )
     }
 }
+RoomPanel = connect(
+    (state) => ({rooms: state.rooms, ui_state: state.ui_state}),
+    (dispatch) => ({
+        newRoom: () => {
+            let room_id = uuid();
+            dispatch({ type:RoomActions.ADD, value:room_id });
+        },
+        openEditor: (uuid) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:uuid });
+            dispatch({ type:UiStateActions.OPEN_ROOM_EDITOR });
+        },
+        closeEditor: () => {dispatch({ type:UiStateActions.CLOSE_ROOM_EDITOR })},
+        openErrors: (uuid) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:uuid });
+            dispatch({ type:UiStateActions.OPEN_ROOM_ERRORS });
+        },
+        closeErrors: () => {dispatch({ type:UiStateActions.CLOSE_ROOM_ERRORS })},
+        openConfirmDelete: (uuid) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:uuid });
+            dispatch({ type:UiStateActions.OPEN_ROOM_CONFIRM_DELETE });
+        },
+        confirmDelete: (e, v) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:null });
+            dispatch({ type:RoomActions.REMOVE, index:e.target.id });
+            dispatch({ type:UiStateActions.CLOSE_ROOM_CONFIRM_DELETE });
+        },
+        cancelDelete: () => {dispatch({ type:UiStateActions.CLOSE_ROOM_CONFIRM_DELETE })},
+    })
+)(RoomPanel)
 
 const paper_style = {
     padding: "5px",
@@ -233,6 +199,7 @@ const paper_style = {
 
 class RoomEditor extends ModelComponent {
     modelClass = Room;
+    handleChange = (e,v)=>(this.props.setProp(this.props.room.uuid, e.target.id, v))
     render() {
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
@@ -245,25 +212,25 @@ class RoomEditor extends ModelComponent {
                         <TextField 
                             floatingLabelText="vnum" 
                             id="vnum" 
-                            value={this.props.model.vnum} 
+                            value={this.props.room.vnum} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={this.handleChange} />
                         <TextField 
                             floatingLabelText="Short description" 
                             id="sdesc" 
                             fullWidth={true} 
-                            value={this.props.model.sdesc} 
+                            value={this.props.room.sdesc} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={this.handleChange} />
                         <TextField 
                             floatingLabelText="Long description" 
                             id="ldesc" 
                             multiLine={true} 
                             rows={5} 
                             fullWidth={true} 
-                            value={this.props.model.ldesc} 
+                            value={this.props.room.ldesc} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={this.handleChange} />
                         </Validate>
                     </Tab>
                     <Tab label="Details">
@@ -272,81 +239,82 @@ class RoomEditor extends ModelComponent {
                             id="room_flags" 
                             label="Room Flags" 
                             flags={ROOM_FLAGS} 
-                            value={this.props.model.room_flags} 
-                            onChange={this.handleChange.bind(this)} />
+                            value={this.props.room.room_flags} 
+                            onChange={this.handleChange} />
                         <FlagSelector 
                             id="sector" 
                             label="Sector" 
                             flags={ROOM_SECTOR_FLAGS} 
-                            value={this.props.model.sector} 
-                            onChange={this.handleChange.bind(this)} />
+                            value={this.props.room.sector} 
+                            onChange={this.handleChange} />
                         <TextField 
                             floatingLabelText="Teleport Delay" 
                             id="teleport_delay" 
-                            value={this.props.model.teleport_delay} 
+                            value={this.props.room.teleport_delay} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={this.handleChange} />
                         <VnumAutoComplete 
                             floatingLabelText="Teleport Target" 
                             id="teleport_target" 
-                            value={this.props.model.teleport_target} 
-                            onChange={this.handleChange.bind(this)} 
+                            value={this.props.room.teleport_target} 
+                            onChange={this.handleChange} 
                             dataSource={this.props.rooms} />
                         <TextField 
                             floatingLabelText="Room Capacity [Tunnel]" 
                             id="tunnel" 
-                            value={this.props.model.tunnel} 
+                            value={this.props.room.tunnel} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={this.handleChange} />
                         </Validate>
                     </Tab>
                     <Tab label="Extra Descs">
                         <ExtraDescriptionsEditor 
                             id="extra_descriptions" 
-                            model={this.props.model.extra_descriptions} 
-                            onChange={this.handleChange.bind(this)} />
+                            pointer={this.props.room.uuid} />
                     </Tab>
                     <Tab label="Exits">
                         <ExitsEditor 
                             id="exits" 
-                            model={this.props.model.exits} 
-                            rooms={this.props.rooms} 
-                            items={this.props.items} 
-                            onChange={this.handleChange.bind(this)} />
+                            pointer={this.props.room.uuid} />
                     </Tab>
                     <Tab label="Programs">
                         <ProgramsEditor 
                             id="programs" 
-                            model={this.props.model.programs} 
-                            triggers={ROOM_PROGRAM_TRIGGERS}
-                            onChange={this.handleChange.bind(this)} />
+                            pointer={this.props.room.uuid}
+                            triggers={ROOM_PROGRAM_TRIGGERS} />
                     </Tab>
                     <Tab label="Resets">
                         <Subheader>Room Resets</Subheader>
                         <RoomResetsEditor 
                             id="room_resets" 
-                            model={this.props.model.room_resets} 
-                            room={this.props.model} 
-                            onChange={this.handleChange.bind(this)} />
+                            vnum={this.props.room.vnum} />
                         <Subheader>Door Resets</Subheader>
                         <DoorResetsEditor 
                             id="door_resets" 
-                            model={this.props.model.door_resets} 
-                            room={this.props.model} 
-                            onChange={this.handleChange.bind(this)} />
+                            vnum={this.props.room.vnum} />
                     </Tab>
                 </Tabs>
             </Dialog>  
         )
     }
 }
+RoomEditor = connect(
+    (state)=>({
+        room: (state.rooms.filter((room)=>(room.uuid===state.ui_state.room_current_room)))[0],
+        rooms: state.rooms,
+        ui_state: state.ui_state
+    }),
+    (dispatch)=>({
+        handleClose: () => {dispatch({ type:UiStateActions.CLOSE_ROOM_EDITOR })},
+        setProp: (index, key, value) => {dispatch({ type:RoomActions.SET_PROP, index, key, value })},
+    })
+)(RoomEditor)
 
-class ExitsEditor extends ModelArrayComponent {
-    modelClass = Exit;
+class ExitsEditor extends React.Component {
     generate() {
-        return this.props.model.map((exit, index) => (
+        return this.props.exits.filter((e)=>(e.room===this.props.pointer)).map((exit, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(exit.uuid))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
                 <Validate validator={exit_validator}>
@@ -355,94 +323,137 @@ class ExitsEditor extends ModelArrayComponent {
                     label="Direction" 
                     flags={EXIT_DIRECTIONS} 
                     value={exit.direction} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
                 <TextField 
                     floatingLabelText="Comment" 
                     id="comment"
                     fullWidth={true} 
                     value={exit.comment} 
                     autoComplete="off" 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
                 <TextField 
                     floatingLabelText={exit.direction === EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} 
                     id="somewhere_door_keyword" 
                     fullWidth={true} 
                     value={exit.somewhere_door_keyword} 
                     autoComplete="off" 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
                 <MultiFlagSelector 
                     id="door_flags" 
                     label="Door Flags" 
                     flags={EXIT_DOOR_FLAGS} 
                     value={exit.door_flags} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
                 <VnumAutoComplete 
                     floatingLabelText="Door Key" 
                     id="door_key" 
                     value={exit.door_key} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} 
                     dataSource={this.props.items} />
                 <VnumAutoComplete 
                     floatingLabelText="Exit Target" 
                     id="target_vnum" 
                     value={exit.target_vnum} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} 
                     dataSource={this.props.rooms} />
                 <FlagSelector 
                     id="exit_size" 
                     label="Exit Size" 
                     flags={EXIT_SIZES} 
                     value={exit.exit_size} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
                 </Validate>
             </Paper>
         ));
     }
+    render() {
+        return (
+            <React.Fragment>
+                {this.generate()}
+                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
+            </React.Fragment>
+        )
+    }
 }
+ExitsEditor = connect(
+    (state)=>({
+        exits: state.exits,
+        rooms: state.rooms,
+        items: state.items
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:ExitActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:ExitActions.REMOVE, index })},
+        handleNew: (pointer) => {
+            dispatch({ type:ExitActions.ADD })
+            dispatch({ type:ExitActions.SET_PROP, key:"pointer", value:pointer })
+        }
+    })
+)(ExitsEditor)
 
-class DoorResetsEditor extends ModelArrayComponent {
+class DoorResetsEditor extends React.Component {
     modelClass = DoorReset;
     generate() {
-        return this.props.model.map((reset, index) => (
+        return this.props.door_resets.filter((r)=>(r.room===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                {/*<VnumAutoComplete floatingLabelText="Room" id="room" value={reset.room} onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />*/}
+                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
+                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                </IconButton>
                 <Validate validator={door_reset_validator}>
                 <FlagSelector 
                     id="exit" 
                     label="Exit" 
                     flags={DOOR_RESET_DIRECTIONS} 
                     value={reset.exit} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 <FlagSelector 
                     id="exit_state" 
                     label="Exit State" 
                     flags={DOOR_RESET_FLAGS} 
                     value={reset.exit_state} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 </Validate>
                 <TrapResetEditor 
                     id="trap_reset" 
-                    model={reset.trap_reset} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    pointer={reset.uuid} />
             </Paper>
         ));
     }
-    
-    handleNew() {
-        let new_dr = new DoorReset();
-        let door_resets = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
-        new_dr.room = this.props.room;
-        door_resets.push(new_dr);
-        this.props.onChange({target:this.props}, door_resets);
+    render() {
+        return (
+            <React.Fragment>
+                {this.generate()}
+                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
+            </React.Fragment>
+        )
     }
 }
+DoorResetsEditor = connect(
+    (state)=>({
+        door_resets: state.door_resets,
+        rooms: state.rooms,
+        items: state.items
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:DoorResetActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:DoorResetActions.REMOVE, index })},
+        handleNew: (vnum) => {
+            dispatch({ type:DoorResetActions.ADD })
+            dispatch({ type:DoorResetActions.SET_PROP, key:"room", value:vnum })
+        }
+    })
+)(DoorResetsEditor)
 
-class RoomResetsEditor extends ModelArrayComponent {
+class RoomResetsEditor extends React.Component {
     modelClass = RoomReset;
     generate() {
-        return this.props.model.map((reset, index) => (
+        return this.props.room_resets.filter(r=>(r.room===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
                 <Validate validator={room_reset_validator}>
@@ -451,25 +462,40 @@ class RoomResetsEditor extends ModelArrayComponent {
                     label="Reset Bit" 
                     flags={RESET_BIT_CODES} 
                     value={reset.bit_type} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 <FlagSelector 
                     id="flag" 
                     label="Room Flag" 
                     flags={ROOM_FLAGS} 
                     value={reset.flag} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 </Validate>
             </Paper>
         ));
     }
-    
-    handleNew() {
-        let new_dr = new RoomReset();
-        let room_resets = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
-        new_dr.room = this.props.room;
-        room_resets.push(new_dr);
-        this.props.onChange({target:this.props}, room_resets);
+    render() {
+        return (
+            <React.Fragment>
+                {this.generate()}
+                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
+            </React.Fragment>
+        )
     }
 }
+RoomResetsEditor = connect(
+    (state)=>({
+        room_resets: state.room_resets
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:RoomResetActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:RoomResetActions.REMOVE, index })},
+        handleNew: (vnum) => {
+            dispatch({ type:RoomResetActions.ADD })
+            dispatch({ type:RoomResetActions.SET_PROP, key:"room", value:vnum })
+        }
+    })
+)(RoomResetsEditor)
 
 export default muiThemeable()(RoomPanel);

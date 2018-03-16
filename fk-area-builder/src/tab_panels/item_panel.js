@@ -12,6 +12,10 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import Subheader from 'material-ui/Subheader';
 import Checkbox from 'material-ui/Checkbox';
 import {equal_recursively} from '../Models/model'
+import { connect } from 'react-redux';
+import { 
+    ItemActions, UiStateActions, ItemResetActions, ItemApplyActions
+} from '../Models/actionTypes';
 
 import {
     Table,
@@ -57,7 +61,8 @@ import {
 }
 from '../Models/model_validator'
 import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
-import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
+
+const uuid = require('uuid/v4');
 
 const item_validator = new ItemValidator()
 const item_apply_validator = new ItemApplyValidator()
@@ -69,93 +74,24 @@ const icon_button_style = {
 }
 
 class ItemPanel extends React.Component {
-    state = {
-        open: false,
-        current_item: 0,
-        confirm_delete_open: false,
-        confirm_text: "",
-        confirm_title: "",
-        errors_open: false
+    get_mob_by_uuid = (uuid) => {
+        let matches = this.props.items.filter((item)=>(item.uuid===uuid))
+        if (matches.length) {
+            return matches[0]
+        }
     }
-    shouldComponentUpdate(newProps) {
-        // Return true if model has changed, false otherwise
-        return (!equal_recursively(this.props.area.items, newProps.area.items))
-    }
-    
-    handleEdit = (index) => {
-        this.setState({current_item: index});
-        this.setState({open: true});
-    };
-    
-    handleDelete = (index) => {
-        this.setState({
-            current_item: index,
-            confirm_text: `Are you sure you want to delete item ${this.props.area.items[index].vnum} (${this.props.area.items[index].sdesc})? You cannot undo this action!`,
-            confirm_title: `Delete ${this.props.area.items[index].sdesc}?`,
-            confirm_delete_open: true
-        });
-    };
-    handleChange(event, value) {
-        console.log("ItemPanel", this.state.current_item, value);
-        let area = this.props.area.clone()
-        area.items[parseInt(this.state.current_item, 10)] = value;
-        this.updateArea(area);
-    }
-    
-    confirmDelete = () => {
-        let area = this.props.area.clone();
-        area.items.splice(this.state.current_item, 1);
-        this.setState({current_item: 0});
-        this.updateArea(area);
-        this.setState({confirm_delete_open: false});
-    }
-    
-    cancelDelete = () => {
-        this.setState({confirm_delete_open: false});
-    }
-    
-    handleNew = () => {
-        let new_item = new Item();
-        let area = this.props.area.clone();
-        area.items.push(new_item);
-        this.updateArea(area);
-        this.setState({open: true, current_item: area.items.length-1});
-    };
-    
-    handleClose = () => {
-        this.setState({open: false});
-    };
-    
-    updateArea(area) {
-        this.props.updateArea(area);
-    }
-    
-    showErrors = (index) => {
-        this.setState({
-            current_item: index,
-            errors_open: true
-        });
-    }
-    
-    closeErrors = (index) => {
-        this.setState({
-            current_item: 0,
-            errors_open: false
-        });
-    }
-    
     generateItems(items) {
         return items.map((item, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={100}>
-                    <IconButton tooltip="Edit" onClick={() => (this.handleEdit(index))} style={icon_button_style}>
+                    <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(item.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons">mode_edit</FontIcon>
                     </IconButton>
-                    <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))} style={icon_button_style}>
+                    <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(item.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
                     {item_validator.validate(item).length > 0 && (
-                    <IconButton tooltip="Show Errors" onClick={()=>(this.showErrors(index))} style={icon_button_style}>
+                    <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(item.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
                     )}
@@ -179,12 +115,13 @@ class ItemPanel extends React.Component {
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.cancelDelete}
+                onClick={this.props.cancelDelete}
             />,
             <FlatButton
                 label="Delete"
                 primary={true}
-                onClick={this.confirmDelete}
+                id={this.props.ui_state.item_current_item} // So confirmDelete can pull the correct uuid
+                onClick={this.props.confirmDelete}
             />,
             ]
         const errorsActions = [
@@ -192,9 +129,10 @@ class ItemPanel extends React.Component {
                 label="Done"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.closeErrors}
+                onClick={this.props.closeErrors}
             />
             ]
+        let item = this.get_mob_by_uuid(this.props.ui_state.item_current_item);
         return (
             <div>
             <Table>
@@ -209,23 +147,23 @@ class ItemPanel extends React.Component {
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                    {this.generateItems(this.props.area.items)}
+                    {this.generateItems(this.props.items)}
                     <TableRow>
                         <TableRowColumn width={100}>
-                            <IconButton tooltip="Add" onClick={this.handleNew}>
+                            <IconButton tooltip="Add" onClick={this.props.newItem}>
                                 <FontIcon className="material-icons">add_box</FontIcon>
                             </IconButton>
                         </TableRowColumn>
                     </TableRow>
                 </TableBody>
             </Table>
-            {this.props.area.items[this.state.current_item] !== undefined && 
+            {item !== undefined && 
             <React.Fragment>
-                <ItemEditor open={this.state.open} id="items" handleClose={this.handleClose} onChange={this.handleChange.bind(this)} model={this.props.area.items[this.state.current_item]} rooms={this.props.area.rooms} index={this.state.current_item} />
-                <Dialog open={this.state.confirm_delete_open} actions={confirmActions} modal={false} title={this.state.confirm_title}>{this.state.confirm_text}</Dialog>
-                <Dialog open={this.state.errors_open} actions={errorsActions} modal={false} title={`Errors for item ${this.props.area.items[this.state.current_item].vnum}`}>
+                <ItemEditor open={this.props.ui_state.item_editor_open} id="items" />
+                <Dialog open={this.props.ui_state.item_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${item.sdesc}?`}>{`Are you sure you want to delete item ${item.vnum} (${item.sdesc})? You cannot undo this action!`}</Dialog>
+                <Dialog open={this.props.ui_state.item_errors_open} actions={errorsActions} modal={false} title={`Errors for item ${item.vnum}`}>
                     <List>
-                        {item_validator.validate([this.props.area.items[this.state.current_item]]).map((error, index) => (
+                        {item_validator.validate(item).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -236,6 +174,35 @@ class ItemPanel extends React.Component {
         )
     }
 }
+ItemPanel = connect(
+    (state) => ({items: state.items, ui_state: state.ui_state}),
+    (dispatch) => ({
+        newItem: () => {
+            let item_id = uuid();
+            dispatch({ type:ItemActions.ADD, value:item_id });
+        },
+        openEditor: (uuid) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:uuid });
+            dispatch({ type:UiStateActions.OPEN_ITEM_EDITOR });
+        },
+        closeEditor: () => {dispatch({ type:UiStateActions.CLOSE_ITEM_EDITOR })},
+        openErrors: (uuid) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:uuid });
+            dispatch({ type:UiStateActions.OPEN_ITEM_ERRORS });
+        },
+        closeErrors: () => {dispatch({ type:UiStateActions.CLOSE_ITEM_ERRORS })},
+        openConfirmDelete: (uuid) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:uuid });
+            dispatch({ type:UiStateActions.OPEN_ITEM_CONFIRM_DELETE });
+        },
+        confirmDelete: (e, v) => {
+            dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:null });
+            dispatch({ type:ItemActions.REMOVE, index:e.target.id });
+            dispatch({ type:UiStateActions.CLOSE_ITEM_CONFIRM_DELETE });
+        },
+        cancelDelete: () => {dispatch({ type:UiStateActions.CLOSE_ITEM_CONFIRM_DELETE })},
+    })
+)(ItemPanel)
 
 const paper_style = {
     padding: "5px",
@@ -250,8 +217,7 @@ const item_type_ldesc_style = {
     whiteSpace: "normal"
 }
 
-class ItemEditor extends ModelComponent {
-    
+class ItemEditor extends React.Component {
     render() {
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
@@ -266,27 +232,27 @@ class ItemEditor extends ModelComponent {
                             id="vnum" 
                             value={this.props.model.vnum} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <TextField 
                             floatingLabelText="Short description" 
                             id="sdesc" 
                             value={this.props.model.sdesc} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <TextField 
                             floatingLabelText="Long description" 
                             id="ldesc" 
                             fullWidth={true} 
                             value={this.props.model.ldesc} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <TextField 
                             floatingLabelText="Keywords" 
                             id="keywords" 
                             fullWidth={true} 
                             value={this.props.model.keywords} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         </Validate>
                     </Tab>
                     <Tab label="Item Type">
@@ -296,7 +262,7 @@ class ItemEditor extends ModelComponent {
                             label="Item Type" 
                             flags={ITEM_TYPES} 
                             value={this.props.model.item_type} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         </Validate>
                         {this.props.model.item_type ? (
                         <React.Fragment>
@@ -307,14 +273,14 @@ class ItemEditor extends ModelComponent {
                                         label="Value 0" 
                                         flags={this.props.model.item_type.value0.type_enum} 
                                         value={this.props.model.value0} 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 ) : (
                                     <TextField 
                                         id="value0" 
                                         floatingLabelText="Value 0" 
                                         value={this.props.model.value0} 
                                         autoComplete="off" 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 )}
                                 <span 
                                     style={item_type_ldesc_style}>{this.props.model.item_type.value0.ldesc}</span>
@@ -326,14 +292,14 @@ class ItemEditor extends ModelComponent {
                                         label="Value 1" 
                                         flags={this.props.model.item_type.value1.type_enum} 
                                         value={this.props.model.value1} 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 ) : (
                                     <TextField 
                                         id="value1" 
                                         floatingLabelText="Value 1" 
                                         value={this.props.model.value1} 
                                         autoComplete="off" 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 )}
                                 <span 
                                     style={item_type_ldesc_style}>{this.props.model.item_type.value1.ldesc}</span>
@@ -345,14 +311,14 @@ class ItemEditor extends ModelComponent {
                                         label="Value 2" 
                                         flags={this.props.model.item_type.value2.type_enum} 
                                         value={this.props.model.value2} 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 ) : (
                                     <TextField 
                                         id="value2" 
                                         floatingLabelText="Value 2" 
                                         value={this.props.model.value2} 
                                         autoComplete="off" 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 )}
                                 <span 
                                     style={item_type_ldesc_style}>{this.props.model.item_type.value2.ldesc}</span>
@@ -364,14 +330,14 @@ class ItemEditor extends ModelComponent {
                                         label="Value 3" 
                                         flags={this.props.model.item_type.value3.type_enum} 
                                         value={this.props.model.value3} 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 ) : (
                                     <TextField 
                                         id="value3" 
                                         floatingLabelText="Value 3" 
                                         value={this.props.model.value3} 
                                         autoComplete="off" 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 )}
                                 <span 
                                     style={item_type_ldesc_style}>{this.props.model.item_type.value3.ldesc}</span>
@@ -383,14 +349,14 @@ class ItemEditor extends ModelComponent {
                                         label="Value 4" 
                                         flags={this.props.model.item_type.value4.type_enum} 
                                         value={this.props.model.value4} 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 ) : (
                                     <TextField 
                                         id="value4" 
                                         floatingLabelText="Value 4" 
                                         value={this.props.model.value4} 
                                         autoComplete="off" 
-                                        onChange={this.handleChange.bind(this)} />
+                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 )}
                                 <span style={item_type_ldesc_style}>{this.props.model.item_type.value4.ldesc}</span>
                             </div>
@@ -400,7 +366,7 @@ class ItemEditor extends ModelComponent {
                                     floatingLabelText="Value 5" 
                                     value={this.props.model.value5} 
                                     autoComplete="off" 
-                                    onChange={this.handleChange.bind(this)} />
+                                    onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                                 <span style={item_type_ldesc_style}>Object data (optional)</span>
                             </div>
                         </React.Fragment>
@@ -413,85 +379,89 @@ class ItemEditor extends ModelComponent {
                             label="Attributes" 
                             flags={ITEM_ATTRIBUTES} 
                             value={this.props.model.attributes} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <MultiFlagSelector 
                             id="wear_flags" 
                             label="Wear Locations" 
                             flags={WEAR_LOCATIONS} 
                             value={this.props.model.wear_flags} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <FlagSelector 
                             id="quality" 
                             label="Quality" 
                             flags={ITEM_QUALITY} 
                             value={this.props.model.quality} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <FlagSelector 
                             id="material" 
                             label="Materials" 
                             flags={ITEM_MATERIALS} 
                             value={this.props.model.material} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <FlagSelector 
                             id="condition" 
                             label="Condition" 
                             flags={ITEM_CONDITION} 
                             value={this.props.model.condition} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <FlagSelector 
                             id="size" 
                             label="Sizes" 
                             flags={ITEM_SIZES} 
                             value={this.props.model.size} 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         <TextField 
                             floatingLabelText="Identify text" 
                             id="identify_message" 
                             fullWidth={true} 
                             value={this.props.model.identify_message} 
                             autoComplete="off" 
-                            onChange={this.handleChange.bind(this)} />
+                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         </Validate>
                         <ApplyEditor 
                             id="special_applies" 
-                            model={this.props.model.special_applies} 
-                            onChange={this.handleChange.bind(this)} />
+                            pointer={this.props.model.pointer} />
                     </Tab>
                     <Tab label="Extra Descs">
                         <ExtraDescriptionsEditor 
                             id="extra_descriptions" 
-                            model={this.props.model.extra_descriptions} 
-                            onChange={this.handleChange.bind(this)} />
+                            pointer={this.props.model.uuid} />
                     </Tab>
                     <Tab label="Programs">
                         <ProgramsEditor 
                             id="programs" 
-                            model={this.props.model.programs} 
                             triggers={ITEM_PROGRAM_TRIGGERS}
-                            onChange={this.handleChange.bind(this)} />
+                            pointer={this.props.model.uuid} />
                     </Tab>
                     <Tab label="Resets">
                         <ItemResetsEditor 
                             id="item_resets" 
-                            model={this.props.model.item_resets} 
-                            item={this.props.model} 
-                            rooms={this.props.rooms} 
-                            onChange={this.handleChange.bind(this)} />
+                            vnum={this.props.model.vnum}  />
                     </Tab>
                 </Tabs>
             </Dialog>  
         )
     }
 }
+ItemEditor = connect(
+    (state)=>({
+        model: (state.items.filter((item)=>(item.uuid===state.ui_state.item_current_item)))[0],
+        items: state.items,
+        rooms: state.rooms,
+        ui_state: state.ui_state
+    }),
+    (dispatch)=>({
+        handleClose: () => {dispatch({ type:UiStateActions.CLOSE_ITEM_EDITOR })},
+        setProp: (index, key, value) => {dispatch({ type:ItemActions.SET_PROP, index, key, value })},
+    })
+)(ItemEditor)
 
-class ApplyEditor extends ModelArrayComponent {
-    modelClass = ItemApply;
-    
+class ApplyEditor extends React.Component {
     generate() {
-        return this.props.model.map((apply, index) => (
+        return this.props.model.filter((r)=>(r.pointer===this.props.pointer)).map((apply, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={50}>
-                    <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))}>
+                    <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(apply.uuid))}>
                         <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                     </IconButton>
                 </TableRowColumn>
@@ -502,7 +472,7 @@ class ApplyEditor extends ModelArrayComponent {
                         label="Apply Flag" 
                         flags={ITEM_APPLIES} 
                         value={apply.apply_flag} 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(apply.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
@@ -511,7 +481,7 @@ class ApplyEditor extends ModelArrayComponent {
                         id="parameter" 
                         value={apply.parameter} 
                         autoComplete="off" 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(apply.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
@@ -537,7 +507,7 @@ class ApplyEditor extends ModelArrayComponent {
                         {this.generate()}
                         <TableRow>
                             <TableRowColumn>
-                                <IconButton tooltip="Add" onClick={this.handleNew.bind(this)}>
+                                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
                                     <FontIcon className="material-icons">add_box</FontIcon>
                                 </IconButton>
                             </TableRowColumn>
@@ -548,13 +518,25 @@ class ApplyEditor extends ModelArrayComponent {
         )
     }
 }
+ApplyEditor = connect(
+    (state)=>({
+        model: state.item_applies
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:ItemApplyActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:ItemApplyActions.REMOVE, index })},
+        handleNew: (pointer) => {
+            dispatch({ type:ItemApplyActions.ADD })
+            dispatch({ type:ItemApplyActions.SET_PROP, key:"pointer", value:pointer })
+        }
+    })
+)(ApplyEditor)
 
-class ItemResetsEditor extends ModelArrayComponent {
-    modelClass = ItemReset;
+class ItemResetsEditor extends React.Component {
     generate() {
-        return this.props.model.map((reset, index) => (
+        return this.props.model.filter((r)=>(r.item===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
                 <Validate validator={item_reset_validator}>
@@ -562,90 +544,112 @@ class ItemResetsEditor extends ModelArrayComponent {
                     floatingLabelText="Room" 
                     id="room_container" 
                     value={reset.room_container} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} dataSource={this.props.rooms} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} dataSource={this.props.rooms} />
                 <TextField 
                     floatingLabelText="Item Limit" 
                     id="item_limit" 
                     value={reset.item_limit} 
                     autoComplete="off" 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 </Validate>
                 <Checkbox 
                     label="Hidden" 
                     id="hidden" 
                     checked={reset.hidden} 
-                    onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 <Checkbox 
                     label="Buried" 
                     id="buried" 
                     checked={reset.buried} 
-                    onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 <TrapResetEditor 
                     id="trap_reset" 
-                    model={reset.trap_reset} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    pointer={reset.uuid}  />
                 <ItemResetsContentsEditor 
                     id="contents" 
-                    model={reset.contents} 
-                    item={reset} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    pointer={reset.uuid}  />
             </Paper>
         ));
     }
-    
-    handleNew() {
-        let new_dr = new ItemReset();
-        let item_resets = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
-        new_dr.item = this.props.item;
-        item_resets.push(new_dr);
-        this.props.onChange({target:this.props}, item_resets);
+    render() {
+        return (
+            <React.Fragment>
+                {this.generate()}
+                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
+            </React.Fragment>
+        )
     }
 }
+ItemResetsEditor = connect(
+    (state)=>({
+        model: state.item_resets,
+        rooms: state.rooms
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:ItemResetActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:ItemResetActions.REMOVE, index })},
+        handleNew: (vnum) => {
+            dispatch({ type:ItemResetActions.ADD })
+            dispatch({ type:ItemResetActions.SET_PROP, key:"item", value:vnum })
+        }
+    })
+)(ItemResetsEditor)
 
-class ItemResetsContentsEditor extends ModelArrayComponent {
+class ItemResetsContentsEditor extends React.Component {
     generate() {
-        return this.props.model.map((reset, index) => (
+        return this.props.model.filter((r)=>(r.item_pointer===this.props.pointer)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.handleDelete(index))}>
+                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
                 </IconButton>
                 <VnumAutoComplete 
                     floatingLabelText="Item" 
                     id="item"
                     value={reset.item} 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} 
-                    dataSource={this.props.area.items} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
+                    dataSource={this.props.items} />
                 <TextField 
                     floatingLabelText="Item Limit" 
                     id="item_limit"
                     value={reset.item_limit} 
                     autoComplete="off" 
-                    onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 <Checkbox 
                     label="Hidden" 
                     id="hidden"
                     checked={reset.hidden} 
-                    onCheck={(e,v)=>(this.handleChange(e,v,index))} />
+                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
             </Paper>
         ));
-    }
-    
-    handleNew() {
-        let new_dr = new ItemReset();
-        let contents = this.props.model.map((item)=>(item.clone())); // Create working copy of state object
-        new_dr.room_container = this.props.item.item;
-        contents.push(new_dr);
-        this.props.onChange({target:this.props}, contents);
     }
     
     render() {
         return (
             <React.Fragment>
                 <Subheader>Contents</Subheader>
-                {super.render()}
+                {this.generate()}
+                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
+                    <FontIcon className="material-icons">add_box</FontIcon>
+                </IconButton>
             </React.Fragment>
         )
     }
 }
+ItemResetsContentsEditor = connect(
+    (state)=>({
+        model: state.item_resets,
+        items: state.items
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:ItemResetActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:ItemResetActions.REMOVE, index })},
+        handleNew: (uuid) => {
+            dispatch({ type:ItemResetActions.ADD })
+            dispatch({ type:ItemResetActions.SET_PROP, key:"item_pointer", value:uuid })
+        }
+    })
+)(ItemResetsContentsEditor)
 
 export default muiThemeable()(ItemPanel);
