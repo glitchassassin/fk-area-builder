@@ -2270,6 +2270,13 @@ const ITEM_APPLIES = {
     })
 };
 const ITEM_WEAPON_FLAGS = {
+    WFLAG_NONE: new Flag({
+        code: "WFLAG_NONE",
+        sdesc: "WFLAG_NONE",
+        ldesc: "No weapon flag",
+        bits: "0",
+        do_not_use: false
+    }),
     WFLAG_ARROW_DEFLECTION: new Flag({
         code: "WFLAG_ARROW_DEFLECTION",
         sdesc: "WFLAG_ARROW_DEFLECTION",
@@ -3393,6 +3400,7 @@ const ITEM_LEVER_BUTTON_FLAGS = {
         code: "TRIG_NONE",
         sdesc: "TRIG_NONE",
         ldesc: "Use 0 when there are no triggers",
+        bits: "0",
         do_not_use: false
     }),
     TRIG_UP: new Flag({
@@ -4151,7 +4159,7 @@ const ITEM_TYPES = {
             ldesc: "capacity in pounds",
         },
         value1: {
-            type: META_VALUE_TYPES.SUM_FLAGS,
+            type: META_VALUE_TYPES.MULTI_FLAGS,
             type_enum:ITEM_CONTAINER_FLAGS,
             ldesc: "container flags",
         },

@@ -123,11 +123,11 @@ function ui_state(state=new UiState(), action) {
         case UiStateActions.OPEN_ROOM_ERRORS:
             return { ...state, room_errors_open:true }
         case UiStateActions.CLOSE_ROOM_ERRORS:
-            return { ...state, room_errors_open:true }
+            return { ...state, room_errors_open:false }
         case UiStateActions.OPEN_ROOM_CONFIRM_DELETE:
             return { ...state, room_confirm_delete_open:true }
         case UiStateActions.CLOSE_ROOM_CONFIRM_DELETE:
-            return { ...state, room_confirm_delete_open:true }
+            return { ...state, room_confirm_delete_open:false }
         case UiStateActions.SET_CURRENT_ROOM:
             return { ...state, room_current_room:action.value }
         case RoomActions.ADD:
@@ -139,11 +139,11 @@ function ui_state(state=new UiState(), action) {
         case UiStateActions.OPEN_MOB_ERRORS:
             return { ...state, mob_errors_open:true }
         case UiStateActions.CLOSE_MOB_ERRORS:
-            return { ...state, mob_errors_open:true }
+            return { ...state, mob_errors_open:false }
         case UiStateActions.OPEN_MOB_CONFIRM_DELETE:
             return { ...state, mob_confirm_delete_open:true }
         case UiStateActions.CLOSE_MOB_CONFIRM_DELETE:
-            return { ...state, mob_confirm_delete_open:true }
+            return { ...state, mob_confirm_delete_open:false }
         case UiStateActions.SET_CURRENT_MOB:
             return { ...state, mob_current_mob:action.value }
         case MobActions.ADD:
@@ -155,11 +155,11 @@ function ui_state(state=new UiState(), action) {
         case UiStateActions.OPEN_ITEM_ERRORS:
             return { ...state, item_errors_open:true }
         case UiStateActions.CLOSE_ITEM_ERRORS:
-            return { ...state, item_errors_open:true }
+            return { ...state, item_errors_open:false }
         case UiStateActions.OPEN_ITEM_CONFIRM_DELETE:
             return { ...state, item_confirm_delete_open:true }
         case UiStateActions.CLOSE_ITEM_CONFIRM_DELETE:
-            return { ...state, item_confirm_delete_open:true }
+            return { ...state, item_confirm_delete_open:false }
         case UiStateActions.SET_CURRENT_ITEM:
             return { ...state, item_current_item:action.value }
         case ItemActions.ADD:
@@ -204,7 +204,7 @@ function mobs(state=[], action) {
             }
             return state.map((target)=>{
                 if (target.uuid === index) {
-                    let simple = {...target}
+                    let simple = {...target, unique:false}
                     for (let field of ["affect_flags", "virtual_armor_type", "virtual_armor_material", "alignment", "str", "int", "wis", "dex", "con", "cha", "lck", "ris_resistant", "ris_immune", "ris_susceptible"]) {
                         delete simple[field];
                     }
@@ -218,7 +218,7 @@ function mobs(state=[], action) {
             }
             return state.map((target)=>{
                 if (target.uuid === index) {
-                    return new UniqueMob({...target})
+                    return new UniqueMob({...target, unique:true})
                 }
                 return target
             })

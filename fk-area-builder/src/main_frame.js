@@ -30,14 +30,12 @@ class MainFrame extends React.Component {
                 <Tab label={this.props.item_label}>
                     <ItemPanel />
                 </Tab>
-                {/*
                 <Tab label="Quests">
                     <QuestsPanel />
                 </Tab>
                 <Tab label="Area Code">
                     <AreaRenderer />
                 </Tab>
-                */}
             </Tabs>
         </div>
         )
@@ -60,13 +58,13 @@ class AreaRenderer extends React.Component {
     render() {
         return (
             <pre>
-            {new AreaExporter().renderArea(this.props.state)}
+            {(new AreaExporter()).renderArea(this.props.state)}
             </pre>
         )
     }
 }
 AreaRenderer = connect(
-    (state) => (state)
+    (state) => ({state})
 )(AreaRenderer)
 
 export default MainFrame;

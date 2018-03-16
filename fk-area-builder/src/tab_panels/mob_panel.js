@@ -130,7 +130,7 @@ class MobPanel extends React.Component {
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(mob.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
-                    {mob_validator.validate(mob).length > 0 && (
+                    {mob_validator.validate_state(this.props.state, mob).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(mob.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
@@ -141,7 +141,7 @@ class MobPanel extends React.Component {
                     {mob.vnum}
                 </TableRowColumn>
                 <TableRowColumn>
-                    <Paper style={{width:"1em", height:"1em", marginRight:"0.5em", textAlign:"center", display:"inline-block", color:this.props.muiTheme.palette.disabledColor}} zDepth={1} circle={true}>{mob instanceof UniqueMob ? "U": "S"}</Paper>
+                    <Paper style={{width:"1em", height:"1em", marginRight:"0.5em", textAlign:"center", display:"inline-block", color:this.props.muiTheme.palette.disabledColor}} zDepth={1} circle={true}>{mob.unique ? "U": "S"}</Paper>
                     {mob.sdesc}
                 </TableRowColumn>
                 <TableRowColumn>{mob.level}</TableRowColumn>
@@ -159,13 +159,13 @@ class MobPanel extends React.Component {
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.cancelDelete}
+                onClick={this.props.cancelDelete}
             />,
             <FlatButton
                 label="Delete"
                 primary={true}
                 id={this.props.ui_state.mob_current_mob} // So confirmDelete can pull the correct uuid
-                onClick={this.confirmDelete}
+                onClick={this.props.confirmDelete}
             />,
             ]
         const errorsActions = [
@@ -173,7 +173,7 @@ class MobPanel extends React.Component {
                 label="Done"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.closeErrors}
+                onClick={this.props.closeErrors}
             />
             ]
         return (
@@ -207,7 +207,7 @@ class MobPanel extends React.Component {
                 <Dialog open={this.props.ui_state.mob_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${mob.sdesc}?`}>{`Are you sure you want to delete mob ${mob.vnum} (${mob.sdesc})? You cannot undo this action!`}</Dialog>
                 <Dialog open={this.props.ui_state.mob_errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${mob.vnum}`}>
                     <List>
-                        {mob_validator.validate(mob).map((error, index) => (
+                        {mob_validator.validate_state(this.props.state, mob).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -219,7 +219,7 @@ class MobPanel extends React.Component {
     }
 }
 MobPanel = connect(
-    (state) => ({mobs: state.mobs, ui_state: state.ui_state}),
+    (state) => ({state: state, mobs: state.mobs, ui_state: state.ui_state}),
     (dispatch) => ({
         newMob: () => {
             let mob_id = uuid();
@@ -258,7 +258,7 @@ class MobEditor extends React.Component {
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
-        var uniqueTab = (this.props.mob instanceof UniqueMob ? (
+        var uniqueTab = (this.props.mob.unique ? (
             <React.Fragment>
                 <Validate validator={mob_validator}>
                 <MultiFlagSelector 
@@ -362,7 +362,7 @@ class MobEditor extends React.Component {
                 onClick={()=>(this.props.convertToUnique(this.props.mob.uuid))}/>
         ))
         return (
-            <Dialog title={`Edit ${this.props.mob instanceof UniqueMob ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
+            <Dialog title={`Edit ${this.props.mob.unique ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
                 <Tabs>
                     <Tab label="Descriptions">
                         <Validate validator={mob_validator}>
@@ -691,7 +691,7 @@ RepairsEditor = connect(
 
 class MobResetsEditor extends React.Component {
     generate() {
-        return this.props.model.filter((r)=>(r.vnum===this.props.vnum)).map((resets, index) => (
+        return this.props.model.filter((r)=>(r.mob===this.props.vnum)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(resets.uuid))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
@@ -750,7 +750,7 @@ MobResetsEditor = connect(
 class EquipmentResetsEditor extends React.Component {
     modelClass = EquipmentReset;
     generate() {
-        return this.props.model.filter((resets)=>(resets.uuid===this.props.pointer)).map((resets, index) => (
+        return this.props.model.filter((resets)=>(resets.mob_reset===this.props.pointer)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
                     <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>

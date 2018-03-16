@@ -35,7 +35,9 @@ import {
     WEAR_LOCATIONS,
     ITEM_QUALITY,
     ITEM_CONDITION,
-    ITEM_SIZES
+    ITEM_SIZES,
+    META_VALUE_TYPES,
+    META_VNUM_TYPES
 }
 from '../Models/flags';
 import {
@@ -90,7 +92,7 @@ class ItemPanel extends React.Component {
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(item.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
-                    {item_validator.validate(item).length > 0 && (
+                    {item_validator.validate_state(this.props.state, item).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(item.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
@@ -163,7 +165,7 @@ class ItemPanel extends React.Component {
                 <Dialog open={this.props.ui_state.item_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${item.sdesc}?`}>{`Are you sure you want to delete item ${item.vnum} (${item.sdesc})? You cannot undo this action!`}</Dialog>
                 <Dialog open={this.props.ui_state.item_errors_open} actions={errorsActions} modal={false} title={`Errors for item ${item.vnum}`}>
                     <List>
-                        {item_validator.validate(item).map((error, index) => (
+                        {item_validator.validate_state(this.props.state, item).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -175,7 +177,7 @@ class ItemPanel extends React.Component {
     }
 }
 ItemPanel = connect(
-    (state) => ({items: state.items, ui_state: state.ui_state}),
+    (state) => ({state: state, items: state.items, ui_state: state.ui_state}),
     (dispatch) => ({
         newItem: () => {
             let item_id = uuid();
@@ -218,6 +220,66 @@ const item_type_ldesc_style = {
 }
 
 class ItemEditor extends React.Component {
+    generateItemValue(item_type, value_index) {
+        let field;
+        if (this.props.model.item_type["value"+value_index].type == META_VALUE_TYPES.FLAG) {
+            field = (
+                <FlagSelector 
+                    id={"value"+value_index}
+                    label={"Value " + value_index}
+                    flags={this.props.model.item_type["value"+value_index].type_enum} 
+                    value={this.props.model["value"+value_index]} 
+                    onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+            )
+        }
+        else if (this.props.model.item_type["value"+value_index].type == META_VALUE_TYPES.MULTI_FLAGS) {
+            field = (
+                <MultiFlagSelector 
+                    id={"value"+value_index}
+                    label={"Value " + value_index}
+                    flags={this.props.model.item_type["value"+value_index].type_enum} 
+                    value={this.props.model["value"+value_index]} 
+                    onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+            )
+        }
+        else if (this.props.model.item_type["value"+value_index].type == META_VALUE_TYPES.VNUM && this.props.model.item_type["value"+value_index].type_enum !== null) {
+            let data_source;
+            if (this.props.model.item_type["value"+value_index].type_enum == META_VNUM_TYPES.OBJECT) {
+                data_source = this.props.items;
+            }
+            else if (this.props.model.item_type["value"+value_index].type_enum == META_VNUM_TYPES.ROOM) {
+                data_source = this.props.rooms;
+            }
+            else if (this.props.model.item_type["value"+value_index].type_enum == META_VNUM_TYPES.MOB) {
+                data_source = this.props.mobs;
+            }
+            field = (
+                <VnumAutoComplete 
+                    id={"value"+value_index}
+                        floatingLabelText={"Value " + value_index}
+                    value={this.props.model["value"+value_index]} 
+                    onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} dataSource={data_source} />
+            )
+        }
+        else {
+            field = (
+                <TextField 
+                    id={"value"+value_index}
+                    floatingLabelText={"Value " + value_index}
+                    value={this.props.model["value"+value_index]} 
+                    autoComplete="off" 
+                    onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                
+            )
+        }
+        
+        return (
+            <div>
+                {field}
+                <span style={item_type_ldesc_style}>{item_type["value"+value_index].ldesc}</span>
+            </div>
+        )
+    }
     render() {
         const actions = [
         <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
@@ -266,100 +328,11 @@ class ItemEditor extends React.Component {
                         </Validate>
                         {this.props.model.item_type ? (
                         <React.Fragment>
-                            <div>
-                                {this.props.model.item_type.value0.type_enum ? (
-                                    <FlagSelector 
-                                        id="value0" 
-                                        label="Value 0" 
-                                        flags={this.props.model.item_type.value0.type_enum} 
-                                        value={this.props.model.value0} 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                ) : (
-                                    <TextField 
-                                        id="value0" 
-                                        floatingLabelText="Value 0" 
-                                        value={this.props.model.value0} 
-                                        autoComplete="off" 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                )}
-                                <span 
-                                    style={item_type_ldesc_style}>{this.props.model.item_type.value0.ldesc}</span>
-                            </div>
-                            <div>
-                                {this.props.model.item_type.value1.type_enum ? (
-                                    <FlagSelector 
-                                        id="value1" 
-                                        label="Value 1" 
-                                        flags={this.props.model.item_type.value1.type_enum} 
-                                        value={this.props.model.value1} 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                ) : (
-                                    <TextField 
-                                        id="value1" 
-                                        floatingLabelText="Value 1" 
-                                        value={this.props.model.value1} 
-                                        autoComplete="off" 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                )}
-                                <span 
-                                    style={item_type_ldesc_style}>{this.props.model.item_type.value1.ldesc}</span>
-                            </div>
-                            <div>
-                                {this.props.model.item_type.value2.type_enum ? (
-                                    <FlagSelector 
-                                        id="value2" 
-                                        label="Value 2" 
-                                        flags={this.props.model.item_type.value2.type_enum} 
-                                        value={this.props.model.value2} 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                ) : (
-                                    <TextField 
-                                        id="value2" 
-                                        floatingLabelText="Value 2" 
-                                        value={this.props.model.value2} 
-                                        autoComplete="off" 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                )}
-                                <span 
-                                    style={item_type_ldesc_style}>{this.props.model.item_type.value2.ldesc}</span>
-                            </div>
-                            <div>
-                                {this.props.model.item_type.value3.type_enum ? (
-                                    <FlagSelector 
-                                        id="value3" 
-                                        label="Value 3" 
-                                        flags={this.props.model.item_type.value3.type_enum} 
-                                        value={this.props.model.value3} 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                ) : (
-                                    <TextField 
-                                        id="value3" 
-                                        floatingLabelText="Value 3" 
-                                        value={this.props.model.value3} 
-                                        autoComplete="off" 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                )}
-                                <span 
-                                    style={item_type_ldesc_style}>{this.props.model.item_type.value3.ldesc}</span>
-                            </div>
-                            <div>
-                                {this.props.model.item_type.value4.type_enum ? (
-                                    <FlagSelector 
-                                        id="value4" 
-                                        label="Value 4" 
-                                        flags={this.props.model.item_type.value4.type_enum} 
-                                        value={this.props.model.value4} 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                ) : (
-                                    <TextField 
-                                        id="value4" 
-                                        floatingLabelText="Value 4" 
-                                        value={this.props.model.value4} 
-                                        autoComplete="off" 
-                                        onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                )}
-                                <span style={item_type_ldesc_style}>{this.props.model.item_type.value4.ldesc}</span>
-                            </div>
+                            {this.generateItemValue(this.props.model.item_type, 0)}
+                            {this.generateItemValue(this.props.model.item_type, 1)}
+                            {this.generateItemValue(this.props.model.item_type, 2)}
+                            {this.generateItemValue(this.props.model.item_type, 3)}
+                            {this.generateItemValue(this.props.model.item_type, 4)}
                             <div>
                                 <TextField 
                                     id="value5" 
@@ -448,6 +421,7 @@ ItemEditor = connect(
         model: (state.items.filter((item)=>(item.uuid===state.ui_state.item_current_item)))[0],
         items: state.items,
         rooms: state.rooms,
+        mobs: state.mobs,
         ui_state: state.ui_state
     }),
     (dispatch)=>({
@@ -567,6 +541,7 @@ class ItemResetsEditor extends React.Component {
                     pointer={reset.uuid}  />
                 <ItemResetsContentsEditor 
                     id="contents" 
+                    vnum={this.props.vnum}
                     pointer={reset.uuid}  />
             </Paper>
         ));
@@ -630,7 +605,7 @@ class ItemResetsContentsEditor extends React.Component {
             <React.Fragment>
                 <Subheader>Contents</Subheader>
                 {this.generate()}
-                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
+                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer, this.props.vnum))}>
                     <FontIcon className="material-icons">add_box</FontIcon>
                 </IconButton>
             </React.Fragment>
@@ -645,8 +620,9 @@ ItemResetsContentsEditor = connect(
     (dispatch) => ({
         setProp: (index, key, value) => {dispatch({ type:ItemResetActions.SET_PROP, index, key, value})},
         handleDelete: (index) => {dispatch({ type:ItemResetActions.REMOVE, index })},
-        handleNew: (uuid) => {
+        handleNew: (uuid, vnum) => {
             dispatch({ type:ItemResetActions.ADD })
+            dispatch({ type:ItemResetActions.SET_PROP, key:"room_container", value:vnum })
             dispatch({ type:ItemResetActions.SET_PROP, key:"item_pointer", value:uuid })
         }
     })

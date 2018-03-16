@@ -10,15 +10,11 @@ class Field {
         this.options = {
             in_flags: options.in_flags,
             optional: options.optional,
-            ignore_validation: options.ignore_validation
         };
     }
     
     validate(value) {
         let errors = [];
-        if (this.options.ignore_validation) {
-            return errors;
-        }
         
         if (value == null || value === "") {
             if (!this.options.optional) {
@@ -109,6 +105,43 @@ class ModelArrayValidator {
     }
 }
 
+class StateValidator extends ModelValidator {
+    constructor(fields) {
+        super(Object.assign({
+            area:                   new AreaValidator(),
+            justice_system:         new JusticeSystemValidator(),
+            rooms:                  new ModelArrayValidator(new RoomValidator()),
+            items:                  new ModelArrayValidator(new ItemValidator()),
+            mobs:                   new ModelArrayValidator(new MobValidator()),
+            mob_specials:           new ModelArrayValidator(new MobSpecialValidator()),
+            quest_log:              new ModelArrayValidator(new QuestLogValidator()),
+            exits:                  new ModelArrayValidator(new ExitValidator()),
+            door_resets:            new ModelArrayValidator(new DoorResetValidator()),
+            room_resets:            new ModelArrayValidator(new RoomResetValidator()),
+            extra_descriptions:     new ModelArrayValidator(new ExtraDescriptionValidator()),
+            programs:               new ModelArrayValidator(new ProgramValidator()),
+            special_applies:        new ModelArrayValidator(new ItemApplyValidator()),
+            item_resets:            new ModelArrayValidator(new ItemResetValidator()),
+            can_train_skill:        new ModelArrayValidator(new TrainSkillValidator()),
+            can_train_weapon_skill: new ModelArrayValidator(new TrainWeaponSkillValidator()),
+            can_train_spell:        new ModelArrayValidator(new TrainSpellValidator()),
+            can_train_level:        new ModelArrayValidator(new TrainLevelValidator()),
+            can_train_statistic:    new ModelArrayValidator(new TrainStatisticValidator()),
+            can_train_feat:         new ModelArrayValidator(new TrainFeatValidator()),
+            programs:               new ModelArrayValidator(new ProgramValidator()),
+            mob_resets:             new ModelArrayValidator(new MobResetValidator()),
+            shop:                   new ModelArrayValidator(new ShopValidator()),
+            repairs:                new ModelArrayValidator(new RepairRechargeValidator()),
+            equipment_resets:       new ModelArrayValidator(new EquipmentResetValidator()),
+            coins_resets:           new ModelArrayValidator(new CoinResetValidator()),
+            trap_reset:             new ModelArrayValidator(new TrapResetValidator()),
+        }, fields))
+    }
+    _error_prefix(model) {
+        return `[Area:${model.name}]`;
+    }
+}
+
 class AreaValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
@@ -120,7 +153,6 @@ class AreaValidator extends ModelValidator {
                 }
             }}),
             vnum:                   new Field({field_name:"vnum",                   in_flags:null,                  optional:false}),
-            justice_system:         new JusticeSystemValidator(),
             min_recommended_level:  new Field({field_name:"min_recommended_level",  in_flags:null,                  optional:false,     extra_validator: (value) => {
                 if (!(0 <= value && value <= 65)) {
                     return[`min_recommended_level must be between 0 and 65`];
@@ -174,11 +206,6 @@ class AreaValidator extends ModelValidator {
             }}),
             mining_material:        new Field({field_name:"mining_material",        in_flags:flags.ITEM_MATERIALS,  optional:true}),
             logging_material:       new Field({field_name:"logging_material",       in_flags:flags.ITEM_MATERIALS,  optional:true}),
-            rooms:                  new ModelArrayValidator(new RoomValidator()),
-            items:                  new ModelArrayValidator(new ItemValidator()),
-            mobs:                   new ModelArrayValidator(new MobValidator()),
-            mob_specials:           new ModelArrayValidator(new MobSpecialValidator()),
-            quest_log:              new ModelArrayValidator(new QuestLogValidator())
         }, fields))
     }
     _error_prefix(model) {
@@ -220,12 +247,15 @@ class RoomValidator extends ModelValidator {
             teleport_delay:     new Field({field_name:"teleport_delay",     in_flags:null,                      optional:true}),
             teleport_target:    new Field({field_name:"teleport_target",    in_flags:null,                      optional:true}),
             tunnel:             new Field({field_name:"tunnel",             in_flags:null,                      optional:true}),
-            exits:              new ModelArrayValidator(new ExitValidator()),
-            door_resets:        new ModelArrayValidator(new DoorResetValidator()),
-            room_resets:        new ModelArrayValidator(new RoomResetValidator()),
-            extra_descriptions: new ModelArrayValidator(new ExtraDescriptionValidator()),
-            programs:           new ModelArrayValidator(new ProgramValidator()),
         }, fields));
+    }
+    validate_state(state, room) {
+        let programs = new ModelArrayValidator(new ProgramValidator()).validate(state.programs.filter(i=>i.pointer===room.uuid))
+        let room_resets = new ModelArrayValidator(new RoomResetValidator()).validate(state.room_resets.filter(i=>(i.room===room.vnum)))
+        let door_resets = new ModelArrayValidator(new DoorResetValidator()).validate(state.door_resets.filter(i=>(i.room===room.vnum)))
+        let exits = new ModelArrayValidator(new ExitValidator()).validate(state.exits.filter(i=>i.room===room.uuid))
+        let extra_descs = new ModelArrayValidator(new ExtraDescriptionValidator()).validate(state.extra_descriptions.filter(i=>i.pointer===room.uuid))
+        return this.validate(room).concat(programs, room_resets, door_resets, exits, extra_descs)
     }
     _error_prefix(model) {
         return `[Room:(${model.vnum}) ${model.sdesc}]`;
@@ -240,8 +270,8 @@ class ExitValidator extends ModelValidator {
             somewhere_door_keyword: new Field({field_name:"somewhere_door_keyword", in_flags:null,                  optional:true}),
             // Flags                    
             door_flags:             new Field({field_name:"door_flags",             in_flags:flags.EXIT_DOOR_FLAGS, optional:true}),
-            door_key:               new Field({field_name:"door_key",               in_flags:null,                  optional:false, ignore_validation:true}),
-            target_vnum:            new Field({field_name:"target_vnum",            in_flags:null,                  optional:false, ignore_validation:true}),
+            door_key:               new Field({field_name:"door_key",               in_flags:null,                  optional:false}),
+            target_vnum:            new Field({field_name:"target_vnum",            in_flags:null,                  optional:false}),
             exit_size:              new Field({field_name:"exit_size",              in_flags:flags.EXIT_SIZES,      optional:false}),
         }, fields))
     }
@@ -289,7 +319,6 @@ class ItemValidator extends ModelValidator {
             item_type:          new Field({field_name:"item_type",          in_flags:flags.ITEM_TYPES,      optional:false}),
             attributes:         new Field({field_name:"attributes",         in_flags:flags.ITEM_ATTRIBUTES, optional:true}),
             wear_flags:         new Field({field_name:"wear_flags",         in_flags:flags.WEAR_LOCATIONS,  optional:true}),
-            extra_descriptions: new ModelArrayValidator(new ExtraDescriptionValidator()),
             quality:            new Field({field_name:"quality",            in_flags:flags.ITEM_QUALITY,    optional:false}),
             material:           new Field({field_name:"material",           in_flags:flags.ITEM_MATERIALS,  optional:false}),
             condition:          new Field({field_name:"condition",          in_flags:flags.ITEM_CONDITION,  optional:false}),
@@ -300,11 +329,15 @@ class ItemValidator extends ModelValidator {
             value3:             new Field({field_name:"value3",             in_flags:null,                  optional:true}),
             value4:             new Field({field_name:"value4",             in_flags:null,                  optional:true}),
             value5:             new Field({field_name:"value5",             in_flags:null,                  optional:true}),
-            special_applies:    new ModelArrayValidator(new ItemApplyValidator()),
-            programs:           new ModelArrayValidator(new ProgramValidator()),
-            item_resets:        new ModelArrayValidator(new ItemResetValidator()),
             identify_message:   new Field({field_name:"identify_message",   in_flags:null,     optional:true}),
         }, fields));
+    }
+    validate_state(state, item) {
+        let programs = new ModelArrayValidator(new ProgramValidator()).validate(state.programs.filter(i=>i.pointer===item.uuid))
+        let resets = new ModelArrayValidator(new ItemResetValidator()).validate(state.item_resets.filter(i=>(i.item===item.vnum||i.item_pointer===item.uuid)))
+        let applies = new ModelArrayValidator(new ItemApplyValidator()).validate(state.item_applies.filter(i=>i.pointer===item.uuid))
+        let extra_descs = new ModelArrayValidator(new ExtraDescriptionValidator()).validate(state.extra_descriptions.filter(i=>i.pointer===item.uuid))
+        return this.validate(item).concat(programs, resets, applies, extra_descs)
     }
     _error_prefix(model) {
         return `[Item:(${model.vnum}) ${model.sdesc}]`;
@@ -328,18 +361,20 @@ class SimpleMobValidator extends ModelValidator {
             act_flags:              new Field({field_name:"act_flags",              in_flags:flags.MOB_ACT_FLAGS,   optional:true}),
             understood_languages:   new Field({field_name:"understood_languages",   in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
             spoken_languages:       new Field({field_name:"spoken_languages",       in_flags:flags.LANGUAGE_FLAGS,  optional:false}),
-            can_train_skill:        new ModelArrayValidator(new TrainSkillValidator()),
-            can_train_weapon_skill: new ModelArrayValidator(new TrainWeaponSkillValidator()),
-            can_train_spell:        new ModelArrayValidator(new TrainSpellValidator()),
-            can_train_level:        new ModelArrayValidator(new TrainLevelValidator()),
-            can_train_statistic:    new ModelArrayValidator(new TrainStatisticValidator()),
-            can_train_feat:         new ModelArrayValidator(new TrainFeatValidator()),
-            programs:               new ModelArrayValidator(new ProgramValidator()),
-            mob_resets:             new ModelArrayValidator(new MobResetValidator()),
-            shop:                   new ShopValidator(),
-            repairs:                new RepairRechargeValidator()
         }, fields));
-        
+    }
+    validate_state(state, mob) {
+        let programs = new ModelArrayValidator(new ProgramValidator()).validate(state.programs.filter(i=>i.pointer===mob.uuid))
+        let resets = new ModelArrayValidator(new MobResetValidator()).validate(state.mob_resets.filter(i=>(i.item===mob.vnum||i.item_pointer===mob.uuid)))
+        let equip = new ModelArrayValidator(new EquipmentResetValidator()).validate(state.equipment_resets.filter(i=>(i.mob===mob.vnum)))
+        let coins = new ModelArrayValidator(new CoinResetValidator()).validate(state.coin_resets.filter(i=>(i.mob===mob.vnum)))
+        let skill = new ModelArrayValidator(new TrainSkillValidator()).validate(state.can_train_skill.filter(i=>i.mob===mob.uuid))
+        let weapon_skill = new ModelArrayValidator(new TrainWeaponSkillValidator()).validate(state.can_train_weapon_skill.filter(i=>i.mob===mob.uuid))
+        let spell = new ModelArrayValidator(new TrainSpellValidator()).validate(state.can_train_spell.filter(i=>i.mob===mob.uuid))
+        let level = new ModelArrayValidator(new TrainLevelValidator()).validate(state.can_train_level.filter(i=>i.mob===mob.uuid))
+        let feat = new ModelArrayValidator(new TrainFeatValidator()).validate(state.can_train_feat.filter(i=>i.mob===mob.uuid))
+        let statistic = new ModelArrayValidator(new TrainStatisticValidator()).validate(state.can_train_statistic.filter(i=>i.mob===mob.uuid))
+        return this.validate(mob).concat(programs, resets, equip, coins, skill, weapon_skill, spell, level, feat, statistic)
     }
     _error_prefix(model) {
         return `[SimpleMob:(${model.vnum}) ${model.sdesc}]`
@@ -418,7 +453,7 @@ class TrainSkillValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[TrainSkill:${model.skill}]`;
+        return `[TrainSkill:${model.skill? model.skill.code : undefined}]`;
     }
 }
 
@@ -431,7 +466,7 @@ class TrainWeaponSkillValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[TrainWeaponSkill:${model.weapon_skill}]`;
+        return `[TrainWeaponSkill:${model.weapon_skill? model.weapon_skill.code : undefined}]`;
     }
 }
 
@@ -444,7 +479,7 @@ class TrainSpellValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[TrainSpell:${model.spell}]`;
+        return `[TrainSpell:${model.spell? model.spell.code : undefined}]`;
     }
 }
 
@@ -469,7 +504,7 @@ class TrainStatisticValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[TrainStatistic:${model.statistic}]`;
+        return `[TrainStatistic:${model.statistic? model.statistic.code : undefined}]`;
     }
 }
 
@@ -482,14 +517,14 @@ class TrainFeatValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[TrainFeat:${model.feat}]`;
+        return `[TrainFeat:${model.feat? model.feat.code : undefined}]`;
     }
 }
 
 class ShopValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
-            shopkeeper:     new Field({field_name:"shopkeeper",     in_flags:null,              optional:false, ignore_validation:true}),
+            shopkeeper:     new Field({field_name:"shopkeeper",     in_flags:null,              optional:false}),
             will_buy_1:     new Field({field_name:"will_buy_1",     in_flags:flags.ITEM_TYPES,  optional:false}),
             will_buy_2:     new Field({field_name:"will_buy_2",     in_flags:flags.ITEM_TYPES,  optional:true}),
             will_buy_3:     new Field({field_name:"will_buy_3",     in_flags:flags.ITEM_TYPES,  optional:true}),
@@ -501,14 +536,14 @@ class ShopValidator extends ModelValidator {
             close_hour:     new Field({field_name:"close_hour",     in_flags:null,              optional:false}),
         }, fields))        }
     _error_prefix(model) {
-        return `[Shop:${model.shopkeeper.vnum}]`;
+        return `[Shop:${model.shopkeeper}]`;
     }
 }
 
 class RepairRechargeValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
-            shopkeeper:         new Field({field_name:"shopkeeper",         in_flags:null,                      optional:false, ignore_validation:true}),
+            shopkeeper:         new Field({field_name:"shopkeeper",         in_flags:null,                      optional:false}),
             will_repair_1:      new Field({field_name:"will_repair_1",      in_flags:flags.ITEM_TYPES,          optional:false}),
             will_repair_2:      new Field({field_name:"will_repair_2",      in_flags:flags.ITEM_TYPES,          optional:true}),
             repair_material:    new Field({field_name:"repair_material",    in_flags:flags.MOB_REPAIR_MATERIAL, optional:false}),
@@ -519,7 +554,7 @@ class RepairRechargeValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[RepairRecharge:${model.shopkeeper.vnum}]`;
+        return `[RepairRecharge:${model.shopkeeper}]`;
     }
 }
 
@@ -527,16 +562,13 @@ class MobResetValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
             defunct:    new Field({field_name:"defunct",    in_flags:null,  optional:false}),
-            mob:        new Field({field_name:"mob",        in_flags:null,  optional:false, ignore_validation:true}),
+            mob:        new Field({field_name:"mob",        in_flags:null,  optional:false}),
             mob_limit:  new Field({field_name:"mob_limit",  in_flags:null,  optional:false}),
-            room:       new Field({field_name:"room",       in_flags:null,  optional:false, ignore_validation:true}),
-            equipment:  new ModelArrayValidator(new EquipmentResetValidator()),
-            coins:      new ModelArrayValidator(new CoinResetValidator()),
-            
+            room:       new Field({field_name:"room",       in_flags:null,  optional:false}),
         }, fields))
     }
     _error_prefix(model) {
-        return `[MobReset:${model.mob.vnum} in ${model.room ? model.room.vnum : "undefined"}]`;
+        return `[MobReset:${model.mob} in ${model.room}]`;
     }
 }
 
@@ -544,14 +576,13 @@ class EquipmentResetValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        in_flags:null,                  optional:false}),
-            item:           new Field({field_name:"item",           in_flags:null,                  optional:false, ignore_validation:true}),
+            item:           new Field({field_name:"item",           in_flags:null,                  optional:false}),
             equip_limit:    new Field({field_name:"equip_limit",    in_flags:null,                  optional:false}),
             wear_loc:       new Field({field_name:"wear_loc",       in_flags:flags.MOB_WEAR_POSITIONS, optional:true}),
-            trap_reset:     new Field({field_name:"trap_reset",     in_flags:null,                  optional:true}),
         }, fields))
     }
     _error_prefix(model) {
-        return `[EquipmentReset:${model.item ? model.item.vnum : "undefined"}]`;
+        return `[EquipmentReset:${model.item}]`;
     }
 }
 
@@ -559,17 +590,15 @@ class ItemResetValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        in_flags:null,  optional:false}),
-            item:           new Field({field_name:"item",           in_flags:null,  optional:false, ignore_validation:true}),
+            item:           new Field({field_name:"item",           in_flags:null,  optional:false}),
             item_limit:     new Field({field_name:"item_limit",     in_flags:null,  optional:false}),
-            room_container: new Field({field_name:"room_container", in_flags:null,  optional:false, ignore_validation:true}),
+            room_container: new Field({field_name:"room_container", in_flags:null,  optional:false}),
             hidden:         new Field({field_name:"hidden",         in_flags:null,  optional:false}),
             buried:         new Field({field_name:"buried",         in_flags:null,  optional:false}),
-            trap_reset:     new ModelArrayValidator(new TrapResetValidator()),
-            contents:       null//new ModelArrayValidator(new ItemResetValidator()),
         }, fields))
     }
     _error_prefix(model) {
-        return `[ItemReset:${model.item.vnum} in ${model.room_container ? model.room_container.vnum : "undefined"}]`;
+        return `[ItemReset:${model.item} in ${model.room_container ? model.room_container : "undefined"}]`;
     }
 }
 
@@ -577,14 +606,13 @@ class DoorResetValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
             defunct:        new Field({field_name:"defunct",        in_flags:null,              optional:false}),
-            room:           new Field({field_name:"room",           in_flags:null,              optional:false, ignore_validation:true}),
+            room:           new Field({field_name:"room",           in_flags:null,              optional:false}),
             exit:           new Field({field_name:"exit",           in_flags:flags.DOOR_RESET_DIRECTIONS,              optional:false}),
             exit_state:     new Field({field_name:"exit_state",     in_flags:flags.DOOR_RESET_FLAGS, optional:false}),
-            trap_reset:     new ModelArrayValidator(new TrapResetValidator()),
         }, fields))
     }
     _error_prefix(model) {
-        return `[DoorReset:${model.exit ? model.exit.code : "[no exit defined]"} from ${model.room.vnum}]`;
+        return `[DoorReset:${model.exit ? model.exit.code : "[no exit defined]"} from ${model.room}]`;
     }
 }
 
@@ -597,7 +625,7 @@ class RandomDoorResetValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[RandomDoorReset:0-${model.last_door} from ${model.room.vnum}]`;
+        return `[RandomDoorReset:0-${model.last_door} from ${model.room}]`;
     }
 }
 
@@ -611,7 +639,7 @@ class RoomResetValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[RoomReset:${model.room.vnum}: BIT_RESET_ROOM|${model.bit_type ? model.bit_type.code : "undefined"} ${model.flag ? model.flag.code : "undefined"}]`;
+        return `[RoomReset:${model.room}: BIT_RESET_ROOM|${model.bit_type ? model.bit_type.code : "undefined"} ${model.flag ? model.flag.code : "undefined"}]`;
     }
 }
 
@@ -654,14 +682,13 @@ class MobSpecialValidator extends ModelValidator {
         }, fields))
     }
     _error_prefix(model) {
-        return `[MobSpecial:${model.mob.vnum} ${model.special.code}]`;
+        return `[MobSpecial:${model.mob} ${model.special.code}]`;
     }
 }
 
 class QuestLogValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
-            area:       new Field({field_name:"area",       in_flags:null,                      optional:false, ignore_validation:true}),
             qbit_start: new Field({field_name:"qbit_start", in_flags:null,                      optional:false}),
             qbit_stop:  new Field({field_name:"qbit_stop",  in_flags:null,                      optional:false}),
             min_qbit:   new Field({field_name:"min_qbit",   in_flags:null,                      optional:false}),

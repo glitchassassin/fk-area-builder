@@ -336,18 +336,27 @@ class Loader {
             setProp("sdesc", matches[3]);
             setProp("ldesc", matches[4].trim());
             setProp("action_description", matches[5]);
-            setProp("item_type", get_code(matches[6], flags.ITEM_TYPES));
+            let item_type = get_code(matches[6], flags.ITEM_TYPES)
+            setProp("item_type", item_type);
             setProp("attributes", get_codes(matches[7].split("|"), flags.ITEM_ATTRIBUTES));
             setProp("wear_flags", get_codes(matches[8].split("|"), flags.WEAR_LOCATIONS));
             setProp("quality", get_code(matches[9], flags.ITEM_QUALITY));
             setProp("material", get_code(matches[10], flags.ITEM_MATERIALS));
             setProp("condition", get_code(matches[11], flags.ITEM_CONDITION));
             setProp("size", get_code(matches[12], flags.ITEM_SIZES));
-            setProp("value0", matches[13]);
-            setProp("value1", matches[14]);
-            setProp("value2", matches[15]);
-            setProp("value3", matches[16]);
-            setProp("value4", matches[17]);
+            for (let vm of [["value0", 13],["value1", 14],["value2", 15],["value3", 16],["value4", 17]]) {
+                let value;
+                if (item_type[vm[0]].type==flags.META_VALUE_TYPES.FLAG) {
+                    value = get_code(matches[vm[1]], item_type[vm[0]].type_enum)
+                }
+                else if (item_type[vm[0]].type==flags.META_VALUE_TYPES.MULTI_FLAGS) {
+                    value = get_codes(matches[vm[1]], item_type[vm[0]].type_enum)
+                }
+                else {
+                    value = matches[vm[1]]
+                }
+                setProp(vm[0], value)
+            }
             setProp("value5", matches[18]);
             setProp("identify_message", matches[21])
             
@@ -454,6 +463,7 @@ class Loader {
             else if (matches[1] === "G") {
                 dispatch({ type:EquipmentResetActions.ADD })
                 dispatch({ type:EquipmentResetActions.SET_PROP, key:"uuid", value:reset_id });
+                dispatch({ type:EquipmentResetActions.SET_PROP, key:"mob_reset", value:last_mob_reset });
                 dispatch({ type:EquipmentResetActions.SET_PROP, key:"defunct", value:matches[2] });
                 dispatch({ type:EquipmentResetActions.SET_PROP, key:"item", value:matches[3] });
                 dispatch({ type:EquipmentResetActions.SET_PROP, key:"equip_limit", value:matches[4] });

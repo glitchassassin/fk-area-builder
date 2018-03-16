@@ -84,7 +84,7 @@ class RoomPanel extends React.Component {
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(room.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
-                    {room_validator.validate(room).length > 0 && (
+                    {room_validator.validate_state(this.props.state, room).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(room.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
                     </IconButton>
@@ -118,7 +118,7 @@ class RoomPanel extends React.Component {
                 label="Done"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.closeErrors}
+                onClick={this.props.closeErrors}
             />
             ]
         let room = this.get_room_by_uuid(this.props.ui_state.room_current_room)
@@ -151,7 +151,7 @@ class RoomPanel extends React.Component {
                 <Dialog open={this.props.ui_state.room_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${room.sdesc}?`}>{`Are you sure you want to delete room ${room.vnum} (${room.sdesc})? You cannot undo this action!`}</Dialog>
                 <Dialog open={this.props.ui_state.room_errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${room.vnum}`}>
                     <List>
-                        {room_validator.validate(room).map((error, index) => (
+                        {room_validator.validate_state(this.props.state, room).map((error, index) => (
                             <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
                         ))}
                     </List>
@@ -163,7 +163,7 @@ class RoomPanel extends React.Component {
     }
 }
 RoomPanel = connect(
-    (state) => ({rooms: state.rooms, ui_state: state.ui_state}),
+    (state) => ({state: state, rooms: state.rooms, ui_state: state.ui_state}),
     (dispatch) => ({
         newRoom: () => {
             let room_id = uuid();

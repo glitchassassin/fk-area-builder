@@ -27,7 +27,7 @@ import {
 }
 from '../Models/area_model'
 import {
-    AreaValidator
+    AreaValidator, JusticeSystemValidator
 }
 from '../Models/model_validator'
 import {
@@ -47,6 +47,7 @@ const paper_style = {
 }
 
 const area_validator = new AreaValidator()
+const justice_system_validator = new JusticeSystemValidator()
 
 class GeneralPanel extends React.Component {
     render() {
@@ -174,13 +175,12 @@ GeneralPanel = connect(
 
 class JusticeSystemEditor extends React.Component {
     render() {
-        console.log(this.props.justice_system)
         if (this.props.justice_system!=undefined) {
             return (
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
                     <Subheader>Justice System</Subheader>
                     <div>
-                        <Validate validator={area_validator.justice_system}>
+                        <Validate validator={justice_system_validator}>
                         <VnumAutoComplete 
                             floatingLabelText="Courtroom" 
                             id="courtroom" 
@@ -196,7 +196,7 @@ class JusticeSystemEditor extends React.Component {
                         </Validate>
                     </div>
                     <div>
-                        <Validate validator={area_validator.justice_system}>
+                        <Validate validator={justice_system_validator}>
                         <VnumAutoComplete 
                             floatingLabelText="Judge" 
                             id="judge" 
@@ -224,7 +224,7 @@ class JusticeSystemEditor extends React.Component {
                                 <TableRowColumn>CRIME_HIGH_MURDER</TableRowColumn>
                                 <TableRowColumn>Murdering another PC</TableRowColumn>
                                 <TableRowColumn>
-                                    <Validate validator={area_validator.justice_system}>
+                                    <Validate validator={justice_system_validator}>
                                     <FlagSelector 
                                         id="CRIME_HIGH_MURDER"
                                         flags={JUSTICE_PUNISHMENTS} 
@@ -237,7 +237,7 @@ class JusticeSystemEditor extends React.Component {
                                 <TableRowColumn>CRIME_LOW_MURDER</TableRowColumn>
                                 <TableRowColumn>Killing a mob</TableRowColumn>
                                 <TableRowColumn>
-                                    <Validate validator={area_validator.justice_system}>
+                                    <Validate validator={justice_system_validator}>
                                     <FlagSelector 
                                         id="CRIME_LOW_MURDER"
                                         flags={JUSTICE_PUNISHMENTS} 
@@ -250,7 +250,7 @@ class JusticeSystemEditor extends React.Component {
                                 <TableRowColumn>CRIME_ASSAULT</TableRowColumn>
                                 <TableRowColumn>Attacking (but not killing) a PC/mob</TableRowColumn>
                                 <TableRowColumn>
-                                    <Validate validator={area_validator.justice_system}>
+                                    <Validate validator={justice_system_validator}>
                                     <FlagSelector 
                                         id="CRIME_ASSAULT"
                                         flags={JUSTICE_PUNISHMENTS} 
@@ -263,7 +263,7 @@ class JusticeSystemEditor extends React.Component {
                                 <TableRowColumn>CRIME_MUGGING</TableRowColumn>
                                 <TableRowColumn>A failed pickpocket/steal attempt</TableRowColumn>
                                 <TableRowColumn>
-                                    <Validate validator={area_validator.justice_system}>
+                                    <Validate validator={justice_system_validator}>
                                     <FlagSelector 
                                         id="CRIME_MUGGING"
                                         flags={JUSTICE_PUNISHMENTS} 

@@ -4,6 +4,8 @@ import IconButton from 'material-ui/IconButton';
 import { red900 } from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import { connect } from 'react-redux';
+import { QuestLogActions } from '../Models/actionTypes';
 
 import {
     Table,
@@ -35,7 +37,6 @@ import {
     QuestLogValidator
 }
 from '../Models/model_validator'
-import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const icon_button_style = {
     padding: "5px",
@@ -45,17 +46,17 @@ const icon_button_style = {
 
 const quest_log_validator = new QuestLogValidator();
 
-class QuestsPanel extends ModelArrayComponent {
-    generateItems(qlogs, area) {
+class QuestsPanel extends React.Component {
+    generateItems(qlogs) {
         return qlogs.map((qlog, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={50}>
-                    <IconButton tooltip="Delete" onClick={()=>(this.handleDelete(index))} style={icon_button_style}>
+                    <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(qlog.uuid))} style={icon_button_style}>
                         <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
                     </IconButton>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
-                    {area.vnum}
+                    {this.props.vnum}
                 </TableRowColumn>
                 <TableRowColumn width={50}>
                     <Validate validator={quest_log_validator}>
@@ -63,7 +64,7 @@ class QuestsPanel extends ModelArrayComponent {
                         id="qbit_start" 
                         value={qlog.qbit_start} 
                         autoComplete="off" 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
@@ -72,7 +73,7 @@ class QuestsPanel extends ModelArrayComponent {
                         id="qbit_stop" 
                         value={qlog.qbit_stop} 
                         autoComplete="off" 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
@@ -81,7 +82,7 @@ class QuestsPanel extends ModelArrayComponent {
                         id="min_qbit" 
                         value={qlog.min_qbit} 
                         autoComplete="off" 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
@@ -90,7 +91,7 @@ class QuestsPanel extends ModelArrayComponent {
                         id="max_qbit" 
                         value={qlog.max_qbit} 
                         autoComplete="off" 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn width={130}>
@@ -99,7 +100,7 @@ class QuestsPanel extends ModelArrayComponent {
                         id="event_code" 
                         flags={QUEST_EVENT_CODES} 
                         value={qlog.event_code} 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
                 <TableRowColumn>
@@ -109,11 +110,11 @@ class QuestsPanel extends ModelArrayComponent {
                         fullWidth={true} 
                         value={qlog.qlog_text} 
                         autoComplete="off" 
-                        onChange={(e,v)=>(this.handleChange(e,v,index))} />
+                        onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
                     </Validate>
                 </TableRowColumn>
             </TableRow>
-            ))
+        ))
     }
 
     render() {
@@ -133,10 +134,10 @@ class QuestsPanel extends ModelArrayComponent {
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                    {this.generateItems(this.props.model, this.props.area)}
+                    {this.generateItems(this.props.model)}
                     <TableRow>
                         <TableRowColumn width={100}>
-                            <IconButton tooltip="Add" onClick={this.handleNew}>
+                            <IconButton tooltip="Add" onClick={this.props.handleNew}>
                                 <FontIcon className="material-icons">add_box</FontIcon>
                             </IconButton>
                         </TableRowColumn>
@@ -147,5 +148,19 @@ class QuestsPanel extends ModelArrayComponent {
         )
     }
 }
+QuestsPanel = connect(
+    (state)=>({
+        model: state.quest_log,
+        vnum: state.area.vnum
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:QuestLogActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:QuestLogActions.REMOVE, index })},
+        handleNew: (pointer) => {
+            dispatch({ type:QuestLogActions.ADD })
+            dispatch({ type:QuestLogActions.SET_PROP, key:"pointer", value:pointer })
+        }
+    })
+)(QuestsPanel)
 
 export default muiThemeable()(QuestsPanel);
