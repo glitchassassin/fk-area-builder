@@ -730,6 +730,7 @@ class ProgramValidator extends ModelValidator {
 //export default Loader;
 
 module.exports = {
+    StateValidator,
     AreaValidator,
     JusticeSystemValidator,
     RoomValidator,

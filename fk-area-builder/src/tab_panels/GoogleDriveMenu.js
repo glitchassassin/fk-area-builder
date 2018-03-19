@@ -10,8 +10,11 @@ import Check from 'material-ui/svg-icons/navigation/check';
 import CircularProgress from 'material-ui/CircularProgress';
 import Divider from 'material-ui/Divider';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import {StateValidator} from '../Models/model_validator'
+import {connect} from 'react-redux'
 
 var area_exporter = new AreaExporter();
+var state_validator = new StateValidator();
 
 class GoogleDriveMenu extends React.Component {
     state = {
@@ -35,9 +38,9 @@ class GoogleDriveMenu extends React.Component {
     saveDrive() {
         this.props.closeMenu();
         
-        if (this.props.validator.validate(this.props.area).length > 0) {
+        if (state_validator.validate(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
-            console.log(this.props.validator.validate(this.props.area))
+            console.log(state_validator.validate(this.props.area))
             return;
         }
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
@@ -53,9 +56,9 @@ class GoogleDriveMenu extends React.Component {
     saveAsDrive() {
         this.props.closeMenu();
         
-        if (this.props.validator.validate(this.props.area).length > 0) {
+        if (state_validator.validate(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
-            console.log(this.props.validator.validate(this.props.area))
+            console.log(state_validator.validate(this.props.area))
             return;
         }
         this.storage.createFolderPicker((folder)=>{
@@ -68,9 +71,9 @@ class GoogleDriveMenu extends React.Component {
         })
     }
     forceSaveDrive() {
-        if (this.props.validator.validate(this.props.area).length > 0) {
+        if (state_validator.validate(this.props.area).length > 0) {
             this.displayError("Cannot save area with errors!")
-            console.log(this.props.validator.validate(this.props.area))
+            console.log(state_validator.validate(this.props.area))
             return;
         }
         this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
@@ -154,5 +157,12 @@ class GoogleDriveMenu extends React.Component {
         );
     }
 }
+GoogleDriveMenu = connect(
+  (state) => {
+    return {
+      area: state
+    };
+  }
+)(GoogleDriveMenu);
 
 export default muiThemeable()(GoogleDriveMenu);

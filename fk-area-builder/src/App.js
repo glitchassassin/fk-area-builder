@@ -18,10 +18,6 @@ import { GlobalActions } from './Models/actionTypes';
 var area_validator = new AreaValidator()
 
 class App extends Component {
-  state = {
-    error_open: false,
-    error_text: ""
-  }
   render() {
     return (
       <MuiThemeProvider>
@@ -56,7 +52,7 @@ class AppHeader extends Component {
         return warning;
       }
     }
-    this.props.loadArea(testArea)
+    //this.props.loadArea(testArea)
   }
   
   setStatus = (icon) => (this.setState({status: icon}));
@@ -70,7 +66,6 @@ class AppHeader extends Component {
         onLeftIconButtonClick={this.openMenu} 
         iconElementRight={<span>{this.state.status}</span>}>
         <GoogleDriveMenu 
-          validator={area_validator}
           open={this.state.menuOpen}
           setStatus={this.setStatus}
           onFileLoad={this.props.loadArea} 
