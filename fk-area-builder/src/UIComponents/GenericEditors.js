@@ -19,7 +19,7 @@ import {
     ExtraDescription,
     Program
 }
-from '../Models/area_model'
+from '../Models/model_templates'
 import {
     FlagSelector,
 }

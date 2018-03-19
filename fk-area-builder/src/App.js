@@ -4,7 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MainFrame from './main_frame';
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar';
-import {Area} from './Models/area_model';
+import {Area} from './Models/model_templates';
 import populateArea from './Models/loader';
 import {AreaValidator} from './Models/model_validator';
 import GoogleDriveMenu from './tab_panels/GoogleDriveMenu';

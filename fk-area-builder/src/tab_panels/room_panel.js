@@ -42,7 +42,7 @@ import {
     RoomReset,
     vnum_sort
 }
-from '../Models/area_model'
+from '../Models/model_templates'
 import {
     FlagSelector,
     MultiFlagSelector,

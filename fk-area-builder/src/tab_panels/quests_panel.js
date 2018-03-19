@@ -23,7 +23,7 @@ from '../Models/flags';
 import {
     QuestLog,
 }
-from '../Models/area_model'
+from '../Models/model_templates'
 import {
     FlagSelector,
 }

@@ -19,7 +19,7 @@ import {
     MobActions, UiStateActions, ShopActions, RepairRechargeActions, 
     MobResetActions, EquipmentResetActions, CoinResetActions, TrainSkillActions,
     TrainWeaponSkillActions, TrainSpellActions, TrainLevelActions, 
-    TrainStatisticActions, TrainFeatActions, TrainLangActions
+    TrainStatisticActions, TrainFeatActions, TrainLangActions, MobSpecialActions
 } from '../Models/actionTypes';
 
 import {
@@ -55,7 +55,8 @@ import {
     MOB_REPAIR_MATERIAL,
     MOB_REPAIR_RECHARGE,
     MOB_WEAR_POSITIONS,
-    ITEM_COIN_TYPES
+    ITEM_COIN_TYPES,
+    MOB_SPECIALS
 }
 from '../Models/flags';
 import {
@@ -74,7 +75,7 @@ import {
     CoinReset,
     vnum_sort
 }
-from '../Models/area_model'
+from '../Models/model_templates'
 import {FlagWithCategorySelector,FlagSelector,MultiFlagSelector,VnumAutoComplete} from '../UIComponents/FlagSelectors'
 import {Validate} from '../UIComponents/GenericEditors'
 import {
@@ -90,7 +91,8 @@ import {
     TrainLevelValidator,
     TrainStatisticValidator,
     TrainFeatValidator,
-    TrainLangValidator
+    TrainLangValidator,
+    MobSpecialValidator
 } from '../Models/model_validator'
 import {TrapResetEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
 //import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
@@ -110,6 +112,7 @@ const can_train_level_validator = new TrainLevelValidator()
 const can_train_statistic_validator = new TrainStatisticValidator()
 const can_train_feat_validator = new TrainFeatValidator()
 const can_train_lang_validator = new TrainLangValidator()
+const mob_special_validator = new MobSpecialValidator()
 
 const icon_button_style = {
     padding: "5px",
@@ -464,6 +467,9 @@ class MobEditor extends React.Component {
                             value={this.props.mob.spoken_languages} 
                             onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Validate>
+                        <MobSpecialEditor
+                            id="mob_specials"
+                            vnum={this.props.mob.vnum} />
                     </Tab>
                     <Tab label="Unique">
                         {uniqueTab}
@@ -1313,5 +1319,51 @@ CanTrainLangEditor = connect(
         }
     })
 )(CanTrainLangEditor)
+
+class MobSpecialEditor extends React.Component {
+    render() {
+        return (
+            <CanTrainWrapper headers={["Special", "Description"]} handleNew={()=>(this.props.handleNew(this.props.vnum))}>
+                {this.generate()}
+            </CanTrainWrapper>
+        )
+    }
+    generate() {
+        return this.props.model.filter((s)=>(s.mob===this.props.vnum)).map((spec, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(spec.uuid))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <Validate validator={mob_special_validator}>
+                    <FlagSelector 
+                        id="special" 
+                        label="Special"
+                        value={spec.special} 
+                        flags={MOB_SPECIALS}
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.props.setProp(spec.uuid, e.target.id, v))} />
+                    </Validate>
+                </TableRowColumn>
+                <TableRowColumn>
+                    {spec.special ? spec.special.ldesc : ""}
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+MobSpecialEditor = connect(
+    (state)=>({
+        model: state.mob_specials,
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:MobSpecialActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:MobSpecialActions.REMOVE, index })},
+        handleNew: (vnum) => {
+            dispatch({ type:MobSpecialActions.ADD })
+            dispatch({ type:MobSpecialActions.SET_PROP, key:"mob", value:vnum })
+        }
+    })
+)(MobSpecialEditor)
 
 export default muiThemeable()(MobPanel);
