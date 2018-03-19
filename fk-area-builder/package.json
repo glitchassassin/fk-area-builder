@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://glitchassassin.github.io/fk-area-builder/",
   "dependencies": {
+    "@manaflair/redux-batch": "^0.1.0",
     "dropbox": "^3.0.2",
     "gh-pages": "^1.1.0",
     "react": "^16.2.0",

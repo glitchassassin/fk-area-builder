@@ -40,7 +40,7 @@ import {
     MOB_POSITIONS,
     MOB_DEITIES,
     MOB_ACT_FLAGS,
-    MOB_LANGUAGES,
+    LANGUAGE_FLAGS,
     MOB_SPELLS,
     MOB_WEAPON_SKILLS,
     MOB_STATISTICS,
@@ -449,14 +449,14 @@ class MobEditor extends React.Component {
                             onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         <MultiFlagSelector 
                             id="understood_languages" 
-                            label="Act Flags" 
-                            flags={MOB_LANGUAGES} 
+                            label="Understood Languages" 
+                            flags={LANGUAGE_FLAGS} 
                             value={this.props.mob.understood_languages} 
                             onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         <MultiFlagSelector 
                             id="spoken_languages" 
-                            label="Act Flags" 
-                            flags={MOB_LANGUAGES} 
+                            label="Spoken Languages" 
+                            flags={LANGUAGE_FLAGS} 
                             value={this.props.mob.spoken_languages} 
                             onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Validate>

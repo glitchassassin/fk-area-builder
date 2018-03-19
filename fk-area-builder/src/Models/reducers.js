@@ -264,7 +264,7 @@ const subReducers = combineReducers({
 })
 
 const reducers = (state, action) => {
-    if (action === GlobalActions.NEW) {
+    if (action.type === GlobalActions.NEW) {
         state = undefined;
     }
     

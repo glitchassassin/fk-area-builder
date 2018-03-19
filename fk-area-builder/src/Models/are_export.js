@@ -258,7 +258,7 @@ ${shop.profit_buy} ${shop.profit_sell} ${shop.open_hour} ${shop.close_hour} ; ${
     renderRepairs(state) {
         return autoline(state.repairs.map((repairs)=>(
             `${repairs.shopkeeper} ${repairs.will_repair_1} ${repairs.will_repair_2} ${repairs.repair_material}
-${repairs.profit_modifier} ${repairs.repair.bits} ${repairs.open_hour} ${repairs.close_hour} ; ${get_mob(state, repairs.shopkeeper).sdesc}`)
+${repairs.profit_modifier} ${repairs.repair?repairs.repair.bits:repairs.repair} ${repairs.open_hour} ${repairs.close_hour} ; ${get_mob(state, repairs.shopkeeper).sdesc}`)
         ).join("\n"));
     }
     
