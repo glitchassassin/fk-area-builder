@@ -208,25 +208,26 @@ ${this.renderTrainSpell(state, mob.uuid)}\
 ${this.renderTrainLevel(state, mob.uuid)}\
 ${this.renderTrainStatistic(state, mob.uuid)}\
 ${this.renderTrainFeat(state, mob.uuid)}\
+${this.renderTrainLang(state, mob.uuid)}\
 ${this.renderPrograms(state, mob.uuid)}`
             )).join("\n");
     }
     
     renderTrainSkill(state, uuid) {
         return autoline(state.can_train_skill.filter((i)=>(i.mob===uuid)).map((train)=>(
-            `%${train.level} ${train.price_multiplier} ${train.skill.code}~`
+            `%${train.level} ${train.price_multiplier} ${train.skill ? train.skill.code : undefined}~`
         )).join("\n"));
     }
     
     renderTrainWeaponSkill(state, uuid) {
         return autoline(state.can_train_weapon_skill.filter((i)=>(i.mob===uuid)).map((train)=>(
-            `%${train.level} ${train.price_multiplier} ${train.weapon_skill.code}~`
+            `%${train.level} ${train.price_multiplier} ${train.weapon_skill ? train.weapon_skill.code : undefined}~`
         )).join("\n"));
     }
     
     renderTrainSpell(state, uuid) {
         return autoline(state.can_train_spell.filter((i)=>(i.mob===uuid)).map((train)=>(
-            `%${train.level} ${train.price_multiplier} ${train.spell.code}~`
+            `%${train.level} ${train.price_multiplier} ${train.spell ? train.spell.code : undefined}~`
         )).join("\n"));
     }
     
@@ -238,13 +239,19 @@ ${this.renderPrograms(state, mob.uuid)}`
     
     renderTrainStatistic(state, uuid) {
         return autoline(state.can_train_statistic.filter((i)=>(i.mob===uuid)).map((train)=>(
-            `%${train.level} ${train.price_multiplier} ${train.statistic.code}~`
+            `%${train.level} ${train.price_multiplier} ${train.statistic ? train.statistic.code : undefined}~`
         )).join("\n"));
     }
     
     renderTrainFeat(state, uuid) {
         return autoline(state.can_train_feat.filter((i)=>(i.mob===uuid)).map((train)=>(
-            `%${train.level} ${train.price_multiplier} ${train.feat.code}~`
+            `%${train.level} ${train.price_multiplier} ${train.feat ? train.feat.code : undefined}~`
+        )).join("\n"));
+    }
+    
+    renderTrainLang(state, uuid) {
+        return autoline(state.can_train_lang.filter((i)=>(i.mob===uuid)).map((train)=>(
+            `%${train.level} ${train.price_multiplier} ${train.lang ? train.lang.code : undefined}~`
         )).join("\n"));
     }
     

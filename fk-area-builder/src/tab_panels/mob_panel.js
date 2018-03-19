@@ -19,7 +19,7 @@ import {
     MobActions, UiStateActions, ShopActions, RepairRechargeActions, 
     MobResetActions, EquipmentResetActions, CoinResetActions, TrainSkillActions,
     TrainWeaponSkillActions, TrainSpellActions, TrainLevelActions, 
-    TrainStatisticActions, TrainFeatActions,
+    TrainStatisticActions, TrainFeatActions, TrainLangActions
 } from '../Models/actionTypes';
 
 import {
@@ -41,6 +41,7 @@ import {
     MOB_DEITIES,
     MOB_ACT_FLAGS,
     LANGUAGE_FLAGS,
+    MOB_LANGUAGES,
     MOB_SPELLS,
     MOB_WEAPON_SKILLS,
     MOB_STATISTICS,
@@ -70,7 +71,8 @@ import {
     RepairRecharge,
     MobReset,
     EquipmentReset,
-    CoinReset
+    CoinReset,
+    vnum_sort
 }
 from '../Models/area_model'
 import {FlagWithCategorySelector,FlagSelector,MultiFlagSelector,VnumAutoComplete} from '../UIComponents/FlagSelectors'
@@ -87,7 +89,8 @@ import {
     TrainSpellValidator,
     TrainLevelValidator,
     TrainStatisticValidator,
-    TrainFeatValidator
+    TrainFeatValidator,
+    TrainLangValidator
 } from '../Models/model_validator'
 import {TrapResetEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
 //import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
@@ -106,6 +109,7 @@ const can_train_spell_validator = new TrainSpellValidator()
 const can_train_level_validator = new TrainLevelValidator()
 const can_train_statistic_validator = new TrainStatisticValidator()
 const can_train_feat_validator = new TrainFeatValidator()
+const can_train_lang_validator = new TrainLangValidator()
 
 const icon_button_style = {
     padding: "5px",
@@ -121,7 +125,7 @@ class MobPanel extends React.Component {
         }
     }
     generateItems() {
-        return this.props.mobs.map((mob, index) => (
+        return this.props.mobs.sort(vnum_sort).map((mob, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(mob.uuid))} style={icon_button_style}>
@@ -477,6 +481,8 @@ class MobEditor extends React.Component {
                         <CanTrainStatisticEditor id="can_train_statistic" pointer={this.props.mob.uuid} />
                         <Subheader>Feats</Subheader>
                         <CanTrainFeatEditor id="can_train_feat" pointer={this.props.mob.uuid} />
+                        <Subheader>Languages</Subheader>
+                        <CanTrainLangEditor id="can_train_lang" pointer={this.props.mob.uuid} />
                     </Tab>
                     <Tab label="Programs">
                         <ProgramsEditor 
@@ -1247,5 +1253,65 @@ CanTrainFeatEditor = connect(
         }
     })
 )(CanTrainFeatEditor)
+
+class CanTrainLangEditor extends React.Component {
+    render() {
+        return (
+            <CanTrainWrapper headers={["Max Level", "Price Multiplier", "Languages"]} handleNew={()=>(this.props.handleNew(this.props.pointer))}>
+                {this.generate()}
+            </CanTrainWrapper>
+        )
+    }
+    generate() {
+        return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
+            <TableRow key={index}>
+                <TableRowColumn>
+                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
+                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    </IconButton>
+                    <Validate validator={can_train_lang_validator}>
+                    <TextField 
+                        id="level" 
+                        value={skill.level} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Validate>
+                </TableRowColumn>
+                <TableRowColumn>
+                    <Validate validator={can_train_lang_validator}>
+                    <TextField 
+                        id="price_multiplier" 
+                        value={skill.price_multiplier} 
+                        autoComplete="off" 
+                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Validate>
+                </TableRowColumn>
+                <TableRowColumn>
+                    <Validate validator={can_train_lang_validator}>
+                    <FlagSelector 
+                        id="lang" 
+                        label="Language" 
+                        flags={MOB_LANGUAGES} 
+                        value={skill.lang} 
+                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Validate>
+                </TableRowColumn>
+            </TableRow>
+        ));
+    }
+}
+CanTrainLangEditor = connect(
+    (state)=>({
+        model: state.can_train_lang,
+    }),
+    (dispatch) => ({
+        setProp: (index, key, value) => {dispatch({ type:TrainLangActions.SET_PROP, index, key, value})},
+        handleDelete: (index) => {dispatch({ type:TrainLangActions.REMOVE, index })},
+        handleNew: (uuid) => {
+            dispatch({ type:TrainLangActions.ADD })
+            dispatch({ type:TrainLangActions.SET_PROP, key:"mob", value:uuid })
+        }
+    })
+)(CanTrainLangEditor)
 
 export default muiThemeable()(MobPanel);

@@ -274,7 +274,18 @@ class TrainFeat extends Object {
             feat:               null,
         }, fields))
     }
-    
+}
+
+class TrainLang extends Object {
+    constructor(fields) {
+        super(Object.assign({
+            uuid:               uuid(),
+            mob:                null,   // Mob UUID pointer
+            level:              10,
+            price_multiplier:   1,
+            lang:               null,
+        }, fields))
+    }
 }
 
 class Shop extends Object {
@@ -487,6 +498,7 @@ module.exports = {
     TrainLevel,
     TrainStatistic,
     TrainFeat,
+    TrainLang,
     Shop,
     RepairRecharge,
     MobReset,

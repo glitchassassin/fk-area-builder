@@ -1,7 +1,7 @@
 import {
     AreaActions, JusticeSystemActions, RoomActions, ExitActions, 
     ExtraDescriptionActions, ItemApplyActions, ItemActions, MobActions,
-    TrainSkillActions, TrainWeaponSkillActions, GlobalActions,
+    TrainSkillActions, TrainWeaponSkillActions, GlobalActions, TrainLangActions,
     TrainSpellActions, TrainLevelActions, TrainStatisticActions, 
     TrainFeatActions, ShopActions, RepairRechargeActions, MobResetActions,
     EquipmentResetActions, ItemResetActions, DoorResetActions, 
@@ -319,6 +319,18 @@ class Loader {
                         actions.push({ type:TrainFeatActions.SET_PROP, key:"price_multiplier", value:t[2] });
                         actions.push({ type:TrainFeatActions.SET_PROP, key:"feat", value:flags.MOB_FEATS[f] });
                         actions.push({ type:TrainFeatActions.SET_PROP, key:"mob", value:mob_id });
+                        break;
+                    }
+                }
+            }
+            if (!train) {
+                for (let f in flags.MOB_LANGUAGES) {
+                    if (flags.MOB_LANGUAGES[f].code === t[3]) {
+                        actions.push({ type:TrainLangActions.ADD })
+                        actions.push({ type:TrainLangActions.SET_PROP, key:"level", value:t[1] });
+                        actions.push({ type:TrainLangActions.SET_PROP, key:"price_multiplier", value:t[2] });
+                        actions.push({ type:TrainLangActions.SET_PROP, key:"lang", value:flags.MOB_LANGUAGES[f] });
+                        actions.push({ type:TrainLangActions.SET_PROP, key:"mob", value:mob_id });
                         break;
                     }
                 }

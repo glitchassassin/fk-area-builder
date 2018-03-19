@@ -521,6 +521,19 @@ class TrainFeatValidator extends ModelValidator {
     }
 }
 
+class TrainLangValidator extends ModelValidator {
+    constructor(fields) {
+        super(Object.assign({
+            level:              new Field({field_name:"level",              in_flags:null,                  optional:false}),
+            price_multiplier:   new Field({field_name:"price_multiplier",   in_flags:null,                  optional:false}),
+            lang:               new Field({field_name:"lang",               in_flags:flags.MOB_LANGUAGES,   optional:false}),
+        }, fields))
+    }
+    _error_prefix(model) {
+        return `[TrainLang:${model.lang? model.lang.code : undefined}]`;
+    }
+}
+
 class ShopValidator extends ModelValidator {
     constructor(fields) {
         super(Object.assign({
@@ -717,33 +730,34 @@ class ProgramValidator extends ModelValidator {
 //export default Loader;
 
 module.exports = {
-    AreaValidator: AreaValidator,
-    JusticeSystemValidator: JusticeSystemValidator,
-    RoomValidator: RoomValidator,
-    ExitValidator: ExitValidator,
-    ExtraDescriptionValidator: ExtraDescriptionValidator,
-    ItemApplyValidator: ItemApplyValidator,
-    ItemValidator: ItemValidator,
-    MobValidator: MobValidator,
-    SimpleMobValidator: SimpleMobValidator,
-    UniqueMobValidator: UniqueMobValidator,
-    TrainSkillValidator: TrainSkillValidator,
-    TrainWeaponSkillValidator: TrainWeaponSkillValidator,
-    TrainSpellValidator: TrainSpellValidator,
-    TrainLevelValidator: TrainLevelValidator,
-    TrainStatisticValidator: TrainStatisticValidator,
-    TrainFeatValidator: TrainFeatValidator,
-    ShopValidator: ShopValidator,
-    RepairRechargeValidator: RepairRechargeValidator,
-    MobResetValidator: MobResetValidator,
-    EquipmentResetValidator: EquipmentResetValidator,
-    ItemResetValidator: ItemResetValidator,
-    DoorResetValidator: DoorResetValidator,
-    RandomDoorResetValidator: RandomDoorResetValidator,
-    RoomResetValidator: RoomResetValidator,
-    TrapResetValidator: TrapResetValidator,
-    CoinResetValidator: CoinResetValidator,
-    MobSpecialValidator: MobSpecialValidator,
-    QuestLogValidator: QuestLogValidator,
-    ProgramValidator: ProgramValidator,
+    AreaValidator,
+    JusticeSystemValidator,
+    RoomValidator,
+    ExitValidator,
+    ExtraDescriptionValidator,
+    ItemApplyValidator,
+    ItemValidator,
+    MobValidator,
+    SimpleMobValidator,
+    UniqueMobValidator,
+    TrainSkillValidator,
+    TrainWeaponSkillValidator,
+    TrainSpellValidator,
+    TrainLevelValidator,
+    TrainStatisticValidator,
+    TrainFeatValidator,
+    TrainLangValidator,
+    ShopValidator,
+    RepairRechargeValidator,
+    MobResetValidator,
+    EquipmentResetValidator,
+    ItemResetValidator,
+    DoorResetValidator,
+    RandomDoorResetValidator,
+    RoomResetValidator,
+    TrapResetValidator,
+    CoinResetValidator,
+    MobSpecialValidator,
+    QuestLogValidator,
+    ProgramValidator,
 }

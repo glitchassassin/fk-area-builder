@@ -43,7 +43,8 @@ from '../Models/flags';
 import {
     Item,
     ItemApply,
-    ItemReset
+    ItemReset,
+    vnum_sort
 }
 from '../Models/area_model'
 import {
@@ -83,7 +84,7 @@ class ItemPanel extends React.Component {
         }
     }
     generateItems(items) {
-        return items.map((item, index) => (
+        return items.sort(vnum_sort).map((item, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(item.uuid))} style={icon_button_style}>

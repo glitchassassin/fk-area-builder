@@ -39,7 +39,8 @@ import {
     Room,
     Exit,
     DoorReset,
-    RoomReset
+    RoomReset,
+    vnum_sort
 }
 from '../Models/area_model'
 import {
@@ -75,7 +76,7 @@ class RoomPanel extends React.Component {
     }
     
     generateItems(rooms) {
-        return rooms.map((room, index) => (
+        return rooms.sort(vnum_sort).map((room, index) => (
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(room.uuid))} style={icon_button_style}>

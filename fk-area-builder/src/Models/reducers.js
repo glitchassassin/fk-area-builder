@@ -3,7 +3,7 @@ import {flags} from './flags'
 import {
     AreaActions, JusticeSystemActions, RoomActions, ExitActions, 
     ExtraDescriptionActions, ItemApplyActions, ItemActions, MobActions,
-    TrainSkillActions, TrainWeaponSkillActions, GlobalActions,
+    TrainSkillActions, TrainWeaponSkillActions, GlobalActions, TrainLangActions,
     TrainSpellActions, TrainLevelActions, TrainStatisticActions, 
     TrainFeatActions, ShopActions, RepairRechargeActions, MobResetActions,
     EquipmentResetActions, ItemResetActions, DoorResetActions, 
@@ -16,7 +16,7 @@ import {
     SimpleMob, UniqueMob, TrainSkill, TrainWeaponSkill, TrainSpell, TrainLevel,
     TrainStatistic, TrainFeat, Shop, RepairRecharge, MobReset, EquipmentReset,
     ItemReset, DoorReset, RandomDoorReset, RoomReset, TrapReset, CoinReset,
-    MobSpecial, QuestLog, Program, UiState
+    MobSpecial, QuestLog, Program, UiState, TrainLang
 }
 from './model_templates'
 
@@ -105,6 +105,7 @@ const can_train_spell = generateDefaultListReducer(TrainSpellActions, TrainSpell
 const can_train_level = generateDefaultListReducer(TrainLevelActions, TrainLevel);
 const can_train_statistic = generateDefaultListReducer(TrainStatisticActions, TrainStatistic);
 const can_train_feat = generateDefaultListReducer(TrainFeatActions, TrainFeat);
+const can_train_lang = generateDefaultListReducer(TrainLangActions, TrainLang);
 const mob_resets = generateDefaultListReducer(MobResetActions, MobReset);
 const equipment_resets = generateDefaultListReducer(EquipmentResetActions, EquipmentReset);
 const coin_resets = generateDefaultListReducer(CoinResetActions, CoinReset);
@@ -250,6 +251,7 @@ const subReducers = combineReducers({
     can_train_level,        // Default: Array // Contains reference to a Mob UUID
     can_train_statistic,    // Default: Array // Contains reference to a Mob UUID
     can_train_feat,         // Default: Array // Contains reference to a Mob UUID
+    can_train_lang,         // Default: Array // Contains reference to a Mob UUID
     mob_resets,             // Default: Array // Contains reference to a Mob UUID // TODO: How to spawn generic mobs? UUID reference to Library?
     equipment_resets,       // Default: Array // Contains reference to a Mob Reset UUID and Item UUID // TODO: What about generic stock items? UUID reference to Library?
     coin_resets,            // Default: Array // Contains reference to a Mob Reset UUID
