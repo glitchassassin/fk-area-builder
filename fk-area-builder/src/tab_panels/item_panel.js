@@ -1,15 +1,15 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import FlatButton from 'material-ui/FlatButton';
-import { red900 } from 'material-ui/styles/colors';
+import Button from 'material-ui/Button';
+import red from 'material-ui/colors/red';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-import muiThemeable from 'material-ui/styles/muiThemeable';
-import Subheader from 'material-ui/Subheader';
+import withTheme from 'material-ui/styles/withTheme';
+import ListSubheader from 'material-ui/List/ListSubheader';
 import Checkbox from 'material-ui/Checkbox';
 import {equal_recursively} from '../Models/model'
 import { connect } from 'react-redux';
@@ -88,14 +88,14 @@ class ItemPanel extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(item.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons">mode_edit</FontIcon>
+                        <Icon>mode_edit</Icon>
                     </IconButton>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(item.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
+                        <Icon color={red[900]}>delete_forever</Icon>
                     </IconButton>
                     {item_validator.validate_state(this.props.state, item).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(item.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
+                        <Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>
                     </IconButton>
                     )}
                 </TableRowColumn>
@@ -114,13 +114,13 @@ class ItemPanel extends React.Component {
 
     render() {
         const confirmActions = [
-            <FlatButton
+            <Button
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
                 onClick={this.props.cancelDelete}
             />,
-            <FlatButton
+            <Button
                 label="Delete"
                 primary={true}
                 id={this.props.ui_state.item_current_item} // So confirmDelete can pull the correct uuid
@@ -128,7 +128,7 @@ class ItemPanel extends React.Component {
             />,
             ]
         const errorsActions = [
-            <FlatButton
+            <Button
                 label="Done"
                 primary={true}
                 keyboardFocused={true}
@@ -154,7 +154,7 @@ class ItemPanel extends React.Component {
                     <TableRow>
                         <TableRowColumn width={100}>
                             <IconButton tooltip="Add" onClick={this.props.newItem}>
-                                <FontIcon className="material-icons">add_box</FontIcon>
+                                <Icon>add_box</Icon>
                             </IconButton>
                         </TableRowColumn>
                     </TableRow>
@@ -167,7 +167,7 @@ class ItemPanel extends React.Component {
                 <Dialog open={this.props.ui_state.item_errors_open} actions={errorsActions} modal={false} title={`Errors for item ${item.vnum}`}>
                     <List>
                         {item_validator.validate_state(this.props.state, item).map((error, index) => (
-                            <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                            <ListItem key={index} primaryText={error} leftIcon={<Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
                         ))}
                     </List>
                 </Dialog>
@@ -283,7 +283,7 @@ class ItemEditor extends React.Component {
     }
     render() {
         const actions = [
-        <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
+        <Button label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
         return (
             <Dialog title={`Edit Item`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
@@ -437,7 +437,7 @@ class ApplyEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn width={50}>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(apply.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon color={red[900]}>remove_circle</Icon>
                     </IconButton>
                 </TableRowColumn>
                 <TableRowColumn>
@@ -469,7 +469,7 @@ class ApplyEditor extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Subheader>Apply Flags</Subheader>
+                <ListSubheader>Apply Flags</ListSubheader>
                 <Table>
                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                         <TableRow>
@@ -483,7 +483,7 @@ class ApplyEditor extends React.Component {
                         <TableRow>
                             <TableRowColumn>
                                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
+                                    <Icon>add_box</Icon>
                                 </IconButton>
                             </TableRowColumn>
                         </TableRow>
@@ -512,7 +512,7 @@ class ItemResetsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.item===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={item_reset_validator}>
                 <VnumAutoComplete 
@@ -552,7 +552,7 @@ class ItemResetsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -578,7 +578,7 @@ class ItemResetsContentsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.item_pointer===this.props.pointer)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <VnumAutoComplete 
                     floatingLabelText="Item" 
@@ -604,10 +604,10 @@ class ItemResetsContentsEditor extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Subheader>Contents</Subheader>
+                <ListSubheader>Contents</ListSubheader>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer, this.props.vnum))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -629,4 +629,4 @@ ItemResetsContentsEditor = connect(
     })
 )(ItemResetsContentsEditor)
 
-export default muiThemeable()(ItemPanel);
+export default withTheme()(ItemPanel);

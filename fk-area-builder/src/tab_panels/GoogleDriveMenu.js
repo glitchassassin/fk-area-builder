@@ -2,14 +2,14 @@ import React from 'react';
 import Storage from '../Models/Storage';
 import AreaExporter from '../Models/are_export';
 import Popover from 'material-ui/Popover';
-import {Menu, MenuItem} from 'material-ui/Menu';
+import Menu, {MenuItem} from 'material-ui/Menu';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-import Check from 'material-ui/svg-icons/navigation/check';
-import CircularProgress from 'material-ui/CircularProgress';
+import Check from 'material-ui-icons/Check';
+import {CircularProgress} from 'material-ui/Progress';
 import Divider from 'material-ui/Divider';
-import muiThemeable from 'material-ui/styles/muiThemeable';
+import withTheme from 'material-ui/styles/withTheme';
 import {StateValidator} from '../Models/model_validator'
 import {connect} from 'react-redux'
 
@@ -139,7 +139,7 @@ class GoogleDriveMenu extends React.Component {
                 </Popover>
                 <Dialog 
                     open={this.state.error_open} 
-                    actions={<FlatButton label="Okay" primary={true} keyboardFocused={true} onClick={this.closeErrors} />}
+                    actions={<Button label="Okay" primary={true} keyboardFocused={true} onClick={this.closeErrors} />}
                     modal={false} 
                     title={"Error"}>
                         {this.state.error_text}
@@ -147,8 +147,8 @@ class GoogleDriveMenu extends React.Component {
                 <Dialog 
                     open={this.state.confirm_open} 
                     actions={[
-                        <FlatButton label="Discard local" primary={true} keyboardFocused={true} onClick={()=>(this.closeConfirm(this.reloadDrive.bind(this)))} />,
-                        <FlatButton label="Overwrite Drive" primary={true} keyboardFocused={true} onClick={()=>(this.closeConfirm(this.forceSaveDrive.bind(this)))} />]}
+                        <Button label="Discard local" primary={true} keyboardFocused={true} onClick={()=>(this.closeConfirm(this.reloadDrive.bind(this)))} />,
+                        <Button label="Overwrite Drive" primary={true} keyboardFocused={true} onClick={()=>(this.closeConfirm(this.forceSaveDrive.bind(this)))} />]}
                     modal={false} 
                     title={"Error"}>
                         Area file has changed on Google Drive. Discard local changes and reload from Drive, or save and overwrite the Drive version?
@@ -165,4 +165,4 @@ GoogleDriveMenu = connect(
   }
 )(GoogleDriveMenu);
 
-export default muiThemeable()(GoogleDriveMenu);
+export default withTheme()(GoogleDriveMenu);

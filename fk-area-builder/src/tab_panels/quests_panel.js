@@ -1,9 +1,9 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import { red900 } from 'material-ui/styles/colors';
+import red from 'material-ui/colors/red';
 import TextField from 'material-ui/TextField';
-import muiThemeable from 'material-ui/styles/muiThemeable';
+import withTheme from 'material-ui/styles/withTheme';
 import { connect } from 'react-redux';
 import { QuestLogActions } from '../Models/actionTypes';
 
@@ -52,7 +52,7 @@ class QuestsPanel extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn width={50}>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(qlog.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
+                        <Icon color={red[900]}>delete_forever</Icon>
                     </IconButton>
                 </TableRowColumn>
                 <TableRowColumn width={50}>
@@ -138,7 +138,7 @@ class QuestsPanel extends React.Component {
                     <TableRow>
                         <TableRowColumn width={100}>
                             <IconButton tooltip="Add" onClick={this.props.handleNew}>
-                                <FontIcon className="material-icons">add_box</FontIcon>
+                                <Icon>add_box</Icon>
                             </IconButton>
                         </TableRowColumn>
                     </TableRow>
@@ -163,4 +163,4 @@ QuestsPanel = connect(
     })
 )(QuestsPanel)
 
-export default muiThemeable()(QuestsPanel);
+export default withTheme()(QuestsPanel);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MainFrame from './main_frame';
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar';
@@ -8,11 +7,29 @@ import {Area} from './Models/model_templates';
 import populateArea from './Models/loader';
 import {AreaValidator} from './Models/model_validator';
 import GoogleDriveMenu from './tab_panels/GoogleDriveMenu';
-import Warning from 'material-ui/svg-icons/alert/warning';
-import muiThemeable from 'material-ui/styles/muiThemeable';
+import Warning from 'material-ui-icons/Warning';
+import { withStyles, withTheme } from 'material-ui/styles';
+import Toolbar from 'material-ui/Toolbar';
+import MenuIcon from 'material-ui-icons/Menu';
+import Typography from 'material-ui/Typography';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { connect } from 'react-redux';
 import { GlobalActions } from './Models/actionTypes';
+import CssBaseline from 'material-ui/CssBaseline';
 
+const theme = createMuiTheme();
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+  flex: {
+    flex: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+};
 //console.log(Storage);
 
 var area_validator = new AreaValidator()
@@ -20,13 +37,14 @@ var area_validator = new AreaValidator()
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider>
-          <div className="App">
-            <ThemedAppHeader />
-            <div className="App-intro">
-                <MainFrame />
-            </div>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline/>
+        <div className="App">
+          <ThemedAppHeader />
+          <div className="App-intro">
+              <MainFrame />
           </div>
+        </div>
       </MuiThemeProvider>
     );
   }
@@ -37,11 +55,11 @@ class AppHeader extends Component {
     loaded: false,
     menuOpen: false,
     menuAnchor: null,
-    status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>
+    status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.theme.palette.alternateTextColor} /></IconButton>
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.area !== this.state.area) {
-      this.setState({ status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.muiTheme.palette.alternateTextColor} /></IconButton> });
+      this.setState({ status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.theme.palette.alternateTextColor} /></IconButton> });
     }
   }
   componentDidMount() {
@@ -52,7 +70,7 @@ class AppHeader extends Component {
         return warning;
       }
     }
-    //this.props.loadArea(testArea)
+    this.props.loadArea(testArea)
   }
   
   setStatus = (icon) => (this.setState({status: icon}));
@@ -60,19 +78,28 @@ class AppHeader extends Component {
   closeMenu = () => (this.setState({menuOpen: false}))
   
   render() {
+    console.log(this);
     return (
-      <AppBar
-        title={"Forgotten Kingdoms Area Builder" + (this.props.title ? " | " + this.props.title : "")}
-        onLeftIconButtonClick={this.openMenu} 
-        iconElementRight={<span>{this.state.status}</span>}>
-        <GoogleDriveMenu 
-          open={this.state.menuOpen}
-          setStatus={this.setStatus}
-          onFileLoad={this.props.loadArea} 
-          closeMenu={this.closeMenu}
-          onNew={this.props.newArea}
-          anchor={this.state.menuAnchor} />
-      </AppBar>
+      <div className={this.props.classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton onClick={this.openMenu} color="inherit" aria-label="Menu" className={this.props.classes.menuButton}>
+              <MenuIcon />
+            </IconButton>
+            <GoogleDriveMenu 
+              open={this.state.menuOpen}
+              setStatus={this.setStatus}
+              onFileLoad={this.props.loadArea} 
+              closeMenu={this.closeMenu}
+              onNew={this.props.newArea}
+              anchor={this.state.menuAnchor} />
+            <Typography variant="title" color="inherit" align="center" className={this.props.classes.flex}>
+              {"Forgotten Kingdoms Area Builder" + (this.props.title ? " | " + this.props.title : "")}
+            </Typography>
+            {this.state.status}
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   }
 }
@@ -96,7 +123,7 @@ AppHeader = connect(
   }
 )(AppHeader);
 
-var ThemedAppHeader = muiThemeable()(AppHeader);
+var ThemedAppHeader = withStyles(styles)(withTheme()(AppHeader));
 
 export default App;
 

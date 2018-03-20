@@ -163,6 +163,8 @@ function ui_state(state=new UiState(), action) {
             return { ...state, item_confirm_delete_open:false }
         case UiStateActions.SET_CURRENT_ITEM:
             return { ...state, item_current_item:action.value }
+        case UiStateActions.SET_MAIN_CURRENT_TAB:
+            return { ...state, main_current_tab:action.value }
         case ItemActions.ADD:
             return { ...state, item_current_item:action.value }
         default:

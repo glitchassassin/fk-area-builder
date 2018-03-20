@@ -1,15 +1,15 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import FlatButton from 'material-ui/FlatButton';
-import { red900 } from 'material-ui/styles/colors';
+import Button from 'material-ui/Button';
+import red from 'material-ui/colors/red';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-import Subheader from 'material-ui/Subheader';
-import muiThemeable from 'material-ui/styles/muiThemeable';
+import ListSubheader from 'material-ui/List/ListSubheader';
+import withTheme from 'material-ui/styles/withTheme';
 import {equal_recursively} from '../Models/model'
 import { connect } from 'react-redux';
 import { RoomActions, UiStateActions, ExitActions, DoorResetActions, RoomResetActions } from '../Models/actionTypes';
@@ -52,7 +52,6 @@ from '../UIComponents/FlagSelectors'
 import {Validate} from '../UIComponents/GenericEditors'
 import {RoomValidator, ExitValidator, DoorResetValidator, RoomResetValidator} from '../Models/model_validator'
 import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
-import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 const uuid = require('uuid/v4');
 
 const room_validator = new RoomValidator();
@@ -80,14 +79,14 @@ class RoomPanel extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(room.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons">mode_edit</FontIcon>
+                        <Icon>mode_edit</Icon>
                     </IconButton>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(room.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
+                        <Icon color={red[900]}>delete_forever</Icon>
                     </IconButton>
                     {room_validator.validate_state(this.props.state, room).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(room.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
+                        <Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>
                     </IconButton>
                     )}
                 </TableRowColumn>
@@ -101,13 +100,13 @@ class RoomPanel extends React.Component {
 
     render() {
         const confirmActions = [
-            <FlatButton
+            <Button
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
                 onClick={this.props.cancelDelete}
             />,
-            <FlatButton
+            <Button
                 label="Delete"
                 id={this.props.ui_state.room_current_room} // So confirmDelete can pull the correct uuid
                 primary={true}
@@ -115,7 +114,7 @@ class RoomPanel extends React.Component {
             />,
             ]
         const errorsActions = [
-            <FlatButton
+            <Button
                 label="Done"
                 primary={true}
                 keyboardFocused={true}
@@ -140,7 +139,7 @@ class RoomPanel extends React.Component {
                     <TableRow>
                         <TableRowColumn width={100}>
                             <IconButton tooltip="Add" onClick={this.props.newRoom}>
-                                <FontIcon className="material-icons">add_box</FontIcon>
+                                <Icon>add_box</Icon>
                             </IconButton>
                         </TableRowColumn>
                     </TableRow>
@@ -153,7 +152,7 @@ class RoomPanel extends React.Component {
                 <Dialog open={this.props.ui_state.room_errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${room.vnum}`}>
                     <List>
                         {room_validator.validate_state(this.props.state, room).map((error, index) => (
-                            <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                            <ListItem key={index} primaryText={error} leftIcon={<Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
                         ))}
                     </List>
                 </Dialog>
@@ -198,12 +197,11 @@ const paper_style = {
     margin: "5px"
 }
 
-class RoomEditor extends ModelComponent {
-    modelClass = Room;
+class RoomEditor extends React.Component {
     handleChange = (e,v)=>(this.props.setProp(this.props.room.uuid, e.target.id, v))
     render() {
         const actions = [
-        <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
+        <Button label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
         return (
             <Dialog title="Edit Room" modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
@@ -285,11 +283,11 @@ class RoomEditor extends ModelComponent {
                             triggers={ROOM_PROGRAM_TRIGGERS} />
                     </Tab>
                     <Tab label="Resets">
-                        <Subheader>Room Resets</Subheader>
+                        <ListSubheader>Room Resets</ListSubheader>
                         <RoomResetsEditor 
                             id="room_resets" 
                             vnum={this.props.room.vnum} />
-                        <Subheader>Door Resets</Subheader>
+                        <ListSubheader>Door Resets</ListSubheader>
                         <DoorResetsEditor 
                             id="door_resets" 
                             vnum={this.props.room.vnum} />
@@ -316,7 +314,7 @@ class ExitsEditor extends React.Component {
         return this.props.exits.filter((e)=>(e.room===this.props.pointer)).map((exit, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(exit.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={exit_validator}>
                 <FlagSelector 
@@ -372,7 +370,7 @@ class ExitsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -400,7 +398,7 @@ class DoorResetsEditor extends React.Component {
         return this.props.door_resets.filter((r)=>(r.room===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={door_reset_validator}>
                 <FlagSelector 
@@ -427,7 +425,7 @@ class DoorResetsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -455,7 +453,7 @@ class RoomResetsEditor extends React.Component {
         return this.props.room_resets.filter(r=>(r.room===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={room_reset_validator}>
                 <FlagSelector 
@@ -479,7 +477,7 @@ class RoomResetsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -499,4 +497,4 @@ RoomResetsEditor = connect(
     })
 )(RoomResetsEditor)
 
-export default muiThemeable()(RoomPanel);
+export default withTheme()(RoomPanel);

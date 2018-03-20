@@ -1,18 +1,18 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import { red900 } from 'material-ui/styles/colors';
+import Button from 'material-ui/Button';
+import red from 'material-ui/colors/red';
 import {List, ListItem} from 'material-ui/List';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Card, CardText} from 'material-ui/Card';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
-import Toggle from 'material-ui/Toggle';
+import Switch from 'material-ui/Switch';
 import TextField from 'material-ui/TextField';
-import muiThemeable from 'material-ui/styles/muiThemeable';
-import Subheader from 'material-ui/Subheader';
+import withTheme from 'material-ui/styles/withTheme';
+import ListSubheader from 'material-ui/List/ListSubheader';
+import {FormControlLabel} from 'material-ui/Form'
 import {equal_recursively} from '../Models/model'
 import { connect } from 'react-redux';
 import { 
@@ -95,7 +95,6 @@ import {
     MobSpecialValidator
 } from '../Models/model_validator'
 import {TrapResetEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
-//import {ModelComponent, ModelArrayComponent} from '../UIComponents/ModelComponents'
 
 const uuid = require('uuid/v4');
 
@@ -132,14 +131,14 @@ class MobPanel extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn width={100}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(mob.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons">mode_edit</FontIcon>
+                        <Icon className="material-icons">mode_edit</Icon>
                     </IconButton>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(mob.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={red900}>delete_forever</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>delete_forever</Icon>
                     </IconButton>
                     {mob_validator.validate_state(this.props.state, mob).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(mob.uuid))} style={icon_button_style}>
-                        <FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>
+                        <Icon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</Icon>
                     </IconButton>
                     )}
                 </TableRowColumn>
@@ -162,13 +161,13 @@ class MobPanel extends React.Component {
     render() {
         let mob = this.get_mob_by_uuid(this.props.ui_state.mob_current_mob)
         const confirmActions = [
-            <FlatButton
+            <Button
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
                 onClick={this.props.cancelDelete}
             />,
-            <FlatButton
+            <Button
                 label="Delete"
                 primary={true}
                 id={this.props.ui_state.mob_current_mob} // So confirmDelete can pull the correct uuid
@@ -176,7 +175,7 @@ class MobPanel extends React.Component {
             />,
             ]
         const errorsActions = [
-            <FlatButton
+            <Button
                 label="Done"
                 primary={true}
                 keyboardFocused={true}
@@ -202,7 +201,7 @@ class MobPanel extends React.Component {
                     <TableRow>
                         <TableRowColumn width={100}>
                             <IconButton tooltip="Add" onClick={this.handleNew}>
-                                <FontIcon className="material-icons">add_box</FontIcon>
+                                <Icon>add_box</Icon>
                             </IconButton>
                         </TableRowColumn>
                     </TableRow>
@@ -215,7 +214,7 @@ class MobPanel extends React.Component {
                 <Dialog open={this.props.ui_state.mob_errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${mob.vnum}`}>
                     <List>
                         {mob_validator.validate_state(this.props.state, mob).map((error, index) => (
-                            <ListItem key={index} primaryText={error} leftIcon={<FontIcon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</FontIcon>} />
+                            <ListItem key={index} primaryText={error} leftIcon={<Icon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
                         ))}
                     </List>
                 </Dialog>
@@ -263,7 +262,7 @@ const paper_style = {
 class MobEditor extends React.Component {
     render() {
         const actions = [
-        <FlatButton label="Done" primary={true} onClick={this.props.handleClose} />,
+        <Button label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
         var uniqueTab = (this.props.mob.unique ? (
             <React.Fragment>
@@ -353,7 +352,8 @@ class MobEditor extends React.Component {
                     value={this.props.mob.ris_susceptible} 
                     onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                 </Validate>
-                <RaisedButton 
+                <Button
+                    variant="raised"
                     id="makeSimpleMob" 
                     label="Convert to Simple Mob?" 
                     primary={true} 
@@ -361,7 +361,8 @@ class MobEditor extends React.Component {
                     onClick={()=>(this.props.convertToSimple(this.props.mob.uuid))}/>
             </React.Fragment>
             ) : (
-            <RaisedButton 
+            <Button
+                variant="raised" 
                 id="makeUniqueMob" 
                 label="Convert to Unique Mob?" 
                 primary={true} 
@@ -475,19 +476,19 @@ class MobEditor extends React.Component {
                         {uniqueTab}
                     </Tab>
                     <Tab label="Training">
-                        <Subheader>Skills</Subheader>
+                        <ListSubheader>Skills</ListSubheader>
                         <CanTrainSkillEditor id="can_train_skill" pointer={this.props.mob.uuid} />
-                        <Subheader>Weapon Skills</Subheader>
+                        <ListSubheader>Weapon Skills</ListSubheader>
                         <CanTrainWeaponSkillEditor id="can_train_weapon_skill" pointer={this.props.mob.uuid} />
-                        <Subheader>Spells</Subheader>
+                        <ListSubheader>Spells</ListSubheader>
                         <CanTrainSpellEditor id="can_train_spell" pointer={this.props.mob.uuid} />
-                        <Subheader>Levels</Subheader>
+                        <ListSubheader>Levels</ListSubheader>
                         <CanTrainLevelEditor id="can_train_level" pointer={this.props.mob.uuid} />
-                        <Subheader>Statistics</Subheader>
+                        <ListSubheader>Statistics</ListSubheader>
                         <CanTrainStatisticEditor id="can_train_statistic" pointer={this.props.mob.uuid} />
-                        <Subheader>Feats</Subheader>
+                        <ListSubheader>Feats</ListSubheader>
                         <CanTrainFeatEditor id="can_train_feat" pointer={this.props.mob.uuid} />
-                        <Subheader>Languages</Subheader>
+                        <ListSubheader>Languages</ListSubheader>
                         <CanTrainLangEditor id="can_train_lang" pointer={this.props.mob.uuid} />
                     </Tab>
                     <Tab label="Programs">
@@ -528,10 +529,13 @@ class ShopsEditor extends React.Component {
         return (
             <Card expanded={model!==undefined} title="Shopkeeper">
                 <CardText>
-                    <Toggle 
-                        toggled={model!==undefined}
-                        onToggle={()=>(this.props.handleToggle(model, this.props.vnum))}
-                        labelPosition="right"
+                    <FormControlLabel
+                        control = {
+                            <Switch 
+                                checked={model!==undefined}
+                                onChange={()=>(this.props.handleToggle(model, this.props.vnum))}
+                            />
+                        }
                         label="Shopkeeper"
                     />
                 </CardText>
@@ -624,11 +628,15 @@ class RepairsEditor extends React.Component {
         return (
             <Card expanded={model!==undefined} title="Repairer">
                 <CardText>
-                    <Toggle 
-                        toggled={model!==undefined}
-                        onToggle={()=>(this.props.handleToggle(model, this.props.vnum))}
-                        labelPosition="right"
-                        label="Repairs" />
+                    <FormControlLabel
+                        control = {
+                            <Switch 
+                                checked={model!==undefined}
+                                onChange={()=>(this.props.handleToggle(model, this.props.vnum))}
+                            />
+                        }
+                        label="Repairs"
+                    />
                 </CardText>
                 <CardText expandable={true}>
                     {model && (
@@ -706,7 +714,7 @@ class MobResetsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.mob===this.props.vnum)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={mob_reset_validator}>
                 <TextField 
@@ -738,7 +746,7 @@ class MobResetsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon className="material-icons">add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -765,7 +773,7 @@ class EquipmentResetsEditor extends React.Component {
         return this.props.model.filter((resets)=>(resets.mob_reset===this.props.pointer)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={equipment_reset_validator}>
                 <VnumAutoComplete 
@@ -799,10 +807,10 @@ class EquipmentResetsEditor extends React.Component {
         return (
             <React.Fragment>
                 <Paper style={paper_style}>
-                    <Subheader>Equipment</Subheader>
+                    <ListSubheader>Equipment</ListSubheader>
                     {this.generate()}
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                        <FontIcon className="material-icons">add_box</FontIcon>
+                        <Icon className="material-icons">add_box</Icon>
                     </IconButton>
                 </Paper>
             </React.Fragment>
@@ -830,7 +838,7 @@ class CoinResetsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.mob_reset===this.props.pointer)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={coin_reset_validator}>
                 <FlagSelector 
@@ -860,10 +868,10 @@ class CoinResetsEditor extends React.Component {
         return (
             <React.Fragment>
                 <Paper style={paper_style}>
-                    <Subheader>Coins</Subheader>
+                    <ListSubheader>Coins</ListSubheader>
                     {this.generate()}
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                        <FontIcon className="material-icons">add_box</FontIcon>
+                        <Icon className="material-icons">add_box</Icon>
                     </IconButton>
                 </Paper>
             </React.Fragment>
@@ -899,7 +907,7 @@ class CanTrainWrapper extends React.Component {
                         <TableRow>
                             <TableRowColumn>
                                 <IconButton tooltip="Add" onClick={this.props.handleNew}>
-                                    <FontIcon className="material-icons">add_box</FontIcon>
+                                    <Icon className="material-icons">add_box</Icon>
                                 </IconButton>
                             </TableRowColumn>
                         </TableRow>
@@ -923,7 +931,7 @@ class CanTrainSkillEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_skill_validator}>
                     <TextField 
@@ -983,7 +991,7 @@ class CanTrainWeaponSkillEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_weapon_skill_validator}>
                     <TextField 
@@ -1043,7 +1051,7 @@ class CanTrainSpellEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_spell_validator}>
                     <TextField 
@@ -1103,7 +1111,7 @@ class CanTrainLevelEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_level_validator}>
                     <TextField 
@@ -1153,7 +1161,7 @@ class CanTrainStatisticEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_statistic_validator}>
                     <TextField 
@@ -1213,7 +1221,7 @@ class CanTrainFeatEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_feat_validator}>
                     <TextField 
@@ -1273,7 +1281,7 @@ class CanTrainLangEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={can_train_lang_validator}>
                     <TextField 
@@ -1333,7 +1341,7 @@ class MobSpecialEditor extends React.Component {
             <TableRow key={index}>
                 <TableRowColumn>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(spec.uuid))}>
-                        <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
                     </IconButton>
                     <Validate validator={mob_special_validator}>
                     <FlagSelector 
@@ -1366,4 +1374,4 @@ MobSpecialEditor = connect(
     })
 )(MobSpecialEditor)
 
-export default muiThemeable()(MobPanel);
+export default withTheme()(MobPanel);

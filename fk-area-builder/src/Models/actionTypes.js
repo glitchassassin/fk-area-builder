@@ -19,6 +19,8 @@ export const UiStateActions = createActions("UI",
         // Item Panel
         "OPEN_ITEM_EDITOR", "CLOSE_ITEM_EDITOR", "OPEN_ITEM_ERRORS", "CLOSE_ITEM_ERRORS",
         "OPEN_ITEM_CONFIRM_DELETE", "CLOSE_ITEM_CONFIRM_DELETE", "SET_CURRENT_ITEM",
+        // General
+        "SET_MAIN_CURRENT_TAB"
     ]
 )
 export const AreaActions = createActions("AREA")

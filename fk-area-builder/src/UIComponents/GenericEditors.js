@@ -1,13 +1,14 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-import Subheader from 'material-ui/Subheader';
-import { red900 } from 'material-ui/styles/colors';
+import ListSubheader from 'material-ui/List/ListSubheader';
+import red from 'material-ui/colors/red';
 import { connect } from 'react-redux';
 import { ExtraDescriptionActions, ProgramActions, TrapResetActions } from '../Models/actionTypes';
+import PropTypes from 'prop-types';
 
 import {
     TRAP_TYPES,
@@ -37,6 +38,9 @@ const paper_style = {
 }
 
 class Validate extends React.Component {
+    getChildContext() {
+        return {validator: this.props.validator}
+    }
     render() {
         var children = React.Children.map(this.props.children, (item, i) => {
             if (item.props.id) {
@@ -55,9 +59,12 @@ class Validate extends React.Component {
             }
         });
         
-        return (children)
+        return (this.props.children)
     }
 }
+Validate.childContextTypes = {
+  validator: PropTypes.function
+};
 
 class TrapResetEditor extends React.Component {
     render() {
@@ -65,7 +72,7 @@ class TrapResetEditor extends React.Component {
         if (model !== undefined) {
             return (
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
-                    <Subheader>Trap Reset</Subheader>
+                    <ListSubheader>Trap Reset</ListSubheader>
                     <Validate validator={trap_reset_validator}>
                     <TextField 
                         floatingLabelText="Reset interval" 
@@ -98,17 +105,18 @@ class TrapResetEditor extends React.Component {
                         value={model.trigger_2} 
                         onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
                     </Validate>
-                    <RaisedButton 
+                    <Button
+                        variant="raised"
                         label="Remove Trap Reset" 
                         onClick={()=>(this.props.handleDelete(model.uuid))} 
-                        icon={<FontIcon className="material-icons">remove_circle</FontIcon>}/>
+                        icon={<Icon>remove_circle</Icon>}/>
                 </Paper>
             );
         }
         else {
             return (
                 <div>
-                    <RaisedButton label="Add Trap Reset" onClick={()=>(this.props.handleNew(this.props.pointer))} icon={<FontIcon className="material-icons">add_box</FontIcon>}/>
+                    <Button variant="raised" label="Add Trap Reset" onClick={()=>(this.props.handleNew(this.props.pointer))} icon={<Icon>add_box</Icon>}/>
                 </div>
             );
         }
@@ -135,7 +143,7 @@ class ExtraDescriptionsEditor extends React.Component {
         return this.props.eds.filter((ed)=>(ed.pointer === this.props.pointer)).map((ed, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(ed.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={extra_description_validator}>
                 <TextField 
@@ -163,7 +171,7 @@ class ExtraDescriptionsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -190,7 +198,7 @@ class ProgramsEditor extends React.Component {
         return this.props.programs.filter((p)=>(p.pointer===this.props.pointer)).map((program, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(program.uuid))}>
-                    <FontIcon className="material-icons" color={red900}>remove_circle</FontIcon>
+                    <Icon color={red[900]}>remove_circle</Icon>
                 </IconButton>
                 <Validate validator={program_validator}>
                 <FlagSelector 
@@ -223,7 +231,7 @@ class ProgramsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                    <FontIcon className="material-icons">add_box</FontIcon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
