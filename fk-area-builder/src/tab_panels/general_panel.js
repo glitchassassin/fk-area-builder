@@ -21,10 +21,6 @@ import {
 }
 from '../Models/flags';
 import {
-    JusticeSystem
-}
-from '../Models/model_templates'
-import {
     AreaValidator, JusticeSystemValidator
 }
 from '../Models/model_validator'
@@ -50,7 +46,6 @@ const justice_system_validator = new JusticeSystemValidator()
 
 class GeneralPanel extends React.Component {
     render() {
-        console.log(this.props.area);
         return (
             <Paper style={paper_style}>
                 <Validate validator={area_validator}>
@@ -133,7 +128,6 @@ class GeneralPanel extends React.Component {
                         <Grid item xs={10} sm={10}>
                             <ValidatedTextField 
                                 label="Area reset echo" 
-                                fullWidth={true} 
                                 id="reset_msg" 
                                 fullWidth={true} 
                                 value={this.props.area.reset_msg} 
@@ -228,6 +222,7 @@ GeneralPanel = connect(
 
 class JusticeSystemEditor extends React.Component {
     render() {
+        // eslint-disable-next-line
         if (this.props.justice_system!=undefined) {
             return (
                 <Paper id={this.props.id} style={paper_style}>

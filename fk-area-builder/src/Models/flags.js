@@ -3132,10 +3132,6 @@ const ITEM_HERB_TYPES = {
         code: "HERB_COMFREY",
         sdesc: "HERB_COMFREY"
     }),
-    HERB_DWALE: new Flag({
-        code: "HERB_DWALE",
-        sdesc: "HERB_DWALE"
-    }),
     HERB_ECHINACEA: new Flag({
         code: "HERB_ECHINACEA",
         sdesc: "HERB_ECHINACEA"

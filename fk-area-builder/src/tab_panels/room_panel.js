@@ -3,24 +3,22 @@ import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import red from 'material-ui/colors/red';
-import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Dialog from 'material-ui/Dialog';
+import List, {ListItem} from 'material-ui/List';
+import Tabs, {Tab} from 'material-ui/Tabs';
+import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
+import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import withTheme from 'material-ui/styles/withTheme';
-import {equal_recursively} from '../Models/model'
+import Grid from 'material-ui/Grid';
 import { connect } from 'react-redux';
 import { RoomActions, UiStateActions, ExitActions, DoorResetActions, RoomResetActions } from '../Models/actionTypes';
 
-import {
-    Table,
+import Table, {
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableHead,
     TableRow,
-    TableRowColumn,
+    TableCell,
 }
 from 'material-ui/Table';
 import {
@@ -36,8 +34,6 @@ import {
 }
 from '../Models/flags';
 import {
-    Room,
-    Exit,
     DoorReset,
     RoomReset,
     vnum_sort
@@ -46,7 +42,8 @@ from '../Models/model_templates'
 import {
     FlagSelector,
     MultiFlagSelector,
-    VnumAutoComplete
+    VnumAutoComplete,
+    ValidatedTextField
 }
 from '../UIComponents/FlagSelectors'
 import {Validate} from '../UIComponents/GenericEditors'
@@ -77,84 +74,103 @@ class RoomPanel extends React.Component {
     generateItems(rooms) {
         return rooms.sort(vnum_sort).map((room, index) => (
             <TableRow key={index}>
-                <TableRowColumn width={100}>
+                <TableCell padding="dense" width={"150px"}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(room.uuid))} style={icon_button_style}>
                         <Icon>mode_edit</Icon>
                     </IconButton>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(room.uuid))} style={icon_button_style}>
-                        <Icon color={red[900]}>delete_forever</Icon>
+                        <Icon color="error">delete_forever</Icon>
                     </IconButton>
                     {room_validator.validate_state(this.props.state, room).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(room.uuid))} style={icon_button_style}>
-                        <Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>
+                        <Icon color="secondary">error</Icon>
                     </IconButton>
                     )}
-                </TableRowColumn>
-                <TableRowColumn width={100}>{room.vnum}</TableRowColumn>
-                <TableRowColumn>{room.sdesc}</TableRowColumn>
-                <TableRowColumn>{room.sector ? room.sector.code : ""}</TableRowColumn>
-                <TableRowColumn>{room.room_flags ? room.room_flags.map((flag)=>(flag.code)).join("|") : ""}</TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">{room.vnum}</TableCell>
+                <TableCell padding="dense" width={"50%"}>{room.sdesc}</TableCell>
+                <TableCell padding="dense">{room.sector ? room.sector.code : ""}</TableCell>
+                <TableCell padding="dense">{room.room_flags ? room.room_flags.map((flag)=>(flag.code)).join("|") : ""}</TableCell>
             </TableRow>
             ))
     }
 
     render() {
-        const confirmActions = [
-            <Button
-                label="Cancel"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.props.cancelDelete}
-            />,
-            <Button
-                label="Delete"
-                id={this.props.ui_state.room_current_room} // So confirmDelete can pull the correct uuid
-                primary={true}
-                onClick={this.props.confirmDelete}
-            />,
-            ]
-        const errorsActions = [
-            <Button
-                label="Done"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.props.closeErrors}
-            />
-            ]
         let room = this.get_room_by_uuid(this.props.ui_state.room_current_room)
         return (
             <div>
-            <Table>
-                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+            <Table padding="dense">
+                <TableHead>
                     <TableRow>
-                        <TableHeaderColumn width={100}>Edit</TableHeaderColumn>
-                        <TableHeaderColumn width={100}>vnum</TableHeaderColumn>
-                        <TableHeaderColumn>Short description</TableHeaderColumn>
-                        <TableHeaderColumn>Sector</TableHeaderColumn>
-                        <TableHeaderColumn>Room Flags</TableHeaderColumn>
+                        <TableCell padding="dense" width={"150px"}>Edit</TableCell>
+                        <TableCell padding="dense">vnum</TableCell>
+                        <TableCell padding="dense" width={"50%"}>Short description</TableCell>
+                        <TableCell padding="dense">Sector</TableCell>
+                        <TableCell padding="dense">Room Flags</TableCell>
                     </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={false}>
+                </TableHead>
+                <TableBody>
                     {this.generateItems(this.props.rooms)}
                     <TableRow>
-                        <TableRowColumn width={100}>
+                        <TableCell padding="dense">
                             <IconButton tooltip="Add" onClick={this.props.newRoom}>
                                 <Icon>add_box</Icon>
                             </IconButton>
-                        </TableRowColumn>
+                        </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
             { room !== undefined && // Don't bother creating these while we have no rooms.
             <React.Fragment>
                 <RoomEditor open={this.props.ui_state.room_editor_open} />
-                <Dialog open={this.props.ui_state.room_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${room.sdesc}?`}>{`Are you sure you want to delete room ${room.vnum} (${room.sdesc})? You cannot undo this action!`}</Dialog>
-                <Dialog open={this.props.ui_state.room_errors_open} actions={errorsActions} modal={false} title={`Room Errors for room ${room.vnum}`}>
-                    <List>
-                        {room_validator.validate_state(this.props.state, room).map((error, index) => (
-                            <ListItem key={index} primaryText={error} leftIcon={<Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
-                        ))}
-                    </List>
+                <Dialog
+                    open={this.props.ui_state.room_confirm_delete_open}
+                    onClose={this.props.cancelDelete}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    >
+                    <DialogTitle id="alert-dialog-title">{`Delete ${room.sdesc}?`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {`Are you sure you want to delete room ${room.vnum} (${room.sdesc})? You cannot undo this action!`}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            color={"primary"}
+                            autoFocus
+                            onClick={this.props.cancelDelete}>
+                            Cancel
+                        </Button>
+                        <Button
+                            color={"primary"}
+                            onClick={()=>(this.props.confirmDelete(this.props.ui_state.room_current_room))}>
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.props.ui_state.room_errors_open}
+                    onClose={this.props.closeErrors}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    >
+                    <DialogTitle id="alert-dialog-title">{`Room Errors for room ${room.vnum}`}</DialogTitle>
+                    <DialogContent>
+                        <List>
+                            {room_validator.validate_state(this.props.state, room).map((error, index) => (
+                                <ListItem key={index} primaryText={error} leftIcon={<Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
+                            ))}
+                        </List>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            primary={true}
+                            onClick={this.props.closeErrors}
+                            autoFocus>
+                            Done
+                        </Button>
+                    </DialogActions>
                 </Dialog>
             </React.Fragment>
             }
@@ -183,9 +199,9 @@ RoomPanel = connect(
             dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:uuid });
             dispatch({ type:UiStateActions.OPEN_ROOM_CONFIRM_DELETE });
         },
-        confirmDelete: (e, v) => {
+        confirmDelete: (uuid) => {
             dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:null });
-            dispatch({ type:RoomActions.REMOVE, index:e.target.id });
+            dispatch({ type:RoomActions.REMOVE, index:uuid });
             dispatch({ type:UiStateActions.CLOSE_ROOM_CONFIRM_DELETE });
         },
         cancelDelete: () => {dispatch({ type:UiStateActions.CLOSE_ROOM_CONFIRM_DELETE })},
@@ -204,95 +220,134 @@ class RoomEditor extends React.Component {
         <Button label="Done" primary={true} onClick={this.props.handleClose} />,
         ];
         return (
-            <Dialog title="Edit Room" modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
-                <Tabs>
-                    <Tab label="Descriptions">
-                        <Validate validator={room_validator}>
-                        <TextField 
-                            floatingLabelText="vnum" 
-                            id="vnum" 
-                            value={this.props.room.vnum} 
-                            autoComplete="off" 
-                            onChange={this.handleChange} />
-                        <TextField 
-                            floatingLabelText="Short description" 
-                            id="sdesc" 
-                            fullWidth={true} 
-                            value={this.props.room.sdesc} 
-                            autoComplete="off" 
-                            onChange={this.handleChange} />
-                        <TextField 
-                            floatingLabelText="Long description" 
-                            id="ldesc" 
-                            multiLine={true} 
-                            rows={5} 
-                            fullWidth={true} 
-                            value={this.props.room.ldesc} 
-                            autoComplete="off" 
-                            onChange={this.handleChange} />
-                        </Validate>
-                    </Tab>
-                    <Tab label="Details">
-                        <Validate validator={room_validator}>
-                        <MultiFlagSelector 
-                            id="room_flags" 
-                            label="Room Flags" 
-                            flags={ROOM_FLAGS} 
-                            value={this.props.room.room_flags} 
-                            onChange={this.handleChange} />
-                        <FlagSelector 
-                            id="sector" 
-                            label="Sector" 
-                            flags={ROOM_SECTOR_FLAGS} 
-                            value={this.props.room.sector} 
-                            onChange={this.handleChange} />
-                        <TextField 
-                            floatingLabelText="Teleport Delay" 
-                            id="teleport_delay" 
-                            value={this.props.room.teleport_delay} 
-                            autoComplete="off" 
-                            onChange={this.handleChange} />
-                        <VnumAutoComplete 
-                            floatingLabelText="Teleport Target" 
-                            id="teleport_target" 
-                            value={this.props.room.teleport_target} 
-                            onChange={this.handleChange} 
-                            dataSource={this.props.rooms} />
-                        <TextField 
-                            floatingLabelText="Room Capacity [Tunnel]" 
-                            id="tunnel" 
-                            value={this.props.room.tunnel} 
-                            autoComplete="off" 
-                            onChange={this.handleChange} />
-                        </Validate>
-                    </Tab>
-                    <Tab label="Extra Descs">
-                        <ExtraDescriptionsEditor 
-                            id="extra_descriptions" 
-                            pointer={this.props.room.uuid} />
-                    </Tab>
-                    <Tab label="Exits">
-                        <ExitsEditor 
-                            id="exits" 
-                            pointer={this.props.room.uuid} />
-                    </Tab>
-                    <Tab label="Programs">
-                        <ProgramsEditor 
-                            id="programs" 
-                            pointer={this.props.room.uuid}
-                            triggers={ROOM_PROGRAM_TRIGGERS} />
-                    </Tab>
-                    <Tab label="Resets">
-                        <ListSubheader>Room Resets</ListSubheader>
-                        <RoomResetsEditor 
-                            id="room_resets" 
-                            vnum={this.props.room.vnum} />
-                        <ListSubheader>Door Resets</ListSubheader>
-                        <DoorResetsEditor 
-                            id="door_resets" 
-                            vnum={this.props.room.vnum} />
-                    </Tab>
-                </Tabs>
+            <Dialog 
+                maxWidth={false}
+                open={this.props.open} 
+                actions={actions} 
+                PaperProps={{style:{width:"80%"}}}
+                onClose={this.props.handleClose}>
+                <DialogTitle>Edit Room</DialogTitle>
+                <DialogContent style={{overflow:"visible"}}>
+                    <Validate validator={room_validator}>
+                        <AppBar position="static" style={{marginBottom:"10px"}}>
+                            <Tabs value={this.props.ui_state.room_current_tab} onChange={this.props.setTab}>
+                                <Tab label="Room" />
+                                <Tab label="Extra Descs" />
+                                <Tab label="Exits" />
+                                <Tab label="Programs" />
+                                <Tab label="Resets" />
+                            </Tabs>
+                        </AppBar>
+                        {this.props.ui_state.room_current_tab === 0 && 
+                        <Grid container spacing={8}>
+                            <Grid item xs={12}>
+                                <ListSubheader>Descriptions</ListSubheader>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <ValidatedTextField 
+                                    label="vnum" 
+                                    id="vnum" 
+                                    fullWidth={true} 
+                                    value={this.props.room.vnum} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                            <Grid item xs={9}>
+                                <ValidatedTextField 
+                                    label="Short description" 
+                                    id="sdesc" 
+                                    fullWidth={true} 
+                                    value={this.props.room.sdesc} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ValidatedTextField 
+                                    label="Long description" 
+                                    id="ldesc" 
+                                    multiline
+                                    rows={5} 
+                                    fullWidth={true} 
+                                    value={this.props.room.ldesc} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ListSubheader>Details</ListSubheader>
+                            </Grid>
+                            <Grid item xs={9}>
+                                <MultiFlagSelector 
+                                    id="room_flags" 
+                                    label="Room Flags" 
+                                    flags={ROOM_FLAGS} 
+                                    value={this.props.room.room_flags} 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <FlagSelector 
+                                    id="sector" 
+                                    label="Sector" 
+                                    flags={ROOM_SECTOR_FLAGS} 
+                                    value={this.props.room.sector} 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <ValidatedTextField 
+                                    label="Teleport Delay" 
+                                    id="teleport_delay" 
+                                    value={this.props.room.teleport_delay} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <VnumAutoComplete 
+                                    label="Teleport Target" 
+                                    id="teleport_target" 
+                                    value={this.props.room.teleport_target} 
+                                    onChange={this.handleChange} 
+                                    dataSource={this.props.rooms} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <ValidatedTextField 
+                                    label="Room Capacity [Tunnel]" 
+                                    id="tunnel" 
+                                    value={this.props.room.tunnel} 
+                                    autoComplete="off" 
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>}
+                        {this.props.ui_state.room_current_tab === 1 && 
+                        <Grid container spacing={8}>
+                            <ExtraDescriptionsEditor 
+                                id="extra_descriptions" 
+                                pointer={this.props.room.uuid} />
+                        </Grid>}
+                        {this.props.ui_state.room_current_tab === 2 && 
+                        <Grid container spacing={8}>
+                            <ExitsEditor 
+                                id="exits" 
+                                pointer={this.props.room.uuid} />
+                        </Grid>}
+                        {this.props.ui_state.room_current_tab === 3 && 
+                        <Grid container spacing={8}>
+                            <ProgramsEditor 
+                                id="programs" 
+                                pointer={this.props.room.uuid}
+                                triggers={ROOM_PROGRAM_TRIGGERS} />
+                        </Grid>}
+                        {this.props.ui_state.room_current_tab === 4 && 
+                        <Grid container spacing={8}>
+                            <ListSubheader>Room Resets</ListSubheader>
+                            <RoomResetsEditor 
+                                id="room_resets" 
+                                vnum={this.props.room.vnum} />
+                            <ListSubheader>Door Resets</ListSubheader>
+                            <DoorResetsEditor 
+                                id="door_resets" 
+                                vnum={this.props.room.vnum} />
+                        </Grid>}
+                    </Validate>
+                </DialogContent>
             </Dialog>  
         )
     }
@@ -306,6 +361,9 @@ RoomEditor = connect(
     (dispatch)=>({
         handleClose: () => {dispatch({ type:UiStateActions.CLOSE_ROOM_EDITOR })},
         setProp: (index, key, value) => {dispatch({ type:RoomActions.SET_PROP, index, key, value })},
+        setTab: (e, index) => {
+            dispatch({type:UiStateActions.SET_ROOM_CURRENT_TAB, value:index})
+        }
     })
 )(RoomEditor)
 
@@ -323,14 +381,14 @@ class ExitsEditor extends React.Component {
                     flags={EXIT_DIRECTIONS} 
                     value={exit.direction} 
                     onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
-                <TextField 
+                <ValidatedTextField 
                     floatingLabelText="Comment" 
                     id="comment"
                     fullWidth={true} 
                     value={exit.comment} 
                     autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(exit.uuid, e.target.id, v))} />
-                <TextField 
+                <ValidatedTextField 
                     floatingLabelText={exit.direction === EXIT_DIRECTIONS.DDIR_SOMEWHERE ? "Somewhere exit keywords" : "Door keywords"} 
                     id="somewhere_door_keyword" 
                     fullWidth={true} 

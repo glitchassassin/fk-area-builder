@@ -16,7 +16,6 @@ import {
 }
 from '../Models/flags';
 import {
-    TrapReset,
     ExtraDescription,
     Program
 }
@@ -42,28 +41,11 @@ class Validate extends React.Component {
         return {validator: this.props.validator}
     }
     render() {
-        var children = React.Children.map(this.props.children, (item, i) => {
-            if (item.props.id) {
-                try {
-                    return React.cloneElement(item, {
-                        errorText: this.props.validator[item.props.id].validate(item.props.value).join(""),
-                    });
-                } catch(e) {
-                    console.log(this.props.validator);
-                    console.log(item.props);
-                    throw(e);
-                }
-            }
-            else {
-                return item;
-            }
-        });
-        
         return (this.props.children)
     }
 }
 Validate.childContextTypes = {
-  validator: PropTypes.function
+  validator: PropTypes.object
 };
 
 class TrapResetEditor extends React.Component {

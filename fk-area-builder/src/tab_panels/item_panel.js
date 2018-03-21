@@ -11,7 +11,6 @@ import TextField from 'material-ui/TextField';
 import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import Checkbox from 'material-ui/Checkbox';
-import {equal_recursively} from '../Models/model'
 import { connect } from 'react-redux';
 import { 
     ItemActions, UiStateActions, ItemResetActions, ItemApplyActions
@@ -41,9 +40,6 @@ import {
 }
 from '../Models/flags';
 import {
-    Item,
-    ItemApply,
-    ItemReset,
     vnum_sort
 }
 from '../Models/model_templates'
@@ -223,7 +219,7 @@ const item_type_ldesc_style = {
 class ItemEditor extends React.Component {
     generateItemValue(item_type, value_index) {
         let field;
-        if (this.props.model.item_type["value"+value_index].type == META_VALUE_TYPES.FLAG) {
+        if (this.props.model.item_type["value"+value_index].type === META_VALUE_TYPES.FLAG) {
             field = (
                 <FlagSelector 
                     id={"value"+value_index}
@@ -233,7 +229,7 @@ class ItemEditor extends React.Component {
                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
             )
         }
-        else if (this.props.model.item_type["value"+value_index].type == META_VALUE_TYPES.MULTI_FLAGS) {
+        else if (this.props.model.item_type["value"+value_index].type === META_VALUE_TYPES.MULTI_FLAGS) {
             field = (
                 <MultiFlagSelector 
                     id={"value"+value_index}
@@ -243,15 +239,15 @@ class ItemEditor extends React.Component {
                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
             )
         }
-        else if (this.props.model.item_type["value"+value_index].type == META_VALUE_TYPES.VNUM && this.props.model.item_type["value"+value_index].type_enum !== null) {
+        else if (this.props.model.item_type["value"+value_index].type === META_VALUE_TYPES.VNUM && this.props.model.item_type["value"+value_index].type_enum !== null) {
             let data_source;
-            if (this.props.model.item_type["value"+value_index].type_enum == META_VNUM_TYPES.OBJECT) {
+            if (this.props.model.item_type["value"+value_index].type_enum === META_VNUM_TYPES.OBJECT) {
                 data_source = this.props.items;
             }
-            else if (this.props.model.item_type["value"+value_index].type_enum == META_VNUM_TYPES.ROOM) {
+            else if (this.props.model.item_type["value"+value_index].type_enum === META_VNUM_TYPES.ROOM) {
                 data_source = this.props.rooms;
             }
-            else if (this.props.model.item_type["value"+value_index].type_enum == META_VNUM_TYPES.MOB) {
+            else if (this.props.model.item_type["value"+value_index].type_enum === META_VNUM_TYPES.MOB) {
                 data_source = this.props.mobs;
             }
             field = (

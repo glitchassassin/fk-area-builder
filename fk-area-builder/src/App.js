@@ -3,14 +3,12 @@ import './App.css';
 import MainFrame from './main_frame';
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar';
-import {Area} from './Models/model_templates';
 import populateArea from './Models/loader';
-import {AreaValidator} from './Models/model_validator';
 import GoogleDriveMenu from './tab_panels/GoogleDriveMenu';
-import Warning from 'material-ui-icons/Warning';
 import { withStyles, withTheme } from 'material-ui/styles';
 import Toolbar from 'material-ui/Toolbar';
 import MenuIcon from 'material-ui-icons/Menu';
+import Icon from 'material-ui/Icon';
 import Typography from 'material-ui/Typography';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { connect } from 'react-redux';
@@ -30,9 +28,6 @@ const styles = {
     marginRight: 20,
   },
 };
-//console.log(Storage);
-
-var area_validator = new AreaValidator()
 
 class App extends Component {
   render() {
@@ -55,11 +50,11 @@ class AppHeader extends Component {
     loaded: false,
     menuOpen: false,
     menuAnchor: null,
-    status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.theme.palette.alternateTextColor} /></IconButton>
+    status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Icon style={{color:this.props.theme.palette.primary.contrastText}}>warning</Icon></IconButton>
   };
   componentWillReceiveProps(nextProps) {
-    if (nextProps.area !== this.state.area) {
-      this.setState({ status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Warning color={this.props.theme.palette.alternateTextColor} /></IconButton> });
+    if (nextProps.state !== this.props.state) {
+      this.setState({ status: <IconButton id="unsaved" tooltip="Unsaved Changes"><Icon style={{color:this.props.theme.palette.primary.contrastText}}>warning</Icon></IconButton> });
     }
   }
   componentDidMount() {
@@ -78,7 +73,6 @@ class AppHeader extends Component {
   closeMenu = () => (this.setState({menuOpen: false}))
   
   render() {
-    console.log(this);
     return (
       <div className={this.props.classes.root}>
         <AppBar position="static">
@@ -106,6 +100,7 @@ class AppHeader extends Component {
 AppHeader = connect(
   (state) => {
     return {
+      state: state,
       title: state.area.name
     };
   },
@@ -127,6 +122,7 @@ var ThemedAppHeader = withStyles(styles)(withTheme()(AppHeader));
 
 export default App;
 
+// eslint-disable-next-line
 var testArea = `
 #AREA Roseportal House~
 
@@ -581,7 +577,7 @@ S
 #$
 
 `
-
+// eslint-disable-next-line
 var testArea2 = `
                                                                      
                                                                      

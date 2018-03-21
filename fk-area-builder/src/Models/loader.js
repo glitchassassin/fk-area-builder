@@ -9,7 +9,6 @@ import {
     CoinResetActions, MobSpecialActions, QuestLogActions, ProgramActions
 } from './actionTypes'
 var flags = require("./flags.js");
-var models = require("./model_templates.js");
 var uuid = require("uuid/v4");
 
 
@@ -380,10 +379,10 @@ class Loader {
             actions.push(setProp("size", get_code(matches[12], flags.ITEM_SIZES)));
             for (let vm of [["value0", 13],["value1", 14],["value2", 15],["value3", 16],["value4", 17]]) {
                 let value;
-                if (item_type[vm[0]].type==flags.META_VALUE_TYPES.FLAG) {
+                if (item_type[vm[0]].type===flags.META_VALUE_TYPES.FLAG) {
                     value = get_code(matches[vm[1]], item_type[vm[0]].type_enum)
                 }
-                else if (item_type[vm[0]].type==flags.META_VALUE_TYPES.MULTI_FLAGS) {
+                else if (item_type[vm[0]].type===flags.META_VALUE_TYPES.MULTI_FLAGS) {
                     value = get_codes(matches[vm[1]], item_type[vm[0]].type_enum)
                 }
                 else {
@@ -580,10 +579,18 @@ class Loader {
                 last_reset = reset_id;
             }
             else if (matches[1] === "R") {
-                actions.push({ type:DoorResetActions.ADD })
-                actions.push({ type:DoorResetActions.SET_PROP, key:"uuid", value:reset_id });
-                actions.push({ type:DoorResetActions.SET_PROP, key:"room", value:matches[3] });
-                actions.push({ type:DoorResetActions.SET_PROP, key:"last_door", value:matches[4] });
+                actions.push({ type:RandomDoorResetActions.ADD })
+                actions.push({ type:RandomDoorResetActions.SET_PROP, key:"uuid", value:reset_id });
+                actions.push({ type:RandomDoorResetActions.SET_PROP, key:"room", value:matches[3] });
+                actions.push({ type:RandomDoorResetActions.SET_PROP, key:"last_door", value:matches[4] });
+                last_reset = reset_id;
+            }
+            else if (matches[1] === "B") {
+                actions.push({ type:RoomResetActions.ADD })
+                actions.push({ type:RoomResetActions.SET_PROP, key:"uuid", value:reset_id });
+                actions.push({ type:RoomResetActions.SET_PROP, key:"room", value:matches[3] });
+                actions.push({ type:RoomResetActions.SET_PROP, key:"bit_type", value:get_code(matches[4],flags.RESET_BIT_CODES) });
+                actions.push({ type:RoomResetActions.SET_PROP, key:"flag", value:get_code(matches[5],flags.ROOM_FLAGS) });
                 last_reset = reset_id;
             }
         }
@@ -669,7 +676,6 @@ class Loader {
 function populateArea(area, dispatch) {
     if (area) {
         let loader = new Loader(area)
-        console.log("Building store...")
         loader.buildStore(dispatch);
     }
 }

@@ -21,10 +21,6 @@ import {
 }
 from '../Models/flags';
 import {
-    QuestLog,
-}
-from '../Models/model_templates'
-import {
     FlagSelector,
 }
 from '../UIComponents/FlagSelectors'
@@ -33,7 +29,6 @@ import {
 }
 from '../UIComponents/GenericEditors'
 import {
-    AreaValidator,
     QuestLogValidator
 }
 from '../Models/model_validator'

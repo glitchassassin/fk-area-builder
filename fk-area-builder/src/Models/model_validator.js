@@ -128,7 +128,6 @@ class StateValidator extends ModelValidator {
             can_train_level:        new ModelArrayValidator(new TrainLevelValidator()),
             can_train_statistic:    new ModelArrayValidator(new TrainStatisticValidator()),
             can_train_feat:         new ModelArrayValidator(new TrainFeatValidator()),
-            programs:               new ModelArrayValidator(new ProgramValidator()),
             mob_resets:             new ModelArrayValidator(new MobResetValidator()),
             shop:                   new ModelArrayValidator(new ShopValidator()),
             repairs:                new ModelArrayValidator(new RepairRechargeValidator()),
@@ -312,6 +311,7 @@ class ItemValidator extends ModelValidator {
             ldesc:              new Field({field_name:"ldesc",              in_flags:null,                  optional:false}),
             keywords:           new Field({field_name:"keywords",           in_flags:null,                  optional:false}),
             action_description: new Field({field_name:"action_description", in_flags:null,                  optional:true,     extra_validator: (value) => {
+                // eslint-disable-next-line
                 if (value != "") {
                     return[`action_description is not used and should be empty`];
                 }

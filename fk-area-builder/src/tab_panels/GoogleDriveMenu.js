@@ -1,7 +1,6 @@
 import React from 'react';
 import Storage from '../Models/Storage';
 import AreaExporter from '../Models/are_export';
-import Popover from 'material-ui/Popover';
 import Menu, {MenuItem} from 'material-ui/Menu';
 import Dialog from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
@@ -43,7 +42,7 @@ class GoogleDriveMenu extends React.Component {
             console.log(state_validator.validate(this.props.area))
             return;
         }
-        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
+        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>);
         this.storage.didFileChange((changed)=>{
             if (changed) {
                 this.setState({confirm_open:true})
@@ -66,7 +65,7 @@ class GoogleDriveMenu extends React.Component {
             console.log("Saving new file", filename, folder);
             let contents = area_exporter.renderArea(this.props.area);
             this.storage.uploadNewFile(filename, folder, contents, ()=>(this.finishSave()));
-            this.props.setStatus(<IconButton id="loading" tooltip="Saving"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+            this.props.setStatus(<IconButton id="loading" tooltip="Saving"><CircularProgress style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>)
             this.setState({saving: true});
         })
     }
@@ -76,7 +75,7 @@ class GoogleDriveMenu extends React.Component {
             console.log(state_validator.validate(this.props.area))
             return;
         }
-        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
+        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>);
         let contents = area_exporter.renderArea(this.props.area);
         if (this.storage.active_file_id !== "") {
             this.storage.updateCurrentFile(contents, ()=>(this.finishSave()));
@@ -88,7 +87,7 @@ class GoogleDriveMenu extends React.Component {
             this.finishLoad(contents);
         }
         this.storage.isDownloading = ()=>{
-            this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>);
+            this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>);
         }
         this.storage.AuthorizeAndPick();
     }
@@ -96,7 +95,7 @@ class GoogleDriveMenu extends React.Component {
         this.storage.downloadFile(null,(contents) => {
             this.finishLoad(contents);
         });
-        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+        this.props.setStatus(<IconButton id="loading" tooltip="Loading"><CircularProgress style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>)
     }
     closeConfirm(callback) {
         this.setState({confirm_open: false})
@@ -107,7 +106,7 @@ class GoogleDriveMenu extends React.Component {
     finishSave() {
         this.props.onFileLoad();
         this.setState({file_active: true});
-        this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+        this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>)
     }
     finishLoad(contents) {
         try {
@@ -117,26 +116,22 @@ class GoogleDriveMenu extends React.Component {
             console.trace();
             console.log(e);
         }
-        this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check color={this.props.muiTheme.palette.alternateTextColor} /></IconButton>)
+        this.props.setStatus(<IconButton id="saved" tooltip="No unsaved changes"><Check style={{color:this.props.theme.palette.primary.contrastText}} /></IconButton>)
     }
     
     render() {
         return (
             <React.Fragment>
-                <Popover
+                <Menu
                     open={this.props.open}
                     anchorEl={this.props.anchor}
-                    anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-                    targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                    onRequestClose={this.props.closeMenu} >
-                    <Menu>
-                        <MenuItem onClick={(e)=>(this.newArea())} primaryText="New" />
-                        <Divider/>
-                        <MenuItem onClick={(e)=>(this.saveDrive())} primaryText="Save" disabled={this.storage.active_file_id === ""} />
-                        <MenuItem onClick={(e)=>(this.saveAsDrive())} primaryText="Save As..." />
-                        <MenuItem onClick={(e)=>(this.loadDrive())} primaryText="Load" />
-                    </Menu>
-                </Popover>
+                    onClose={this.props.closeMenu} >
+                    <MenuItem onClick={(e)=>(this.newArea())}>New</MenuItem>
+                    <Divider/>
+                    <MenuItem onClick={(e)=>(this.saveDrive())} disabled={this.storage.active_file_id === ""}>Save</MenuItem>
+                    <MenuItem onClick={(e)=>(this.saveAsDrive())}>Save As...</MenuItem>
+                    <MenuItem onClick={(e)=>(this.loadDrive())}>Load</MenuItem>
+                </Menu>
                 <Dialog 
                     open={this.state.error_open} 
                     actions={<Button label="Okay" primary={true} keyboardFocused={true} onClick={this.closeErrors} />}

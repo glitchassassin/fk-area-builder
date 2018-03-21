@@ -1,5 +1,4 @@
 import {combineReducers} from 'redux'
-import {flags} from './flags'
 import {
     AreaActions, JusticeSystemActions, RoomActions, ExitActions, 
     ExtraDescriptionActions, ItemApplyActions, ItemActions, MobActions,
@@ -94,6 +93,7 @@ const rooms = generateDefaultListReducer(RoomActions, Room);
 const quest_log = generateDefaultListReducer(QuestLogActions, QuestLog);
 const exits = generateDefaultListReducer(ExitActions, Exit);
 const door_resets = generateDefaultListReducer(DoorResetActions, DoorReset);
+const random_door_resets = generateDefaultListReducer(RandomDoorResetActions, RandomDoorReset);
 const room_resets = generateDefaultListReducer(RoomResetActions, RoomReset);
 const items = generateDefaultListReducer(ItemActions, Item);
 const item_applies = generateDefaultListReducer(ItemApplyActions, ItemApply);
@@ -163,10 +163,16 @@ function ui_state(state=new UiState(), action) {
             return { ...state, item_confirm_delete_open:false }
         case UiStateActions.SET_CURRENT_ITEM:
             return { ...state, item_current_item:action.value }
-        case UiStateActions.SET_MAIN_CURRENT_TAB:
-            return { ...state, main_current_tab:action.value }
         case ItemActions.ADD:
             return { ...state, item_current_item:action.value }
+        case UiStateActions.SET_MAIN_CURRENT_TAB:
+            return { ...state, main_current_tab:action.value }
+        case UiStateActions.SET_ROOM_CURRENT_TAB:
+            return { ...state, room_current_tab:action.value }
+        case UiStateActions.SET_ITEM_CURRENT_TAB:
+            return { ...state, item_current_tab:action.value }
+        case UiStateActions.SET_MOB_CURRENT_TAB:
+            return { ...state, mob_current_tab:action.value }
         default:
             return state
     }
@@ -238,6 +244,7 @@ const subReducers = combineReducers({
     // Rooms
     rooms,                  // Default: Array
     exits,                  // Default: Array // Contains reference to a Room UUID
+    random_door_resets,     // Default: Array // Contains reference to a Room UUID
     door_resets,            // Default: Array // Contains reference to a Room UUID
     room_resets,            // Default: Array // Contains reference to a Room UUID
     // Items

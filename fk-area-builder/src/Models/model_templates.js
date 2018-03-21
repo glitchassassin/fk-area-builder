@@ -17,6 +17,9 @@ class UiState extends Object {
             item_confirm_delete_open:   false,
             item_current_item:          null,
             main_current_tab:           0,
+            room_current_tab:           0,
+            item_current_tab:           0,
+            mob_current_tab:           0,
         }, fields))
     }
 }

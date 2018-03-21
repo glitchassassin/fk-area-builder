@@ -32,8 +32,8 @@ class MainFrame extends React.Component {
             <AppBar position="static">
                 <Tabs value={this.props.current_tab} onChange={this.props.setTab}>
                     <Tab label="General" />
-                    {/*<Tab label={this.props.room_label} />
-                    <Tab label={this.props.mob_label} />
+                    <Tab label={this.props.room_label} />
+                    {/*<Tab label={this.props.mob_label} />
                     <Tab label={this.props.item_label} />
                     <Tab label="Quests" />
                     <Tab label="Area Code" />

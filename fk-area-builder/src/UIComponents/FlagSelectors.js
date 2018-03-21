@@ -1,29 +1,19 @@
 import React from 'react';
-import {MenuItem} from 'material-ui/Menu';
+import Menu, {MenuItem} from 'material-ui/Menu';
+import Popover from 'material-ui/Popover';
 import Select from 'material-ui/Select';
 import TextField from 'material-ui/TextField';
 import ListSubheader from 'material-ui/List/ListSubheader';
-import {ListItem, ListItemText} from 'material-ui/List';
+import {ListItemText} from 'material-ui/List';
 import Autosuggest from 'react-autosuggest';
 import {equal_recursively} from '../Models/model';
 import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types';
-
-const ldesc_style = {
-    color: "rgba(180,180,180,1)",
-    lineHeight: "15px",
-    fontStyle: "italic",
-    padding: "5px",
-    display: "inline-block",
-    whiteSpace: "normal"
-}
 
 class FlagWithCategorySelector extends React.Component {
     handleChange(event) {
-        console.log(event)
         this.props.onChange({target:{id:this.props.id}}, this.props.flags[event.target.target.value]);
     }
     
@@ -68,9 +58,10 @@ class FlagWithCategorySelector extends React.Component {
             <FormControl error={!!this.validate()}>
                 <InputLabel>{this.props.label}</InputLabel>
                 <Select
-                    value={this.props.value?this.props.value.code:null}
+                    value={this.props.value?this.props.value.code:""}
                     onChange={this.handleChange.bind(this)}
-                    fullWidth={this.props.fullWidth}
+                    renderValue={(v)=>(this.props.flags[v].sdesc)}
+                    fullWidth={true}
                 >
                     {this.generateItems(this.props.flags)}
                 </Select>
@@ -80,12 +71,11 @@ class FlagWithCategorySelector extends React.Component {
     }
 }
 FlagWithCategorySelector.contextTypes = {
-  validator: PropTypes.function
+  validator: PropTypes.object
 };
 
 class FlagSelector extends React.Component {
     handleChange(event) {
-        console.log(event.target);
         this.props.onChange({target:{id:this.props.id}}, this.props.flags[event.target.value]);
     }
     
@@ -99,14 +89,19 @@ class FlagSelector extends React.Component {
                 return "";
             }
             if (flags[key].ldesc) {
-                return (<MenuItem key={flags[key].code} value={flags[key].code} secondary={flags[key].ldesc}>{flags[key].sdesc}</MenuItem>)
+                return (<MenuItem 
+                    key={flags[key].code} 
+                    value={flags[key].code}>
+                    <ListItemText 
+                        primary={flags[key].sdesc}
+                        secondary={flags[key].ldesc} />
+                </MenuItem>)
             }
             return (<MenuItem key={flags[key].code} value={flags[key].code}>{flags[key].sdesc}</MenuItem>)
         }))
     }
     
     validate() {
-        console.log(this.context)
         if (this.context.validator) {
             return this.context.validator[this.props.id].validate(this.props.value).join("")
         }
@@ -114,15 +109,14 @@ class FlagSelector extends React.Component {
     }
     
     render() {
-        console.log(this.props);
-        console.log(this.generateItems(this.props.flags));
         return (
-            <FormControl fullWidth={this.props.fullWidth} error={!!this.validate()}>
+            <FormControl fullWidth={true} error={!!this.validate()}>
                 <InputLabel>{this.props.label}</InputLabel>
                 <Select
                     value={this.props.value?this.props.value.code:""}
                     onChange={this.handleChange.bind(this)}
-                    fullWidth={this.props.fullWidth}
+                    renderValue={(v)=>(this.props.flags[v].sdesc)}
+                    fullWidth={true}
                 >
                     {this.generateItems(this.props.flags)}
                 </Select>
@@ -132,13 +126,13 @@ class FlagSelector extends React.Component {
     }
 }
 FlagSelector.contextTypes = {
-  validator: PropTypes.function
+  validator: PropTypes.object
 };
 
 class MultiFlagSelector extends FlagSelector {
     handleChange(event) {
         console.log(event)
-        this.props.onChange({target:{id:this.props.id}}, this.props.flags[event.target.value]);
+        this.props.onChange({target:{id:this.props.id}}, event.target.value.map(v=>this.props.flags[v]));
     }
     
     shouldComponentUpdate(newProps) {
@@ -151,7 +145,13 @@ class MultiFlagSelector extends FlagSelector {
                 return "";
             }
             if (flags[key].ldesc) {
-                return (<MenuItem key={flags[key].code} value={flags[key].code} checked={values && values.indexOf(flags[key]) > -1}>{flags[key].sdesc} secondary={flags[key].ldesc}</MenuItem>)
+                return (<MenuItem 
+                    key={flags[key].code} 
+                    value={flags[key].code} >
+                    <ListItemText 
+                        primary={flags[key].sdesc}
+                        secondary={flags[key].ldesc} />
+                </MenuItem>)
             }
             return (<MenuItem key={flags[key].code} value={flags[key].code} checked={values && values.indexOf(flags[key]) > -1}>{flags[key].sdesc}</MenuItem>)
         })
@@ -166,13 +166,14 @@ class MultiFlagSelector extends FlagSelector {
     
     render() {
         return (
-            <FormControl error={!!this.validate()}>
+            <FormControl fullWidth={true} error={!!this.validate()}>
                 <InputLabel>{this.props.label}</InputLabel>
                 <Select
                     multiple={true}
-                    value={this.props.value?this.props.value.code:null}
+                    value={this.props.value.map(v=>v.code)}
                     onChange={this.handleChange.bind(this)}
-                    fullWidth={this.props.fullWidth}
+                    fullWidth={true}
+                    renderValue={(v)=>(v.map(flag=>this.props.flags[flag].sdesc).join(", "))}
                 >
                     {this.generateItems(this.props.flags, this.props.value)}
                 </Select>
@@ -182,7 +183,7 @@ class MultiFlagSelector extends FlagSelector {
     }
 }
 MultiFlagSelector.contextTypes = {
-  validator: PropTypes.function
+  validator: PropTypes.object
 };
 
 class VnumAutoComplete extends React.Component {
@@ -194,7 +195,6 @@ class VnumAutoComplete extends React.Component {
     }
     
     updateInput(event, v) {
-        console.log(event, v)
         this.props.onChange({target:{id:this.props.id}}, v.newValue);
     }
     
@@ -232,29 +232,41 @@ class VnumAutoComplete extends React.Component {
             </MenuItem>
         );
     }
-    renderSuggestionsContainer(options) {
-        const { containerProps, children } = options;
-        return (
-            <Paper {...containerProps} square>
-                {children}
-            </Paper>
-        );
+    renderSuggestionsContainer = ({ containerProps, children }) => {
+        if (this.autosuggest) {
+            console.log(this.autosuggest.input)
+            console.log(containerProps)
+            return (
+                <Popover 
+                    disableAutoFocus
+                    disableEnforceFocus
+                    disableRestoreFocus
+                    hideBackdrop
+                    anchorEl={this.autosuggest.input} 
+                    anchorOrigin={{vertical:"bottom",horizontal:"left"}}
+                    open={containerProps.className && containerProps.className.indexOf("suggestionsContainerOpen")!=-1} 
+                    {...containerProps} >
+                    {children}
+                </Popover>
+            );
+        }
     }
     
     render() {
         const { classes } = this.props;
         return (
-            <FormControl fullWidth={this.props.fullWidth} error={!!this.validate()}>
+            <FormControl fullWidth={true} error={!!this.validate()}>
                 <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
                 <Autosuggest 
+                    ref={(autosuggest)=>(this.autosuggest = autosuggest)}
                     theme={{
                         container: classes.container,
                         suggestionsContainerOpen: classes.suggestionsContainerOpen,
                         suggestionsList: classes.suggestionsList,
                         suggestion: classes.suggestion,
                     }}
-                    fullWidth={this.props.fullWidth}
-                    getSuggestionValue={item=>item.vnum}
+                    renderInputComponent={this.renderInput}
+                    suggestions={this.state.suggestions}
                     onSuggestionsFetchRequested={({ value }) => {
                         this.setState({
                             suggestions: this.get_suggestions(value)
@@ -266,17 +278,16 @@ class VnumAutoComplete extends React.Component {
                         })
                     }}
                     shouldRenderSuggestions={()=>(true)}
-                    renderInputComponent={this.renderInput}
                     renderSuggestionsContainer={this.renderSuggestionsContainer}
+                    getSuggestionValue={item=>item.vnum}
                     renderSuggestion={this.renderSuggestion}
                     inputProps={{
                         classes,
                         id:this.props.id,
-                        fullWidth:this.props.fullWidth,
+                        fullWidth:true,
                         value:this.props.value,
                         onChange:this.updateInput.bind(this)
                     }}
-                    suggestions={this.state.suggestions}
                 />
                 <FormHelperText>{this.validate()}</FormHelperText>
             </FormControl>
@@ -284,7 +295,7 @@ class VnumAutoComplete extends React.Component {
     }
 }
 VnumAutoComplete.contextTypes = {
-  validator: PropTypes.function
+  validator: PropTypes.object
 };
 VnumAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired
@@ -296,11 +307,11 @@ const styles = theme => ({
     marginTop: "16px",
   },
   suggestionsContainerOpen: {
-    position: 'absolute',
-    zIndex: 1,
+    //position: 'absolute',
+    zIndex: 1500,
     marginTop: theme.spacing.unit,
-    left: 0,
-    right: 0,
+    //left: 0,
+    //right: 0,
   },
   suggestion: {
     display: 'block',
@@ -318,12 +329,10 @@ class ValidatedTextField extends React.Component {
         return !equal_recursively(this.props.value, newProps.value)
     }
     handleChange(event, value) {
-        console.log(event, value)
         this.props.onChange({target:{id:this.props.id}}, event.target.value)
     }
     
     validate() {
-        console.log(this.props)
         if (this.context.validator) {
             return this.context.validator[this.props.id].validate(this.props.value).join("")
         }
@@ -331,20 +340,20 @@ class ValidatedTextField extends React.Component {
     }
     
     render() {
+        const { onChange, id, ...other } = this.props
         return (
             <TextField 
                 error={!!this.validate()}
-                label={this.props.label}
-                value={this.props.value} 
-                fullWidth={this.props.fullWidth}
                 autoComplete="off" 
+                fullWidth={true}
                 onChange={this.handleChange.bind(this)}
-                helperText={this.validate()} />
+                helperText={this.validate()} 
+                {...other} />
         )
     }
 }
 ValidatedTextField.contextTypes = {
-  validator: PropTypes.function
+  validator: PropTypes.object
 };
 
 export {FlagWithCategorySelector,FlagSelector,MultiFlagSelector,VnumAutoComplete,ValidatedTextField}

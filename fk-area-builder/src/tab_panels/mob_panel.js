@@ -13,7 +13,6 @@ import TextField from 'material-ui/TextField';
 import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import {FormControlLabel} from 'material-ui/Form'
-import {equal_recursively} from '../Models/model'
 import { connect } from 'react-redux';
 import { 
     MobActions, UiStateActions, ShopActions, RepairRechargeActions, 
@@ -60,17 +59,6 @@ import {
 }
 from '../Models/flags';
 import {
-    SimpleMob,
-    UniqueMob,
-    TrainSkill,
-    TrainWeaponSkill,
-    TrainSpell,
-    TrainLevel,
-    TrainStatistic,
-    TrainFeat,
-    Shop,
-    RepairRecharge,
-    MobReset,
     EquipmentReset,
     CoinReset,
     vnum_sort
