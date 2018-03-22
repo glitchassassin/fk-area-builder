@@ -2892,9 +2892,10 @@ const ITEM_CONTAINER_FLAGS = {
     })
 };
 const ITEM_BODY_TYPES = {
-    HUMANOID: new Flag({
-        code: "0",
-        sdesc: "BODY_TYPE_HUMANOID"
+    BODY_HUMANOID: new Flag({
+        code: "BODY_HUMANOID",
+        bits: "0",
+        sdesc: "BODY_HUMANOID"
     })
 };
 const ITEM_ARMOR_TYPES = {
@@ -4076,7 +4077,7 @@ const ITEM_TYPES = {
         },
         value3: {
             type: META_VALUE_TYPES.FLAG,
-            type_enum: null,
+            type_enum: MAGIC_ITEM_SPELLS,
             ldesc: "spell number",
         },
         value4: {
@@ -4105,7 +4106,7 @@ const ITEM_TYPES = {
             ldesc: "charges left",
         },
         value3: {
-            type: META_VALUE_TYPES.POS_INT,
+            type: META_VALUE_TYPES.FLAG,
             type_enum: MAGIC_ITEM_SPELLS,
             ldesc: "spell number",
         },

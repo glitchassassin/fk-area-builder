@@ -2,14 +2,12 @@ import React from 'react';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
-import red from 'material-ui/colors/red';
-import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import {Card, CardText} from 'material-ui/Card';
-import Dialog from 'material-ui/Dialog';
+import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
+import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
+import Card, {CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import Switch from 'material-ui/Switch';
-import TextField from 'material-ui/TextField';
+import Grid from 'material-ui/Grid';
 import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import {FormControlLabel} from 'material-ui/Form'
@@ -21,13 +19,11 @@ import {
     TrainStatisticActions, TrainFeatActions, TrainLangActions, MobSpecialActions
 } from '../Models/actionTypes';
 
-import {
-    Table,
+import Table, {
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableHead,
+    TableCell,
     TableRow,
-    TableRowColumn,
 }
 from 'material-ui/Table';
 import {
@@ -64,7 +60,7 @@ import {
     vnum_sort
 }
 from '../Models/model_templates'
-import {FlagWithCategorySelector,FlagSelector,MultiFlagSelector,VnumAutoComplete} from '../UIComponents/FlagSelectors'
+import {FlagWithCategorySelector,FlagSelector,MultiFlagSelector,VnumAutoComplete,ValidatedTextField} from '../UIComponents/FlagSelectors'
 import {Validate} from '../UIComponents/GenericEditors'
 import {
     MobValidator,
@@ -82,7 +78,7 @@ import {
     TrainLangValidator,
     MobSpecialValidator
 } from '../Models/model_validator'
-import {TrapResetEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
+import {TrapResetEditor, ProgramsEditor, EditorDialog} from '../UIComponents/GenericEditors'
 
 const uuid = require('uuid/v4');
 
@@ -117,94 +113,120 @@ class MobPanel extends React.Component {
     generateItems() {
         return this.props.mobs.sort(vnum_sort).map((mob, index) => (
             <TableRow key={index}>
-                <TableRowColumn width={100}>
+                <TableCell padding="dense" width={"150px"}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(mob.uuid))} style={icon_button_style}>
-                        <Icon className="material-icons">mode_edit</Icon>
+                        <Icon>mode_edit</Icon>
                     </IconButton>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(mob.uuid))} style={icon_button_style}>
-                        <Icon className="material-icons" color={red[900]}>delete_forever</Icon>
+                        <Icon color="error">delete_forever</Icon>
                     </IconButton>
                     {mob_validator.validate_state(this.props.state, mob).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(mob.uuid))} style={icon_button_style}>
-                        <Icon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</Icon>
+                        <Icon color="error">error</Icon>
                     </IconButton>
                     )}
-                </TableRowColumn>
-                <TableRowColumn width={100}>
+                </TableCell>
+                <TableCell padding="dense" width={"150px"}>
                     
                     {mob.vnum}
-                </TableRowColumn>
-                <TableRowColumn>
-                    <Paper style={{width:"1em", height:"1em", marginRight:"0.5em", textAlign:"center", display:"inline-block", color:this.props.muiTheme.palette.disabledColor}} zDepth={1} circle={true}>{mob.unique ? "U": "S"}</Paper>
+                </TableCell>
+                <TableCell padding="dense">
+                    <Paper 
+                        style={{
+                            width:"1.5em", 
+                            height:"1.5em", 
+                            borderRadius:"50%", 
+                            marginRight:"0.5em", 
+                            textAlign:"center", 
+                            display:"inline-block", 
+                            color:this.props.theme.palette.grey["800"], 
+                            backgroundColor:this.props.theme.palette.grey["200"]
+                        }} 
+                        square={false}>
+                        {mob.unique ? "U": "S"}
+                    </Paper>
                     {mob.sdesc}
-                </TableRowColumn>
-                <TableRowColumn>{mob.level}</TableRowColumn>
-                <TableRowColumn>{mob.sex ? mob.sex.code : ""}</TableRowColumn>
-                <TableRowColumn>{mob.race ? mob.race.code : ""}</TableRowColumn>
-                <TableRowColumn>{mob.mob_class ? mob.mob_class.code : ""}</TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">{mob.level}</TableCell>
+                <TableCell padding="dense">{mob.sex ? mob.sex.code : ""}</TableCell>
+                <TableCell padding="dense">{mob.race ? mob.race.code : ""}</TableCell>
+                <TableCell padding="dense">{mob.mob_class ? mob.mob_class.code : ""}</TableCell>
             </TableRow>
             ))
     }
 
     render() {
         let mob = this.get_mob_by_uuid(this.props.ui_state.mob_current_mob)
-        const confirmActions = [
-            <Button
-                label="Cancel"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.props.cancelDelete}
-            />,
-            <Button
-                label="Delete"
-                primary={true}
-                id={this.props.ui_state.mob_current_mob} // So confirmDelete can pull the correct uuid
-                onClick={this.props.confirmDelete}
-            />,
-            ]
-        const errorsActions = [
-            <Button
-                label="Done"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.props.closeErrors}
-            />
-            ]
         return (
             <div>
             <Table>
-                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableHead>
                     <TableRow>
-                        <TableHeaderColumn width={100}>Edit</TableHeaderColumn>
-                        <TableHeaderColumn width={100}>vnum</TableHeaderColumn>
-                        <TableHeaderColumn>Short description</TableHeaderColumn>
-                        <TableHeaderColumn>Level</TableHeaderColumn>
-                        <TableHeaderColumn>Sex</TableHeaderColumn>
-                        <TableHeaderColumn>Race</TableHeaderColumn>
-                        <TableHeaderColumn>Class</TableHeaderColumn>
+                        <TableCell padding="dense" width={"150px"}>Edit</TableCell>
+                        <TableCell padding="dense" width={"150px"}>vnum</TableCell>
+                        <TableCell padding="dense">Short description</TableCell>
+                        <TableCell padding="dense">Level</TableCell>
+                        <TableCell padding="dense">Sex</TableCell>
+                        <TableCell padding="dense">Race</TableCell>
+                        <TableCell padding="dense">Class</TableCell>
                     </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={false}>
+                </TableHead>
+                <TableBody>
                     {this.generateItems()}
                     <TableRow>
-                        <TableRowColumn width={100}>
+                        <TableCell padding="dense" width={"150px"}>
                             <IconButton tooltip="Add" onClick={this.handleNew}>
                                 <Icon>add_box</Icon>
                             </IconButton>
-                        </TableRowColumn>
+                        </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
             {mob !== undefined &&
             <React.Fragment>
-                <MobEditor open={this.props.ui_state.mob_editor_open} />
-                <Dialog open={this.props.ui_state.mob_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${mob.sdesc}?`}>{`Are you sure you want to delete mob ${mob.vnum} (${mob.sdesc})? You cannot undo this action!`}</Dialog>
-                <Dialog open={this.props.ui_state.mob_errors_open} actions={errorsActions} modal={false} title={`Errors for mob ${mob.vnum}`}>
-                    <List>
-                        {mob_validator.validate_state(this.props.state, mob).map((error, index) => (
-                            <ListItem key={index} primaryText={error} leftIcon={<Icon className="material-icons" color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
-                        ))}
-                    </List>
+                <MobEditor />
+                <Dialog 
+                    open={this.props.ui_state.mob_confirm_delete_open} 
+                    modal={false} >
+                    <DialogTitle>{`Delete ${mob.sdesc}?`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>{`Are you sure you want to delete mob ${mob.vnum} (${mob.sdesc})? You cannot undo this action!`}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            color="primary"
+                            keyboardFocused={true}
+                            onClick={this.props.cancelDelete}>
+                        Cancel
+                        </Button>
+                        <Button
+                            color="primary"
+                            onClick={()=>(this.props.confirmDelete(this.props.ui_state.mob_current_mob))}>
+                        Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog 
+                    open={this.props.ui_state.mob_errors_open} >
+                    <DialogTitle>{`Errors for mob ${mob.vnum}`}</DialogTitle>
+                    <DialogContent>
+                        <List>
+                            {mob_validator.validate_state(this.props.state, mob).map((error, index) => (
+                                <ListItem key={index} >
+                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
+                                    <ListItemText primary={error} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            color="primary"
+                            keyboardFocused={true}
+                            onClick={this.props.closeErrors}>
+                        Done
+                        </Button>
+                    </DialogActions>
                 </Dialog>
             </React.Fragment>
             }
@@ -249,251 +271,337 @@ const paper_style = {
 
 class MobEditor extends React.Component {
     render() {
-        const actions = [
-        <Button label="Done" primary={true} onClick={this.props.handleClose} />,
-        ];
-        var uniqueTab = (this.props.mob.unique ? (
-            <React.Fragment>
-                <Validate validator={mob_validator}>
-                <MultiFlagSelector 
-                    id="affect_flags" 
-                    label="Act Flags" 
-                    flags={MOB_AFFECTS} 
-                    value={this.props.mob.affect_flags} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <FlagSelector 
-                    id="virtual_armor_type" 
-                    label="Virtual Armor Type" 
-                    flags={ITEM_ARMOR_TYPES} 
-                    value={this.props.mob.virtual_armor_type} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <FlagSelector 
-                    id="virtual_armor_material" 
-                    label="Virtual Armor Material" 
-                    flags={ITEM_MATERIALS} 
-                    value={this.props.mob.virtual_armor_material} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <FlagSelector 
-                    id="alignment" 
-                    label="Alignment" 
-                    flags={MOB_ALIGNMENTS} 
-                    value={this.props.mob.alignment} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="STR" 
-                    id="str" 
-                    value={this.props.mob.str} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="INT" 
-                    id="int" 
-                    value={this.props.mob.int} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="WIS" 
-                    id="wis" 
-                    value={this.props.mob.wis} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="DEX" 
-                    id="dex" 
-                    value={this.props.mob.dex} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="CON" 
-                    id="con" 
-                    value={this.props.mob.con} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="CHA" 
-                    id="cha" 
-                    value={this.props.mob.cha} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="LCK" 
-                    id="lck" 
-                    value={this.props.mob.lck} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <MultiFlagSelector 
-                    id="ris_resistant" 
-                    label="Resistant" 
-                    flags={MOB_RIS} 
-                    value={this.props.mob.ris_resistant} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <MultiFlagSelector 
-                    id="ris_immune" 
-                    label="Immune" 
-                    flags={MOB_RIS} 
-                    value={this.props.mob.ris_immune} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                <MultiFlagSelector 
-                    id="ris_susceptible" 
-                    label="Susceptible" 
-                    flags={MOB_RIS} 
-                    value={this.props.mob.ris_susceptible} 
-                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                </Validate>
-                <Button
-                    variant="raised"
-                    id="makeSimpleMob" 
-                    label="Convert to Simple Mob?" 
-                    primary={true} 
-                    keyboardFocused={true} 
-                    onClick={()=>(this.props.convertToSimple(this.props.mob.uuid))}/>
-            </React.Fragment>
-            ) : (
-            <Button
-                variant="raised" 
-                id="makeUniqueMob" 
-                label="Convert to Unique Mob?" 
-                primary={true} 
-                keyboardFocused={true} 
-                onClick={()=>(this.props.convertToUnique(this.props.mob.uuid))}/>
-        ))
         return (
-            <Dialog title={`Edit ${this.props.mob.unique ? "Unique": "Simple"} Mob`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
-                <Tabs>
-                    <Tab label="Descriptions">
-                        <Validate validator={mob_validator}>
-                        <TextField 
-                            floatingLabelText="vnum" 
-                            id="vnum" 
-                            value={this.props.mob.vnum} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Short description" 
-                            id="sdesc" 
-                            value={this.props.mob.sdesc} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Long description" 
-                            id="ldesc" 
-                            fullWidth={true} 
-                            value={this.props.mob.ldesc} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Keywords" 
-                            id="keywords" 
-                            fullWidth={true} 
-                            value={this.props.mob.keywords} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Full description" 
-                            id="fulldesc" 
-                            multiLine={true} 
-                            rows={5} 
-                            fullWidth={true} 
-                            value={this.props.mob.fulldesc} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        </Validate>
-                    </Tab>
-                    <Tab label="Details">
-                        <Validate validator={mob_validator}>
-                        <TextField 
-                            floatingLabelText="Level" 
-                            id="level" 
-                            value={this.props.mob.level} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <FlagWithCategorySelector 
-                            id="mob_class" 
-                            label="Class" 
-                            flags={MOB_CLASSES} 
-                            value={this.props.mob.mob_class} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="race" 
-                            label="Race" 
-                            flags={MOB_RACES} 
-                            value={this.props.mob.race} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="sex" 
-                            label="Sex" 
-                            flags={MOB_SEXES} 
-                            value={this.props.mob.sex} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="position" 
-                            label="Position" 
-                            flags={MOB_POSITIONS} 
-                            value={this.props.mob.position} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="deity" 
-                            label="Deity" 
-                            flags={MOB_DEITIES} 
-                            value={this.props.mob.deity} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <MultiFlagSelector 
-                            id="act_flags" 
-                            label="Act Flags" 
-                            flags={MOB_ACT_FLAGS} 
-                            value={this.props.mob.act_flags} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <MultiFlagSelector 
-                            id="understood_languages" 
-                            label="Understood Languages" 
-                            flags={LANGUAGE_FLAGS} 
-                            value={this.props.mob.understood_languages} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        <MultiFlagSelector 
-                            id="spoken_languages" 
-                            label="Spoken Languages" 
-                            flags={LANGUAGE_FLAGS} 
-                            value={this.props.mob.spoken_languages} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
-                        </Validate>
-                        <MobSpecialEditor
-                            id="mob_specials"
-                            vnum={this.props.mob.vnum} />
-                    </Tab>
-                    <Tab label="Unique">
-                        {uniqueTab}
-                    </Tab>
-                    <Tab label="Training">
-                        <ListSubheader>Skills</ListSubheader>
-                        <CanTrainSkillEditor id="can_train_skill" pointer={this.props.mob.uuid} />
-                        <ListSubheader>Weapon Skills</ListSubheader>
-                        <CanTrainWeaponSkillEditor id="can_train_weapon_skill" pointer={this.props.mob.uuid} />
-                        <ListSubheader>Spells</ListSubheader>
-                        <CanTrainSpellEditor id="can_train_spell" pointer={this.props.mob.uuid} />
-                        <ListSubheader>Levels</ListSubheader>
-                        <CanTrainLevelEditor id="can_train_level" pointer={this.props.mob.uuid} />
-                        <ListSubheader>Statistics</ListSubheader>
-                        <CanTrainStatisticEditor id="can_train_statistic" pointer={this.props.mob.uuid} />
-                        <ListSubheader>Feats</ListSubheader>
-                        <CanTrainFeatEditor id="can_train_feat" pointer={this.props.mob.uuid} />
-                        <ListSubheader>Languages</ListSubheader>
-                        <CanTrainLangEditor id="can_train_lang" pointer={this.props.mob.uuid} />
-                    </Tab>
-                    <Tab label="Programs">
-                        <ProgramsEditor 
-                            id="programs" 
-                            pointer={this.props.mob.uuid}
-                            triggers={MOB_PROGRAM_TRIGGERS} />
-                    </Tab>
-                    <Tab label="Shops">
-                        <ShopsEditor id="shop" vnum={this.props.mob.vnum} />
-                        <RepairsEditor id="repairs" vnum={this.props.mob.vnum} />
-                    </Tab>
-                    <Tab label="Resets">
-                        <MobResetsEditor id="mob_resets" vnum={this.props.mob.vnum} />
-                    </Tab>
-                </Tabs>
-            </Dialog>
+            <EditorDialog
+                open={this.props.ui_state.mob_editor_open} 
+                onClose={this.props.handleClose} 
+                title={`Edit ${this.props.mob.unique ? "Unique": "Simple"} Mob`}
+                selected_tab={this.props.ui_state.mob_current_tab}
+                setTab={this.props.setTab}
+                tabs={["Descriptions","Details","Unique","Training","Programs","Shops","Resets"]}>
+                <Validate validator={mob_validator}>
+                    {this.props.ui_state.mob_current_tab === 0 && // Descriptions
+                    <Grid container spacing={8}>
+                        <Grid item xs={3}>
+                            <ValidatedTextField 
+                                label="vnum" 
+                                id="vnum" 
+                                value={this.props.mob.vnum} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={9}>
+                            <ValidatedTextField 
+                                label="Short description" 
+                                id="sdesc" 
+                                value={this.props.mob.sdesc} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Long description" 
+                                id="ldesc" 
+                                value={this.props.mob.ldesc} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Keywords" 
+                                id="keywords" 
+                                value={this.props.mob.keywords} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Full description" 
+                                id="fulldesc" 
+                                multiline={true} 
+                                rows={5} 
+                                value={this.props.mob.fulldesc} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.mob_current_tab === 1 && // Details
+                    <Grid container spacing={8}>
+                        <Grid item xs={3}>
+                            <ValidatedTextField 
+                                label="Level" 
+                                id="level" 
+                                value={this.props.mob.level} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagWithCategorySelector 
+                                id="mob_class" 
+                                label="Class" 
+                                flags={MOB_CLASSES} 
+                                value={this.props.mob.mob_class} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="race" 
+                                label="Race" 
+                                flags={MOB_RACES} 
+                                value={this.props.mob.race} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="sex" 
+                                label="Sex" 
+                                flags={MOB_SEXES} 
+                                value={this.props.mob.sex} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <FlagSelector 
+                                id="position" 
+                                label="Position" 
+                                flags={MOB_POSITIONS} 
+                                value={this.props.mob.position} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <FlagSelector 
+                                id="deity" 
+                                label="Deity" 
+                                flags={MOB_DEITIES} 
+                                value={this.props.mob.deity} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="act_flags" 
+                                label="Act Flags" 
+                                flags={MOB_ACT_FLAGS} 
+                                value={this.props.mob.act_flags} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="understood_languages" 
+                                label="Understood Languages" 
+                                flags={LANGUAGE_FLAGS} 
+                                value={this.props.mob.understood_languages} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="spoken_languages" 
+                                label="Spoken Languages" 
+                                flags={LANGUAGE_FLAGS} 
+                                value={this.props.mob.spoken_languages} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <MobSpecialEditor
+                                id="mob_specials"
+                                vnum={this.props.mob.vnum} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.mob_current_tab === 2 && // Unique
+                    (this.props.mob.unique ? (
+                    <Grid container spacing={8} justify="center">
+                        <Grid item xs={3}>
+                            <MultiFlagSelector 
+                                id="affect_flags" 
+                                label="Affect Flags" 
+                                flags={MOB_AFFECTS} 
+                                value={this.props.mob.affect_flags} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="alignment" 
+                                label="Alignment" 
+                                flags={MOB_ALIGNMENTS} 
+                                value={this.props.mob.alignment} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="virtual_armor_type" 
+                                label="Virtual Armor Type" 
+                                flags={ITEM_ARMOR_TYPES} 
+                                value={this.props.mob.virtual_armor_type} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="virtual_armor_material" 
+                                label="Virtual Armor Material" 
+                                flags={ITEM_MATERIALS} 
+                                value={this.props.mob.virtual_armor_material} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}><Grid container spacing={24} justify="center">
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="STR" 
+                                    id="str" 
+                                    value={this.props.mob.str} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="INT" 
+                                    id="int" 
+                                    value={this.props.mob.int} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="WIS" 
+                                    id="wis" 
+                                    value={this.props.mob.wis} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="DEX" 
+                                    id="dex" 
+                                    value={this.props.mob.dex} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="CON" 
+                                    id="con" 
+                                    value={this.props.mob.con} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="CHA" 
+                                    id="cha" 
+                                    value={this.props.mob.cha} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ValidatedTextField 
+                                    label="LCK" 
+                                    id="lck" 
+                                    value={this.props.mob.lck} 
+                                    onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                            </Grid>
+                        </Grid></Grid>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="ris_resistant" 
+                                label="Resistant" 
+                                flags={MOB_RIS} 
+                                value={this.props.mob.ris_resistant} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="ris_immune" 
+                                label="Immune" 
+                                flags={MOB_RIS} 
+                                value={this.props.mob.ris_immune} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="ris_susceptible" 
+                                label="Susceptible" 
+                                flags={MOB_RIS} 
+                                value={this.props.mob.ris_susceptible} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="raised"
+                                id="makeSimpleMob" 
+                                color="primary"
+                                onClick={()=>(this.props.convertToSimple(this.props.mob.uuid))}>
+                                Convert to Simple Mob?
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    ) : (
+                    <Grid container spacing={8} justify="center">
+                        <Grid item xs={12}>
+                            <Button
+                                variant="raised" 
+                                id="makeUniqueMob" 
+                                color="primary"
+                                onClick={()=>(this.props.convertToUnique(this.props.mob.uuid))}>
+                                Convert to Unique Mob?
+                            </Button>
+                        </Grid>
+                    </Grid>))}
+                    {this.props.ui_state.mob_current_tab === 3 && // Training
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ListSubheader>Skills</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainSkillEditor id="can_train_skill" pointer={this.props.mob.uuid} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListSubheader>Weapon Skills</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainWeaponSkillEditor id="can_train_weapon_skill" pointer={this.props.mob.uuid} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListSubheader>Spells</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainSpellEditor id="can_train_spell" pointer={this.props.mob.uuid} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListSubheader>Levels</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainLevelEditor id="can_train_level" pointer={this.props.mob.uuid} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListSubheader>Statistics</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainStatisticEditor id="can_train_statistic" pointer={this.props.mob.uuid} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListSubheader>Feats</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainFeatEditor id="can_train_feat" pointer={this.props.mob.uuid} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListSubheader>Languages</ListSubheader>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CanTrainLangEditor id="can_train_lang" pointer={this.props.mob.uuid} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.mob_current_tab === 4 && // Descriptions
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ProgramsEditor 
+                                id="programs" 
+                                pointer={this.props.mob.uuid}
+                                triggers={MOB_PROGRAM_TRIGGERS} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.mob_current_tab === 5 && // Shops
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ShopsEditor id="shop" vnum={this.props.mob.vnum} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <RepairsEditor id="repairs" vnum={this.props.mob.vnum} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.mob_current_tab === 6 && // Resets
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <MobResetsEditor id="mob_resets" vnum={this.props.mob.vnum} />
+                        </Grid>
+                    </Grid>}
+                </Validate>
+            </EditorDialog>
         )
     }
 }
@@ -505,9 +613,12 @@ MobEditor = connect(
     }),
     (dispatch)=>({
         handleClose: () => {dispatch({ type:UiStateActions.CLOSE_MOB_EDITOR })},
-        convertToSimple: (uuid) => {dispatch({ type:MobActions.CONVERT_TO_SIMPLE })},
-        convertToUnique: (uuid) => {dispatch({ type:MobActions.CONVERT_TO_UNIQUE })},
+        convertToSimple: (uuid) => {dispatch({ type:MobActions.CONVERT_TO_SIMPLE, index:uuid })},
+        convertToUnique: (uuid) => {dispatch({ type:MobActions.CONVERT_TO_UNIQUE, index:uuid })},
         setProp: (index, key, value) => {dispatch({ type:MobActions.SET_PROP, index, key, value })},
+        setTab: (e, index) => {
+            dispatch({type:UiStateActions.SET_MOB_CURRENT_TAB, value:index})
+        }
     })
 )(MobEditor)
 
@@ -561,29 +672,25 @@ class ShopsEditor extends React.Component {
                             flags={ITEM_TYPES} 
                             value={model.will_buy_5} 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Profit (Buy)" 
+                        <ValidatedTextField 
+                            label="Profit (Buy)" 
                             id="profit_buy" 
                             value={model.profit_buy} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Profit (Sell)" 
+                        <ValidatedTextField 
+                            label="Profit (Sell)" 
                             id="profit_sell" 
                             value={model.profit_sell} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Open Hour" 
+                        <ValidatedTextField 
+                            label="Open Hour" 
                             id="open_hour" 
                             value={model.open_hour} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Close Hour" 
+                        <ValidatedTextField 
+                            label="Close Hour" 
                             id="close_hour" 
                             value={model.close_hour} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
                         </Validate>
                         </React.Fragment>
@@ -648,11 +755,10 @@ class RepairsEditor extends React.Component {
                             flags={MOB_REPAIR_MATERIAL} 
                             value={model.repair_material} 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Profit Modifier" 
+                        <ValidatedTextField 
+                            label="Profit Modifier" 
                             id="profit_modifier" 
                             value={model.profit_modifier} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
                         <FlagSelector 
                             id="repair" 
@@ -660,17 +766,15 @@ class RepairsEditor extends React.Component {
                             flags={MOB_REPAIR_RECHARGE} 
                             value={model.repair} 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Open Hour" 
+                        <ValidatedTextField 
+                            label="Open Hour" 
                             id="open_hour" 
                             value={model.open_hour} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Close Hour" 
+                        <ValidatedTextField 
+                            label="Close Hour" 
                             id="close_hour" 
                             value={model.close_hour} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
                         </Validate>
                         </React.Fragment>
@@ -702,17 +806,16 @@ class MobResetsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.mob===this.props.vnum)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
+                    <Icon color="error">remove_circle</Icon>
                 </IconButton>
                 <Validate validator={mob_reset_validator}>
-                <TextField 
-                    floatingLabelText="Limit" 
+                <ValidatedTextField 
+                    label="Limit" 
                     id="mob_limit" 
                     value={resets.mob_limit} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
                 <VnumAutoComplete 
-                    floatingLabelText="Starting Room"
+                    label="Starting Room"
                     id="room"  
                     value={resets.room}  
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))}
@@ -734,7 +837,7 @@ class MobResetsEditor extends React.Component {
             <React.Fragment>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                    <Icon className="material-icons">add_box</Icon>
+                    <Icon>add_box</Icon>
                 </IconButton>
             </React.Fragment>
         )
@@ -761,20 +864,19 @@ class EquipmentResetsEditor extends React.Component {
         return this.props.model.filter((resets)=>(resets.mob_reset===this.props.pointer)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
+                    <Icon color="error">remove_circle</Icon>
                 </IconButton>
                 <Validate validator={equipment_reset_validator}>
                 <VnumAutoComplete 
-                    floatingLabelText="Item" 
+                    label="Item" 
                     id="item" 
                     value={resets.item} 
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} 
                     dataSource={this.props.items} />
-                <TextField 
-                    floatingLabelText="Equip Limit" 
+                <ValidatedTextField 
+                    label="Equip Limit" 
                     id="equip_limit" 
                     value={resets.equip_limit} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
                 <FlagSelector 
                     id="wear_loc" 
@@ -798,7 +900,7 @@ class EquipmentResetsEditor extends React.Component {
                     <ListSubheader>Equipment</ListSubheader>
                     {this.generate()}
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
-                        <Icon className="material-icons">add_box</Icon>
+                        <Icon>add_box</Icon>
                     </IconButton>
                 </Paper>
             </React.Fragment>
@@ -826,7 +928,7 @@ class CoinResetsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.mob_reset===this.props.pointer)).map((resets, index) => (
             <Paper key={index}>
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
+                    <Icon color="error">remove_circle</Icon>
                 </IconButton>
                 <Validate validator={coin_reset_validator}>
                 <FlagSelector 
@@ -835,17 +937,15 @@ class CoinResetsEditor extends React.Component {
                     flags={ITEM_COIN_TYPES} 
                     value={resets.coin_type} 
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="Dice Count" 
+                <ValidatedTextField 
+                    label="Dice Count" 
                     id="dice_count" 
                     value={resets.dice_count} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="Dice Sides" 
+                <ValidatedTextField 
+                    label="Dice Sides" 
                     id="dice_sides" 
                     value={resets.dice_sides} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
                 </Validate>
             </Paper>
@@ -859,7 +959,7 @@ class CoinResetsEditor extends React.Component {
                     <ListSubheader>Coins</ListSubheader>
                     {this.generate()}
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                        <Icon className="material-icons">add_box</Icon>
+                        <Icon>add_box</Icon>
                     </IconButton>
                 </Paper>
             </React.Fragment>
@@ -885,19 +985,20 @@ class CanTrainWrapper extends React.Component {
         return (
             <React.Fragment>
                 <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                    <TableHead>
                         <TableRow>
-                            {this.props.headers.map((h)=>(<TableHeaderColumn key={h}>{h}</TableHeaderColumn>))}
+                            {this.props.headers.map((h)=>(<TableCell padding="dense" key={h}>{h}</TableCell>))}
                         </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
+                    </TableHead>
+                    <TableBody>
                         {this.props.children}
                         <TableRow>
-                            <TableRowColumn>
+                            <TableCell padding="dense">
                                 <IconButton tooltip="Add" onClick={this.props.handleNew}>
-                                    <Icon className="material-icons">add_box</Icon>
+                                    <Icon>add_box</Icon>
                                 </IconButton>
-                            </TableRowColumn>
+                            </TableCell>
+                            {this.props.headers.slice(1).map((h)=>(<TableCell padding="dense" key={h}></TableCell>))}
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -917,28 +1018,32 @@ class CanTrainSkillEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_skill_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_skill_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_skill_validator}>
                     <FlagSelector 
                         id="skill" 
@@ -947,7 +1052,7 @@ class CanTrainSkillEditor extends React.Component {
                         value={skill.skill} 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -977,28 +1082,32 @@ class CanTrainWeaponSkillEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_weapon_skill_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_weapon_skill_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_weapon_skill_validator}>
                     <FlagSelector 
                         id="weapon_skill" 
@@ -1007,7 +1116,7 @@ class CanTrainWeaponSkillEditor extends React.Component {
                         value={skill.weapon_skill} 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -1037,28 +1146,32 @@ class CanTrainSpellEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_spell_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_spell_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_spell_validator}>
                     <FlagSelector 
                         id="spell" 
@@ -1067,7 +1180,7 @@ class CanTrainSpellEditor extends React.Component {
                         value={skill.spell} 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -1097,27 +1210,31 @@ class CanTrainLevelEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_level_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_level_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -1147,28 +1264,32 @@ class CanTrainStatisticEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(skill.uuid))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_statistic_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_statistic_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_statistic_validator}>
                     <FlagSelector 
                         id="statistic" 
@@ -1177,7 +1298,7 @@ class CanTrainStatisticEditor extends React.Component {
                         value={skill.statistic} 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -1207,28 +1328,32 @@ class CanTrainFeatEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_feat_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_feat_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_feat_validator}>
                     <FlagSelector 
                         id="feat" 
@@ -1237,7 +1362,7 @@ class CanTrainFeatEditor extends React.Component {
                         value={skill.feat} 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -1267,28 +1392,32 @@ class CanTrainLangEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.pointer)).map((skill, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Add" onClick={()=>(this.removeSkill(index))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
+                <TableCell padding="dense">
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(skill.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
                     <Validate validator={can_train_lang_validator}>
-                    <TextField 
-                        id="level" 
-                        value={skill.level} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            id="level" 
+                            value={skill.level} 
+                            onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
+                    </Grid>
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_lang_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="price_multiplier" 
                         value={skill.price_multiplier} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={can_train_lang_validator}>
                     <FlagSelector 
                         id="lang" 
@@ -1297,7 +1426,7 @@ class CanTrainLangEditor extends React.Component {
                         value={skill.lang} 
                         onChange={(e,v)=>(this.props.setProp(skill.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -1327,23 +1456,28 @@ class MobSpecialEditor extends React.Component {
     generate() {
         return this.props.model.filter((s)=>(s.mob===this.props.vnum)).map((spec, index) => (
             <TableRow key={index}>
-                <TableRowColumn>
-                    <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(spec.uuid))}>
-                        <Icon className="material-icons" color={red[900]}>remove_circle</Icon>
-                    </IconButton>
-                    <Validate validator={mob_special_validator}>
-                    <FlagSelector 
-                        id="special" 
-                        label="Special"
-                        value={spec.special} 
-                        flags={MOB_SPECIALS}
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(spec.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                <TableCell padding="dense">
+                    <Grid container spacing={8} alignItems="center">
+                        <Grid item xs={2}>
+                            <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(spec.uuid))}>
+                                <Icon color="error">remove_circle</Icon>
+                            </IconButton>
+                        </Grid>
+                        <Validate validator={mob_special_validator}>
+                        <Grid item xs={10}>
+                            <FlagSelector 
+                                id="special" 
+                                label="Special"
+                                value={spec.special} 
+                                flags={MOB_SPECIALS}
+                                onChange={(e,v)=>(this.props.setProp(spec.uuid, e.target.id, v))} />
+                        </Grid>
+                        </Validate>
+                    </Grid>
+                </TableCell>
+                <TableCell padding="dense">
                     {spec.special ? spec.special.ldesc : ""}
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }

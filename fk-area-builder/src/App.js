@@ -19,6 +19,7 @@ const theme = createMuiTheme();
 const styles = {
   root: {
     flexGrow: 1,
+    paddingTop:"64px"
   },
   flex: {
     flex: 1,
@@ -65,7 +66,7 @@ class AppHeader extends Component {
         return warning;
       }
     }
-    this.props.loadArea(testArea)
+    this.props.loadArea(testArea2)
   }
   
   setStatus = (icon) => (this.setState({status: icon}));
@@ -75,7 +76,7 @@ class AppHeader extends Component {
   render() {
     return (
       <div className={this.props.classes.root}>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             <IconButton onClick={this.openMenu} color="inherit" aria-label="Menu" className={this.props.classes.menuButton}>
               <MenuIcon />

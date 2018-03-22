@@ -1,19 +1,15 @@
 import React from 'react';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import red from 'material-ui/colors/red';
-import TextField from 'material-ui/TextField';
 import withTheme from 'material-ui/styles/withTheme';
 import { connect } from 'react-redux';
 import { QuestLogActions } from '../Models/actionTypes';
 
-import {
-    Table,
+import Table, {
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableHead,
+    TableCell,
     TableRow,
-    TableRowColumn,
 }
 from 'material-ui/Table';
 import {
@@ -21,7 +17,7 @@ import {
 }
 from '../Models/flags';
 import {
-    FlagSelector,
+    FlagSelector, ValidatedTextField
 }
 from '../UIComponents/FlagSelectors'
 import {
@@ -43,103 +39,100 @@ const quest_log_validator = new QuestLogValidator();
 
 class QuestsPanel extends React.Component {
     generateItems(qlogs) {
+        let cellpadding = "10px";
         return qlogs.map((qlog, index) => (
             <TableRow key={index}>
-                <TableRowColumn width={50}>
+                <TableCell padding="none">
                     <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(qlog.uuid))} style={icon_button_style}>
-                        <Icon color={red[900]}>delete_forever</Icon>
+                        <Icon color="error">delete_forever</Icon>
                     </IconButton>
-                </TableRowColumn>
-                <TableRowColumn width={50}>
+                </TableCell>
+                <TableCell padding="none">
                     {this.props.vnum}
-                </TableRowColumn>
-                <TableRowColumn width={50}>
-                    <Validate validator={quest_log_validator}>
-                    <TextField 
+                </TableCell>
+                <TableCell padding="none">
+                    <ValidatedTextField 
                         id="qbit_start" 
+                        style={{paddingLeft:cellpadding,width:"60px"}}
                         value={qlog.qbit_start} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
-                <TableRowColumn width={50}>
-                    <Validate validator={quest_log_validator}>
-                    <TextField 
+                </TableCell>
+                <TableCell padding="none">
+                    <ValidatedTextField 
                         id="qbit_stop" 
+                        style={{paddingLeft:cellpadding,width:"60px"}}
                         value={qlog.qbit_stop} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
-                <TableRowColumn width={50}>
-                    <Validate validator={quest_log_validator}>
-                    <TextField 
+                </TableCell>
+                <TableCell padding="none">
+                    <ValidatedTextField 
                         id="min_qbit" 
+                        style={{paddingLeft:cellpadding,width:"60px"}}
                         value={qlog.min_qbit} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
-                <TableRowColumn width={50}>
-                    <Validate validator={quest_log_validator}>
-                    <TextField 
+                </TableCell>
+                <TableCell padding="none">
+                    <ValidatedTextField 
                         id="max_qbit" 
+                        style={{paddingLeft:cellpadding,width:"60px"}}
                         value={qlog.max_qbit} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
-                <TableRowColumn width={130}>
-                    <Validate validator={quest_log_validator}>
+                </TableCell>
+                <TableCell padding="none">
                     <FlagSelector 
                         id="event_code" 
+                        style={{paddingLeft:cellpadding,width:"60px"}}
                         flags={QUEST_EVENT_CODES} 
                         value={qlog.event_code} 
                         onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
-                    <Validate validator={quest_log_validator}>
-                    <TextField 
+                </TableCell>
+                <TableCell padding="none">
+                    <ValidatedTextField 
                         id="qlog_text" 
-                        fullWidth={true} 
+                        style={{paddingLeft:cellpadding,width:"400px"}}
                         value={qlog.qlog_text} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(qlog.uuid, e.target.id, v))} />
-                    </Validate>
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ))
     }
 
     render() {
+        let cellpadding = "10px";
         return (
-            <div>
             <Table>
-                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableHead>
                     <TableRow>
-                        <TableHeaderColumn width={50}></TableHeaderColumn>
-                        <TableHeaderColumn width={50}>Area Vnum</TableHeaderColumn>
-                        <TableHeaderColumn width={50}>Qbit Start</TableHeaderColumn>
-                        <TableHeaderColumn width={50}>Qbit Count</TableHeaderColumn>
-                        <TableHeaderColumn width={50}>Min Qbit</TableHeaderColumn>
-                        <TableHeaderColumn width={50}>Max Qbit</TableHeaderColumn>
-                        <TableHeaderColumn width={130}>Event Type</TableHeaderColumn>
-                        <TableHeaderColumn>Qlog Text</TableHeaderColumn>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none">Area Vnum</TableCell>
+                        <TableCell style={{paddingLeft:cellpadding}} padding="none">Qbit Start</TableCell>
+                        <TableCell style={{paddingLeft:cellpadding}} padding="none">Qbit Count</TableCell>
+                        <TableCell style={{paddingLeft:cellpadding}} padding="none">Min Qbit</TableCell>
+                        <TableCell style={{paddingLeft:cellpadding}} padding="none">Max Qbit</TableCell>
+                        <TableCell style={{paddingLeft:cellpadding}} padding="none">Event Type</TableCell>
+                        <TableCell style={{paddingLeft:cellpadding}} padding="none">Qlog Text</TableCell>
                     </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={false}>
+                </TableHead>
+                <TableBody>
+                    <Validate validator={quest_log_validator}>
                     {this.generateItems(this.props.model)}
+                    </Validate>
                     <TableRow>
-                        <TableRowColumn width={100}>
+                        <TableCell padding="none">
                             <IconButton tooltip="Add" onClick={this.props.handleNew}>
                                 <Icon>add_box</Icon>
                             </IconButton>
-                        </TableRowColumn>
+                        </TableCell>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none"></TableCell>
+                        <TableCell padding="none"></TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-        </div>
         )
     }
 }

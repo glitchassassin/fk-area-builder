@@ -1,30 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
-import red from 'material-ui/colors/red';
-import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Dialog from 'material-ui/Dialog';
+import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
+import Table, {TableBody, TableHead, TableCell, TableRow} from 'material-ui/Table';
+import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
+import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import Checkbox from 'material-ui/Checkbox';
-import { connect } from 'react-redux';
 import { 
     ItemActions, UiStateActions, ItemResetActions, ItemApplyActions
 } from '../Models/actionTypes';
-
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
-}
-from 'material-ui/Table';
 import {
     ITEM_TYPES,
     ITEM_APPLIES,
@@ -44,22 +33,19 @@ import {
 }
 from '../Models/model_templates'
 import {
-    FlagSelector,
-    MultiFlagSelector,
-    VnumAutoComplete
-}
-from '../UIComponents/FlagSelectors'
-import {
-    Validate
-}
-from '../UIComponents/GenericEditors'
-import {
     ItemValidator,
     ItemApplyValidator,
     ItemResetValidator
 }
 from '../Models/model_validator'
-import {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor} from '../UIComponents/GenericEditors'
+import {
+    FlagSelector,
+    MultiFlagSelector,
+    VnumAutoComplete,
+    ValidatedTextField
+}
+from '../UIComponents/FlagSelectors'
+import {Validate, TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor, EditorDialog} from '../UIComponents/GenericEditors'
 
 const uuid = require('uuid/v4');
 
@@ -82,90 +68,99 @@ class ItemPanel extends React.Component {
     generateItems(items) {
         return items.sort(vnum_sort).map((item, index) => (
             <TableRow key={index}>
-                <TableRowColumn width={100}>
+                <TableCell padding="dense" width={"150px"}>
                     <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(item.uuid))} style={icon_button_style}>
                         <Icon>mode_edit</Icon>
                     </IconButton>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(item.uuid))} style={icon_button_style}>
-                        <Icon color={red[900]}>delete_forever</Icon>
+                        <Icon color="error">delete_forever</Icon>
                     </IconButton>
                     {item_validator.validate_state(this.props.state, item).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(item.uuid))} style={icon_button_style}>
-                        <Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>
+                        <Icon color="error">error</Icon>
                     </IconButton>
                     )}
-                </TableRowColumn>
-                <TableRowColumn width={100}>
+                </TableCell>
+                <TableCell padding="dense" width={"150px"}>
                     {item.vnum}
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     {item.sdesc}
-                </TableRowColumn>
-                <TableRowColumn>{item.item_type ? item.item_type.code : ""}</TableRowColumn>
-                <TableRowColumn>{item.material ? item.material.code : ""}</TableRowColumn>
-                <TableRowColumn>{item.size ? item.size.code : ""}</TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">{item.item_type ? item.item_type.code : ""}</TableCell>
+                <TableCell padding="dense">{item.material ? item.material.code : ""}</TableCell>
+                <TableCell padding="dense">{item.size ? item.size.code : ""}</TableCell>
             </TableRow>
             ))
     }
 
     render() {
-        const confirmActions = [
-            <Button
-                label="Cancel"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.props.cancelDelete}
-            />,
-            <Button
-                label="Delete"
-                primary={true}
-                id={this.props.ui_state.item_current_item} // So confirmDelete can pull the correct uuid
-                onClick={this.props.confirmDelete}
-            />,
-            ]
-        const errorsActions = [
-            <Button
-                label="Done"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.props.closeErrors}
-            />
-            ]
         let item = this.get_mob_by_uuid(this.props.ui_state.item_current_item);
         return (
             <div>
             <Table>
-                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableHead>
                     <TableRow>
-                        <TableHeaderColumn width={100}>Edit</TableHeaderColumn>
-                        <TableHeaderColumn width={100}>vnum</TableHeaderColumn>
-                        <TableHeaderColumn>Short description</TableHeaderColumn>
-                        <TableHeaderColumn>Item type</TableHeaderColumn>
-                        <TableHeaderColumn>Material</TableHeaderColumn>
-                        <TableHeaderColumn>Size</TableHeaderColumn>
+                        <TableCell padding="dense" width={"150px"}>Edit</TableCell>
+                        <TableCell padding="dense" width={"150px"}>vnum</TableCell>
+                        <TableCell padding="dense">Short description</TableCell>
+                        <TableCell padding="dense">Item type</TableCell>
+                        <TableCell padding="dense">Material</TableCell>
+                        <TableCell padding="dense">Size</TableCell>
                     </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={false}>
+                </TableHead>
+                <TableBody>
                     {this.generateItems(this.props.items)}
                     <TableRow>
-                        <TableRowColumn width={100}>
+                        <TableCell padding="dense" width={"150px"}>
                             <IconButton tooltip="Add" onClick={this.props.newItem}>
                                 <Icon>add_box</Icon>
                             </IconButton>
-                        </TableRowColumn>
+                        </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
             {item !== undefined && 
             <React.Fragment>
-                <ItemEditor open={this.props.ui_state.item_editor_open} id="items" />
-                <Dialog open={this.props.ui_state.item_confirm_delete_open} actions={confirmActions} modal={false} title={`Delete ${item.sdesc}?`}>{`Are you sure you want to delete item ${item.vnum} (${item.sdesc})? You cannot undo this action!`}</Dialog>
-                <Dialog open={this.props.ui_state.item_errors_open} actions={errorsActions} modal={false} title={`Errors for item ${item.vnum}`}>
-                    <List>
-                        {item_validator.validate_state(this.props.state, item).map((error, index) => (
-                            <ListItem key={index} primaryText={error} leftIcon={<Icon color={this.props.muiTheme.palette.accent1Color}>error</Icon>} />
-                        ))}
-                    </List>
+                <ItemEditor />
+                <Dialog open={this.props.ui_state.item_confirm_delete_open}>
+                    <DialogTitle>{`Delete ${item.sdesc}?`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>{`Are you sure you want to delete item ${item.vnum} (${item.sdesc})? You cannot undo this action!`}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            color="primary"
+                            onClick={this.props.cancelDelete}>
+                            Cancel
+                        </Button>
+                        <Button
+                            color="primary"
+                            onClick={()=>(this.props.confirmDelete(this.props.ui_state.item_current_item))}>
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={this.props.ui_state.item_errors_open} >
+                    <DialogTitle>{`Errors for item ${item.vnum}`}</DialogTitle>
+                    <DialogContent>
+                        <List>
+                            {item_validator.validate_state(this.props.state, item).map((error, index) => (
+                                <ListItem key={index}>
+                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
+                                    <ListItemText primary={error} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            label="Done"
+                            color="primary"
+                            onClick={this.props.closeErrors} >
+                            Done
+                        </Button>
+                    </DialogActions>
                 </Dialog>
             </React.Fragment>
             }
@@ -208,14 +203,6 @@ const paper_style = {
     margin: "5px"
 }
 
-const item_type_ldesc_style = {
-    color: "rgba(180,180,180,1)",
-    //lineHeight: "15px",
-    //fontStyle: "italic",
-    marginLeft: "10px",
-    whiteSpace: "normal"
-}
-
 class ItemEditor extends React.Component {
     generateItemValue(item_type, value_index) {
         let field;
@@ -223,7 +210,7 @@ class ItemEditor extends React.Component {
             field = (
                 <FlagSelector 
                     id={"value"+value_index}
-                    label={"Value " + value_index}
+                    label={`Value ${value_index} (${item_type["value"+value_index].ldesc})`}
                     flags={this.props.model.item_type["value"+value_index].type_enum} 
                     value={this.props.model["value"+value_index]} 
                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
@@ -233,7 +220,7 @@ class ItemEditor extends React.Component {
             field = (
                 <MultiFlagSelector 
                     id={"value"+value_index}
-                    label={"Value " + value_index}
+                    label={`Value ${value_index} (${item_type["value"+value_index].ldesc})`}
                     flags={this.props.model.item_type["value"+value_index].type_enum} 
                     value={this.props.model["value"+value_index]} 
                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
@@ -253,163 +240,195 @@ class ItemEditor extends React.Component {
             field = (
                 <VnumAutoComplete 
                     id={"value"+value_index}
-                        floatingLabelText={"Value " + value_index}
+                    label={`Value ${value_index} (${item_type["value"+value_index].ldesc})`}
                     value={this.props.model["value"+value_index]} 
                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} dataSource={data_source} />
             )
         }
         else {
             field = (
-                <TextField 
+                <ValidatedTextField 
                     id={"value"+value_index}
-                    floatingLabelText={"Value " + value_index}
+                    label={`Value ${value_index} (${item_type["value"+value_index].ldesc})`}
                     value={this.props.model["value"+value_index]} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                 
             )
         }
         
-        return (
-            <div>
-                {field}
-                <span style={item_type_ldesc_style}>{item_type["value"+value_index].ldesc}</span>
-            </div>
-        )
+        return field
     }
     render() {
-        const actions = [
-        <Button label="Done" primary={true} onClick={this.props.handleClose} />,
-        ];
         return (
-            <Dialog title={`Edit Item`} modal={false} open={this.props.open} actions={actions} onRequestClose={this.props.handleClose} autoScrollBodyContent={true}>
-                <Tabs>
-                    <Tab label="Descriptions">
-                        <Validate validator={item_validator}>
-                        <TextField 
-                            floatingLabelText="vnum" 
-                            id="vnum" 
-                            value={this.props.model.vnum} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Short description" 
-                            id="sdesc" 
-                            value={this.props.model.sdesc} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Long description" 
-                            id="ldesc" 
-                            fullWidth={true} 
-                            value={this.props.model.ldesc} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Keywords" 
-                            id="keywords" 
-                            fullWidth={true} 
-                            value={this.props.model.keywords} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        </Validate>
-                    </Tab>
-                    <Tab label="Item Type">
-                        <Validate validator={item_validator}>
-                        <FlagSelector 
-                            id="item_type" 
-                            label="Item Type" 
-                            flags={ITEM_TYPES} 
-                            value={this.props.model.item_type} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        </Validate>
+            <EditorDialog 
+                open={this.props.ui_state.item_editor_open} 
+                onClose={this.props.handleClose}
+                title={`Edit Item`}
+                selected_tab={this.props.ui_state.item_current_tab}
+                setTab={this.props.setTab}
+                tabs={["Descriptions","Item Type","Details","Extra Descs","Programs","Resets"]}>
+                <Validate validator={item_validator}>
+                    {this.props.ui_state.item_current_tab === 0 && // Descriptions
+                    <Grid container spacing={8}>
+                        <Grid item xs={3}>
+                            <ValidatedTextField 
+                                label="vnum" 
+                                id="vnum" 
+                                value={this.props.model.vnum} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={9}>
+                            <ValidatedTextField 
+                                label="Short description" 
+                                id="sdesc" 
+                                value={this.props.model.sdesc} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Long description" 
+                                id="ldesc" 
+                                fullWidth={true} 
+                                value={this.props.model.ldesc} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Keywords" 
+                                id="keywords" 
+                                fullWidth={true} 
+                                value={this.props.model.keywords} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.item_current_tab === 1 && // Item Type
+                    <Grid container spacing={8}>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="item_type" 
+                                label="Item Type" 
+                                flags={ITEM_TYPES} 
+                                value={this.props.model.item_type} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={9}>{/*Padding*/}</Grid>
                         {this.props.model.item_type ? (
                         <React.Fragment>
-                            {this.generateItemValue(this.props.model.item_type, 0)}
-                            {this.generateItemValue(this.props.model.item_type, 1)}
-                            {this.generateItemValue(this.props.model.item_type, 2)}
-                            {this.generateItemValue(this.props.model.item_type, 3)}
-                            {this.generateItemValue(this.props.model.item_type, 4)}
-                            <div>
-                                <TextField 
+                            <Grid item xs={4}>
+                                {this.generateItemValue(this.props.model.item_type, 0)}
+                            </Grid>
+                            <Grid item xs={4}>
+                                {this.generateItemValue(this.props.model.item_type, 1)}
+                            </Grid>
+                            <Grid item xs={4}>
+                                {this.generateItemValue(this.props.model.item_type, 2)}
+                            </Grid>
+                            <Grid item xs={4}>
+                                {this.generateItemValue(this.props.model.item_type, 3)}
+                            </Grid>
+                            <Grid item xs={4}>
+                                {this.generateItemValue(this.props.model.item_type, 4)}
+                            </Grid>
+                            <Grid item xs={4}>
+                                <ValidatedTextField 
                                     id="value5" 
-                                    floatingLabelText="Value 5" 
+                                    label="Value 5 (Object data (optional))"
                                     value={this.props.model.value5} 
-                                    autoComplete="off" 
                                     onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                                <span style={item_type_ldesc_style}>Object data (optional)</span>
-                            </div>
+                            </Grid>
                         </React.Fragment>
                         ) : ""}
-                    </Tab>
-                    <Tab label="Details">
-                        <Validate validator={item_validator}>
-                        <MultiFlagSelector 
-                            id="attributes" 
-                            label="Attributes" 
-                            flags={ITEM_ATTRIBUTES} 
-                            value={this.props.model.attributes} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <MultiFlagSelector 
-                            id="wear_flags" 
-                            label="Wear Locations" 
-                            flags={WEAR_LOCATIONS} 
-                            value={this.props.model.wear_flags} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="quality" 
-                            label="Quality" 
-                            flags={ITEM_QUALITY} 
-                            value={this.props.model.quality} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="material" 
-                            label="Materials" 
-                            flags={ITEM_MATERIALS} 
-                            value={this.props.model.material} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="condition" 
-                            label="Condition" 
-                            flags={ITEM_CONDITION} 
-                            value={this.props.model.condition} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="size" 
-                            label="Sizes" 
-                            flags={ITEM_SIZES} 
-                            value={this.props.model.size} 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        <TextField 
-                            floatingLabelText="Identify text" 
-                            id="identify_message" 
-                            fullWidth={true} 
-                            value={this.props.model.identify_message} 
-                            autoComplete="off" 
-                            onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
-                        </Validate>
-                        <ApplyEditor 
-                            id="special_applies" 
-                            pointer={this.props.model.pointer} />
-                    </Tab>
-                    <Tab label="Extra Descs">
-                        <ExtraDescriptionsEditor 
-                            id="extra_descriptions" 
-                            pointer={this.props.model.uuid} />
-                    </Tab>
-                    <Tab label="Programs">
-                        <ProgramsEditor 
-                            id="programs" 
-                            triggers={ITEM_PROGRAM_TRIGGERS}
-                            pointer={this.props.model.uuid} />
-                    </Tab>
-                    <Tab label="Resets">
-                        <ItemResetsEditor 
-                            id="item_resets" 
-                            vnum={this.props.model.vnum}  />
-                    </Tab>
-                </Tabs>
-            </Dialog>  
+                    </Grid>}
+                    {this.props.ui_state.item_current_tab === 2 && // Details
+                    <Grid container spacing={8}>
+                        <Grid item xs={6}>
+                            <MultiFlagSelector 
+                                id="attributes" 
+                                label="Attributes" 
+                                flags={ITEM_ATTRIBUTES} 
+                                value={this.props.model.attributes} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <MultiFlagSelector 
+                                id="wear_flags" 
+                                label="Wear Locations" 
+                                flags={WEAR_LOCATIONS} 
+                                value={this.props.model.wear_flags} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="quality" 
+                                label="Quality" 
+                                flags={ITEM_QUALITY} 
+                                value={this.props.model.quality} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="material" 
+                                label="Materials" 
+                                flags={ITEM_MATERIALS} 
+                                value={this.props.model.material} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="condition" 
+                                label="Condition" 
+                                flags={ITEM_CONDITION} 
+                                value={this.props.model.condition} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <FlagSelector 
+                                id="size" 
+                                label="Sizes" 
+                                flags={ITEM_SIZES} 
+                                value={this.props.model.size} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Identify text" 
+                                id="identify_message" 
+                                value={this.props.model.identify_message} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ApplyEditor 
+                                id="special_applies" 
+                                pointer={this.props.model.pointer} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.item_current_tab === 3 && // Extra Descs
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ExtraDescriptionsEditor 
+                                id="extra_descriptions" 
+                                pointer={this.props.model.uuid} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.item_current_tab === 4 && // Programs
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ProgramsEditor 
+                                id="programs" 
+                                triggers={ITEM_PROGRAM_TRIGGERS}
+                                pointer={this.props.model.uuid} />
+                        </Grid>
+                    </Grid>}
+                    {this.props.ui_state.item_current_tab === 5 && // Resets
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ItemResetsEditor 
+                                id="item_resets" 
+                                vnum={this.props.model.vnum}  />
+                        </Grid>
+                    </Grid>}
+                </Validate>
+            </EditorDialog>  
         )
     }
 }
@@ -424,6 +443,9 @@ ItemEditor = connect(
     (dispatch)=>({
         handleClose: () => {dispatch({ type:UiStateActions.CLOSE_ITEM_EDITOR })},
         setProp: (index, key, value) => {dispatch({ type:ItemActions.SET_PROP, index, key, value })},
+        setTab: (e, index) => {
+            dispatch({type:UiStateActions.SET_ITEM_CURRENT_TAB, value:index})
+        }
     })
 )(ItemEditor)
 
@@ -431,12 +453,12 @@ class ApplyEditor extends React.Component {
     generate() {
         return this.props.model.filter((r)=>(r.pointer===this.props.pointer)).map((apply, index) => (
             <TableRow key={index}>
-                <TableRowColumn width={50}>
+                <TableCell padding="dense" width={50}>
                     <IconButton tooltip="Delete" onClick={()=>(this.props.handleDelete(apply.uuid))}>
-                        <Icon color={red[900]}>remove_circle</Icon>
+                        <Icon color="error">remove_circle</Icon>
                     </IconButton>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={item_apply_validator}>
                     <FlagSelector 
                         id="apply_flag"
@@ -445,19 +467,18 @@ class ApplyEditor extends React.Component {
                         value={apply.apply_flag} 
                         onChange={(e,v)=>(this.props.setProp(apply.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     <Validate validator={item_apply_validator}>
-                    <TextField 
+                    <ValidatedTextField 
                         id="parameter" 
                         value={apply.parameter} 
-                        autoComplete="off" 
                         onChange={(e,v)=>(this.props.setProp(apply.uuid, e.target.id, v))} />
                     </Validate>
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell padding="dense">
                     
-                </TableRowColumn>
+                </TableCell>
             </TableRow>
         ));
     }
@@ -467,21 +488,21 @@ class ApplyEditor extends React.Component {
             <React.Fragment>
                 <ListSubheader>Apply Flags</ListSubheader>
                 <Table>
-                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                    <TableHead>
                         <TableRow>
-                            <TableHeaderColumn width={50}></TableHeaderColumn>
-                            <TableHeaderColumn>Apply Flag</TableHeaderColumn>
-                            <TableHeaderColumn>Value</TableHeaderColumn>
+                            <TableCell padding="dense" width={50}></TableCell>
+                            <TableCell padding="dense">Apply Flag</TableCell>
+                            <TableCell padding="dense">Value</TableCell>
                         </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
+                    </TableHead>
+                    <TableBody>
                         {this.generate()}
                         <TableRow>
-                            <TableRowColumn>
+                            <TableCell padding="dense">
                                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
                                     <Icon>add_box</Icon>
                                 </IconButton>
-                            </TableRowColumn>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -508,19 +529,18 @@ class ItemResetsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.item===this.props.vnum)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <Icon color={red[900]}>remove_circle</Icon>
+                    <Icon color="error">remove_circle</Icon>
                 </IconButton>
                 <Validate validator={item_reset_validator}>
                 <VnumAutoComplete 
-                    floatingLabelText="Room" 
+                    label="Room" 
                     id="room_container" 
                     value={reset.room_container} 
                     onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} dataSource={this.props.rooms} />
-                <TextField 
-                    floatingLabelText="Item Limit" 
+                <ValidatedTextField 
+                    label="Item Limit" 
                     id="item_limit" 
                     value={reset.item_limit} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 </Validate>
                 <Checkbox 
@@ -574,19 +594,18 @@ class ItemResetsContentsEditor extends React.Component {
         return this.props.model.filter((r)=>(r.item_pointer===this.props.pointer)).map((reset, index) => (
             <Paper style={paper_style} zDepth={1} key={index}>
                 <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <Icon color={red[900]}>remove_circle</Icon>
+                    <Icon color="error">remove_circle</Icon>
                 </IconButton>
                 <VnumAutoComplete 
-                    floatingLabelText="Item" 
+                    label="Item" 
                     id="item"
                     value={reset.item} 
                     onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
                     dataSource={this.props.items} />
-                <TextField 
-                    floatingLabelText="Item Limit" 
+                <ValidatedTextField 
+                    label="Item Limit" 
                     id="item_limit"
                     value={reset.item_limit} 
-                    autoComplete="off" 
                     onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                 <Checkbox 
                     label="Hidden" 

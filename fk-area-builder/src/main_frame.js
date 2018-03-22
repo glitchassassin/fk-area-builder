@@ -1,6 +1,7 @@
 import React from 'react';
 import Tabs, {Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
+import Grid from 'material-ui/Grid';
 import AppBar from 'material-ui/AppBar';
 import Typography from 'material-ui/Typography';
 import GeneralPanel from './tab_panels/general_panel';
@@ -20,24 +21,34 @@ var item_validator = new ItemValidator()
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    //marginTop: theme.spacing.unit * 3,
+    //marginTop: theme.spacing.unit * 3,,
+    paddingTop: "48px",
     backgroundColor: theme.palette.background.paper,
   },
+  tabs: {
+      marginTop: "64px",
+      zIndex: "1099"
+  },
+  badge: {
+    padding: `0 ${theme.spacing.unit * 2}px`,
+  }
 });
 
 class MainFrame extends React.Component {
     render() {
+        let room_label = this.props.room_errors > 0 ? (<Badge className={this.props.classes.badge} badgeContent={this.props.room_errors} color="secondary">Rooms</Badge>) : "Rooms";
+        let mob_label = this.props.mob_errors > 0 ? (<Badge className={this.props.classes.badge} badgeContent={this.props.mob_errors} color="secondary">Mobs</Badge>) : "Mobs";
+        let item_label = this.props.item_errors > 0 ? (<Badge className={this.props.classes.badge} badgeContent={this.props.item_errors} color="secondary">Items</Badge>) : "Items";
         return (
         <div className={this.props.classes.root}>
-            <AppBar position="static">
-                <Tabs value={this.props.current_tab} onChange={this.props.setTab}>
+            <AppBar className={this.props.classes.tabs} position="fixed">
+                <Tabs value={this.props.current_tab} onChange={this.props.setTab} fullWidth>
                     <Tab label="General" />
-                    <Tab label={this.props.room_label} />
-                    {/*<Tab label={this.props.mob_label} />
-                    <Tab label={this.props.item_label} />
+                    <Tab label={room_label} />
+                    <Tab label={mob_label} />
+                    <Tab label={item_label} />
                     <Tab label="Quests" />
                     <Tab label="Area Code" />
-                    */}
                 </Tabs>
             </AppBar>
             {this.props.current_tab === 0 && <Typography component="div" style={{ padding: 8 * 3 }}><GeneralPanel /></Typography>}
@@ -53,13 +64,10 @@ class MainFrame extends React.Component {
 MainFrame = withStyles(styles)(connect(
     (state) => {
         let room_errors = state.rooms.length ? state.rooms.map((room)=>(room_validator.validate(room).length?1:0)).reduce((a, b)=>(a+b)) : 0;
-        let room_label = room_errors > 0 ? (<Badge badgeContent={room_errors} secondary={true}>"Rooms"</Badge>) : "Rooms";
         let mob_errors = state.mobs.length ? state.mobs.map((mob)=>(mob_validator.validate(mob).length?1:0)).reduce((a, b)=>(a+b)) : 0;
-        let mob_label = mob_errors > 0 ? (<Badge badgeContent={mob_errors} secondary={true}>"Mobs"</Badge>) : "Mobs";
         let item_errors = state.items.length ? state.items.map((item)=>(item_validator.validate(item).length?1:0)).reduce((a, b)=>(a+b)) : 0;
-        let item_label = item_errors > 0 ? (<Badge badgeContent={item_errors} secondary={true}>"Items"</Badge>) : "Items";
         let current_tab = state.ui_state.main_current_tab
-        return {room_label, mob_label, item_label, current_tab}
+        return {room_errors, mob_errors, item_errors, current_tab}
     },
     (dispatch) => ({
         setTab: (e, index) => {
@@ -68,17 +76,29 @@ MainFrame = withStyles(styles)(connect(
     })
 )(MainFrame))
 
+const areaStyles = theme => ({
+    areafile: {
+        textAlign:"left",
+        lineHeight:"1rem",
+        fontSize:"1rem"
+    }
+})
 class AreaRenderer extends React.Component {
     render() {
+        const { classes } = this.props;
         return (
-            <pre>
-            {(new AreaExporter()).renderArea(this.props.state)}
-            </pre>
+            <Grid container spacing={8} justify="left">
+                <Grid item xs={12}>
+                    <pre className={classes.areafile}>
+                    {(new AreaExporter()).renderArea(this.props.state)}
+                    </pre>
+                </Grid>
+            </Grid>
         )
     }
 }
-AreaRenderer = connect(
+AreaRenderer = withStyles(areaStyles)(connect(
     (state) => ({state})
-)(AreaRenderer)
+)(AreaRenderer))
 
 export default MainFrame;

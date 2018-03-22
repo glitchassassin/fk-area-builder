@@ -3,12 +3,15 @@ import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import ListSubheader from 'material-ui/List/ListSubheader';
-import red from 'material-ui/colors/red';
+import AppBar from 'material-ui/AppBar';
+import Tabs, {Tab} from 'material-ui/Tabs';
+import { withStyles } from 'material-ui/styles';
+import Dialog, {DialogContent, DialogActions, DialogTitle} from 'material-ui/Dialog';
 import { connect } from 'react-redux';
 import { ExtraDescriptionActions, ProgramActions, TrapResetActions } from '../Models/actionTypes';
 import PropTypes from 'prop-types';
+import Grid from 'material-ui/Grid';
 
 import {
     TRAP_TYPES,
@@ -22,6 +25,7 @@ import {
 from '../Models/model_templates'
 import {
     FlagSelector,
+    ValidatedTextField
 }
 from '../UIComponents/FlagSelectors'
 import {TrapResetValidator, ExtraDescriptionValidator, ProgramValidator} from '../Models/model_validator'
@@ -33,7 +37,7 @@ const program_validator = new ProgramValidator();
 const paper_style = {
     padding: "5px",
     margin: "5px auto",
-    maxWidth: "900px"
+    width: "100%"
 }
 
 class Validate extends React.Component {
@@ -54,52 +58,71 @@ class TrapResetEditor extends React.Component {
         if (model !== undefined) {
             return (
                 <Paper id={this.props.id} style={paper_style} zDepth={1}>
-                    <ListSubheader>Trap Reset</ListSubheader>
-                    <Validate validator={trap_reset_validator}>
-                    <TextField 
-                        floatingLabelText="Reset interval" 
-                        id="reset_interval" 
-                        value={model.reset_interval} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                    <FlagSelector 
-                        label="Trap type" 
-                        id="trap_type" 
-                        flags={TRAP_TYPES} 
-                        value={model.trap_type} 
-                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                    <TextField 
-                        floatingLabelText="Trap charges" 
-                        id="trap_charges" 
-                        value={model.trap_charges} 
-                        autoComplete="off" 
-                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                    <FlagSelector 
-                        label="Trap trigger 1" 
-                        id="trigger_1" 
-                        flags={TRAP_TRIGGERS} 
-                        value={model.trigger_1} 
-                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                    <FlagSelector 
-                        label="Trap trigger 2" 
-                        id="trigger_2" 
-                        flags={TRAP_TRIGGERS} 
-                        value={model.trigger_2} 
-                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                    </Validate>
-                    <Button
-                        variant="raised"
-                        label="Remove Trap Reset" 
-                        onClick={()=>(this.props.handleDelete(model.uuid))} 
-                        icon={<Icon>remove_circle</Icon>}/>
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <ListSubheader>Trap Reset</ListSubheader>
+                        </Grid>
+                        <Validate validator={trap_reset_validator}>
+                        <Grid item xs={4}>
+                            <ValidatedTextField 
+                                label="Reset interval" 
+                                id="reset_interval" 
+                                value={model.reset_interval} 
+                                autoComplete="off" 
+                                onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <FlagSelector 
+                                label="Trap type" 
+                                id="trap_type" 
+                                flags={TRAP_TYPES} 
+                                value={model.trap_type} 
+                                onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <ValidatedTextField 
+                                label="Trap charges" 
+                                id="trap_charges" 
+                                value={model.trap_charges} 
+                                autoComplete="off" 
+                                onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <FlagSelector 
+                                label="Trap trigger 1" 
+                                id="trigger_1" 
+                                flags={TRAP_TRIGGERS} 
+                                value={model.trigger_1} 
+                                onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <FlagSelector 
+                                label="Trap trigger 2" 
+                                id="trigger_2" 
+                                flags={TRAP_TRIGGERS} 
+                                value={model.trigger_2} 
+                                onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                        </Grid>
+                        </Validate>
+                        <Grid item xs={4}>
+                            <Button
+                                variant="raised"
+                                onClick={()=>(this.props.handleDelete(model.uuid))} >
+                                <Icon>remove_circle</Icon>
+                                Remove Trap Reset
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Paper>
             );
         }
         else {
             return (
-                <div>
-                    <Button variant="raised" label="Add Trap Reset" onClick={()=>(this.props.handleNew(this.props.pointer))} icon={<Icon>add_box</Icon>}/>
-                </div>
+                <Grid container spacing={8} justify="center">
+                    <Grid item style={{textAlign:"center"}} xs={12}>
+                        <Button variant="raised" onClick={()=>(this.props.handleNew(this.props.pointer))}><Icon>add_box</Icon> Add Trap Reset</Button>
+                    </Grid>
+                </Grid>
             );
         }
     }
@@ -123,39 +146,51 @@ class ExtraDescriptionsEditor extends React.Component {
     
     generate() {
         return this.props.eds.filter((ed)=>(ed.pointer === this.props.pointer)).map((ed, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(ed.uuid))}>
-                    <Icon color={red[900]}>remove_circle</Icon>
-                </IconButton>
-                <Validate validator={extra_description_validator}>
-                <TextField 
-                    floatingLabelText="Keywords (space separated)" 
-                    id="keywords" 
-                    fullWidth={true} 
-                    value={ed.keywords} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(ed.uuid, e.target.id, v))} />
-                <TextField 
-                    floatingLabelText="Long description" 
-                    id="ldesc" 
-                    multiLine={true} 
-                    rows={5} 
-                    fullWidth={true} 
-                    value={ed.ldesc} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(ed.uuid, e.target.id, v))} />
-                </Validate>
+            <Grid item xs={12} key={index}>
+            <Paper style={paper_style}>
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(ed.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
+                    <Validate validator={extra_description_validator}>
+                    <Grid item xs={10}>
+                        <ValidatedTextField 
+                            label="Keywords (space separated)" 
+                            id="keywords" 
+                            fullWidth={true} 
+                            value={ed.keywords} 
+                            autoComplete="off" 
+                            onChange={(e,v)=>(this.props.setProp(ed.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ValidatedTextField 
+                            label="Long description" 
+                            id="ldesc" 
+                            multiline={true} 
+                            rows={5} 
+                            fullWidth={true} 
+                            value={ed.ldesc} 
+                            autoComplete="off" 
+                            onChange={(e,v)=>(this.props.setProp(ed.uuid, e.target.id, v))} />
+                    </Grid>
+                    </Validate>
+                </Grid>
             </Paper>
+            </Grid>
         ));
     }
     render() {
         return (
-            <React.Fragment>
+            <Grid container spacing={16}>
                 {this.generate()}
-                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                    <Icon>add_box</Icon>
-                </IconButton>
-            </React.Fragment>
+                <Grid item xs={1}>
+                    <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
+                        <Icon>add_box</Icon>
+                    </IconButton>
+                </Grid>
+            </Grid>
         )
     }
 }
@@ -178,44 +213,58 @@ class ProgramsEditor extends React.Component {
     
     generate() {
         return this.props.programs.filter((p)=>(p.pointer===this.props.pointer)).map((program, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(program.uuid))}>
-                    <Icon color={red[900]}>remove_circle</Icon>
-                </IconButton>
-                <Validate validator={program_validator}>
-                <FlagSelector 
-                    label="Trigger" 
-                    id="trigger" 
-                    flags={this.props.triggers} 
-                    value={program.trigger} 
-                    onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
-                <TextField 
-                    floatingLabelText="Variable" 
-                    id="argument" 
-                    value={program.argument} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
-                <TextField 
-                    floatingLabelText="Program" 
-                    id="program" 
-                    multiLine={true} 
-                    rows={5} 
-                    fullWidth={true} 
-                    value={program.program} 
-                    autoComplete="off" 
-                    onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
-                </Validate>
-            </Paper>
+            <Grid item xs={12}>
+                <Paper style={paper_style} key={index}>
+                    <Grid container spacing={8}>
+                        <Grid item xs={2}>
+                            <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(program.uuid))}>
+                                <Icon color="error">remove_circle</Icon>
+                            </IconButton>
+                        </Grid>
+                        <Validate validator={program_validator}>
+                        <Grid item xs={5}>
+                            <FlagSelector 
+                                label="Trigger" 
+                                id="trigger" 
+                                flags={this.props.triggers} 
+                                value={program.trigger} 
+                                onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <ValidatedTextField 
+                                label="Variable" 
+                                id="argument" 
+                                value={program.argument} 
+                                autoComplete="off" 
+                                onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ValidatedTextField 
+                                label="Program" 
+                                id="program" 
+                                multiline={true} 
+                                rows={5} 
+                                fullWidth={true} 
+                                value={program.program} 
+                                autoComplete="off" 
+                                onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
+                        </Grid>
+                        </Validate>
+                    </Grid>
+                </Paper>
+            </Grid>
         ));
     }
     render() {
         return (
-            <React.Fragment>
+            <Grid container spacing={16}>
                 {this.generate()}
-                <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
-                    <Icon>add_box</Icon>
-                </IconButton>
-            </React.Fragment>
+                <Grid item xs={1}>
+                    <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
+                        <Icon>add_box</Icon>
+                    </IconButton>
+                </Grid>
+            </Grid>
         )
     }
 }
@@ -232,4 +281,42 @@ ProgramsEditor = connect(
         }
     })
 )(ProgramsEditor)
-export {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor, Validate};
+
+const editorDialogStyles = theme => ({
+    title: {
+        padding: 0
+    },
+    content: {
+        paddingTop: "20px"
+    }
+})
+class EditorDialog extends React.Component {
+    render() {
+        const { classes } = this.props;
+        return (
+            <Dialog
+                maxWidth={false}
+                open={this.props.open} 
+                onClose={this.props.onClose} 
+                PaperProps={{style:{width:"80%"}}}>
+                <DialogTitle className={classes.title}>
+                    {/*this.props.title*/}
+                    <AppBar position="static">
+                        <Tabs value={this.props.selected_tab} onChange={this.props.setTab} fullWidth>
+                            {this.props.tabs.map((t)=>(<Tab key={t} label={t} />))}
+                        </Tabs>
+                    </AppBar>
+                </DialogTitle>
+                <DialogContent className={classes.content}>
+                    {this.props.children}
+                </DialogContent>
+                <DialogActions>
+                    <Button color="primary" onClick={this.props.onClose}>Done</Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
+}
+EditorDialog = withStyles(editorDialogStyles)(EditorDialog)
+
+export {TrapResetEditor, ExtraDescriptionsEditor, ProgramsEditor, Validate, EditorDialog};

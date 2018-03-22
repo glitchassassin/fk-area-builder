@@ -1,5 +1,5 @@
 import React from 'react';
-import Menu, {MenuItem} from 'material-ui/Menu';
+import {MenuItem} from 'material-ui/Menu';
 import Popover from 'material-ui/Popover';
 import Select from 'material-ui/Select';
 import TextField from 'material-ui/TextField';
@@ -55,12 +55,12 @@ class FlagWithCategorySelector extends React.Component {
     
     render() {
         return (
-            <FormControl error={!!this.validate()}>
+            <FormControl fullWidth={true} error={!!this.validate()}>
                 <InputLabel>{this.props.label}</InputLabel>
                 <Select
                     value={this.props.value?this.props.value.code:""}
                     onChange={this.handleChange.bind(this)}
-                    renderValue={(v)=>(this.props.flags[v].sdesc)}
+                    renderValue={(v)=>(v?this.props.flags[v].sdesc:"")}
                     fullWidth={true}
                 >
                     {this.generateItems(this.props.flags)}
@@ -115,7 +115,7 @@ class FlagSelector extends React.Component {
                 <Select
                     value={this.props.value?this.props.value.code:""}
                     onChange={this.handleChange.bind(this)}
-                    renderValue={(v)=>(this.props.flags[v].sdesc)}
+                    renderValue={(v)=>{return v?this.props.flags[v].sdesc:""}}
                     fullWidth={true}
                 >
                     {this.generateItems(this.props.flags)}
@@ -131,7 +131,6 @@ FlagSelector.contextTypes = {
 
 class MultiFlagSelector extends FlagSelector {
     handleChange(event) {
-        console.log(event)
         this.props.onChange({target:{id:this.props.id}}, event.target.value.map(v=>this.props.flags[v]));
     }
     
@@ -234,8 +233,6 @@ class VnumAutoComplete extends React.Component {
     }
     renderSuggestionsContainer = ({ containerProps, children }) => {
         if (this.autosuggest) {
-            console.log(this.autosuggest.input)
-            console.log(containerProps)
             return (
                 <Popover 
                     disableAutoFocus
@@ -244,7 +241,7 @@ class VnumAutoComplete extends React.Component {
                     hideBackdrop
                     anchorEl={this.autosuggest.input} 
                     anchorOrigin={{vertical:"bottom",horizontal:"left"}}
-                    open={containerProps.className && containerProps.className.indexOf("suggestionsContainerOpen")!=-1} 
+                    open={Boolean(containerProps.className && containerProps.className.indexOf("suggestionsContainerOpen")!==-1)} 
                     {...containerProps} >
                     {children}
                 </Popover>
@@ -326,7 +323,7 @@ VnumAutoComplete = withStyles(styles)(VnumAutoComplete)
 
 class ValidatedTextField extends React.Component {
     shouldComponentUpdate(newProps) {
-        return !equal_recursively(this.props.value, newProps.value)
+        return !equal_recursively(this.props, newProps)
     }
     handleChange(event, value) {
         this.props.onChange({target:{id:this.props.id}}, event.target.value)
