@@ -9,6 +9,7 @@ import ListSubheader from 'material-ui/List/ListSubheader';
 import withTheme from 'material-ui/styles/withTheme';
 import Grid from 'material-ui/Grid';
 import { connect } from 'react-redux';
+import { ColorCodeEditor } from '../UIComponents/QuillEditor';
 import { RoomActions, UiStateActions, ExitActions, DoorResetActions, RoomResetActions } from '../Models/actionTypes';
 
 import Table, {
@@ -238,23 +239,18 @@ class RoomEditor extends React.Component {
                                 onChange={this.handleChange} />
                         </Grid>
                         <Grid item xs={9}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Short description" 
                                 id="sdesc" 
-                                fullWidth={true} 
                                 value={this.props.room.sdesc} 
-                                autoComplete="off" 
                                 onChange={this.handleChange} />
                         </Grid>
                         <Grid item xs={12}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Long description" 
                                 id="ldesc" 
-                                multiline
                                 rows={5} 
-                                fullWidth={true} 
                                 value={this.props.room.ldesc} 
-                                autoComplete="off" 
                                 onChange={this.handleChange} />
                         </Grid>
                         <Grid item xs={12}>

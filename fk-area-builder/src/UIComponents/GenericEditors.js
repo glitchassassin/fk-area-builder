@@ -5,6 +5,7 @@ import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import AppBar from 'material-ui/AppBar';
+import {ColorCodeEditor} from '../UIComponents/QuillEditor';
 import Tabs, {Tab} from 'material-ui/Tabs';
 import { withStyles } from 'material-ui/styles';
 import Dialog, {DialogContent, DialogActions, DialogTitle} from 'material-ui/Dialog';
@@ -165,14 +166,11 @@ class ExtraDescriptionsEditor extends React.Component {
                             onChange={(e,v)=>(this.props.setProp(ed.uuid, e.target.id, v))} />
                     </Grid>
                     <Grid item xs={12}>
-                        <ValidatedTextField 
+                        <ColorCodeEditor
                             label="Long description" 
                             id="ldesc" 
-                            multiline={true} 
-                            rows={5} 
-                            fullWidth={true} 
+                            rows={5}
                             value={ed.ldesc} 
-                            autoComplete="off" 
                             onChange={(e,v)=>(this.props.setProp(ed.uuid, e.target.id, v))} />
                     </Grid>
                     </Validate>

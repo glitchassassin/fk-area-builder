@@ -191,6 +191,7 @@ class ColorCodeEditor extends Component {
                     theme="snow"
                     value={this.state.valueDelta}
                     ref={this.quillRef}
+                    style={{minHeight:(24+18*parseInt(this.props.rows||"1", 10))+"px"}}
                     onChange={this.handleChange.bind(this)}
                     formats={this.formats}
         			modules={this.modules}

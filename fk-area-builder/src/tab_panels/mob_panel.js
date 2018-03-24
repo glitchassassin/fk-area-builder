@@ -12,6 +12,7 @@ import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import {FormControlLabel} from 'material-ui/Form'
 import { connect } from 'react-redux';
+import { ColorCodeEditor } from '../UIComponents/QuillEditor';
 import { 
     MobActions, UiStateActions, ShopActions, RepairRechargeActions, 
     MobResetActions, EquipmentResetActions, CoinResetActions, TrainSkillActions,
@@ -290,14 +291,14 @@ class MobEditor extends React.Component {
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Grid>
                         <Grid item xs={9}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Short description" 
                                 id="sdesc" 
                                 value={this.props.mob.sdesc} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Grid>
                         <Grid item xs={12}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Long description" 
                                 id="ldesc" 
                                 value={this.props.mob.ldesc} 
@@ -311,10 +312,9 @@ class MobEditor extends React.Component {
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Grid>
                         <Grid item xs={12}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Full description" 
-                                id="fulldesc" 
-                                multiline={true} 
+                                id="fulldesc"
                                 rows={5} 
                                 value={this.props.mob.fulldesc} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
