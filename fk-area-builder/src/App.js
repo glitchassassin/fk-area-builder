@@ -15,7 +15,11 @@ import { connect } from 'react-redux';
 import { GlobalActions } from './Models/actionTypes';
 import CssBaseline from 'material-ui/CssBaseline';
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    type: "dark"
+  }
+});
 const styles = {
   root: {
     flexGrow: 1,

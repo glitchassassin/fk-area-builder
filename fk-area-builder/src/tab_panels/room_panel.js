@@ -493,7 +493,7 @@ class DoorResetsEditor extends React.Component {
                     </Validate>
                     <Grid item xs={12}>
                         <TrapResetEditor 
-                            id="trap_reset" 
+                            id="trap_reset"
                             pointer={reset.uuid} />
                     </Grid>
                 </Grid>

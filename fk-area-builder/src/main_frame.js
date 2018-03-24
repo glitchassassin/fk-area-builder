@@ -87,7 +87,7 @@ class AreaRenderer extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <Grid container spacing={8} justify="left">
+            <Grid container spacing={8}>
                 <Grid item xs={12}>
                     <pre className={classes.areafile}>
                     {(new AreaExporter()).renderArea(this.props.state)}

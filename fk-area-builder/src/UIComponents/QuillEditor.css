@@ -1,0 +1,48 @@
+#editor {
+	background: linear-gradient(to right, black 0%, black 562px, #555 562px, #555 565px, black 565px, black 100%)
+}
+.ql-container {
+	font-family: "Courier New";
+}
+.ql-toolbar {
+	background: #888;
+	color: #333;
+}
+.ql-toolbar.ql-snow {
+	border: 0px solid #888;
+	width: 89px;
+	height: 42px;
+	float: left;
+}
+.ql-container.ql-snow {
+	border: 0px solid #888;
+	background: #000;
+	margin-left: 89px;
+}
+.ql-snow .ql-color-picker .ql-picker-options {
+	background: #333;
+	width: 172px;
+}
+.ql-snow.ql-toolbar .ql-export {
+	color: #444;
+	width: 50px;
+}
+.ql-snow.ql-toolbar .ql-export:after {
+	content: "Export";
+}
+.ql-snow.ql-toolbar .ql-export_escaped {
+	color: #444;
+	width: 120px;
+}
+.ql-snow.ql-toolbar .ql-export_escaped:after {
+	content: "Export (escaped)";
+}
+.footer {
+	text-align: right;
+	size: 6pt;
+	font-style: italic;
+	width: 100%;
+}
+.footer a {
+	color: #808080;
+}

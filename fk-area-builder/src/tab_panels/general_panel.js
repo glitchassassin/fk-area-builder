@@ -6,6 +6,7 @@ import Grid from 'material-ui/Grid';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import { AreaActions, JusticeSystemActions } from '../Models/actionTypes';
 import { connect } from 'react-redux';
+import { ColorCodeEditor } from '../UIComponents/QuillEditor';
 
 import Table, {
     TableBody,
@@ -126,13 +127,12 @@ class GeneralPanel extends React.Component {
                             <ListSubheader>Area Reset</ListSubheader>
                         </Grid>
                         <Grid item xs={10} sm={10}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor
                                 label="Area reset echo" 
                                 id="reset_msg" 
-                                fullWidth={true} 
                                 value={this.props.area.reset_msg} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
+                                onChange={this.props.setProp}
+                            />
                         </Grid>
                         <Grid item xs={2} sm={2}>
                             <ValidatedTextField 
