@@ -39,7 +39,7 @@ from '../UIComponents/GenericEditors'
 const paper_style = {
     padding: "5px",
     margin: "5px auto",
-    maxWidth: "900px"
+    //maxWidth: "900px"
 }
 
 const area_validator = new AreaValidator()
@@ -48,168 +48,170 @@ const justice_system_validator = new JusticeSystemValidator()
 class GeneralPanel extends React.Component {
     render() {
         return (
-            <Paper style={paper_style}>
-                <Validate validator={area_validator}>
-                    <Grid container spacing={8}>
-                        <Grid item xs={12} sm={4}>
-                            <FlagSelector 
-                                id="category" 
-                                label="Category" 
-                                fullWidth={true}
-                                flags={AREA_CATEGORIES} 
-                                value={this.props.area.category} 
-                                onChange={this.props.setProp} />
+            <Grid container spacing={8} justify="center">
+                <Grid item xs={12} lg={10} xl={8}>
+                    <Validate validator={area_validator}>
+                        <Grid container spacing={8}>
+                            <Grid item xs={12} sm={4}>
+                                <FlagSelector 
+                                    id="category" 
+                                    label="Category" 
+                                    fullWidth={true}
+                                    flags={AREA_CATEGORIES} 
+                                    value={this.props.area.category} 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <ValidatedTextField 
+                                    label="Area Name" 
+                                    id="name"
+                                    fullWidth={true}
+                                    value={this.props.area.name} 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <ValidatedTextField 
+                                    label="Base Vnum" 
+                                    id="vnum" 
+                                    fullWidth={true}
+                                    value={this.props.area.vnum} 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                                <ValidatedTextField 
+                                    label="Authors" 
+                                    id="authors" 
+                                    fullWidth={true} 
+                                    value={this.props.area.authors} 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                                <ListSubheader>Levels</ListSubheader>
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <ValidatedTextField 
+                                    label="Min recommended level" 
+                                    id="min_recommended_level" 
+                                    fullWidth={true} 
+                                    value={this.props.area.min_recommended_level} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <ValidatedTextField 
+                                    label="Max recommended level" 
+                                    id="max_recommended_level" 
+                                    fullWidth={true} 
+                                    value={this.props.area.max_recommended_level} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <ValidatedTextField 
+                                    label="Min enforced level" 
+                                    id="min_enforced_level" 
+                                    fullWidth={true} 
+                                    value={this.props.area.min_enforced_level} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <ValidatedTextField 
+                                    label="Max enforced level" 
+                                    id="max_enforced_level" 
+                                    fullWidth={true} 
+                                    value={this.props.area.max_enforced_level} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                                <ListSubheader>Area Reset</ListSubheader>
+                            </Grid>
+                            <Grid item xs={10} sm={10}>
+                                <ColorCodeEditor
+                                    label="Area reset echo" 
+                                    id="reset_msg" 
+                                    value={this.props.area.reset_msg} 
+                                    onChange={this.props.setProp}
+                                />
+                            </Grid>
+                            <Grid item xs={2} sm={2}>
+                                <ValidatedTextField 
+                                    label="Area reset duration" 
+                                    id="reset_duration" 
+                                    fullWidth={true} 
+                                    value={this.props.area.reset_duration} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                                <ListSubheader>Economy</ListSubheader>
+                            </Grid>
+                            <Grid item xs={6} sm={6}>
+                                <ValidatedTextField 
+                                    label="Economy min" 
+                                    id="economy_min" 
+                                    fullWidth={true} 
+                                    value={this.props.area.economy_min} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={6} sm={6}>
+                                <ValidatedTextField 
+                                    label="Economy max" 
+                                    id="economy_max" 
+                                    fullWidth={true} 
+                                    value={this.props.area.economy_max} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                                <ListSubheader>Weather</ListSubheader>
+                            </Grid>
+                            <Grid item xs={6} sm={6}>
+                                <ValidatedTextField 
+                                    label="Humidity" 
+                                    id="weather_humidity" 
+                                    fullWidth={true} 
+                                    value={this.props.area.weather_humidity} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={6} sm={6}>
+                                <ValidatedTextField 
+                                    label="Temperature" 
+                                    id="weather_temperature" 
+                                    fullWidth={true} 
+                                    value={this.props.area.weather_temperature} 
+                                    autoComplete="off" 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                                <ListSubheader>Environmental Materials</ListSubheader>
+                            </Grid>
+                            <Grid item xs={6} sm={6}>
+                                <FlagSelector 
+                                    id="mining_material" 
+                                    label="Mining material" 
+                                    fullWidth={true} 
+                                    flags={ITEM_MATERIALS} 
+                                    value={this.props.area.mining_material} 
+                                    onChange={this.props.setProp} />
+                            </Grid>
+                            <Grid item xs={6} sm={6}>
+                                <FlagSelector 
+                                    id="logging_material" 
+                                    label="Logging material" 
+                                    fullWidth={true} 
+                                    flags={ITEM_MATERIALS} 
+                                    value={this.props.area.logging_material} 
+                                    onChange={this.props.setProp} />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <ValidatedTextField 
-                                label="Area Name" 
-                                id="name"
-                                fullWidth={true}
-                                value={this.props.area.name} 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={2}>
-                            <ValidatedTextField 
-                                label="Base Vnum" 
-                                id="vnum" 
-                                fullWidth={true}
-                                value={this.props.area.vnum} 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <ValidatedTextField 
-                                label="Authors" 
-                                id="authors" 
-                                fullWidth={true} 
-                                value={this.props.area.authors} 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <ListSubheader>Levels</ListSubheader>
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <ValidatedTextField 
-                                label="Min recommended level" 
-                                id="min_recommended_level" 
-                                fullWidth={true} 
-                                value={this.props.area.min_recommended_level} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <ValidatedTextField 
-                                label="Max recommended level" 
-                                id="max_recommended_level" 
-                                fullWidth={true} 
-                                value={this.props.area.max_recommended_level} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <ValidatedTextField 
-                                label="Min enforced level" 
-                                id="min_enforced_level" 
-                                fullWidth={true} 
-                                value={this.props.area.min_enforced_level} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <ValidatedTextField 
-                                label="Max enforced level" 
-                                id="max_enforced_level" 
-                                fullWidth={true} 
-                                value={this.props.area.max_enforced_level} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <ListSubheader>Area Reset</ListSubheader>
-                        </Grid>
-                        <Grid item xs={10} sm={10}>
-                            <ColorCodeEditor
-                                label="Area reset echo" 
-                                id="reset_msg" 
-                                value={this.props.area.reset_msg} 
-                                onChange={this.props.setProp}
-                            />
-                        </Grid>
-                        <Grid item xs={2} sm={2}>
-                            <ValidatedTextField 
-                                label="Area reset duration" 
-                                id="reset_duration" 
-                                fullWidth={true} 
-                                value={this.props.area.reset_duration} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <ListSubheader>Economy</ListSubheader>
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <ValidatedTextField 
-                                label="Economy min" 
-                                id="economy_min" 
-                                fullWidth={true} 
-                                value={this.props.area.economy_min} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <ValidatedTextField 
-                                label="Economy max" 
-                                id="economy_max" 
-                                fullWidth={true} 
-                                value={this.props.area.economy_max} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <ListSubheader>Weather</ListSubheader>
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <ValidatedTextField 
-                                label="Humidity" 
-                                id="weather_humidity" 
-                                fullWidth={true} 
-                                value={this.props.area.weather_humidity} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <ValidatedTextField 
-                                label="Temperature" 
-                                id="weather_temperature" 
-                                fullWidth={true} 
-                                value={this.props.area.weather_temperature} 
-                                autoComplete="off" 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <ListSubheader>Environmental Materials</ListSubheader>
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <FlagSelector 
-                                id="mining_material" 
-                                label="Mining material" 
-                                fullWidth={true} 
-                                flags={ITEM_MATERIALS} 
-                                value={this.props.area.mining_material} 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <FlagSelector 
-                                id="logging_material" 
-                                label="Logging material" 
-                                fullWidth={true} 
-                                flags={ITEM_MATERIALS} 
-                                value={this.props.area.logging_material} 
-                                onChange={this.props.setProp} />
-                        </Grid>
-                    </Grid>
-                </Validate>
-                <JusticeSystemEditor />
-            </Paper>
+                        <JusticeSystemEditor />
+                    </Validate>
+                </Grid>
+            </Grid>
         )
     }
 }

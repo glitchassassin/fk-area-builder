@@ -23,11 +23,14 @@ const styles = theme => ({
     flexGrow: 1,
     //marginTop: theme.spacing.unit * 3,,
     paddingTop: "48px",
-    backgroundColor: theme.palette.background.paper,
+    //backgroundColor: theme.palette.background.paper,
   },
   tabs: {
       marginTop: "64px",
       zIndex: "1099"
+  },
+  tab_contents: {
+      backgroundColor: theme.palette.background.paper,
   },
   badge: {
     padding: `0 ${theme.spacing.unit * 2}px`,
@@ -51,12 +54,12 @@ class MainFrame extends React.Component {
                     <Tab label="Area Code" />
                 </Tabs>
             </AppBar>
-            {this.props.current_tab === 0 && <Typography component="div" style={{ padding: 8 * 3 }}><GeneralPanel /></Typography>}
-            {this.props.current_tab === 1 && <Typography component="div" style={{ padding: 8 * 3 }}><RoomPanel /></Typography>}
-            {this.props.current_tab === 2 && <Typography component="div" style={{ padding: 8 * 3 }}><MobPanel /></Typography>}
-            {this.props.current_tab === 3 && <Typography component="div" style={{ padding: 8 * 3 }}><ItemPanel /></Typography>}
-            {this.props.current_tab === 4 && <Typography component="div" style={{ padding: 8 * 3 }}><QuestsPanel /></Typography>}
-            {this.props.current_tab === 5 && <Typography component="div" style={{ padding: 8 * 3 }}><AreaRenderer /></Typography>}
+            {this.props.current_tab === 0 && <Typography className={this.props.classes.tab_contents} component="div" style={{ padding: 8 * 3 }}><GeneralPanel /></Typography>}
+            {this.props.current_tab === 1 && <Typography className={this.props.classes.tab_contents} component="div" style={{ padding: 8 * 3 }}><RoomPanel /></Typography>}
+            {this.props.current_tab === 2 && <Typography className={this.props.classes.tab_contents} component="div" style={{ padding: 8 * 3 }}><MobPanel /></Typography>}
+            {this.props.current_tab === 3 && <Typography className={this.props.classes.tab_contents} component="div" style={{ padding: 8 * 3 }}><ItemPanel /></Typography>}
+            {this.props.current_tab === 4 && <Typography className={this.props.classes.tab_contents} component="div" style={{ padding: 8 * 3 }}><QuestsPanel /></Typography>}
+            {this.props.current_tab === 5 && <Typography className={this.props.classes.tab_contents} component="div" style={{ padding: 8 * 3 }}><AreaRenderer /></Typography>}
         </div>
         )
     }
