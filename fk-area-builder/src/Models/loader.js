@@ -75,6 +75,7 @@ class Loader {
             this.parseShops(),
             this.parseRepairs()
         );
+        console.log(actions)
         dispatch(actions) // Send all actions at once, instead of each one individually
     }
     
@@ -127,7 +128,7 @@ class Loader {
         
         let matches = /#JUSTICE\nCourtRoom (.*)\nDungeon (.*)\nJudge (.*)\n(?:Guard (.*)\n)?Crime ([^\s]*) ([^\s]*)\nCrime ([^\s]*) ([^\s]*)\nCrime ([^\s]*) ([^\s]*)\nCrime ([^\s]*) ([^\s]*)\n\$/gm.exec(this.area);
         if (!matches) {
-            return;
+            return [];
         }
         
         actions.push(setProp("courtroom", matches[1] || "0"));
@@ -148,7 +149,7 @@ class Loader {
         
         let quests = this.area.match(/^#QUESTS[^]*?(-1|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)/gm)
         if (!quests) {
-            return
+            return []
         }
         let qlog_regex = /^([^\s]{4}) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ({..})?(.*?)$/gm
         let matches;
@@ -171,7 +172,7 @@ class Loader {
         
         let mobiles = this.area.match(/^#MOBILES[^]*?(#0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)/gm)
         if (!mobiles) {
-            return
+            return []
         }
         let simple_mobile_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^~]\n)*.*)~\n(S) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\n(.*)$\n([^%].*)$\n([^%].*)$\n((?:%.*~\n)*)?(>[^]*?\|)?/gm
         let matches;
@@ -602,7 +603,7 @@ class Loader {
         let actions = []
         let specials = this.area.match(/^#SPECIALS[^]*?^(S|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!specials) {
-            return
+            return []
         }
         let specials_regex = /^M ([^\s]*) ([^\s]*)/gm
         let matches;
@@ -623,7 +624,7 @@ class Loader {
         let actions = []
         let shops = this.area.match(/^#SHOPS[^]*?^(0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!shops) {
-            return
+            return []
         }
         let shops_regex = /^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\s^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/gm
         let matches;
@@ -651,7 +652,7 @@ class Loader {
         let actions = [];
         let repairs = this.area.match(/^#REPAIRS[^]*?^(0|#PROGRAMS|#QUESTS|#MOBILES|#OBJECTS|#ROOMS|#RESETS|#SHOPS|#REPAIRS|#SPECIALS|#\$)$/gm)
         if (!repairs) {
-            return
+            return []
         }
         let repairs_regex = /^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\s^([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/gm
         let matches;

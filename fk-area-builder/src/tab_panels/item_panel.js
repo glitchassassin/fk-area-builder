@@ -6,11 +6,14 @@ import Button from 'material-ui/Button';
 import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Table, {TableBody, TableHead, TableCell, TableRow} from 'material-ui/Table';
 import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
+import { FormControlLabel } from 'material-ui/Form';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import Checkbox from 'material-ui/Checkbox';
+import { withStyles } from 'material-ui/styles';
+import PropTypes from 'prop-types';
 import { 
     ItemActions, UiStateActions, ItemResetActions, ItemApplyActions
 } from '../Models/actionTypes';
@@ -67,17 +70,14 @@ class ItemPanel extends React.Component {
     }
     generateItems(items) {
         return items.sort(vnum_sort).map((item, index) => (
-            <TableRow key={index}>
-                <TableCell padding="dense" width={"150px"}>
-                    <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(item.uuid))} style={icon_button_style}>
-                        <Icon>mode_edit</Icon>
-                    </IconButton>
-                    <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(item.uuid))} style={icon_button_style}>
+            <TableRow key={index} hover onClick={() => (this.props.openEditor(item.uuid))}>
+                <TableCell padding="dense" width={"100px"}>
+                    <IconButton tooltip="Delete" onClick={(e)=>{e.stopPropagation(); this.props.openConfirmDelete(item.uuid)}} style={icon_button_style}>
                         <Icon color="error">delete_forever</Icon>
                     </IconButton>
                     {item_validator.validate_state(this.props.state, item).length > 0 && (
-                    <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(item.uuid))} style={icon_button_style}>
-                        <Icon color="error">error</Icon>
+                    <IconButton tooltip="Show Errors" onClick={(e)=>{e.stopPropagation(); this.props.openErrors(item.uuid)}} style={icon_button_style}>
+                        <Icon color="primary">error</Icon>
                     </IconButton>
                     )}
                 </TableCell>
@@ -101,7 +101,7 @@ class ItemPanel extends React.Component {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell padding="dense" width={"150px"}>Edit</TableCell>
+                        <TableCell padding="dense" width={"120px"}></TableCell>
                         <TableCell padding="dense" width={"150px"}>vnum</TableCell>
                         <TableCell padding="dense">Short description</TableCell>
                         <TableCell padding="dense">Item type</TableCell>
@@ -147,7 +147,7 @@ class ItemPanel extends React.Component {
                         <List>
                             {item_validator.validate_state(this.props.state, item).map((error, index) => (
                                 <ListItem key={index}>
-                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
+                                    <ListItemIcon><Icon color="primary">error</Icon></ListItemIcon>
                                     <ListItemText primary={error} />
                                 </ListItem>
                             ))}
@@ -174,6 +174,8 @@ ItemPanel = connect(
         newItem: () => {
             let item_id = uuid();
             dispatch({ type:ItemActions.ADD, value:item_id });
+            dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:item_id });
+            dispatch({ type:UiStateActions.OPEN_ITEM_EDITOR });
         },
         openEditor: (uuid) => {
             dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:uuid });
@@ -189,19 +191,22 @@ ItemPanel = connect(
             dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:uuid });
             dispatch({ type:UiStateActions.OPEN_ITEM_CONFIRM_DELETE });
         },
-        confirmDelete: (e, v) => {
+        confirmDelete: (uuid) => {
             dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:null });
-            dispatch({ type:ItemActions.REMOVE, index:e.target.id });
+            dispatch({ type:ItemActions.REMOVE, index:uuid });
             dispatch({ type:UiStateActions.CLOSE_ITEM_CONFIRM_DELETE });
         },
         cancelDelete: () => {dispatch({ type:UiStateActions.CLOSE_ITEM_CONFIRM_DELETE })},
     })
 )(ItemPanel)
 
-const paper_style = {
-    padding: "5px",
-    margin: "5px"
-}
+const paper_style = theme => ({
+    paper: {
+        padding: "5px",
+        margin: "5px",
+        backgroundColor: theme.palette.secondary.main
+    }
+})
 
 class ItemEditor extends React.Component {
     generateItemValue(item_type, value_index) {
@@ -527,39 +532,61 @@ ApplyEditor = connect(
 class ItemResetsEditor extends React.Component {
     generate() {
         return this.props.model.filter((r)=>(r.item===this.props.vnum)).map((reset, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <Icon color="error">remove_circle</Icon>
-                </IconButton>
-                <Validate validator={item_reset_validator}>
-                <VnumAutoComplete 
-                    label="Room" 
-                    id="room_container" 
-                    value={reset.room_container} 
-                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} dataSource={this.props.rooms} />
-                <ValidatedTextField 
-                    label="Item Limit" 
-                    id="item_limit" 
-                    value={reset.item_limit} 
-                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
-                </Validate>
-                <Checkbox 
-                    label="Hidden" 
-                    id="hidden" 
-                    checked={reset.hidden} 
-                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
-                <Checkbox 
-                    label="Buried" 
-                    id="buried" 
-                    checked={reset.buried} 
-                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
-                <TrapResetEditor 
-                    id="trap_reset" 
-                    pointer={reset.uuid}  />
-                <ItemResetsContentsEditor 
-                    id="contents" 
-                    vnum={this.props.vnum}
-                    pointer={reset.uuid}  />
+            <Paper classes={{root:this.props.classes.paper}} key={index}>
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
+                    <Validate validator={item_reset_validator}>
+                    <Grid item xs={4}>
+                        <VnumAutoComplete 
+                            label="Room" 
+                            id="room_container" 
+                            value={reset.room_container} 
+                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} dataSource={this.props.rooms} />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <ValidatedTextField 
+                            label="Item Limit" 
+                            id="item_limit" 
+                            value={reset.item_limit} 
+                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
+                    </Grid>
+                    </Validate>
+                    <Grid item xs={2}>
+                        <Grid container align="center"><Grid item xs={12}>
+                            <FormControlLabel control={
+                                <Checkbox 
+                                    id="hidden" 
+                                    checked={reset.hidden} 
+                                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
+                            } label="Hidden" />
+                        </Grid></Grid>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Grid container align="center"><Grid item xs={12}>
+                            <FormControlLabel control={
+                                <Checkbox 
+                                    id="buried" 
+                                    checked={reset.buried} 
+                                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
+                            } label="Buried" />
+                        </Grid></Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TrapResetEditor 
+                            id="trap_reset" 
+                            pointer={reset.uuid}  />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ItemResetsContentsEditor 
+                            id="contents" 
+                            vnum={this.props.vnum}
+                            pointer={reset.uuid}  />
+                    </Grid>
+                </Grid>
             </Paper>
         ));
     }
@@ -574,7 +601,10 @@ class ItemResetsEditor extends React.Component {
         )
     }
 }
-ItemResetsEditor = connect(
+ItemResetsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ItemResetsEditor = withStyles(paper_style)(connect(
     (state)=>({
         model: state.item_resets,
         rooms: state.rooms
@@ -587,48 +617,66 @@ ItemResetsEditor = connect(
             dispatch({ type:ItemResetActions.SET_PROP, key:"item", value:vnum })
         }
     })
-)(ItemResetsEditor)
+)(ItemResetsEditor))
 
 class ItemResetsContentsEditor extends React.Component {
     generate() {
         return this.props.model.filter((r)=>(r.item_pointer===this.props.pointer)).map((reset, index) => (
-            <Paper style={paper_style} zDepth={1} key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
-                    <Icon color="error">remove_circle</Icon>
-                </IconButton>
-                <VnumAutoComplete 
-                    label="Item" 
-                    id="item"
-                    value={reset.item} 
-                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
-                    dataSource={this.props.items} />
-                <ValidatedTextField 
-                    label="Item Limit" 
-                    id="item_limit"
-                    value={reset.item_limit} 
-                    onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
-                <Checkbox 
-                    label="Hidden" 
-                    id="hidden"
-                    checked={reset.hidden} 
-                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
+            <Paper classes={{root:this.props.classes.paper}} key={index}>
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
+                    <Validate validator={item_reset_validator}>
+                    <Grid item xs={4}>
+                        <VnumAutoComplete 
+                            label="Item" 
+                            id="item"
+                            value={reset.item} 
+                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
+                            dataSource={this.props.items} />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <ValidatedTextField 
+                            label="Item Limit" 
+                            id="item_limit"
+                            value={reset.item_limit} 
+                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Grid container align="center"><Grid item xs={12}>
+                            <FormControlLabel control={
+                                <Checkbox 
+                                    id="hidden"
+                                    checked={reset.hidden} 
+                                    onCheck={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
+                            } label="Hidden" />
+                        </Grid></Grid>
+                    </Grid>
+                    </Validate>
+                </Grid>
             </Paper>
         ));
     }
     
     render() {
         return (
-            <React.Fragment>
+            <Paper classes={{root:this.props.classes.paper}}>
                 <ListSubheader>Contents</ListSubheader>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer, this.props.vnum))}>
                     <Icon>add_box</Icon>
                 </IconButton>
-            </React.Fragment>
+            </Paper>
         )
     }
 }
-ItemResetsContentsEditor = connect(
+ItemResetsContentsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ItemResetsContentsEditor = withStyles(paper_style)(connect(
     (state)=>({
         model: state.item_resets,
         items: state.items
@@ -642,6 +690,6 @@ ItemResetsContentsEditor = connect(
             dispatch({ type:ItemResetActions.SET_PROP, key:"item_pointer", value:uuid })
         }
     })
-)(ItemResetsContentsEditor)
+)(ItemResetsContentsEditor))
 
 export default withTheme()(ItemPanel);

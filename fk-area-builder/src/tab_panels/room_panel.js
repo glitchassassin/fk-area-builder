@@ -8,6 +8,8 @@ import Paper from 'material-ui/Paper';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import withTheme from 'material-ui/styles/withTheme';
 import Grid from 'material-ui/Grid';
+import { withStyles } from 'material-ui/styles';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ColorCodeEditor } from '../UIComponents/QuillEditor';
 import { RoomActions, UiStateActions, ExitActions, DoorResetActions, RoomResetActions } from '../Models/actionTypes';
@@ -71,17 +73,14 @@ class RoomPanel extends React.Component {
     
     generateItems(rooms) {
         return rooms.sort(vnum_sort).map((room, index) => (
-            <TableRow key={index}>
-                <TableCell padding="dense" width={"150px"}>
-                    <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(room.uuid))} style={icon_button_style}>
-                        <Icon>mode_edit</Icon>
-                    </IconButton>
-                    <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(room.uuid))} style={icon_button_style}>
+            <TableRow key={index} hover onClick={() => (this.props.openEditor(room.uuid))}>
+                <TableCell padding="dense" width={"100px"}>
+                    <IconButton tooltip="Delete" onClick={(e)=>{e.stopPropagation(); this.props.openConfirmDelete(room.uuid)}} style={icon_button_style}>
                         <Icon color="error">delete_forever</Icon>
                     </IconButton>
                     {room_validator.validate_state(this.props.state, room).length > 0 && (
-                    <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(room.uuid))} style={icon_button_style}>
-                        <Icon color="secondary">error</Icon>
+                    <IconButton tooltip="Show Errors" onClick={(e)=>{e.stopPropagation(); this.props.openErrors(room.uuid)}} style={icon_button_style}>
+                        <Icon color="primary">error</Icon>
                     </IconButton>
                     )}
                 </TableCell>
@@ -100,7 +99,7 @@ class RoomPanel extends React.Component {
             <Table padding="dense">
                 <TableHead>
                     <TableRow>
-                        <TableCell padding="dense" width={"150px"}>Edit</TableCell>
+                        <TableCell padding="dense" width={"120px"}></TableCell>
                         <TableCell padding="dense">vnum</TableCell>
                         <TableCell padding="dense" width={"50%"}>Short description</TableCell>
                         <TableCell padding="dense">Sector</TableCell>
@@ -157,7 +156,7 @@ class RoomPanel extends React.Component {
                     <DialogContent>
                         <List>
                             {room_validator.validate_state(this.props.state, room).map((error, index) => (
-                                <ListItem key={index} primaryText={error} leftIcon={<Icon color="secondary">error</Icon>} />
+                                <ListItem key={index} primaryText={error} leftIcon={<Icon color="primary">error</Icon>} />
                             ))}
                         </List>
                     </DialogContent>
@@ -182,6 +181,8 @@ RoomPanel = connect(
         newRoom: () => {
             let room_id = uuid();
             dispatch({ type:RoomActions.ADD, value:room_id });
+            dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:room_id });
+            dispatch({ type:UiStateActions.OPEN_ROOM_EDITOR });
         },
         openEditor: (uuid) => {
             dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:uuid });
@@ -206,11 +207,13 @@ RoomPanel = connect(
     })
 )(RoomPanel)
 
-const paper_style = {
-    padding: "5px",
-    //margin: "5px",
-    width: "100%"
-}
+const paper_style = theme => ({
+    paper: {
+        padding: "5px",
+        margin: "5px",
+        backgroundColor: theme.palette.secondary.main
+    }
+})
 
 class RoomEditor extends React.Component {
     handleChange = (e,v)=>(this.props.setProp(this.props.room.uuid, e.target.id, v))
@@ -356,7 +359,7 @@ class ExitsEditor extends React.Component {
         console.log(this.props.exits)
         return this.props.exits.filter((e)=>(e.room===this.props.pointer)).map((exit, index) => (
             <Grid item key={index} xs={12}>
-            <Paper style={paper_style}>
+            <Paper classes={{root:this.props.classes.paper}}>
                 <Grid container spacing={8}>
                     <Grid item xs={2}>
                     <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(exit.uuid))}>
@@ -441,7 +444,10 @@ class ExitsEditor extends React.Component {
         )
     }
 }
-ExitsEditor = connect(
+ExitsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ExitsEditor = withStyles(paper_style)(connect(
     (state)=>({
         exits: state.exits,
         rooms: state.rooms,
@@ -455,14 +461,14 @@ ExitsEditor = connect(
             dispatch({ type:ExitActions.SET_PROP, key:"pointer", value:pointer })
         }
     })
-)(ExitsEditor)
+)(ExitsEditor))
 
 class DoorResetsEditor extends React.Component {
     modelClass = DoorReset;
     generate() {
         return this.props.door_resets.filter((r)=>(r.room===this.props.vnum)).map((reset, index) => (
             <Grid item xs={12} key={index}>
-            <Paper style={paper_style}>
+            <Paper classes={{root:this.props.classes.paper}}>
                 <Grid container spacing={8} alignItems="center">
                     <Grid item xs={1}>
                         <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
@@ -510,7 +516,10 @@ class DoorResetsEditor extends React.Component {
         )
     }
 }
-DoorResetsEditor = connect(
+DoorResetsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+DoorResetsEditor = withStyles(paper_style)(connect(
     (state)=>({
         door_resets: state.door_resets,
         rooms: state.rooms,
@@ -524,14 +533,14 @@ DoorResetsEditor = connect(
             dispatch({ type:DoorResetActions.SET_PROP, key:"room", value:vnum })
         }
     })
-)(DoorResetsEditor)
+)(DoorResetsEditor))
 
 class RoomResetsEditor extends React.Component {
     modelClass = RoomReset;
     generate() {
         return this.props.room_resets.filter(r=>(r.room===this.props.vnum)).map((reset, index) => (
-            <Grid item xs={12}>
-                <Paper style={paper_style} zDepth={1} key={index}>
+            <Grid item xs={12} key={index}>
+                <Paper classes={{root:this.props.classes.paper}}>
                     <Grid container spacing={8} alignItems="center">
                         <Grid item xs={1}>
                             <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
@@ -574,7 +583,10 @@ class RoomResetsEditor extends React.Component {
         )
     }
 }
-RoomResetsEditor = connect(
+RoomResetsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+RoomResetsEditor = withStyles(paper_style)(connect(
     (state)=>({
         room_resets: state.room_resets
     }),
@@ -586,6 +598,6 @@ RoomResetsEditor = connect(
             dispatch({ type:RoomResetActions.SET_PROP, key:"room", value:vnum })
         }
     })
-)(RoomResetsEditor)
+)(RoomResetsEditor))
 
 export default withTheme()(RoomPanel);

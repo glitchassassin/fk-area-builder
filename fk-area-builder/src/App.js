@@ -17,15 +17,31 @@ import CssBaseline from 'material-ui/CssBaseline';
 
 const theme = createMuiTheme({
   palette: {
-    type: "dark"
+    type: "dark",
+    primary: {
+      light: '#c7a4ff',
+      main: '#9575cd',
+      dark: '#512da8',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#8e8e8e',
+      main: '#616161',
+      dark: '#373737',
+      contrastText: '#fff',
+    },
+    error: {
+      main: "#f4511e"
+    }
   }
 });
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
     paddingTop:"64px"
   },
   appBar: {
+    backgroundColor: theme.palette.primary.dark,
     minHeight: "64px"
   },
   flex: {
@@ -35,7 +51,7 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
-};
+});
 
 class App extends Component {
   render() {
@@ -73,7 +89,7 @@ class AppHeader extends Component {
         return warning;
       }
     }
-    this.props.loadArea(testArea)
+    //this.props.loadArea(testArea2)
   }
   
   setStatus = (icon) => (this.setState({status: icon}));

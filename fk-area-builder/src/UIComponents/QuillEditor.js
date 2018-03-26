@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Grid from 'material-ui/Grid';
 import {FormControl, FormHelperText} from 'material-ui/Form'
 import {InputLabel} from 'material-ui/Input';
 import {withStyles} from 'material-ui/styles';
@@ -7,7 +8,6 @@ import PropTypes from 'prop-types';
 import 'react-quill/dist/quill.snow.css';
 import './QuillEditor.css';
 import AceEditor from 'react-ace';
-import brace from 'brace';
 import './FK_Syntax';
 import 'brace/theme/monokai';
 const uuid = require('uuid/v4');
@@ -126,11 +126,15 @@ const color_code_styles = {
     },
     input_label_shrink: {
         transform: "translate(0, -5.0px) scale(0.75)"
+    },
+    helper_text_root: {
+        marginLeft: "95px"
     }
 }
 
 class ColorCodeEditor extends Component {
     id=uuid()
+    quill=null
     state = {
         valueString:"",
         valueDelta:stringToDelta("")
@@ -139,8 +143,9 @@ class ColorCodeEditor extends Component {
         if (source === "user") {
             let valueDelta = editor.getContents();
             let valueString = deltaToString(valueDelta);
+            if (valueString==="\n") { this.quill.format("color", "#c0c0c0") }
             this.setState({valueDelta, valueString})
-            this.props.onChange({target:{id:this.props.id}}, valueString)
+            this.props.onChange({target:{id:this.props.id}}, valueString) // If editor is cleared, set default format
             //if (this.focus) { this.focus(); }
         }
     }
@@ -160,18 +165,17 @@ class ColorCodeEditor extends Component {
         if (nextProps.value !== this.state.valueString) {
             this.setState({valueDelta:stringToDelta(nextProps.value)})
         }
-        
     }
     quillRef = (ref) => {
         if (!ref) { return; }
-        let quill = ref.getEditor()
-        quill.format("color", "#c0c0c0")
-		quill.root.addEventListener('copy', function(e){
-			var range = quill.getSelection();
+        this.quill = ref.getEditor()
+        this.quill.format("color", "#c0c0c0")
+		this.quill.root.addEventListener('copy', function(e){
+			var range = this.quill.getSelection();
 			if (range) {
 				if (range.length === 0) {
 				} else {
-					var text = quill.getContents(range.index, range.length);
+					var text = this.quill.getContents(range.index, range.length);
 					e.clipboardData.setData('text/plain', deltaToString(text));
 				}
 			}
@@ -191,7 +195,8 @@ class ColorCodeEditor extends Component {
         const { classes } = this.props
         //let value = stringToDelta(this.props.value)
         return (
-            <FormControl fullWidth>
+            <Grid container spacing={8} justify="center"><Grid item style={{width:"789px"}}>
+            <FormControl style={{maxWidth:"789px", width:"100%"}} error={Boolean(this.validate().length)}>
                 <InputLabel classes={{root:classes.input_label_root, shrink:classes.input_label_shrink}} shrink={Boolean(this.props.value.trim())}>{this.props.label}</InputLabel>
                 <div style={{marginTop:"16px"}}>
                 <ReactQuill
@@ -204,8 +209,9 @@ class ColorCodeEditor extends Component {
         			modules={this.modules}
                 />
                 </div>
-                <FormHelperText>{this.validate()}</FormHelperText>
+                <FormHelperText classes={{root:classes.helper_text_root}}>{this.validate()}</FormHelperText>
             </FormControl>
+            </Grid></Grid>
         )
     }
 }
@@ -219,13 +225,16 @@ ColorCodeEditor = withStyles(color_code_styles)(ColorCodeEditor)
 
 const program_styles = {
     input_label_root: {
-        left: "50x",
+        left: "50px",
         top: "16px",
         zIndex: "1",
         pointerEvents: "none"
     },
     input_label_shrink: {
         transform: "translate(0, -17.0px) scale(0.75)"
+    },
+    helper_text_root: {
+        marginLeft: "45px"
     }
 }
 
@@ -241,9 +250,8 @@ class ProgramEditor extends Component {
     }
     render() {
         const { classes } = this.props
-        console.log(this.props.value)
         return (
-            <FormControl fullWidth>
+            <FormControl fullWidth error={Boolean(this.validate().length)}>
                 <InputLabel classes={{root:classes.input_label_root, shrink:classes.input_label_shrink}} shrink={Boolean(this.props.value.trim())}>{this.props.label}</InputLabel>
                 <div style={{marginTop:"16px"}}>
                 <AceEditor
@@ -252,7 +260,7 @@ class ProgramEditor extends Component {
                     name="authors"
                     onLoad={this.onLoad}
                     onChange={this.handleChange.bind(this)}
-                    fontSize={14}
+                    fontSize={12}
                     showPrintMargin={true}
                     showGutter={true}
                     width={"100%"}
@@ -264,7 +272,7 @@ class ProgramEditor extends Component {
                         tabSize: 2,
                     }}/>
                 </div>
-                <FormHelperText>{this.validate()}</FormHelperText>
+                <FormHelperText classes={{root:classes.helper_text_root}}>{this.validate()}</FormHelperText>
             </FormControl>
         )
     }

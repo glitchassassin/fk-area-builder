@@ -7,6 +7,8 @@ import ListSubheader from 'material-ui/List/ListSubheader';
 import { AreaActions, JusticeSystemActions } from '../Models/actionTypes';
 import { connect } from 'react-redux';
 import { ColorCodeEditor } from '../UIComponents/QuillEditor';
+import { withStyles } from 'material-ui/styles';
+import PropTypes from 'prop-types';
 
 import Table, {
     TableBody,
@@ -36,11 +38,13 @@ import {
 }
 from '../UIComponents/GenericEditors'
 
-const paper_style = {
-    padding: "5px",
-    margin: "5px auto",
-    //maxWidth: "900px"
-}
+const paper_style = theme => ({
+    paper: {
+        padding: "5px",
+        margin: "5px",
+        backgroundColor: theme.palette.secondary.main
+    }
+})
 
 const area_validator = new AreaValidator()
 const justice_system_validator = new JusticeSystemValidator()
@@ -214,19 +218,22 @@ class GeneralPanel extends React.Component {
         )
     }
 }
-GeneralPanel = connect(
+GeneralPanel.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+GeneralPanel = withStyles(paper_style)(connect(
     (state) => ({area:state.area}),
     (dispatch) => ({
         setProp: (e,v) => (dispatch({ type:AreaActions.SET_PROP, key:e.target.id, value:v }))
     })
-)(GeneralPanel)
+)(GeneralPanel))
 
 class JusticeSystemEditor extends React.Component {
     render() {
         // eslint-disable-next-line
         if (this.props.justice_system!=undefined) {
             return (
-                <Paper id={this.props.id} style={paper_style}>
+                <Paper id={this.props.id} classes={{root:this.props.classes.paper}}>
                     <Validate validator={justice_system_validator}>
                         <Grid container spacing={8}>
                             <Grid item xs={12} sm={12}>
@@ -346,13 +353,16 @@ class JusticeSystemEditor extends React.Component {
         }
     }
 }
-JusticeSystemEditor = connect(
+JusticeSystemEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+JusticeSystemEditor = withStyles(paper_style)(connect(
     (state) => ({justice_system:state.justice_system, rooms:state.rooms, mobs:state.mobs}),
     (dispatch) => ({
         setProp: (e,v) => (dispatch({ type:JusticeSystemActions.SET_PROP, key:e.target.id, value:v })),
         handleNew: (e,v) => (dispatch({ type:JusticeSystemActions.ADD })),
         remove: (e,v) => (dispatch({ type:JusticeSystemActions.REMOVE }))
     })
-)(JusticeSystemEditor)
+)(JusticeSystemEditor))
 
 export default GeneralPanel;

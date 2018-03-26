@@ -26,3 +26,12 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Google Drive picker styles */
+
+.picker-dialog-bg {
+  z-index: 1100 !important;
+}
+.picker-dialog {
+  z-index: 1101 !important ;
+}

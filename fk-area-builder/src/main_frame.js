@@ -26,6 +26,7 @@ const styles = theme => ({
     //backgroundColor: theme.palette.background.paper,
   },
   tabs: {
+      backgroundColor: theme.palette.primary.dark,
       marginTop: "64px",
       zIndex: "1099"
   },

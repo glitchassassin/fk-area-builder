@@ -116,17 +116,14 @@ class MobPanel extends React.Component {
     }
     generateItems() {
         return this.props.mobs.sort(vnum_sort).map((mob, index) => (
-            <TableRow key={index}>
-                <TableCell padding="dense" width={"150px"}>
-                    <IconButton tooltip="Edit" onClick={() => (this.props.openEditor(mob.uuid))} style={icon_button_style}>
-                        <Icon>mode_edit</Icon>
-                    </IconButton>
-                    <IconButton tooltip="Delete" onClick={()=>(this.props.openConfirmDelete(mob.uuid))} style={icon_button_style}>
+            <TableRow key={index} hover onClick={() => (this.props.openEditor(mob.uuid))}>
+                <TableCell padding="dense" width={"100px"}>
+                    <IconButton tooltip="Delete" onClick={(e)=>{e.stopPropagation(); this.props.openConfirmDelete(mob.uuid)}} style={icon_button_style}>
                         <Icon color="error">delete_forever</Icon>
                     </IconButton>
                     {mob_validator.validate_state(this.props.state, mob).length > 0 && (
-                    <IconButton tooltip="Show Errors" onClick={()=>(this.props.openErrors(mob.uuid))} style={icon_button_style}>
-                        <Icon color="error">error</Icon>
+                    <IconButton tooltip="Show Errors" onClick={(e)=>{e.stopPropagation(); this.props.openErrors(mob.uuid)}} style={icon_button_style}>
+                        <Icon color="primary">error</Icon>
                     </IconButton>
                     )}
                 </TableCell>
@@ -166,7 +163,7 @@ class MobPanel extends React.Component {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell padding="dense" width={"150px"}>Edit</TableCell>
+                        <TableCell padding="dense" width={"120px"}></TableCell>
                         <TableCell padding="dense" width={"150px"}>vnum</TableCell>
                         <TableCell padding="dense">Short description</TableCell>
                         <TableCell padding="dense">Level</TableCell>
@@ -179,7 +176,7 @@ class MobPanel extends React.Component {
                     {this.generateItems()}
                     <TableRow>
                         <TableCell padding="dense" width={"150px"}>
-                            <IconButton tooltip="Add" onClick={this.handleNew}>
+                            <IconButton tooltip="Add" onClick={this.props.newMob}>
                                 <Icon>add_box</Icon>
                             </IconButton>
                         </TableCell>
@@ -189,9 +186,7 @@ class MobPanel extends React.Component {
             {mob !== undefined &&
             <React.Fragment>
                 <MobEditor />
-                <Dialog 
-                    open={this.props.ui_state.mob_confirm_delete_open} 
-                    modal={false} >
+                <Dialog open={this.props.ui_state.mob_confirm_delete_open} >
                     <DialogTitle>{`Delete ${mob.sdesc}?`}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>{`Are you sure you want to delete mob ${mob.vnum} (${mob.sdesc})? You cannot undo this action!`}</DialogContentText>
@@ -210,14 +205,13 @@ class MobPanel extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <Dialog 
-                    open={this.props.ui_state.mob_errors_open} >
+                <Dialog open={this.props.ui_state.mob_errors_open} >
                     <DialogTitle>{`Errors for mob ${mob.vnum}`}</DialogTitle>
                     <DialogContent>
                         <List>
                             {mob_validator.validate_state(this.props.state, mob).map((error, index) => (
                                 <ListItem key={index} >
-                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
+                                    <ListItemIcon><Icon color="primary">error</Icon></ListItemIcon>
                                     <ListItemText primary={error} />
                                 </ListItem>
                             ))}
@@ -244,6 +238,8 @@ MobPanel = connect(
         newMob: () => {
             let mob_id = uuid();
             dispatch({ type:MobActions.ADD, value:mob_id });
+            dispatch({ type:UiStateActions.SET_CURRENT_MOB, value:mob_id });
+            dispatch({ type:UiStateActions.OPEN_MOB_EDITOR });
         },
         openEditor: (uuid) => {
             dispatch({ type:UiStateActions.SET_CURRENT_MOB, value:uuid });
@@ -259,9 +255,9 @@ MobPanel = connect(
             dispatch({ type:UiStateActions.SET_CURRENT_MOB, value:uuid });
             dispatch({ type:UiStateActions.OPEN_MOB_CONFIRM_DELETE });
         },
-        confirmDelete: (e, v) => {
+        confirmDelete: (uuid) => {
             dispatch({ type:UiStateActions.SET_CURRENT_MOB, value:null });
-            dispatch({ type:MobActions.REMOVE, index:e.target.id });
+            dispatch({ type:MobActions.REMOVE, index:uuid });
             dispatch({ type:UiStateActions.CLOSE_MOB_CONFIRM_DELETE });
         },
         cancelDelete: () => {dispatch({ type:UiStateActions.CLOSE_MOB_CONFIRM_DELETE })},
@@ -272,7 +268,7 @@ const paper_style = theme => ({
     paper: {
         padding: "5px",
         margin: "5px",
-        backgroundColor: theme.palette.grey[600]
+        backgroundColor: theme.palette.secondary.main
     }
 })
 

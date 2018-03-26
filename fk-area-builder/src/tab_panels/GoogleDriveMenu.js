@@ -2,7 +2,7 @@ import React from 'react';
 import Storage from '../Models/Storage';
 import AreaExporter from '../Models/are_export';
 import Menu, {MenuItem} from 'material-ui/Menu';
-import Dialog from 'material-ui/Dialog';
+import Dialog, {DialogContent, DialogActions, DialogContentText, DialogTitle} from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Check from 'material-ui-icons/Check';
@@ -132,21 +132,26 @@ class GoogleDriveMenu extends React.Component {
                     <MenuItem onClick={(e)=>(this.saveAsDrive())}>Save As...</MenuItem>
                     <MenuItem onClick={(e)=>(this.loadDrive())}>Load</MenuItem>
                 </Menu>
-                <Dialog 
-                    open={this.state.error_open} 
-                    actions={<Button label="Okay" primary={true} keyboardFocused={true} onClick={this.closeErrors} />}
-                    modal={false} 
-                    title={"Error"}>
-                        {this.state.error_text}
+                <Dialog open={this.state.error_open} >
+                    <DialogTitle>{`Error`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>{this.state.error_text}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" onClick={this.closeErrors}>
+                            Okay
+                        </Button>
+                    </DialogActions>
                 </Dialog>
-                <Dialog 
-                    open={this.state.confirm_open} 
-                    actions={[
-                        <Button label="Discard local" primary={true} keyboardFocused={true} onClick={()=>(this.closeConfirm(this.reloadDrive.bind(this)))} />,
-                        <Button label="Overwrite Drive" primary={true} keyboardFocused={true} onClick={()=>(this.closeConfirm(this.forceSaveDrive.bind(this)))} />]}
-                    modal={false} 
-                    title={"Error"}>
-                        Area file has changed on Google Drive. Discard local changes and reload from Drive, or save and overwrite the Drive version?
+                <Dialog open={this.state.confirm_open} >
+                    <DialogTitle>{`Error`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>Area file has changed on Google Drive. Discard local changes and reload from Drive, or save and overwrite the Drive version?</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" onClick={()=>(this.closeConfirm(this.reloadDrive.bind(this)))}>Discard local</Button>
+                        <Button color="primary" onClick={()=>(this.closeConfirm(this.forceSaveDrive.bind(this)))}>Overwrite Drive</Button>
+                    </DialogActions>
                 </Dialog>
             </React.Fragment>
         );

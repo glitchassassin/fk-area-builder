@@ -1,5 +1,4 @@
 window.ace.define("ace/mode/fk_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
-"use strict";
 
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
@@ -7,24 +6,37 @@ var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 var FkHighlightRules = function() {
 
     var keywords = (
-        "and|as|assert|break|class|continue|def|del|elif|else|except|exec|" +
-        "finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|" +
-        "raise|return|try|while|with|yield|async|await"
+        "mpadvance|mpaffect|mpapply|mpapplyb|mpareaecho|mpasound|mpat|mpcast|mpclearability|" +
+        "mpclearspell|mpclosepassage|mpdamage|mpdegrade|mpdeposit|mpdrain|mpdream|mpecho|" +
+        "mpechoaround|mpechoat|mpfavor|mpforce|mpgive|mpgoto|mphireemployee|mpinfect|" +
+        "mpinvis|mpjunk|mpkill|mpkilllist|mplag|mplog|mpmadd|mpmakecash|mpmload|mpmset|" +
+        "mpnothing|mpoadd|mpoload|mpopenpassage|mposet|mppeace|mppkset|mppractice|mppunish|" +
+        "mppurge|mpquiet|mpregoto|mpresize|mprestore|mpreward|mprset|mpsetclan|mpsetfeat|" +
+        "mpsetheight|mpsetsong|mpsettrap|mpsetweight|mpslay|mptakecash|mptakecashroom|" +
+        "mptrain|mptransfer|mpunintercept|mpwalkto|mpwithdraw|if|else|endif|"
     );
 
     var builtinConstants = (
-        "True|False|None|NotImplemented|Ellipsis|__debug__"
+        "$n|$N|$i|$I|$t|$T|$r|$R|$e|$m|$s|$E|$M|$S|$j|$k|$l|$J|$K|$L|$o|$O|$c|$C|$p|$P|$a|" +
+        "$A|$f|$F|$w|$W|$b|$v|$0|$1|$2|$3|$4|$5|$6|$7|$8|$9|self"
     );
 
     var builtinFunctions = (
-        "abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|" +
-        "eval|isinstance|pow|sum|basestring|execfile|issubclass|print|super|" +
-        "binfile|iter|property|tuple|bool|filter|len|range|type|bytearray|" +
-        "float|list|raw_input|unichr|callable|format|locals|reduce|unicode|" +
-        "chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|" +
-        "cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|" +
-        "__import__|complex|hash|min|set|apply|delattr|help|next|setattr|" +
-        "buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern"
+        "actorhasobjnum|actorotypewear|align|canhire|canpkill|cha|charinroom|clan|class|" +
+        "con|day|deity|dex|doingquest|economy|favor|feat|formation|getcurrentuses|goldamt|" +
+        "goldamtroom|goldamtroomc|glory|glory_total|group|guild|hashorse|haspet|hitamt|" +
+        "hitprcnt|hometown|inarea|inroom|int|isaffected|isburied($o)|ischaotic|ischarmed|" +
+        "isclanned|isdevoted|isemployer|isevil|isfamilar|isfight|isfollow|isfullmoon|" +
+        "isgood|isguilded|ishelled|isimmort|isindoors|islawful|ismobinvis|ismounted|" +
+        "isneutral|isnpc|isordered|ispc|ispet|ispkill|isunconcerned|isundead|iswanted|" +
+        "killer|kismet|language|lck|level|manaamt|manaprcnt|material|memorised|mobinroom|" +
+        "mobinvislevel|month|moveamt|moveprcnt|name|norecall|number|numinarea|objininv|" +
+        "objinroom|objtype|objval0|objval1|objval2|objval3|objval4|objval5|objisworn|" +
+        "order|otypecarry|otypehere|otypeinv|otyperoom|otypewear|ovnumcarry|ovnumhere|" +
+        "ovnuminv|ovnumroom|ovnumwear|ownsmark|pcinroom|perm_cha|perm_con|perm_dex|" +
+        "perm_int|perm_lck|perm_str|perm_wis|position|practice|quality|quest|questr|race|" +
+        "rand|resistance|sector|sex|skilllevel|skillcheck|str|string|stringprefix|temp|" +
+        "thief|time|timeskilled|value5bits|wasinroom|wear_loc|weather|wis|"
     );
     var keywordMapper = this.createKeywordMapper({
         "invalid.deprecated": "debugger",
@@ -33,13 +45,12 @@ var FkHighlightRules = function() {
         "keyword": keywords
     }, "identifier");
 
-    var strPre = "(?:r|u|ur|R|U|UR|Ur|uR)?";
-
     var decimalInteger = "(?:(?:[1-9]\\d*)|(?:0))";
     var octInteger = "(?:0[oO]?[0-7]+)";
     var hexInteger = "(?:0[xX][\\dA-Fa-f]+)";
     var binInteger = "(?:0[bB][01]+)";
-    var integer = "(?:" + decimalInteger + "|" + octInteger + "|" + hexInteger + "|" + binInteger + ")";
+    var vnum = "(?:[mi][\\d]+)";
+    var integer = "(?:" + decimalInteger + "|" + octInteger + "|" + hexInteger + "|" + binInteger + "|" + vnum + ")";
 
     var exponent = "(?:[eE][+-]?\\d+)";
     var fraction = "(?:\\.\\d+)";
@@ -48,28 +59,10 @@ var FkHighlightRules = function() {
     var exponentFloat = "(?:(?:" + pointFloat + "|" +  intPart + ")" + exponent + ")";
     var floatNumber = "(?:" + exponentFloat + "|" + pointFloat + ")";
 
-    var stringEscape =  "\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv'\"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})";
-
     this.$rules = {
         "start" : [ {
             token : "comment",
-            regex : "#.*$"
-        }, {
-            token : "string",           // multi line """ string start
-            regex : strPre + '"{3}',
-            next : "qqstring3"
-        }, {
-            token : "string",           // " string
-            regex : strPre + '"(?=.)',
-            next : "qqstring"
-        }, {
-            token : "string",           // multi line ''' string start
-            regex : strPre + "'{3}",
-            next : "qstring3"
-        }, {
-            token : "string",           // ' string
-            regex : strPre + "'(?=.)",
-            next : "qstring"
+            regex : ";.*$"
         }, {
             token : "constant.numeric", // imaginary
             regex : "(?:" + floatNumber + "|\\d+)[jJ]\\b"
@@ -98,54 +91,6 @@ var FkHighlightRules = function() {
             token : "text",
             regex : "\\s+"
         } ],
-        "qqstring3" : [ {
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string", // multi line """ string end
-            regex : '"{3}',
-            next : "start"
-        }, {
-            defaultToken : "string"
-        } ],
-        "qstring3" : [ {
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string",  // multi line ''' string end
-            regex : "'{3}",
-            next : "start"
-        }, {
-            defaultToken : "string"
-        } ],
-        "qqstring" : [{
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string",
-            regex : "\\\\$",
-            next  : "qqstring"
-        }, {
-            token : "string",
-            regex : '"|$',
-            next  : "start"
-        }, {
-            defaultToken: "string"
-        }],
-        "qstring" : [{
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string",
-            regex : "\\\\$",
-            next  : "qstring"
-        }, {
-            token : "string",
-            regex : "'|$",
-            next  : "start"
-        }, {
-            defaultToken: "string"
-        }]
     };
 };
 
@@ -155,7 +100,6 @@ exports.FkHighlightRules = FkHighlightRules;
 });
 
 window.ace.define("ace/mode/folding/fk",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
-"use strict";
 
 var oop = acequire("../../lib/oop");
 var BaseFoldMode = acequire("./fold_mode").FoldMode;
@@ -184,7 +128,6 @@ oop.inherits(FoldMode, BaseFoldMode);
 });
 
 window.ace.define("ace/mode/fk",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/fk_highlight_rules","ace/mode/folding/fk","ace/range"], function(acequire, exports, module) {
-"use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
@@ -209,12 +152,12 @@ oop.inherits(Mode, TextMode);
         var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
         var tokens = tokenizedLine.tokens;
 
-        if (tokens.length && tokens[tokens.length-1].type == "comment") {
+        if (tokens.length && tokens[tokens.length-1].type === "comment") {
             return indent;
         }
 
-        if (state == "start") {
-            var match = line.match(/^.*[\{\(\[:]\s*$/);
+        if (state === "start") {
+            var match = line.match(/^.*[{([:]\s*$/);
             if (match) {
                 indent += tab;
             }
@@ -241,12 +184,12 @@ oop.inherits(Mode, TextMode);
             return false;
         do {
             var last = tokens.pop();
-        } while (last && (last.type == "comment" || (last.type == "text" && last.value.match(/^\s+$/))));
+        } while (last && (last.type === "comment" || (last.type === "text" && last.value.match(/^\s+$/))));
         
         if (!last)
             return false;
         
-        return (last.type == "keyword" && outdents[last.value]);
+        return (last.type === "keyword" && outdents[last.value]);
     };
 
     this.autoOutdent = function(state, doc, row) {
@@ -254,7 +197,7 @@ oop.inherits(Mode, TextMode);
         row += 1;
         var indent = this.$getIndent(doc.getLine(row));
         var tab = doc.getTabString();
-        if (indent.slice(-tab.length) == tab)
+        if (indent.slice(-tab.length) === tab)
             doc.remove(new Range(row, indent.length-tab.length, row, indent.length));
     };
 

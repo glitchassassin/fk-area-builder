@@ -282,7 +282,7 @@ class VnumAutoComplete extends React.Component {
                         classes,
                         id:this.props.id,
                         fullWidth:true,
-                        value:this.props.value,
+                        value:this.props.value||"",
                         onChange:this.updateInput.bind(this)
                     }}
                 />

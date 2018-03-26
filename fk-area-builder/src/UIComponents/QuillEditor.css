@@ -1,5 +1,6 @@
 .ql-editor {
 	background: linear-gradient(to right, black 0%, black 562px, #333 562px, #333 565px, black 565px, black 100%);
+	color: #c0c0c0;
 	height: 100%;
 	min-height: inherit;
 }

@@ -198,9 +198,11 @@ function mobs(state=[], action) {
                 return target
             })
         case MobActions.ADD:
+            let mob = new SimpleMob();
+            mob.uuid = action.value;
             return [
                 ...state,
-                new SimpleMob()
+                mob
             ]
         case MobActions.REMOVE:
             if (state.length <= 0) {

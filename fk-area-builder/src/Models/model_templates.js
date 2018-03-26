@@ -53,10 +53,10 @@ class Area extends Object {
 class JusticeSystem extends Object {
     constructor(fields) {
         super(Object.assign({
-            courtroom:  "",
-            dungeon:    "",
-            judge:      "",
-            guard:      "",
+            courtroom:  "0",
+            dungeon:    "0",
+            judge:      "0",
+            guard:      "0",
             CRIME_HIGH_MURDER: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED,
             CRIME_LOW_MURDER: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED,
             CRIME_ASSAULT: flags.JUSTICE_PUNISHMENTS.PUNISHMENT_NOT_ENFORCED,

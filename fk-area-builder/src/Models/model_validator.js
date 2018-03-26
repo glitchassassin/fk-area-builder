@@ -16,7 +16,7 @@ class Field {
     validate(value) {
         let errors = [];
         
-        if (value == null || value === "") {
+        if (value == null || (typeof value === "string" && value.trim() === "")) {
             if (!this.options.optional) {
                 errors.push(`${this.name} should not be empty`)
             }

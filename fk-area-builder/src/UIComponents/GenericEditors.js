@@ -40,7 +40,7 @@ const paper_style = theme => ({
         padding: "5px",
         margin: "5px auto",
         width: "100%",
-        backgroundColor: theme.palette.grey[600]
+        backgroundColor: theme.palette.secondary.main
     }
 })
 
@@ -292,6 +292,9 @@ const editorDialogStyles = theme => ({
     title: {
         padding: 0
     },
+    appBar: {
+        backgroundColor: theme.palette.primary.dark,
+    },
     content: {
         paddingTop: "20px"
     }
@@ -307,7 +310,7 @@ class EditorDialog extends React.Component {
                 PaperProps={{style:{width:"80%"}}}>
                 <DialogTitle className={classes.title}>
                     {/*this.props.title*/}
-                    <AppBar position="static">
+                    <AppBar position="static" classes={{root:classes.appBar}}>
                         <Tabs value={this.props.selected_tab} onChange={this.props.setTab} fullWidth scrollable scrollButtons="auto">
                             {this.props.tabs.map((t)=>(<Tab key={t} label={t} />))}
                         </Tabs>
