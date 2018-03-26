@@ -5,8 +5,14 @@ import {withStyles} from 'material-ui/styles';
 import ReactQuill, {Quill} from 'react-quill';
 import PropTypes from 'prop-types';
 import 'react-quill/dist/quill.snow.css';
-import './QuillEditor.css'
+import './QuillEditor.css';
+import AceEditor from 'react-ace';
+import brace from 'brace';
+import './FK_Syntax';
+import 'brace/theme/monokai';
 const uuid = require('uuid/v4');
+
+
 
 var QClipboard = Quill.import('modules/clipboard');
 var Delta = Quill.import('delta');
@@ -211,4 +217,64 @@ ColorCodeEditor.propTypes = {
 }
 ColorCodeEditor = withStyles(color_code_styles)(ColorCodeEditor)
 
-export { ColorCodeEditor }
+const program_styles = {
+    input_label_root: {
+        left: "50x",
+        top: "16px",
+        zIndex: "1",
+        pointerEvents: "none"
+    },
+    input_label_shrink: {
+        transform: "translate(0, -17.0px) scale(0.75)"
+    }
+}
+
+class ProgramEditor extends Component {
+    handleChange(value, event) {
+        this.props.onChange({target:{id:this.props.id}}, value)
+    }
+    validate() {
+        if (this.context.validator) {
+            return this.context.validator[this.props.id].validate(this.props.value).join("")
+        }
+        return ""
+    }
+    render() {
+        const { classes } = this.props
+        console.log(this.props.value)
+        return (
+            <FormControl fullWidth>
+                <InputLabel classes={{root:classes.input_label_root, shrink:classes.input_label_shrink}} shrink={Boolean(this.props.value.trim())}>{this.props.label}</InputLabel>
+                <div style={{marginTop:"16px"}}>
+                <AceEditor
+                    mode="fk"
+                    theme="monokai"
+                    name="authors"
+                    onLoad={this.onLoad}
+                    onChange={this.handleChange.bind(this)}
+                    fontSize={14}
+                    showPrintMargin={true}
+                    showGutter={true}
+                    width={"100%"}
+                    height={"250px"}
+                    highlightActiveLine={true}
+                    value={this.props.value} 
+                    setOptions={{
+                        showLineNumbers: true,
+                        tabSize: 2,
+                    }}/>
+                </div>
+                <FormHelperText>{this.validate()}</FormHelperText>
+            </FormControl>
+        )
+    }
+}
+ProgramEditor.contextTypes = {
+  validator: PropTypes.object
+};
+ProgramEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ProgramEditor = withStyles(program_styles)(ProgramEditor)
+
+export { ColorCodeEditor, ProgramEditor }

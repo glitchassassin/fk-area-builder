@@ -78,10 +78,9 @@ class GeneralPanel extends React.Component {
                                     onChange={this.props.setProp} />
                             </Grid>
                             <Grid item xs={12} sm={12}>
-                                <ValidatedTextField 
+                                <ValidatedTextField
                                     label="Authors" 
                                     id="authors" 
-                                    fullWidth={true} 
                                     value={this.props.area.authors} 
                                     onChange={this.props.setProp} />
                             </Grid>

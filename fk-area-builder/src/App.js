@@ -25,6 +25,9 @@ const styles = {
     flexGrow: 1,
     paddingTop:"64px"
   },
+  appBar: {
+    minHeight: "64px"
+  },
   flex: {
     flex: 1,
   },
@@ -80,7 +83,7 @@ class AppHeader extends Component {
   render() {
     return (
       <div className={this.props.classes.root}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" classes={{root:this.props.classes.appBar}}>
           <Toolbar>
             <IconButton onClick={this.openMenu} color="inherit" aria-label="Menu" className={this.props.classes.menuButton}>
               <MenuIcon />

@@ -4,7 +4,8 @@ import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
-import Card, {CardText} from 'material-ui/Card';
+import Card, {CardContent} from 'material-ui/Card';
+import Collapse from 'material-ui/transitions/Collapse';
 import Paper from 'material-ui/Paper';
 import Switch from 'material-ui/Switch';
 import Grid from 'material-ui/Grid';
@@ -13,6 +14,8 @@ import ListSubheader from 'material-ui/List/ListSubheader';
 import {FormControlLabel} from 'material-ui/Form'
 import { connect } from 'react-redux';
 import { ColorCodeEditor } from '../UIComponents/QuillEditor';
+import { withStyles } from 'material-ui/styles';
+import PropTypes from 'prop-types';
 import { 
     MobActions, UiStateActions, ShopActions, RepairRechargeActions, 
     MobResetActions, EquipmentResetActions, CoinResetActions, TrainSkillActions,
@@ -265,10 +268,13 @@ MobPanel = connect(
     })
 )(MobPanel)
 
-const paper_style = {
-    padding: "5px",
-    margin: "5px"
-}
+const paper_style = theme => ({
+    paper: {
+        padding: "5px",
+        margin: "5px",
+        backgroundColor: theme.palette.grey[600]
+    }
+})
 
 class MobEditor extends React.Component {
     render() {
@@ -626,8 +632,8 @@ class ShopsEditor extends React.Component {
     render() {
         let model = this.props.shops.filter(s=>(s.shopkeeper===this.props.vnum))[0]
         return (
-            <Card expanded={model!==undefined} title="Shopkeeper">
-                <CardText>
+            <Card classes={{root:this.props.classes.paper}} title="Shopkeeper">
+                <CardContent>
                     <FormControlLabel
                         control = {
                             <Switch 
@@ -637,70 +643,96 @@ class ShopsEditor extends React.Component {
                         }
                         label="Shopkeeper"
                     />
-                </CardText>
-                <CardText expandable={true}>
-                    {model && (
-                        <React.Fragment>
-                        <Validate validator={shop_validator}>
-                        <FlagSelector 
-                            id="will_buy_1" 
-                            label="Will Buy 1" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_buy_1} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="will_buy_2" 
-                            label="Will Buy 2" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_buy_2} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="will_buy_3" 
-                            label="Will Buy 3" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_buy_3} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="will_buy_4" 
-                            label="Will Buy 4" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_buy_4} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="will_buy_5" 
-                            label="Will Buy 5" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_buy_5} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Profit (Buy)" 
-                            id="profit_buy" 
-                            value={model.profit_buy} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Profit (Sell)" 
-                            id="profit_sell" 
-                            value={model.profit_sell} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Open Hour" 
-                            id="open_hour" 
-                            value={model.open_hour} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Close Hour" 
-                            id="close_hour" 
-                            value={model.close_hour} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        </Validate>
-                        </React.Fragment>
-                    )}
-                </CardText>
+                </CardContent>
+                <Collapse in={model!==undefined} timeout="auto" unmountOnExit>
+                    <CardContent>
+                        {model && (
+                            <Validate validator={shop_validator}>
+                            <Grid container spacing={8}>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_buy_1" 
+                                        label="Will Buy 1" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_buy_1} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_buy_2" 
+                                        label="Will Buy 2" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_buy_2} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_buy_3" 
+                                        label="Will Buy 3" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_buy_3} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_buy_4" 
+                                        label="Will Buy 4" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_buy_4} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_buy_5" 
+                                        label="Will Buy 5" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_buy_5} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    {/*Padding*/}
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Profit (Buy)" 
+                                        id="profit_buy" 
+                                        value={model.profit_buy} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Profit (Sell)" 
+                                        id="profit_sell" 
+                                        value={model.profit_sell} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Open Hour" 
+                                        id="open_hour" 
+                                        value={model.open_hour} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Close Hour" 
+                                        id="close_hour" 
+                                        value={model.close_hour} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                            </Grid>
+                            </Validate>
+                        )}
+                    </CardContent>
+                </Collapse>
             </Card>
         )
     }
 }
-ShopsEditor = connect(
+ShopsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ShopsEditor = withStyles(paper_style)(connect(
     (state)=>({
         shops: state.shops,
     }),
@@ -715,14 +747,14 @@ ShopsEditor = connect(
             }
         }
     })
-)(ShopsEditor)
+)(ShopsEditor))
 
 class RepairsEditor extends React.Component {
     render() {
         let model = this.props.repairs.filter(r=>(r.shopkeeper===this.props.vnum))[0]
         return (
-            <Card expanded={model!==undefined} title="Repairer">
-                <CardText>
+            <Card classes={{root:this.props.classes.paper}} title="Repairer">
+                <CardContent>
                     <FormControlLabel
                         control = {
                             <Switch 
@@ -732,59 +764,81 @@ class RepairsEditor extends React.Component {
                         }
                         label="Repairs"
                     />
-                </CardText>
-                <CardText expandable={true}>
-                    {model && (
-                        <React.Fragment>
-                        <Validate validator={repair_recharge_validator}>
-                        <FlagSelector 
-                            id="will_repair_1" 
-                            label="Will Repair 1" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_repair_1} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="will_repair_2" 
-                            label="Will Repair 2" 
-                            flags={ITEM_TYPES} 
-                            value={model.will_repair_2} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="repair_material" 
-                            label="Repair Material" 
-                            flags={MOB_REPAIR_MATERIAL} 
-                            value={model.repair_material} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Profit Modifier" 
-                            id="profit_modifier" 
-                            value={model.profit_modifier} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <FlagSelector 
-                            id="repair" 
-                            label="Repair/Recharge" 
-                            flags={MOB_REPAIR_RECHARGE} 
-                            value={model.repair} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Open Hour" 
-                            id="open_hour" 
-                            value={model.open_hour} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        <ValidatedTextField 
-                            label="Close Hour" 
-                            id="close_hour" 
-                            value={model.close_hour} 
-                            onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
-                        </Validate>
-                        </React.Fragment>
-                    )}
-                </CardText>
+                </CardContent>
+                <Collapse in={model!==undefined} timeout="auto" unmountOnExit>
+                    <CardContent>
+                        {model && (
+                            <Validate validator={repair_recharge_validator}>
+                            <Grid container spacing={8}>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_repair_1" 
+                                        label="Will Repair 1" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_repair_1} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="will_repair_2" 
+                                        label="Will Repair 2" 
+                                        flags={ITEM_TYPES} 
+                                        value={model.will_repair_2} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="repair_material" 
+                                        label="Repair Material" 
+                                        flags={MOB_REPAIR_MATERIAL} 
+                                        value={model.repair_material} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Profit Modifier" 
+                                        id="profit_modifier" 
+                                        value={model.profit_modifier} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FlagSelector 
+                                        id="repair" 
+                                        label="Repair/Recharge" 
+                                        flags={MOB_REPAIR_RECHARGE} 
+                                        value={model.repair} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    {/*Padding*/}
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Open Hour" 
+                                        id="open_hour" 
+                                        value={model.open_hour} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ValidatedTextField 
+                                        label="Close Hour" 
+                                        id="close_hour" 
+                                        value={model.close_hour} 
+                                        onChange={(e,v)=>(this.props.setProp(model.uuid, e.target.id, v))} />
+                                </Grid>
+                            </Grid>
+                            </Validate>
+                        )}
+                    </CardContent>
+                </Collapse>
             </Card>
         )
     }
 }
-RepairsEditor = connect(
+RepairsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+RepairsEditor = withStyles(paper_style)(connect(
     (state)=>({
         repairs: state.repairs,
     }),
@@ -799,42 +853,55 @@ RepairsEditor = connect(
             }
         }
     })
-)(RepairsEditor)
+)(RepairsEditor))
 
 class MobResetsEditor extends React.Component {
     generate() {
         return this.props.model.filter((r)=>(r.mob===this.props.vnum)).map((resets, index) => (
-            <Paper key={index}>
-                <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <Icon color="error">remove_circle</Icon>
-                </IconButton>
-                <Validate validator={mob_reset_validator}>
-                <ValidatedTextField 
-                    label="Limit" 
-                    id="mob_limit" 
-                    value={resets.mob_limit} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <VnumAutoComplete 
-                    label="Starting Room"
-                    id="room"  
-                    value={resets.room}  
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))}
-                    dataSource={this.props.rooms} />
-                </Validate>
-                <EquipmentResetsEditor 
-                    id="equipment" 
-                    pointer={resets.uuid} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <CoinResetsEditor 
-                    id="coins" 
-                    pointer={resets.uuid} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+            <Paper classes={{root:this.props.classes.paper}} key={index}>
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(resets.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
+                    <Validate validator={mob_reset_validator}>
+                    <Grid item xs={5}>
+                        <ValidatedTextField 
+                            label="Limit" 
+                            id="mob_limit" 
+                            value={resets.mob_limit} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={5}>
+                        <VnumAutoComplete 
+                            label="Starting Room"
+                            id="room"  
+                            value={resets.room}  
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))}
+                            dataSource={this.props.rooms} />
+                    </Grid>
+                    </Validate>
+                    <Grid item xs={12}>
+                        <EquipmentResetsEditor 
+                            id="equipment" 
+                            pointer={resets.uuid} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CoinResetsEditor 
+                            id="coins" 
+                            pointer={resets.uuid} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                </Grid>
             </Paper>
         ));
     }
     render() {
         return (
             <React.Fragment>
+                <ListSubheader>Mob Resets</ListSubheader>
                 {this.generate()}
                 <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
                     <Icon>add_box</Icon>
@@ -843,7 +910,10 @@ class MobResetsEditor extends React.Component {
         )
     }
 }
-MobResetsEditor = connect(
+MobResetsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+MobResetsEditor = withStyles(paper_style)(connect(
     (state)=>({
         model: state.mob_resets,
         rooms: state.rooms
@@ -856,39 +926,51 @@ MobResetsEditor = connect(
             dispatch({ type:MobResetActions.SET_PROP, key:"mob", value:vnum })
         }
     })
-)(MobResetsEditor)
+)(MobResetsEditor))
 
 class EquipmentResetsEditor extends React.Component {
     modelClass = EquipmentReset;
     generate() {
         return this.props.model.filter((resets)=>(resets.mob_reset===this.props.pointer)).map((resets, index) => (
-            <Paper key={index}>
-                <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <Icon color="error">remove_circle</Icon>
-                </IconButton>
-                <Validate validator={equipment_reset_validator}>
-                <VnumAutoComplete 
-                    label="Item" 
-                    id="item" 
-                    value={resets.item} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} 
-                    dataSource={this.props.items} />
-                <ValidatedTextField 
-                    label="Equip Limit" 
-                    id="equip_limit" 
-                    value={resets.equip_limit} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <FlagSelector 
-                    id="wear_loc" 
-                    label="Wear Location" 
-                    flags={MOB_WEAR_POSITIONS} 
-                    value={resets.wear_loc} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                </Validate>
-                <TrapResetEditor 
-                    id="trap_reset" 
-                    model={resets.trap_reset} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+            <Paper classes={{root:this.props.classes.paper}} key={index}>
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
+                    <Validate validator={equipment_reset_validator}>
+                    <Grid item xs={4}>
+                        <VnumAutoComplete 
+                            label="Item" 
+                            id="item" 
+                            value={resets.item} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} 
+                            dataSource={this.props.items} />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <ValidatedTextField 
+                            label="Equip Limit" 
+                            id="equip_limit" 
+                            value={resets.equip_limit} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FlagSelector 
+                            id="wear_loc" 
+                            label="Wear Location" 
+                            flags={MOB_WEAR_POSITIONS} 
+                            value={resets.wear_loc} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    </Validate>
+                    <Grid item xs={12}>
+                        <TrapResetEditor 
+                            id="trap_reset" 
+                            model={resets.trap_reset} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                </Grid>
             </Paper>
         ));
     }
@@ -896,7 +978,7 @@ class EquipmentResetsEditor extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Paper style={paper_style}>
+                <Paper classes={{root:this.props.classes.paper}}>
                     <ListSubheader>Equipment</ListSubheader>
                     {this.generate()}
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.vnum))}>
@@ -907,7 +989,10 @@ class EquipmentResetsEditor extends React.Component {
         )
     }
 }
-EquipmentResetsEditor = connect(
+EquipmentResetsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+EquipmentResetsEditor = withStyles(paper_style)(connect(
     (state)=>({
         model: state.equipment_resets,
         items: state.items
@@ -920,34 +1005,44 @@ EquipmentResetsEditor = connect(
             dispatch({ type:EquipmentResetActions.SET_PROP, key:"mob_reset", value:uuid })
         }
     })
-)(EquipmentResetsEditor)
+)(EquipmentResetsEditor))
 
 class CoinResetsEditor extends React.Component {
     modelClass = CoinReset;
     generate() {
         return this.props.model.filter((r)=>(r.mob_reset===this.props.pointer)).map((resets, index) => (
-            <Paper key={index}>
-                <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
-                    <Icon color="error">remove_circle</Icon>
-                </IconButton>
-                <Validate validator={coin_reset_validator}>
-                <FlagSelector 
-                    id="coin_type" 
-                    label="Coin Type" 
-                    flags={ITEM_COIN_TYPES} 
-                    value={resets.coin_type} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <ValidatedTextField 
-                    label="Dice Count" 
-                    id="dice_count" 
-                    value={resets.dice_count} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                <ValidatedTextField 
-                    label="Dice Sides" 
-                    id="dice_sides" 
-                    value={resets.dice_sides} 
-                    onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
-                </Validate>
+            <Paper classes={{root:this.props.classes.paper}} key={index}>
+                <Grid container spacing={8}>
+                    <Grid item xs={2}>
+                        <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
+                            <Icon color="error">remove_circle</Icon>
+                        </IconButton>
+                    </Grid>
+                    <Validate validator={coin_reset_validator}>
+                    <Grid item xs={4}>
+                        <FlagSelector 
+                            id="coin_type" 
+                            label="Coin Type" 
+                            flags={ITEM_COIN_TYPES} 
+                            value={resets.coin_type} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <ValidatedTextField 
+                            label="Dice Count" 
+                            id="dice_count" 
+                            value={resets.dice_count} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <ValidatedTextField 
+                            label="Dice Sides" 
+                            id="dice_sides" 
+                            value={resets.dice_sides} 
+                            onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} />
+                    </Grid>
+                    </Validate>
+                </Grid>
             </Paper>
         ));
     }
@@ -955,7 +1050,7 @@ class CoinResetsEditor extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Paper style={paper_style}>
+                <Paper classes={{root:this.props.classes.paper}}>
                     <ListSubheader>Coins</ListSubheader>
                     {this.generate()}
                     <IconButton tooltip="Add" onClick={()=>(this.props.handleNew(this.props.pointer))}>
@@ -966,7 +1061,10 @@ class CoinResetsEditor extends React.Component {
         )
     }
 }
-CoinResetsEditor = connect(
+CoinResetsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+CoinResetsEditor = withStyles(paper_style)(connect(
     (state)=>({
         model: state.coin_resets,
     }),
@@ -978,7 +1076,7 @@ CoinResetsEditor = connect(
             dispatch({ type:CoinResetActions.SET_PROP, key:"mob_reset", value:uuid })
         }
     })
-)(CoinResetsEditor)
+)(CoinResetsEditor))
 
 class CanTrainWrapper extends React.Component {
     render() {

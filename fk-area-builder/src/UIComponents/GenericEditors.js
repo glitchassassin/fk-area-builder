@@ -5,7 +5,7 @@ import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import AppBar from 'material-ui/AppBar';
-import {ColorCodeEditor} from '../UIComponents/QuillEditor';
+import { ColorCodeEditor, ProgramEditor } from '../UIComponents/QuillEditor';
 import Tabs, {Tab} from 'material-ui/Tabs';
 import { withStyles } from 'material-ui/styles';
 import Dialog, {DialogContent, DialogActions, DialogTitle} from 'material-ui/Dialog';
@@ -35,11 +35,14 @@ const trap_reset_validator = new TrapResetValidator();
 const extra_description_validator = new ExtraDescriptionValidator();
 const program_validator = new ProgramValidator();
 
-const paper_style = {
-    padding: "5px",
-    margin: "5px auto",
-    width: "100%"
-}
+const paper_style = theme => ({
+    paper: {
+        padding: "5px",
+        margin: "5px auto",
+        width: "100%",
+        backgroundColor: theme.palette.grey[600]
+    }
+})
 
 class Validate extends React.Component {
     getChildContext() {
@@ -58,7 +61,7 @@ class TrapResetEditor extends React.Component {
         let model = this.props.resets.filter((r)=>(r.pointer===this.props.pointer))[0]
         if (model !== undefined) {
             return (
-                <Paper id={this.props.id} style={paper_style} zDepth={1}>
+                <Paper id={this.props.id} classes={{root:this.props.classes.paper}} zDepth={1}>
                     <Grid container spacing={8}>
                         <Grid item xs={12}>
                             <ListSubheader>Trap Reset</ListSubheader>
@@ -128,7 +131,10 @@ class TrapResetEditor extends React.Component {
         }
     }
 }
-TrapResetEditor = connect(
+TrapResetEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+TrapResetEditor = withStyles(paper_style)(connect(
     (state) => ({
         resets: state.trap_resets
     }),
@@ -140,7 +146,7 @@ TrapResetEditor = connect(
             dispatch({ type:TrapResetActions.SET_PROP, key:"pointer", value:pointer })
         }
     })
-)(TrapResetEditor)
+)(TrapResetEditor))
 
 class ExtraDescriptionsEditor extends React.Component {
     modelClass = ExtraDescription;
@@ -148,7 +154,7 @@ class ExtraDescriptionsEditor extends React.Component {
     generate() {
         return this.props.eds.filter((ed)=>(ed.pointer === this.props.pointer)).map((ed, index) => (
             <Grid item xs={12} key={index}>
-            <Paper style={paper_style}>
+            <Paper classes={{root:this.props.classes.paper}}>
                 <Grid container spacing={8}>
                     <Grid item xs={2}>
                         <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(ed.uuid))}>
@@ -192,7 +198,10 @@ class ExtraDescriptionsEditor extends React.Component {
         )
     }
 }
-ExtraDescriptionsEditor = connect(
+ExtraDescriptionsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ExtraDescriptionsEditor = withStyles(paper_style)(connect(
     (state) => ({
         eds: state.extra_descriptions
     }),
@@ -204,15 +213,15 @@ ExtraDescriptionsEditor = connect(
             dispatch({ type:ExtraDescriptionActions.SET_PROP, key:"pointer", value:pointer })
         }
     })
-)(ExtraDescriptionsEditor)
+)(ExtraDescriptionsEditor))
 
 class ProgramsEditor extends React.Component {
     modelClass = Program;
     
     generate() {
         return this.props.programs.filter((p)=>(p.pointer===this.props.pointer)).map((program, index) => (
-            <Grid item xs={12}>
-                <Paper style={paper_style} key={index}>
+            <Grid item xs={12} key={index}>
+                <Paper classes={{root:this.props.classes.paper}}>
                     <Grid container spacing={8}>
                         <Grid item xs={2}>
                             <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(program.uuid))}>
@@ -237,14 +246,10 @@ class ProgramsEditor extends React.Component {
                                 onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
                         </Grid>
                         <Grid item xs={12}>
-                            <ValidatedTextField 
+                            <ProgramEditor 
                                 label="Program" 
                                 id="program" 
-                                multiline={true} 
-                                rows={5} 
-                                fullWidth={true} 
                                 value={program.program} 
-                                autoComplete="off" 
                                 onChange={(e,v)=>(this.props.setProp(program.uuid,e.target.id,v))} />
                         </Grid>
                         </Validate>
@@ -266,7 +271,10 @@ class ProgramsEditor extends React.Component {
         )
     }
 }
-ProgramsEditor = connect(
+ProgramsEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+ProgramsEditor = withStyles(paper_style)(connect(
     (state) => ({
         programs: state.programs
     }),
@@ -278,7 +286,7 @@ ProgramsEditor = connect(
             dispatch({ type:ProgramActions.SET_PROP, key:"pointer", value:pointer })
         }
     })
-)(ProgramsEditor)
+)(ProgramsEditor))
 
 const editorDialogStyles = theme => ({
     title: {
@@ -300,7 +308,7 @@ class EditorDialog extends React.Component {
                 <DialogTitle className={classes.title}>
                     {/*this.props.title*/}
                     <AppBar position="static">
-                        <Tabs value={this.props.selected_tab} onChange={this.props.setTab} fullWidth>
+                        <Tabs value={this.props.selected_tab} onChange={this.props.setTab} fullWidth scrollable scrollButtons="auto">
                             {this.props.tabs.map((t)=>(<Tab key={t} label={t} />))}
                         </Tabs>
                     </AppBar>
