@@ -1,3 +1,4 @@
+import { items_library, mobs_library } from '../Models/vnum_library';
 var flags = require("./flags.js");
 var models = require("./model_templates.js");
 
@@ -26,7 +27,9 @@ function get_mob(state, vnum) {
     if (vnum == null) {
         return mob;
     }
-    let matches = state.mobs.filter((m)=>(m.vnum===vnum))
+    let flat_list = mobs_library(state.mobs)
+    flat_list = flat_list[0].list.concat(flat_list[1].list, flat_list[2].list);
+    let matches = flat_list.filter((m)=>(m.vnum===vnum))
     if (matches.length) {
         return matches[0]
     }
@@ -43,7 +46,9 @@ function get_item(state, vnum) {
     if (vnum == null) {
         return item;
     }
-    let matches = state.items.filter((m)=>(m.vnum===vnum))
+    let flat_list = items_library(state.items)
+    flat_list = flat_list[0].list.concat(flat_list[1].list, flat_list[2].list);
+    let matches = flat_list.filter((m)=>(m.vnum===vnum))
     if (matches.length) {
         return matches[0]
     }

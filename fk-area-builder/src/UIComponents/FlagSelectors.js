@@ -12,6 +12,10 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 
+function strip_color_codes(desc) {
+    return desc.replace(/\{..\}/g, "");
+}
+
 class FlagWithCategorySelector extends React.Component {
     handleChange(event) {
         this.props.onChange({target:{id:this.props.id}}, this.props.flags[event.target.target.value]);
@@ -187,7 +191,7 @@ MultiFlagSelector.contextTypes = {
 
 class VnumAutoComplete extends React.Component {
     state = {
-        suggestions:this.props.dataSource
+        suggestions:this.get_suggestions(this.props.value)
     }
     shouldComponentUpdate(newProps) {
         return !equal_recursively(this.props.value, newProps.value)
@@ -205,15 +209,38 @@ class VnumAutoComplete extends React.Component {
     }
     
     get_suggestions(value) {
+        const max_results = 200;
         if (!this.props.dataSource) {
             console.log(this);
             throw new Error("Empty dataSource property!")
         }
-        const inputValue = value.trim().toLowerCase();
+        const inputValue = (value||"").trim().toLowerCase();
         const inputLength = inputValue.length;
-        return inputLength === 0 ? this.props.dataSource : this.props.dataSource.filter(item =>
-            item.vnum.toLowerCase().slice(0, inputLength) === inputValue
-        );
+        if (!this.props.multiSection) {
+            return inputLength === 0 ? this.props.dataSource : this.props.dataSource.filter(item =>
+                item.vnum.toLowerCase().slice(0, inputLength) === inputValue ||
+                item.sdesc.toLowerCase().includes(inputValue)
+            ).slice(0,max_results);
+        }
+        else {
+            return this.props.dataSource.map(section=>{
+                return {
+                    title: section.title,
+                    list: section.list.filter(item => 
+                        item.vnum.toLowerCase().slice(0, inputLength) === inputValue ||
+                        item.sdesc.toLowerCase().includes(inputValue)
+                    ).slice(0,Math.floor(max_results/this.props.dataSource.length))
+                }
+            }).filter(section=>section.list.length>0)
+        }
+    }
+    getSectionSuggestions(section) {
+        return section.list;
+    }
+    renderSectionTitle(section) {
+        return (
+            <ListSubheader>{section.title}</ListSubheader>
+        )
     }
     renderInput(inputProps) {
         const { classes, ref, ...other } = inputProps;
@@ -231,7 +258,7 @@ class VnumAutoComplete extends React.Component {
     renderSuggestion(suggestion, { query, isHighlighted }) {
         return (
             <MenuItem selected={isHighlighted} component="div">
-                <ListItemText primary={suggestion.vnum} secondary={suggestion.sdesc} />
+                <ListItemText primary={suggestion.vnum} secondary={strip_color_codes(suggestion.sdesc)} />
             </MenuItem>
         );
     }
@@ -289,6 +316,9 @@ class VnumAutoComplete extends React.Component {
                         value:this.props.value||"",
                         onChange:this.updateInput.bind(this)
                     }}
+                    multiSection={this.props.multiSection}
+                    renderSectionTitle={this.renderSectionTitle}
+                    getSectionSuggestions={this.getSectionSuggestions}
                 />
                 <FormHelperText>{this.validate()}</FormHelperText>
             </FormControl>

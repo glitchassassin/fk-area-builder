@@ -14,6 +14,7 @@ import ListSubheader from 'material-ui/List/ListSubheader';
 import {FormControlLabel} from 'material-ui/Form'
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
+import { items_library, mobs_library } from '../Models/vnum_library';
 import PropTypes from 'prop-types';
 import { 
     MobActions, UiStateActions, ItemResetActions,
@@ -60,7 +61,12 @@ function get_sdesc(list, vnum) {
     let sdesc = "[MISSING]";
     
     if (vnum !== null) {
-        let matches = list.filter((m)=>(m.vnum===vnum))
+        let flat_list = list;
+        console.log(flat_list);
+        if (flat_list[0].title && flat_list[0].list) { // Merge library lists
+            flat_list = flat_list[0].list.concat(flat_list[1].list, flat_list[2].list);
+        }
+        let matches = flat_list.filter((m)=>(m.vnum===vnum))
         if (matches.length) {
             sdesc = strip_color_codes(matches[0].sdesc)
         }
@@ -180,7 +186,7 @@ class MobResetsEditor extends React.Component {
                 <Paper classes={{root:this.props.classes.paper}}>
                     <Grid container spacing={8}>
                         <Grid item xs={12}>
-                            <Typography variant="subheading">{get_sdesc(this.props.mobs, resets.mob)} in {get_sdesc(this.props.rooms, resets.room)}</Typography>
+                            <Typography variant="subheading">{get_sdesc(mobs_library(this.props.mobs), resets.mob)} in {get_sdesc(this.props.rooms, resets.room)}</Typography>
                         </Grid>
                         <Grid item xs={2}>
                             <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(resets.uuid))}>
@@ -193,8 +199,9 @@ class MobResetsEditor extends React.Component {
                                 label="Mob" 
                                 id="mob" 
                                 value={resets.mob} 
+                                multiSection
                                 onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))}
-                                dataSource={this.props.mobs} />
+                                dataSource={mobs_library(this.props.mobs)} />
                         </Grid>
                         <Grid item xs={3}>
                             <ValidatedTextField 
@@ -270,11 +277,11 @@ class EquipmentResetsEditor extends React.Component {
     modelClass = EquipmentReset;
     generate() {
         return this.props.model.filter((resets)=>(resets.mob_reset===this.props.pointer)).map((resets, index) => (
-            <Grid item xs={12}>
-            <Paper classes={{root:this.props.classes.paper}} key={index}>
+            <Grid item xs={12} key={index}>
+            <Paper classes={{root:this.props.classes.paper}}>
                 <Grid container spacing={8}>
                     <Grid item xs={12}>
-                        <Typography variant="subheading">{resets.wear_loc? "Equips": "Holds"} {get_sdesc(this.props.items, resets.item)}</Typography>
+                        <Typography variant="subheading">{resets.wear_loc? "Equips": "Holds"} {get_sdesc(items_library(this.props.items), resets.item)}</Typography>
                     </Grid>
                     <Grid item xs={2}>
                         <IconButton tooltip="Add" onClick={()=>(this.props.handleDelete(resets.uuid))}>
@@ -287,8 +294,9 @@ class EquipmentResetsEditor extends React.Component {
                             label="Item" 
                             id="item" 
                             value={resets.item} 
+                            multiSection
                             onChange={(e,v)=>(this.props.setProp(resets.uuid, e.target.id, v))} 
-                            dataSource={this.props.items} />
+                            dataSource={items_library(this.props.items)} />
                     </Grid>
                     <Grid item xs={2}>
                         <ValidatedTextField 
@@ -459,7 +467,7 @@ class ItemResetsEditor extends React.Component {
             <Paper classes={{root:this.props.classes.paper}} key={index}>
                 <Grid container spacing={8} justify="center">
                     <Grid item xs={12}>
-                        <Typography variant="subheading">{get_sdesc(this.props.items, reset.item)} in {get_sdesc(this.props.rooms, reset.room_container)}</Typography>
+                        <Typography variant="subheading">{get_sdesc(items_library(this.props.items), reset.item)} in {get_sdesc(this.props.rooms, reset.room_container)}</Typography>
                     </Grid>
                     <Grid item xs={2}>
                         <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
@@ -472,14 +480,17 @@ class ItemResetsEditor extends React.Component {
                             label="Item" 
                             id="item" 
                             value={reset.item} 
-                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} dataSource={this.props.items} />
+                            multiSection
+                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
+                            dataSource={items_library(this.props.items)} />
                     </Grid>
                     <Grid item xs={5}>
                         <VnumAutoComplete 
                             label="Room" 
                             id="room_container" 
                             value={reset.room_container} 
-                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} dataSource={this.props.rooms} />
+                            onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
+                            dataSource={this.props.rooms} />
                     </Grid>
                     <Grid item xs={3}>
                         <ValidatedTextField 
@@ -569,7 +580,7 @@ class ItemResetsContentsEditor extends React.Component {
             <Paper classes={{root:this.props.classes.paper}} key={index}>
                 <Grid container spacing={8}>
                     <Grid item xs={12}>
-                        <Typography variant="subheading">{get_sdesc(this.props.items, reset.item)} in {get_sdesc(this.props.items, reset.room_container)}</Typography>
+                        <Typography variant="subheading">{get_sdesc(items_library(this.props.items), reset.item)} in {get_sdesc(this.props.items, reset.room_container)}</Typography>
                     </Grid>
                     <Grid item xs={2}>
                         <IconButton tooltip="Remove" onClick={()=>(this.props.handleDelete(reset.uuid))}>
@@ -582,8 +593,9 @@ class ItemResetsContentsEditor extends React.Component {
                             label="Item" 
                             id="item"
                             value={reset.item} 
+                            multiSection
                             onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} 
-                            dataSource={this.props.items} />
+                            dataSource={items_library(this.props.items)} />
                     </Grid>
                     <Grid item xs={4}>
                         <ValidatedTextField 
