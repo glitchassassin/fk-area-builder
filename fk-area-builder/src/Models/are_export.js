@@ -65,6 +65,9 @@ function get_room(state, vnum) {
     }
     return room;
 }
+function strip_color_codes(desc) {
+    return desc.replace(/\{..\}/g, "");
+}
 
 class AreaExporter {
     renderArea(state) { // Area
@@ -258,14 +261,14 @@ ${this.renderPrograms(state, mob.uuid)}`
     renderShops(state) {
         return autoline(state.shops.map((shop)=>(
             `${shop.shopkeeper} ${shop.will_buy_1} ${shop.will_buy_2} ${shop.will_buy_3} ${shop.will_buy_4} ${shop.will_buy_5}
-${shop.profit_buy} ${shop.profit_sell} ${shop.open_hour} ${shop.close_hour} ; ${get_mob(state, shop.shopkeeper).sdesc}`
+${shop.profit_buy} ${shop.profit_sell} ${shop.open_hour} ${shop.close_hour} ; ${strip_color_codes(get_mob(state, shop.shopkeeper).sdesc)}`
         )).join("\n"));
     }
     
     renderRepairs(state) {
         return autoline(state.repairs.map((repairs)=>(
             `${repairs.shopkeeper} ${repairs.will_repair_1} ${repairs.will_repair_2} ${repairs.repair_material}
-${repairs.profit_modifier} ${repairs.repair?repairs.repair.bits:repairs.repair} ${repairs.open_hour} ${repairs.close_hour} ; ${get_mob(state, repairs.shopkeeper).sdesc}`)
+${repairs.profit_modifier} ${repairs.repair?repairs.repair.bits:repairs.repair} ${repairs.open_hour} ${repairs.close_hour} ; ${strip_color_codes(get_mob(state, repairs.shopkeeper).sdesc)}`)
         ).join("\n"));
     }
     
@@ -275,7 +278,7 @@ ${repairs.profit_modifier} ${repairs.repair?repairs.repair.bits:repairs.repair} 
     
     renderMobResets(state) {
         return autoline(state.mob_resets.map(reset=>{
-            return `M ${reset.defunct} ${reset.mob} ${reset.mob_limit} ${reset.room} ; ${get_mob(state, reset.mob).sdesc} in ${get_room(state, reset.room).sdesc}\
+            return `M ${reset.defunct} ${reset.mob} ${reset.mob_limit} ${reset.room} ; ${strip_color_codes(get_mob(state, reset.mob).sdesc)} in ${strip_color_codes(get_room(state, reset.room).sdesc)}\
 ${this.renderEquipmentResets(state, reset.uuid)}\
 ${this.renderCoinResets(state, reset.uuid)}`
         }).join("\n").trimRight())
@@ -285,12 +288,12 @@ ${this.renderCoinResets(state, reset.uuid)}`
         return autoline(state.equipment_resets.filter((i)=>(i.mob_reset===uuid)).map((equip)=>{
             if (equip.wear_loc) {
                 // Equipped
-                return ` E ${equip.defunct} ${equip.item} ${equip.equip_limit} ${equip.wear_loc} ; Equip ${get_item(state, equip.item).sdesc}\
+                return ` E ${equip.defunct} ${equip.item} ${equip.equip_limit} ${equip.wear_loc} ; Equip ${strip_color_codes(get_item(state, equip.item).sdesc)}\
 ${this.renderTrapReset(state, equip.uuid)}`
             }
             else {
                 // Held
-                return ` G ${equip.defunct} ${equip.item} ${equip.equip_limit} ; Hold ${get_item(state, equip.item).sdesc}\
+                return ` G ${equip.defunct} ${equip.item} ${equip.equip_limit} ; Hold ${strip_color_codes(get_item(state, equip.item).sdesc)}\
 ${this.renderTrapReset(state, equip.uuid)}`
             }
         }).join("\n").trimRight());
@@ -299,22 +302,25 @@ ${this.renderTrapReset(state, equip.uuid)}`
     renderItemResets(state) {
         return autoline(state.item_resets.filter((i)=>(i.item_pointer===null)).map((reset)=>{
             if (reset.hidden) {
-                return `H ${reset.defunct} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${get_item(state, reset.item).sdesc} hidden in ${reset.room_container ? get_room(state, reset.room_container).sdesc : "undefined"}\
+                return `H ${reset.defunct} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${strip_color_codes(get_item(state, reset.item).sdesc)} hidden in ${reset.room_container ? strip_color_codes(get_room(state, reset.room_container).sdesc) : "undefined"}\
+${this.renderContainedItems(state, reset.uuid)}\
 ${this.renderTrapReset(state, reset.uuid)}`
             }
             else if (reset.buried) {
-                return `U ${reset.defunct} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${get_item(state, reset.item).sdesc} buried in ${reset.room_container ? get_room(state, reset.room_container).sdesc : "undefined"}\
+                return `U ${reset.defunct} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${strip_color_codes(get_item(state, reset.item).sdesc)} buried in ${reset.room_container ? strip_color_codes(get_room(state, reset.room_container).sdesc) : "undefined"}\
+${this.renderContainedItems(state, reset.uuid)}\
 ${this.renderTrapReset(state, reset.uuid)}`
             }
-            return `O ${reset.defunct} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${get_item(state, reset.item).sdesc} in room ${reset.room_container ? get_room(state, reset.room_container).sdesc : "undefined"}\
+            return `O ${reset.defunct} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${strip_color_codes(get_item(state, reset.item).sdesc)} in room ${reset.room_container ? strip_color_codes(get_room(state, reset.room_container).sdesc) : "undefined"}\
 ${this.renderContainedItems(state, reset.uuid)}\
 ${this.renderTrapReset(state, reset.uuid)}`
         }).join("\n").trimRight());
     }
     
     renderContainedItems(state, uuid) {
+        console.log(state.item_resets, state.item_resets.filter((i)=>(i.item_pointer===uuid)));
         return autoline(state.item_resets.filter((i)=>(i.item_pointer===uuid)).map((reset)=>{
-            return ` P ${reset.hidden ? 1 : 0} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${get_item(state, reset.item).sdesc} in container ${reset.room_container ? get_item(state, reset.room_container).sdesc : "undefined"}\
+            return ` P ${reset.hidden ? 1 : 0} ${reset.item} ${reset.item_limit} ${reset.room_container || "undefined"} ; ${strip_color_codes(get_item(state, reset.item).sdesc)} in container ${reset.room_container ? strip_color_codes(get_item(state, reset.room_container).sdesc) : "undefined"}\
 ${this.renderTrapReset(state, reset.uuid)}`
         }).join("\n").trimRight());
     }
@@ -325,14 +331,14 @@ ${this.renderTrapReset(state, reset.uuid)}`
                 return `R ${reset.defunct} ${reset.room} ${reset.last_door} ; ${reset.room.sdesc} rearrange exits 0-${reset.last_door} randomly`
             }
             else {
-                return `D ${reset.defunct} ${reset.room} ${reset.exit} ${reset.exit_state} ; ${get_room(state, reset.room).sdesc}${this.renderTrapReset(state, reset.uuid)}`
+                return `D ${reset.defunct} ${reset.room} ${reset.exit} ${reset.exit_state} ; ${strip_color_codes(get_room(state, reset.room).sdesc)}${this.renderTrapReset(state, reset.uuid)}`
             }
         }));
     }
     
     renderRoomResets(state) {
         return autoline(state.room_resets.map((reset)=>{
-            return `B ${reset.defunct} ${reset.room} ${flags.ROOM_FLAGS.BIT_RESET_ROOM}|${reset.bit_type} ${reset.flag} ; ${get_room(state, reset.room).sdesc}`
+            return `B ${reset.defunct} ${reset.room} ${flags.ROOM_FLAGS.BIT_RESET_ROOM}|${reset.bit_type} ${reset.flag} ; ${strip_color_codes(get_room(state, reset.room).sdesc)}`
         }).join("\n"));
     }
     

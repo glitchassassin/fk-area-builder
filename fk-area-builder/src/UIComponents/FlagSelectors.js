@@ -205,6 +205,10 @@ class VnumAutoComplete extends React.Component {
     }
     
     get_suggestions(value) {
+        if (!this.props.dataSource) {
+            console.log(this);
+            throw new Error("Empty dataSource property!")
+        }
         const inputValue = value.trim().toLowerCase();
         const inputLength = inputValue.length;
         return inputLength === 0 ? this.props.dataSource : this.props.dataSource.filter(item =>

@@ -7,6 +7,7 @@ import ListSubheader from 'material-ui/List/ListSubheader';
 import AppBar from 'material-ui/AppBar';
 import { ColorCodeEditor, ProgramEditor } from '../UIComponents/QuillEditor';
 import Tabs, {Tab} from 'material-ui/Tabs';
+import Tooltip from 'material-ui/Tooltip';
 import { withStyles } from 'material-ui/styles';
 import Dialog, {DialogContent, DialogActions, DialogTitle} from 'material-ui/Dialog';
 import { connect } from 'react-redux';
@@ -35,12 +36,16 @@ const trap_reset_validator = new TrapResetValidator();
 const extra_description_validator = new ExtraDescriptionValidator();
 const program_validator = new ProgramValidator();
 
-const paper_style = theme => ({
+const style = theme => ({
     paper: {
         padding: "5px",
         margin: "5px auto",
         width: "100%",
         backgroundColor: theme.palette.secondary.main
+    },
+    tooltip: {
+        backgroundColor: theme.palette.secondary.light,
+        color: theme.palette.secondary.dark,
     }
 })
 
@@ -61,6 +66,7 @@ class TrapResetEditor extends React.Component {
         let model = this.props.resets.filter((r)=>(r.pointer===this.props.pointer))[0]
         if (model !== undefined) {
             return (
+                <Grid item xs={12}>
                 <Paper id={this.props.id} classes={{root:this.props.classes.paper}} zDepth={1}>
                     <Grid container spacing={8}>
                         <Grid item xs={12}>
@@ -110,7 +116,6 @@ class TrapResetEditor extends React.Component {
                         </Validate>
                         <Grid item xs={4}>
                             <Button
-                                variant="raised"
                                 onClick={()=>(this.props.handleDelete(model.uuid))} >
                                 <Icon>remove_circle</Icon>
                                 Remove Trap Reset
@@ -118,14 +123,15 @@ class TrapResetEditor extends React.Component {
                         </Grid>
                     </Grid>
                 </Paper>
+                </Grid>
             );
         }
         else {
             return (
-                <Grid container spacing={8} justify="center">
-                    <Grid item style={{textAlign:"center"}} xs={12}>
-                        <Button variant="raised" onClick={()=>(this.props.handleNew(this.props.pointer))}><Icon>add_box</Icon> Add Trap Reset</Button>
-                    </Grid>
+                <Grid item style={{textAlign:"center"}} xs={1}>
+                    <Tooltip title="Add Trap Reset" classes={{tooltip:this.props.classes.tooltip}}>
+                        <IconButton variant="raised" onClick={()=>(this.props.handleNew(this.props.pointer))}><Icon>whatshot</Icon></IconButton>
+                    </Tooltip>
                 </Grid>
             );
         }
@@ -134,7 +140,7 @@ class TrapResetEditor extends React.Component {
 TrapResetEditor.propTypes = {
     classes: PropTypes.object.isRequired
 }
-TrapResetEditor = withStyles(paper_style)(connect(
+TrapResetEditor = withStyles(style)(connect(
     (state) => ({
         resets: state.trap_resets
     }),
@@ -201,7 +207,7 @@ class ExtraDescriptionsEditor extends React.Component {
 ExtraDescriptionsEditor.propTypes = {
     classes: PropTypes.object.isRequired
 }
-ExtraDescriptionsEditor = withStyles(paper_style)(connect(
+ExtraDescriptionsEditor = withStyles(style)(connect(
     (state) => ({
         eds: state.extra_descriptions
     }),
@@ -274,7 +280,7 @@ class ProgramsEditor extends React.Component {
 ProgramsEditor.propTypes = {
     classes: PropTypes.object.isRequired
 }
-ProgramsEditor = withStyles(paper_style)(connect(
+ProgramsEditor = withStyles(style)(connect(
     (state) => ({
         programs: state.programs
     }),

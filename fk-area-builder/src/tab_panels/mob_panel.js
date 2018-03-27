@@ -123,7 +123,7 @@ class MobPanel extends React.Component {
                     </IconButton>
                     {mob_validator.validate_state(this.props.state, mob).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={(e)=>{e.stopPropagation(); this.props.openErrors(mob.uuid)}} style={icon_button_style}>
-                        <Icon color="primary">error</Icon>
+                        <Icon color="error">error</Icon>
                     </IconButton>
                     )}
                 </TableCell>
@@ -211,7 +211,7 @@ class MobPanel extends React.Component {
                         <List>
                             {mob_validator.validate_state(this.props.state, mob).map((error, index) => (
                                 <ListItem key={index} >
-                                    <ListItemIcon><Icon color="primary">error</Icon></ListItemIcon>
+                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
                                     <ListItemText primary={error} />
                                 </ListItem>
                             ))}
@@ -281,7 +281,7 @@ class MobEditor extends React.Component {
                 title={`Edit ${this.props.mob.unique ? "Unique": "Simple"} Mob`}
                 selected_tab={this.props.ui_state.mob_current_tab}
                 setTab={this.props.setTab}
-                tabs={["Descriptions","Details","Unique","Training","Programs","Shops","Resets"]}>
+                tabs={["Descriptions","Details","Unique","Training","Programs","Shops"]}>
                 <Validate validator={mob_validator}>
                     {this.props.ui_state.mob_current_tab === 0 && // Descriptions
                     <Grid container spacing={8}>
@@ -594,12 +594,6 @@ class MobEditor extends React.Component {
                         </Grid>
                         <Grid item xs={12}>
                             <RepairsEditor id="repairs" vnum={this.props.mob.vnum} />
-                        </Grid>
-                    </Grid>}
-                    {this.props.ui_state.mob_current_tab === 6 && // Resets
-                    <Grid container spacing={8}>
-                        <Grid item xs={12}>
-                            <MobResetsEditor id="mob_resets" vnum={this.props.mob.vnum} />
                         </Grid>
                     </Grid>}
                 </Validate>

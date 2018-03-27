@@ -77,7 +77,7 @@ class ItemPanel extends React.Component {
                     </IconButton>
                     {item_validator.validate_state(this.props.state, item).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={(e)=>{e.stopPropagation(); this.props.openErrors(item.uuid)}} style={icon_button_style}>
-                        <Icon color="primary">error</Icon>
+                        <Icon color="error">error</Icon>
                     </IconButton>
                     )}
                 </TableCell>
@@ -147,7 +147,7 @@ class ItemPanel extends React.Component {
                         <List>
                             {item_validator.validate_state(this.props.state, item).map((error, index) => (
                                 <ListItem key={index}>
-                                    <ListItemIcon><Icon color="primary">error</Icon></ListItemIcon>
+                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
                                     <ListItemText primary={error} />
                                 </ListItem>
                             ))}
@@ -271,7 +271,7 @@ class ItemEditor extends React.Component {
                 title={`Edit Item`}
                 selected_tab={this.props.ui_state.item_current_tab}
                 setTab={this.props.setTab}
-                tabs={["Descriptions","Item Type","Details","Extra Descs","Programs","Resets"]}>
+                tabs={["Descriptions","Item Type","Details","Extra Descs","Programs"]}>
                 <Validate validator={item_validator}>
                     {this.props.ui_state.item_current_tab === 0 && // Descriptions
                     <Grid container spacing={8}>
@@ -422,14 +422,6 @@ class ItemEditor extends React.Component {
                                 id="programs" 
                                 triggers={ITEM_PROGRAM_TRIGGERS}
                                 pointer={this.props.model.uuid} />
-                        </Grid>
-                    </Grid>}
-                    {this.props.ui_state.item_current_tab === 5 && // Resets
-                    <Grid container spacing={8}>
-                        <Grid item xs={12}>
-                            <ItemResetsEditor 
-                                id="item_resets" 
-                                vnum={this.props.model.vnum}  />
                         </Grid>
                     </Grid>}
                 </Validate>

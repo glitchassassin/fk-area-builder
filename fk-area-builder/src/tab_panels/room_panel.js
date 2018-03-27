@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
-import List, {ListItem} from 'material-ui/List';
+import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 import ListSubheader from 'material-ui/List/ListSubheader';
@@ -80,7 +80,7 @@ class RoomPanel extends React.Component {
                     </IconButton>
                     {room_validator.validate_state(this.props.state, room).length > 0 && (
                     <IconButton tooltip="Show Errors" onClick={(e)=>{e.stopPropagation(); this.props.openErrors(room.uuid)}} style={icon_button_style}>
-                        <Icon color="primary">error</Icon>
+                        <Icon color="error">error</Icon>
                     </IconButton>
                     )}
                 </TableCell>
@@ -156,7 +156,10 @@ class RoomPanel extends React.Component {
                     <DialogContent>
                         <List>
                             {room_validator.validate_state(this.props.state, room).map((error, index) => (
-                                <ListItem key={index} primaryText={error} leftIcon={<Icon color="primary">error</Icon>} />
+                                <ListItem key={index} >
+                                    <ListItemIcon><Icon color="error">error</Icon></ListItemIcon>
+                                    <ListItemText primary={error} />
+                                </ListItem>
                             ))}
                         </List>
                     </DialogContent>
@@ -493,11 +496,9 @@ class DoorResetsEditor extends React.Component {
                             onChange={(e,v)=>(this.props.setProp(reset.uuid, e.target.id, v))} />
                     </Grid>
                     </Validate>
-                    <Grid item xs={12}>
                         <TrapResetEditor 
                             id="trap_reset"
                             pointer={reset.uuid} />
-                    </Grid>
                 </Grid>
             </Paper>
             </Grid>
