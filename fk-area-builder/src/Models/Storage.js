@@ -47,6 +47,7 @@ class Storage {
     }
 
     handleAuthResult(authResult, callback) {
+      console.log(authResult);
       if (authResult && !authResult.error) {
         this.oauthToken = authResult.access_token;
         callback();
@@ -132,6 +133,12 @@ class Storage {
         xhr.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
         console.log(download_file_id);
         xhr.onload = () => {
+          if (xhr.status === 401) {
+            // Access error - probably expired token. Clear the old one and re-auth
+            this.oauthToken = null;
+            this.downloadFile(file_id, callback)
+            return
+          }
           this.active_file_id = download_file_id;
           this.storeChangeToken();
           callback(xhr.responseText);
@@ -159,6 +166,12 @@ class Storage {
         xhr.setRequestHeader('Content-Length', contents.length);
         
         xhr.onload = () => {
+          if (xhr.status === 401) {
+            // Access error - probably expired token. Clear the old one and re-auth
+            this.oauthToken = null;
+            this.updateCurrentFile(contents, callback)
+            return
+          }
           setTimeout(()=>(this.storeChangeToken()), 1000) // Timeout gives time for Google Drive to file before fetching a new change token
           callback(xhr.responseText);
         };
@@ -173,7 +186,7 @@ class Storage {
     
     didFileChange(callback) {
       if (!this.oauthToken) {
-        this.Authorize(()=>(this.getFileChanges(callback)));
+        this.Authorize(()=>(this.didFileChange(callback)));
         return;
       }
       if (this.active_file_id) {
@@ -182,6 +195,12 @@ class Storage {
         xhr2.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
         xhr2.onload = () => {
           let response = JSON.parse(xhr2.responseText);
+          if (xhr2.status === 401) {
+            // Access error - probably expired token. Clear the old one and re-auth
+            this.oauthToken = null;
+            this.didFileChange(callback)
+            return
+          }
           console.log("didFileChange", response)
           if (response.changes.filter((o)=>(o.fileId === this.active_file_id)).length > 0) {
             callback(true, response);
@@ -200,11 +219,21 @@ class Storage {
     }
     
     storeChangeToken() {
+      if (!this.oauthToken) {
+        this.Authorize(()=>(this.storeChangeToken()));
+        return;
+      }
       console.log("Getting change token...")
       var xhr = new XMLHttpRequest();
       xhr.open('GET', `https://www.googleapis.com/drive/v3/changes/startPageToken`);
       xhr.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
       xhr.onload = () => {
+        if (xhr.status === 401) {
+          // Access error - probably expired token. Clear the old one and re-auth
+          this.oauthToken = null;
+          this.storeChangeToken()
+          return
+        }
         console.log(xhr.responseText);
         let response = JSON.parse(xhr.responseText);
         this.change_token = response.startPageToken;
@@ -226,6 +255,12 @@ class Storage {
       file_id_xhr.open('GET', `https://www.googleapis.com/drive/v3/files/generateIds?count=1`);
       file_id_xhr.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
       file_id_xhr.onload = () => {
+        if (file_id_xhr.status === 401) {
+          // Access error - probably expired token. Clear the old one and re-auth
+          this.oauthToken = null;
+          this.uploadNewFile(filename, folder, contents, callback)
+          return
+        }
         let response = JSON.parse(file_id_xhr.responseText);
         // Now that we have the new file ID, upload the file
         this.active_file_id = response.ids[0];
@@ -251,6 +286,12 @@ ${contents}
         xhr.setRequestHeader('Content-Length', body.length);
         
         xhr.onload = () => {
+          if (xhr.status === 401) {
+            // Access error - probably expired token. Clear the old one and re-auth
+            this.oauthToken = null;
+            this.uploadNewFile(filename, folder, contents, callback)
+            return
+          }
           this.storeChangeToken();
           callback(xhr.responseText);
         };

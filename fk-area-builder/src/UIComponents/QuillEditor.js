@@ -181,7 +181,7 @@ class ColorCodeEditor extends Component {
         if (!ref) { return; }
         this.quill = ref.getEditor()
         this.quill.format("color", "#c0c0c0")
-		this.quill.root.addEventListener('copy', function(e){
+		this.quill.root.addEventListener('copy', (e) => {
 			var range = this.quill.getSelection();
 			if (range) {
 				if (range.length === 0) {
