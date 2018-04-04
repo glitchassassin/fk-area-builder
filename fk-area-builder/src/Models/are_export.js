@@ -149,7 +149,7 @@ S
     }
     
     renderExits(state, uuid) { // Exits
-        return autoline(state.exits.filter((i)=>(i.room===uuid)).map((exit) => (`${exit.direction}
+        return autoline(state.exits.filter((i)=>(i.pointer===uuid)).map((exit) => (`${exit.direction}
 ${exit.comment}~
 ${exit.somewhere_door_keyword}~
 ${exit.door_flags.map((flag)=>(flag.code)).join("|")||"0"} ${exit.door_key || "-1"} ${exit.target_vnum || "0"} ${exit.exit_size}`)).join("\n"))

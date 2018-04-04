@@ -159,7 +159,7 @@ class Storage {
         xhr.setRequestHeader('Content-Length', contents.length);
         
         xhr.onload = () => {
-          this.storeChangeToken();
+          setTimeout(()=>(this.storeChangeToken()), 1000) // Timeout gives time for Google Drive to file before fetching a new change token
           callback(xhr.responseText);
         };
         xhr.onerror = function() {
@@ -182,6 +182,7 @@ class Storage {
         xhr2.setRequestHeader('Authorization', 'Bearer ' + this.oauthToken);
         xhr2.onload = () => {
           let response = JSON.parse(xhr2.responseText);
+          console.log("didFileChange", response)
           if (response.changes.filter((o)=>(o.fileId === this.active_file_id)).length > 0) {
             callback(true, response);
           }
@@ -209,6 +210,9 @@ class Storage {
         this.change_token = response.startPageToken;
         console.log("Change token stored", this)
       }
+      xhr.onerror = function() {
+        console.log("Error fetching change token");
+      };
       xhr.send()
     }
     

@@ -18,7 +18,7 @@ function strip_color_codes(desc) {
 
 class FlagWithCategorySelector extends React.Component {
     handleChange(event) {
-        this.props.onChange({target:{id:this.props.id}}, this.props.flags[event.target.target.value]);
+        this.props.onChange({target:{id:this.props.id}}, this.props.flags[event.target.value]);
     }
     
     shouldComponentUpdate(newProps) {

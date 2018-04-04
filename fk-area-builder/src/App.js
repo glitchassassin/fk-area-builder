@@ -89,7 +89,7 @@ class AppHeader extends Component {
         return warning;
       }
     }
-    this.props.loadArea(testArea)
+    //this.props.loadArea(testArea)
   }
   
   setStatus = (icon) => (this.setState({status: icon}));

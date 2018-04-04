@@ -75,7 +75,6 @@ class Loader {
             this.parseShops(),
             this.parseRepairs()
         );
-        console.log(actions)
         dispatch(actions) // Send all actions at once, instead of each one individually
     }
     
@@ -452,7 +451,7 @@ class Loader {
             while ((exit_matches = exit_regex.exec(matches[10])) != null) {
                 actions.push({ type:ExitActions.ADD })
                 actions.push({ type:ExitActions.SET_PROP, key:"direction", value:get_code(exit_matches[1], flags.EXIT_DIRECTIONS) });
-                actions.push({ type:ExitActions.SET_PROP, key:"room", value:room_id });
+                actions.push({ type:ExitActions.SET_PROP, key:"pointer", value:room_id });
                 actions.push({ type:ExitActions.SET_PROP, key:"comment", value:exit_matches[2] });
                 actions.push({ type:ExitActions.SET_PROP, key:"somewhere_door_keyword", value:exit_matches[3] });
                 actions.push({ type:ExitActions.SET_PROP, key:"door_flags", value:get_codes(exit_matches[4].split("|"), flags.EXIT_DOOR_FLAGS) });

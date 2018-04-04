@@ -12,6 +12,7 @@ import Paper from 'material-ui/Paper';
 import withTheme from 'material-ui/styles/withTheme';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import Checkbox from 'material-ui/Checkbox';
+import { ColorCodeEditor } from '../UIComponents/QuillEditor';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import { 
@@ -283,17 +284,16 @@ class ItemEditor extends React.Component {
                                 onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         </Grid>
                         <Grid item xs={9}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Short description" 
                                 id="sdesc" 
                                 value={this.props.model.sdesc} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         </Grid>
                         <Grid item xs={12}>
-                            <ValidatedTextField 
+                            <ColorCodeEditor 
                                 label="Long description" 
                                 id="ldesc" 
-                                fullWidth={true} 
                                 value={this.props.model.ldesc} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.model.uuid, e.target.id, v))} />
                         </Grid>

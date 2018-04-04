@@ -93,7 +93,7 @@ class Exit extends Object {
             somewhere_door_keyword: "",
             // Flags                    
             door_flags:             [],
-            door_key:               null,
+            door_key:               "-1",
             target_vnum:            null,
             exit_size:              flags.EXIT_SIZES.EXIT_SIZE_ANY,
         }, fields))

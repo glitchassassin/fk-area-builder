@@ -61,7 +61,7 @@ class GoogleDriveMenu extends React.Component {
             return;
         }
         this.storage.createFolderPicker((folder)=>{
-            let filename = this.props.area.name + ".are"; // Should eventually prompt to select a file/location, but this works temporarily
+            let filename = this.props.area.area.name + ".are"; // Should eventually prompt to select a file/location, but this works temporarily
             console.log("Saving new file", filename, folder);
             let contents = area_exporter.renderArea(this.props.area);
             this.storage.uploadNewFile(filename, folder, contents, ()=>(this.finishSave()));

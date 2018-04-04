@@ -360,7 +360,7 @@ RoomEditor = connect(
 class ExitsEditor extends React.Component {
     generate() {
         console.log(this.props.exits)
-        return this.props.exits.filter((e)=>(e.room===this.props.pointer)).map((exit, index) => (
+        return this.props.exits.filter((e)=>(e.pointer===this.props.pointer)).map((exit, index) => (
             <Grid item key={index} xs={12}>
             <Paper classes={{root:this.props.classes.paper}}>
                 <Grid container spacing={8}>

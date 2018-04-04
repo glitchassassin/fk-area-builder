@@ -38,9 +38,13 @@ const color_list = {
 
 const stringToDelta = (fk=null) => {
 	var buffer = fk
-	if (!buffer.match(/^{..}/gm)) {
+	if (!buffer.match(/^{..}/)) {
 		buffer = "{70}" + buffer // Add default color code to beginning of string
 	}
+	if (!buffer.match(/\n$/)) {
+		buffer = buffer + "\n" // Add trailing newline for QuillJS
+	}
+	console.log(buffer)
 	var segments = buffer.split(/{(.)(.)}([\s\S]*?)/gm)
 	var ops = []
 	for (var i=1; i < segments.length; i+=4) {
@@ -57,15 +61,18 @@ const stringToDelta = (fk=null) => {
 		});
 	}
 	buffer = '';
-	return new Delta(ops)
+	let to_return = new Delta(ops)
+	console.log(to_return);
+	return to_return
 }
 const deltaToString = (delta) => {
-    var to_return = ""// = "{70}"
+    var to_return = "{70}"
     const color_lookup = (kv)=>(kv[1]===op["attributes"]["color"])
     const background_color_lookup = (kv)=>(kv[1]===op["attributes"]["background"])
     for (var i in delta["ops"]) {
         var op = delta["ops"][i]
-        if ("attributes" in op) {
+        if ("attributes" in op) // Add default color code regardless
+        {
             var color = "7"
             var background_color = "0"
             // Color codes change
@@ -81,7 +88,10 @@ const deltaToString = (delta) => {
                 to_return = to_return.slice(0,-4) // Avoiding superfluous color codes
             }
             to_return += "{" + color + background_color + "}"
-        }
+        }/*
+        else {
+            to_return += "{70}"
+        }*/
         if ("insert" in op) {
             to_return += op.insert.replace(/\n(?!{..})/, "\n{70}")
         }
@@ -142,9 +152,10 @@ class ColorCodeEditor extends Component {
     handleChange(content, delta, source, editor) {
         if (source === "user") {
             let valueDelta = editor.getContents();
-            let valueString = deltaToString(valueDelta);
-            if (valueString==="\n") { this.quill.format("color", "#c0c0c0") }
+            let valueString = deltaToString(valueDelta).replace(/\n$/, "");
+            //if (valueString==="") { this.quill.format("color", "#c0c0c0") }
             this.setState({valueDelta, valueString})
+            console.log("handleChange", valueDelta, valueString);
             this.props.onChange({target:{id:this.props.id}}, valueString) // If editor is cleared, set default format
             //if (this.focus) { this.focus(); }
         }
