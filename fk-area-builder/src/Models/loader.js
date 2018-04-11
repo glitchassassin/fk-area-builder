@@ -201,7 +201,7 @@ class Loader {
         }
         
         
-        let unique_mobile_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^~]\n)*.*)~\n(U) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\n(.*)$\n(.*)$\n([^\s]+) (.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+).*\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+)\n((?:%.*~\n)+)?(>.*~[^]*?\|)/gm
+        let unique_mobile_regex = /#(.*)$\n(.*)~\n(.*)~\n(.*)~\n((?:.*[^~]\n)*.*)~\n(U) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)$\n(.*)$\n(.*) ?(.*)$\n([^\s]+) (.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+).*\n(.*)\n(.*)\n([^\s]+) ([^\s]+) ([^\s]+)\n((?:%.*~\n)+)?(>.*~[^]*?\|)/gm
         while ((matches = unique_mobile_regex.exec(mobiles[0])) != null) {
             let mob_id = uuid()
             actions.push({ type:MobActions.ADD })
@@ -222,24 +222,25 @@ class Loader {
             actions.push(setProp("deity", get_code(matches[12], flags.MOB_DEITIES)));
             actions.push(setProp("act_flags", get_codes(matches[13].split("|"), flags.MOB_ACT_FLAGS)));
             actions.push(setProp("affect_flags", get_codes(matches[14].split("|"), flags.MOB_AFFECTS)));
-            actions.push(setProp("virtual_armor_type", get_code(matches[15], flags.ITEM_ARMOR_TYPES)));
-            actions.push(setProp("virtual_armor_material", get_code(matches[16], flags.ITEM_MATERIALS)));
-            actions.push(setProp("alignment", get_code(matches[17], flags.MOB_ALIGNMENTS)));
-            actions.push(setProp("str", matches[18]));
-            actions.push(setProp("int", matches[19]));
-            actions.push(setProp("wis", matches[20]));
-            actions.push(setProp("dex", matches[21]));
-            actions.push(setProp("con", matches[22]));
-            actions.push(setProp("cha", matches[23]));
-            actions.push(setProp("lck", matches[24]));
-            actions.push(setProp("understood_languages", get_codes(matches[25].split("|"), flags.LANGUAGE_FLAGS)));
-            actions.push(setProp("spoken_languages", get_codes(matches[26].split("|"), flags.LANGUAGE_FLAGS)));
-            actions.push(setProp("ris_resistant", get_codes(matches[27].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE)));
-            actions.push(setProp("ris_immune", get_codes(matches[28].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE)));
-            actions.push(setProp("ris_susceptible", get_codes(matches[29].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE)));
+            actions.push(setProp("affect_two_flags", get_codes(matches[15].split("|"), flags.MOB_AFFECTS_TWO)));
+            actions.push(setProp("virtual_armor_type", get_code(matches[16], flags.ITEM_ARMOR_TYPES)));
+            actions.push(setProp("virtual_armor_material", get_code(matches[17], flags.ITEM_MATERIALS)));
+            actions.push(setProp("alignment", get_code(matches[18], flags.MOB_ALIGNMENTS)));
+            actions.push(setProp("str", matches[19]));
+            actions.push(setProp("int", matches[20]));
+            actions.push(setProp("wis", matches[21]));
+            actions.push(setProp("dex", matches[22]));
+            actions.push(setProp("con", matches[23]));
+            actions.push(setProp("cha", matches[24]));
+            actions.push(setProp("lck", matches[25]));
+            actions.push(setProp("understood_languages", get_codes(matches[26].split("|"), flags.LANGUAGE_FLAGS)));
+            actions.push(setProp("spoken_languages", get_codes(matches[27].split("|"), flags.LANGUAGE_FLAGS)));
+            actions.push(setProp("ris_resistant", get_codes(matches[28].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE)));
+            actions.push(setProp("ris_immune", get_codes(matches[29].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE)));
+            actions.push(setProp("ris_susceptible", get_codes(matches[30].split("|"), flags.MOB_RIS, flags.MOB_RIS.RIS_NONE)));
 
-            actions = actions.concat(this.parseMobileCanTrains(matches[30], mob_id));
-            actions = actions.concat(this.parsePrograms(matches[31], mob_id, flags.MOB_PROGRAM_TRIGGERS));
+            actions = actions.concat(this.parseMobileCanTrains(matches[31], mob_id));
+            actions = actions.concat(this.parsePrograms(matches[32], mob_id, flags.MOB_PROGRAM_TRIGGERS));
         }
         
         return actions;

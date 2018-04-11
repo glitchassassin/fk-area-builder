@@ -185,6 +185,7 @@ class UniqueMob extends SimpleMob {
     constructor(fields) {
         super(Object.assign({
             affect_flags:           [flags.MOB_AFFECTS.AFF_NONE],
+            affect_two_flags:       [flags.MOB_AFFECTS_TWO.AFFTWO_NONE],
             virtual_armor_type:     null,
             virtual_armor_material: null,
             alignment:              null,

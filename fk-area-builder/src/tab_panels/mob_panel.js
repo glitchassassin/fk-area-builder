@@ -47,6 +47,7 @@ import {
     MOB_FEATS,
     MOB_RIS,
     MOB_AFFECTS,
+    MOB_AFFECTS_TWO,
     ITEM_ARMOR_TYPES,
     ITEM_MATERIALS,
     MOB_ALIGNMENTS,
@@ -404,7 +405,7 @@ class MobEditor extends React.Component {
                     {this.props.ui_state.mob_current_tab === 2 && // Unique
                     (this.props.mob.unique ? (
                     <Grid container spacing={8} justify="center">
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                             <MultiFlagSelector 
                                 id="affect_flags" 
                                 label="Affect Flags" 
@@ -412,7 +413,15 @@ class MobEditor extends React.Component {
                                 value={this.props.mob.affect_flags} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
+                            <MultiFlagSelector 
+                                id="affect_two_flags" 
+                                label="More Affect Flags"
+                                flags={MOB_AFFECTS_TWO} 
+                                value={this.props.mob.affect_two_flags} 
+                                onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
+                        </Grid>
+                        <Grid item xs={4}>
                             <FlagSelector 
                                 id="alignment" 
                                 label="Alignment" 
@@ -420,7 +429,7 @@ class MobEditor extends React.Component {
                                 value={this.props.mob.alignment} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                             <FlagSelector 
                                 id="virtual_armor_type" 
                                 label="Virtual Armor Type" 
@@ -428,7 +437,7 @@ class MobEditor extends React.Component {
                                 value={this.props.mob.virtual_armor_type} 
                                 onChange={(e,v)=>(this.props.setProp(this.props.mob.uuid, e.target.id, v))} />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                             <FlagSelector 
                                 id="virtual_armor_material" 
                                 label="Virtual Armor Material" 

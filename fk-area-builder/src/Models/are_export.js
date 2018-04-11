@@ -77,39 +77,54 @@ function strip_color_codes(desc) {
 class AreaExporter {
     renderArea(state) { // Area
         return `#AREA ${state.area.category.color_code}${state.area.name}~
+
 #AUTHOR ${state.area.authors}~\
+
 ${this.renderJusticeSystem(state)}
+
 #RANGES
 ${state.area.min_recommended_level} ${state.area.max_recommended_level} ${state.area.min_enforced_level} ${state.area.max_enforced_level}
 $
+
 #RESETMSG ${state.area.reset_msg}~
+
 #FLAGS
 ${state.area.wilderness_flag} ${state.area.reset_duration}
+
 #ECONOMY ${state.area.economy_min} ${state.area.economy_max}
+
 #WEATHER ${state.area.weather_humidity} ${state.area.weather_temperature}
 ${state.area.mining_material != null ? "\n#MINING " + state.area.mining_material.code : ""}\
 ${state.area.logging_material != null ? "\n#LOGGING " + state.area.logging_material.code : ""}\
+
 #QUESTS
 ${this.renderQuests(state)}
 -1
+
 #MOBILES
 ${this.renderMobs(state)}
 #0
+
 #OBJECTS
 ${this.renderItems(state)}
 #0
+
 #ROOMS
 ${this.renderRooms(state)}
 #0
+
 #RESETS\
 ${this.renderResets(state)}
 S
+
 #SHOPS\
 ${this.renderShops(state)}
 0
+
 #REPAIRS\
 ${this.renderRepairs(state)}
 0
+
 #SPECIALS\
 ${this.renderSpecials(state)}
 S
@@ -144,8 +159,7 @@ ${room.defunct} ${room.room_flags.map((flag)=>(flag.code)).join("|")||"0"} ${roo
 ${this.renderExits(state, room.uuid)}\
 ${this.renderExtraDescriptions(state, room.uuid)}\
 ${this.renderPrograms(state, room.uuid)}
-S
-`}).join("\n")
+S`}).join("\n")
     }
     
     renderExits(state, uuid) { // Exits
@@ -203,7 +217,7 @@ ${mob.fulldesc}~
 ${mob.unique ? "U" : "S"} ${mob.level} ${mob.mob_class} ${mob.race} ${mob.sex} ${mob.position} ${mob.deity}
 ${mob.act_flags.map((flag)=>(flag.code)).join("|")}\
 ${mob.unique ? `
-${mob.affect_flags.map((flag)=>(flag.code)).join("|")||"0"}
+${mob.affect_flags.map((flag)=>(flag.code)).join("|")||"0"} ${mob.affect_two_flags.map((flag)=>(flag.code)).join("|")||"0"}
 ${mob.virtual_armor_type} ${mob.virtual_armor_material}
 ${mob.alignment}
 ${mob.str} ${mob.int} ${mob.wis} ${mob.dex} ${mob.con} ${mob.cha} ${mob.lck}` : ""}

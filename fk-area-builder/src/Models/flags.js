@@ -8420,9 +8420,18 @@ const MOB_AFFECTS = {
     AFF_NONE: new Flag({
         code: "AFF_NONE",
         sdesc: "AFF_NONE",
-        ldesc: "Mobile has no affects"
+        ldesc: "Mobile has no affects",
+        bits: "0"
     })
 };
+const MOB_AFFECTS_TWO = {
+    AFFTWO_NONE: new Flag({
+        code: "AFFTWO_NONE",
+        sdesc: "AFFTWO_NONE",
+        ldesc: "Mobile has no affects",
+        bits: "0"
+    }),
+}
 const MOB_ALIGNMENTS = {
     ALIGN_LAWFUL_GOOD: new Flag({
         code: "ALIGN_LAWFUL_GOOD",
@@ -11190,6 +11199,7 @@ export {
     MOB_DEITIES,
     MOB_ACT_FLAGS,
     MOB_AFFECTS,
+    MOB_AFFECTS_TWO,
     MOB_ALIGNMENTS,
     MOB_RIS,
     MOB_SPELLS,

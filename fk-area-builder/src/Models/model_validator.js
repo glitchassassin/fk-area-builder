@@ -381,6 +381,7 @@ class UniqueMobValidator extends SimpleMobValidator {
     constructor(fields) {
         super(Object.assign({
             affect_flags:           new Field({field_name:"Affect flags",           in_flags:flags.MOB_AFFECTS,     optional:true}),
+            affect_two_flags:       new Field({field_name:"Affect flags 2",         in_flags:flags.MOB_AFFECTS_TWO, optional:true}),
             virtual_armor_type:     new Field({field_name:"Virtual armor type",     in_flags:flags.ITEM_ARMOR_TYPES,optional:false}),
             virtual_armor_material: new Field({field_name:"Virtual armor material", in_flags:flags.ITEM_MATERIALS,  optional:false}),
             alignment:              new Field({field_name:"Alignment",              in_flags:flags.MOB_ALIGNMENTS,  optional:false}),
@@ -419,9 +420,9 @@ class UniqueMobValidator extends SimpleMobValidator {
                     return[`Lck should be between 3 and 22`];
                 }
             }}),
-            ris_resistant:          new Field({field_name:"Resistant",          in_flags:flags.MOB_RIS,         optional:false}),
-            ris_immune:             new Field({field_name:"Immune",             in_flags:flags.MOB_RIS,         optional:false}),
-            ris_susceptible:        new Field({field_name:"Susceptible",        in_flags:flags.MOB_RIS,         optional:false}),
+            ris_resistant:          new Field({field_name:"Resistant",              in_flags:flags.MOB_RIS,         optional:false}),
+            ris_immune:             new Field({field_name:"Immune",                 in_flags:flags.MOB_RIS,         optional:false}),
+            ris_susceptible:        new Field({field_name:"Susceptible",            in_flags:flags.MOB_RIS,         optional:false}),
         }, fields));
     }
     _error_prefix(model) {
