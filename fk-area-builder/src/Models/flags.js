@@ -8327,6 +8327,16 @@ const MOB_AFFECTS = {
         sdesc: "AFF_INFRARED",
         ldesc: "Mobile has infravision"
     }),
+    AFF_DETECT_LAW: new Flag({
+        code: "AFF_DETECT_LAW",
+        sdesc: "AFF_DETECT_LAW",
+        bits: "1024",
+    }),
+    AFF_SPIRIT_SIGHT: new Flag({
+        code: "AFF_SPIRIT_SIGHT",
+        sdesc: "AFF_SPIRIT_SIGHT",
+        bits: "2048",
+    }),
     AFF_CURSE: new Flag({
         code: "AFF_CURSE",
         sdesc: "AFF_CURSE",
@@ -8377,15 +8387,26 @@ const MOB_AFFECTS = {
         sdesc: "AFF_PASS_DOOR",
         ldesc: "Mobile can pass door"
     }),
-    AFF_FLOATING: new Flag({
-        code: "AFF_FLOATING",
-        sdesc: "AFF_FLOATING",
-        ldesc: "Mobile is floating"
+    AFF_LEVITATE: new Flag({
+        code: "AFF_LEVITATE",
+        sdesc: "AFF_LEVITATE",
+        ldesc: "Mobile is floating",
+        bits: "2097152",
     }),
     AFF_TRUE_SIGHT: new Flag({
         code: "AFF_TRUE_SIGHT",
         sdesc: "AFF_TRUE_SIGHT",
         ldesc: "Mobile is affected by truesight"
+    }),
+    AFF_FIND_TRAPS: new Flag({
+        code: "AFF_FIND_TRAPS",
+        sdesc: "AFF_FIND_TRAPS",
+        bits: "8388608",
+    }),
+    AFF_DETECT_CHAOS: new Flag({
+        code: "AFF_DETECT_CHAOS",
+        sdesc: "AFF_DETECT_CHAOS",
+        bits: "16777216",
     }),
     AFF_FIRESHIELD: new Flag({
         code: "AFF_FIRESHIELD",
@@ -8401,6 +8422,11 @@ const MOB_AFFECTS = {
         code: "AFF_ICESHIELD",
         sdesc: "AFF_ICESHIELD",
         ldesc: "Mobile is affected by iceshield"
+    }),
+    AFF_POSSESS: new Flag({
+        code: "AFF_POSSESS",
+        sdesc: "AFF_POSSESS",
+        bits: "536870912",
     }),
     AFF_BERSERK: new Flag({
         code: "AFF_BERSERK",
@@ -8425,11 +8451,130 @@ const MOB_AFFECTS = {
     })
 };
 const MOB_AFFECTS_TWO = {
-    AFFTWO_NONE: new Flag({
-        code: "AFFTWO_NONE",
-        sdesc: "AFFTWO_NONE",
-        ldesc: "Mobile has no affects",
-        bits: "0"
+    AFFTWO_SILENCED: new Flag({
+        code: "AFFTWO_SILENCED",
+        sdesc: "AFFTWO_SILENCED",
+        bits: "1",
+    }),
+    AFFTWO_COMPREHEND: new Flag({
+        code: "AFFTWO_COMPREHEND",
+        sdesc: "AFFTWO_COMPREHEND",
+        bits: "2",
+    }),
+    AFFTWO_MIRROR_IMAGE: new Flag({
+        code: "AFFTWO_MIRROR_IMAGE",
+        sdesc: "AFFTWO_MIRROR_IMAGE",
+        bits: "4",
+    }),
+    AFFTWO_STONESKIN: new Flag({
+        code: "AFFTWO_STONESKIN",
+        sdesc: "AFFTWO_STONESKIN",
+        bits: "8",
+    }),
+    AFFTWO_BLEEDING: new Flag({
+        code: "AFFTWO_BLEEDING",
+        sdesc: "AFFTWO_BLEEDING",
+        bits: "16",
+    }),
+    AFFTWO_ACIDSHIELD: new Flag({
+        code: "AFFTWO_ACIDSHIELD",
+        sdesc: "AFFTWO_ACIDSHIELD",
+        bits: "32",
+    }),
+    AFFTWO_NON_DETECTION: new Flag({
+        code: "AFFTWO_NON_DETECTION",
+        sdesc: "AFFTWO_NON_DETECTION",
+        bits: "64",
+    }),
+    AFFTWO_FREEDOM: new Flag({
+        code: "AFFTWO_FREEDOM",
+        sdesc: "AFFTWO_FREEDOM",
+        bits: "128",
+    }),
+    AFFTWO_ENLARGE: new Flag({
+        code: "AFFTWO_ENLARGE",
+        sdesc: "AFFTWO_ENLARGE",
+        bits: "256",
+    }),
+    AFFTWO_REDUCE: new Flag({
+        code: "AFFTWO_REDUCE",
+        sdesc: "AFFTWO_REDUCE",
+        bits: "512",
+    }),
+    AFFTWO_SPIDER_CLIMB: new Flag({
+        code: "AFFTWO_SPIDER_CLIMB",
+        sdesc: "AFFTWO_SPIDER_CLIMB",
+        bits: "1024",
+    }),
+    AFFTWO_DEATH_WARD: new Flag({
+        code: "AFFTWO_DEATH_WARD",
+        sdesc: "AFFTWO_DEATH_WARD",
+        bits: "2048",
+    }),
+    AFFTWO_ACID: new Flag({
+        code: "AFFTWO_ACID",
+        sdesc: "AFFTWO_ACID",
+        bits: "4096",
+    }),
+    AFFTWO_INVIS_TO_UNDEAD: new Flag({
+        code: "AFFTWO_INVIS_TO_UNDEAD",
+        sdesc: "AFFTWO_INVIS_TO_UNDEAD",
+        bits: "8192",
+    }),
+    AFFTWO_TONGUES: new Flag({
+        code: "AFFTWO_TONGUES",
+        sdesc: "AFFTWO_TONGUES",
+        bits: "16384",
+    }),
+    AFFTWO_DIMENSIONAL_ANCHOR: new Flag({
+        code: "AFFTWO_DIMENSIONAL_ANCHOR",
+        sdesc: "AFFTWO_DIMENSIONAL_ANCHOR",
+        bits: "32768",
+    }),
+    AFFTWO_DETECT_GOOD: new Flag({
+        code: "AFFTWO_DETECT_GOOD",
+        sdesc: "AFFTWO_DETECT_GOOD",
+        bits: "65536",
+    }),
+    AFFTWO_BLADE_BARRIER: new Flag({
+        code: "AFFTWO_BLADE_BARRIER",
+        sdesc: "AFFTWO_BLADE_BARRIER",
+        bits: "131072",
+    }),
+    AFFTWO_GLOBE_INVULNERABILITY: new Flag({
+        code: "AFFTWO_GLOBE_INVULNERABILITY",
+        sdesc: "AFFTWO_GLOBE_INVULNERABILITY",
+        bits: "262144",
+    }),
+    AFFTWO_MINOR_GLOBE: new Flag({
+        code: "AFFTWO_MINOR_GLOBE",
+        sdesc: "AFFTWO_MINOR_GLOBE",
+        bits: "524288",
+    }),
+    AFFTWO_MIND_SHIELDING: new Flag({
+        code: "AFFTWO_MIND_SHIELDING",
+        sdesc: "AFFTWO_MIND_SHIELDING",
+        bits: "1048576",
+    }),
+    AFFTWO_SUSTENANCE: new Flag({
+        code: "AFFTWO_SUSTENANCE",
+        sdesc: "AFFTWO_SUSTENANCE",
+        bits: "2097152",
+    }),
+    AFFTWO_IMMUNE_DISEASE: new Flag({
+        code: "AFFTWO_IMMUNE_DISEASE",
+        sdesc: "AFFTWO_IMMUNE_DISEASE",
+        bits: "4194304",
+    }),
+    AFFTWO_IMMUNE_POISON: new Flag({
+        code: "AFFTWO_IMMUNE_POISON",
+        sdesc: "AFFTWO_IMMUNE_POISON",
+        bits: "8388608",
+    }),
+    AFFTWO_READ_MAGIC: new Flag({
+        code: "AFFTWO_READ_MAGIC",
+        sdesc: "AFFTWO_READ_MAGIC",
+        bits: "16777216",
     }),
 }
 const MOB_ALIGNMENTS = {
