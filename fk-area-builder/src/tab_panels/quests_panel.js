@@ -1,17 +1,16 @@
 import React from 'react';
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
-import withTheme from 'material-ui/styles/withTheme';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import withTheme from '@material-ui/core/styles/withTheme';
 import { connect } from 'react-redux';
 import { QuestLogActions } from '../Models/actionTypes';
 
-import Table, {
-    TableBody,
-    TableHead,
-    TableCell,
-    TableRow,
-}
-from 'material-ui/Table';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+
 import {
     QUEST_EVENT_CODES
 }

@@ -1,9 +1,10 @@
 import React from 'react';
-import Tabs, {Tab} from 'material-ui/Tabs';
-import Badge from 'material-ui/Badge';
-import Grid from 'material-ui/Grid';
-import AppBar from 'material-ui/AppBar';
-import Typography from 'material-ui/Typography';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Badge from '@material-ui/core/Badge';
+import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Typography from '@material-ui/core/Typography';
 import GeneralPanel from './tab_panels/general_panel';
 import MobPanel from './tab_panels/mob_panel';
 import RoomPanel from './tab_panels/room_panel';
@@ -25,7 +26,7 @@ import {
 from './Models/model_validator'
 import {UiStateActions} from './Models/actionTypes';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 var area_validator = new AreaValidator()
 var room_validator = new RoomValidator()
 var mob_validator = new MobValidator()

@@ -1,14 +1,19 @@
 import React from 'react';
 import Storage from '../Models/Storage';
 import AreaExporter from '../Models/are_export';
-import Menu, {MenuItem} from 'material-ui/Menu';
-import Dialog, {DialogContent, DialogActions, DialogContentText, DialogTitle} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import Check from 'material-ui-icons/Check';
-import {CircularProgress} from 'material-ui/Progress';
-import Divider from 'material-ui/Divider';
-import withTheme from 'material-ui/styles/withTheme';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Check from '@material-ui/icons/Check';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider';
+import withTheme from '@material-ui/core/styles/withTheme';
 import {StateValidator} from '../Models/model_validator'
 import {connect} from 'react-redux'
 

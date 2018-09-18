@@ -1,15 +1,17 @@
 import React from 'react';
-import {MenuItem} from 'material-ui/Menu';
-import Popover from 'material-ui/Popover';
-import Select from 'material-ui/Select';
-import TextField from 'material-ui/TextField';
-import ListSubheader from 'material-ui/List/ListSubheader';
-import {ListItemText} from 'material-ui/List';
+import MenuItem from '@material-ui/core/MenuItem';
+import Popover from '@material-ui/core/Popover';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItemText from '@material-ui/core/ListItemText';
 import Autosuggest from 'react-autosuggest';
 import {equal_recursively} from '../Models/model';
-import Input, { InputLabel } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import { withStyles } from 'material-ui/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 function strip_color_codes(desc) {

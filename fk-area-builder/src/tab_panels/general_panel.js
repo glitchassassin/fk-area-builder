@@ -1,22 +1,21 @@
 import React from 'react';
-import Icon from 'material-ui/Icon';
-import Button from 'material-ui/Button';
-import Paper from 'material-ui/Paper';
-import Grid from 'material-ui/Grid';
-import ListSubheader from 'material-ui/List/ListSubheader';
+import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import { AreaActions, JusticeSystemActions } from '../Models/actionTypes';
 import { connect } from 'react-redux';
 import { ColorCodeEditor } from '../UIComponents/QuillEditor';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import Table, {
-    TableBody,
-    TableHead,
-    TableCell,
-    TableRow,
-}
-from 'material-ui/Table';
+import Table from '@material-ui/core/Dialog';
+import TableBody from '@material-ui/core/DialogContent';
+import TableHead from '@material-ui/core/DialogActions';
+import TableCell from '@material-ui/core/DialogTitle';
+import TableRow from '@material-ui/core/DialogContentText';
+
 import {
     ITEM_MATERIALS,
     AREA_CATEGORIES,

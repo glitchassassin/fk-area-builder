@@ -1,19 +1,26 @@
 import React from 'react';
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
-import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
-import Paper from 'material-ui/Paper';
-import Tooltip from 'material-ui/Tooltip';
-import Typography from 'material-ui/Typography';
-import Checkbox from 'material-ui/Checkbox';
-import Grid from 'material-ui/Grid';
-import withTheme from 'material-ui/styles/withTheme';
-import ListSubheader from 'material-ui/List/ListSubheader';
-import {FormControlLabel} from 'material-ui/Form'
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List'; 
+import ListItem from '@material-ui/core/ListItem'; 
+import ListItemIcon from '@material-ui/core/ListItemIcon'; 
+import ListItemText from '@material-ui/core/ListItemText';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import withTheme from '@material-ui/core/styles/withTheme';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { items_library, mobs_library } from '../Models/vnum_library';
 import PropTypes from 'prop-types';
 import { 

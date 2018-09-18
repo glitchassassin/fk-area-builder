@@ -1,20 +1,28 @@
 import React from 'react';
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
-import Dialog, {DialogContent, DialogActions, DialogTitle, DialogContentText} from 'material-ui/Dialog';
-import Card, {CardContent} from 'material-ui/Card';
-import Collapse from 'material-ui/transitions/Collapse';
-import Paper from 'material-ui/Paper';
-import Switch from 'material-ui/Switch';
-import Grid from 'material-ui/Grid';
-import withTheme from 'material-ui/styles/withTheme';
-import ListSubheader from 'material-ui/List/ListSubheader';
-import {FormControlLabel} from 'material-ui/Form'
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem'; 
+import ListItemIcon from '@material-ui/core/ListItemIcon'; 
+import ListItemText from '@material-ui/core/ListItemText';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Collapse from '@material-ui/core/Collapse';
+import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import Grid from '@material-ui/core/Grid';
+import withTheme from '@material-ui/core/styles/withTheme';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { connect } from 'react-redux';
 import { ColorCodeEditor } from '../UIComponents/QuillEditor';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { 
     MobActions, UiStateActions, ShopActions, RepairRechargeActions, 
@@ -23,13 +31,12 @@ import {
     TrainStatisticActions, TrainFeatActions, TrainLangActions, MobSpecialActions
 } from '../Models/actionTypes';
 
-import Table, {
-    TableBody,
-    TableHead,
-    TableCell,
-    TableRow,
-}
-from 'material-ui/Table';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+
 import {
     MOB_PROGRAM_TRIGGERS,
     MOB_SKILLS,

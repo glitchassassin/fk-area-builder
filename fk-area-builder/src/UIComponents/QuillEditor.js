@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import Grid from 'material-ui/Grid';
-import {FormControl, FormHelperText} from 'material-ui/Form'
-import {InputLabel} from 'material-ui/Input';
-import {withStyles} from 'material-ui/styles';
+import Grid from '@material-ui/core/Grid';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
+import {withStyles} from '@material-ui/core/styles';
 import ReactQuill, {Quill} from 'react-quill';
 import PropTypes from 'prop-types';
 import 'react-quill/dist/quill.snow.css';

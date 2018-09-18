@@ -1,19 +1,23 @@
 import React from 'react';
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import Paper from 'material-ui/Paper';
-import ListSubheader from 'material-ui/List/ListSubheader';
-import AppBar from 'material-ui/AppBar';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import AppBar from '@material-ui/core/AppBar';
 import { ColorCodeEditor, ProgramEditor } from '../UIComponents/QuillEditor';
-import Tabs, {Tab} from 'material-ui/Tabs';
-import Tooltip from 'material-ui/Tooltip';
-import { withStyles } from 'material-ui/styles';
-import Dialog, {DialogContent, DialogActions, DialogTitle} from 'material-ui/Dialog';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
 import { ExtraDescriptionActions, ProgramActions, TrapResetActions } from '../Models/actionTypes';
 import PropTypes from 'prop-types';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 
 import {
     TRAP_TYPES,
