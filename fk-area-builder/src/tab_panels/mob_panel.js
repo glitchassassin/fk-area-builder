@@ -247,6 +247,7 @@ MobPanel = connect(
             let mob_id = uuid();
             dispatch({ type:MobActions.ADD, value:mob_id });
             dispatch({ type:UiStateActions.SET_CURRENT_MOB, value:mob_id });
+            dispatch({ type:UiStateActions.SET_MOB_CURRENT_TAB, value:0})
             dispatch({ type:UiStateActions.OPEN_MOB_EDITOR });
         },
         openEditor: (uuid) => {

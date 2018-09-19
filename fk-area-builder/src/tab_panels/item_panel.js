@@ -187,6 +187,7 @@ ItemPanel = connect(
             let item_id = uuid();
             dispatch({ type:ItemActions.ADD, value:item_id });
             dispatch({ type:UiStateActions.SET_CURRENT_ITEM, value:item_id });
+            dispatch({ type:UiStateActions.SET_ITEM_CURRENT_TAB, value:0})
             dispatch({ type:UiStateActions.OPEN_ITEM_EDITOR });
         },
         openEditor: (uuid) => {

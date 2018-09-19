@@ -191,6 +191,7 @@ RoomPanel = connect(
             let room_id = uuid();
             dispatch({ type:RoomActions.ADD, value:room_id });
             dispatch({ type:UiStateActions.SET_CURRENT_ROOM, value:room_id });
+            dispatch({ type:UiStateActions.SET_ROOM_CURRENT_TAB, value:0})
             dispatch({ type:UiStateActions.OPEN_ROOM_EDITOR });
         },
         openEditor: (uuid) => {
