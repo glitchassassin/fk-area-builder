@@ -274,7 +274,7 @@ class VnumAutoComplete extends React.Component {
                     hideBackdrop
                     anchorEl={this.autosuggest.input} 
                     anchorOrigin={{vertical:"bottom",horizontal:"left"}}
-                    open={Boolean(containerProps.className && containerProps.className.indexOf("suggestionsContainerOpen")!==-1)} 
+                    open={Boolean(containerProps.className)} // && (containerProps.className.indexOf("suggestionsContainerOpen")!==-1 || containerProps.className.indexOf("react-autosuggest__suggestions-container--open")!==-1))} 
                     {...containerProps} >
                     {children}
                 </Popover>
@@ -307,6 +307,7 @@ class VnumAutoComplete extends React.Component {
                             suggestions: this.props.dataSource
                         })
                     }}
+                    id={this.props.id}
                     shouldRenderSuggestions={()=>(true)}
                     renderSuggestionsContainer={this.renderSuggestionsContainer}
                     getSuggestionValue={item=>item.vnum}
