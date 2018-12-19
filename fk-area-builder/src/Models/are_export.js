@@ -180,9 +180,12 @@ ${ed.ldesc}
         if (!state.programs.filter((i)=>(i.pointer===uuid)).length) {
             return ""
         }
-        return autoline(state.programs.filter((i)=>(i.pointer===uuid)).map(program=>`>${program.trigger} ${program.argument}~
+        return autoline(state.programs.filter((i)=>(i.pointer===uuid)).map(program=>(
+            program.trigger == "in_file_prog" ? 
+                `>${program.trigger} ${program.argument}~` : 
+                `>${program.trigger} ${program.argument}~
 ${program.program}
-~`).join("\n")) + "\n|"
+~`)).join("\n")) + "\n|"
     }
     
     renderItems(state) {

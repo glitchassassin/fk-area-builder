@@ -11125,6 +11125,11 @@ const ROOM_PROGRAM_TRIGGERS = {
         code: "hour_prog",
         sdesc: "hour_prog",
         ldesc: "loops as Script for an hour from start"
+    }),
+    in_file_prog: new Flag({
+        code: "in_file_prog",
+        sdesc: "in_file_prog",
+        ldesc: "(filename) Reference to external script [ignores program content]"
     })
 };
 const ITEM_PROGRAM_TRIGGERS = {
@@ -11212,6 +11217,11 @@ const ITEM_PROGRAM_TRIGGERS = {
         code: "give_prog",
         sdesc: "give_prog",
         ldesc: "(percentage): when a player gives the object"
+    }),
+    in_file_prog: new Flag({
+        code: "in_file_prog",
+        sdesc: "in_file_prog",
+        ldesc: "(filename) Reference to external script [ignores program content]"
     })
 };
 const MOB_PROGRAM_TRIGGERS = {
@@ -11299,6 +11309,11 @@ const MOB_PROGRAM_TRIGGERS = {
         code: "injure_prog",
         sdesc: "injure_prog",
         ldesc: "(percentage): activates when the mobile is injured",
+    }),
+    in_file_prog: new Flag({
+        code: "in_file_prog",
+        sdesc: "in_file_prog",
+        ldesc: "(filename) Reference to external script [ignores program content]"
     })
 };
 
