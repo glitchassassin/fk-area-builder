@@ -304,7 +304,7 @@ class VnumAutoComplete extends React.Component {
                     }}
                     onSuggestionsClearRequested={() => {
                         this.setState({
-                            suggestions: this.props.dataSource
+                            suggestions: [] //this.props.dataSource
                         })
                     }}
                     id={this.props.id}
@@ -312,6 +312,7 @@ class VnumAutoComplete extends React.Component {
                     renderSuggestionsContainer={this.renderSuggestionsContainer}
                     getSuggestionValue={item=>item.vnum}
                     renderSuggestion={this.renderSuggestion}
+                    focusInputOnSuggestionClick={false}
                     inputProps={{
                         classes,
                         id:this.props.id,
