@@ -8576,6 +8576,12 @@ const MOB_AFFECTS_TWO = {
         sdesc: "AFFTWO_READ_MAGIC",
         bits: "16777216",
     }),
+    AFFTWO_NONE: new Flag({
+        code: "AFFTWO_NONE",
+        sdesc: "AFFTWO_NONE",
+        ldesc: "Mobile has no affects",
+        bits: "0"
+    })
 }
 const MOB_ALIGNMENTS = {
     ALIGN_LAWFUL_GOOD: new Flag({
